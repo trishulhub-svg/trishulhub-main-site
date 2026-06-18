@@ -41,9 +41,10 @@ function TechPill({ slug, name, color }: { slug: string; name: string; color: st
           height={20}
           className="h-5 w-5 transition-all duration-300"
           style={{
-            color: '#A0A0A0',
-            filter: 'grayscale(1) brightness(1.2)',
-            opacity: 0.7,
+            // Theme blue so logos are visible on the dark background —
+            // SVGs use fill="currentColor", so this `color` cascades to them.
+            color: '#00DEFF',
+            opacity: 0.95,
           }}
           loading="lazy"
         />

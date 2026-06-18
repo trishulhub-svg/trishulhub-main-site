@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react'
 
@@ -12,9 +13,56 @@ type Founder = {
   bio: string
 }
 
+/*
+ * Founder intro videos — looping background clips for the founder cards.
+ * Kiran and Taroon have custom intro videos; other founders fall back to
+ * the gradient + big-initial design (no video).
+ */
+const FOUNDER_VIDEOS: Record<string, string> = {
+  kiran: '/videos/founder-kiran.mp4',
+  taroon: '/videos/founder-taroon.mp4',
+}
+
 export function Team({ founders }: { founders: Founder[] }) {
+  const sectionRef = useRef<HTMLElement>(null)
+
+  // Some browsers won't autoplay muted videos reliably (especially on mobile
+  // or when the page was loaded in a background tab). As a belt-and-suspenders
+  // measure, after mount we explicitly call .play() on every founder video in
+  // this section. If a video is already playing, .play() is a no-op.
+  useEffect(() => {
+    const section = sectionRef.current
+    if (!section) return
+    const videos = Array.from(section.querySelectorAll<HTMLVideoElement>('video'))
+    const kick = () => {
+      videos.forEach((v) => {
+        v.muted = true
+        v.play().catch(() => {
+          /* autoplay blocked — will retry on next user interaction */
+        })
+      })
+    }
+    // Kick once on mount, and again on first user interaction (covers the
+    // case where the browser blocks autoplay until the user interacts).
+    kick()
+    const onFirstInteraction = () => {
+      kick()
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
+    }
+    window.addEventListener('click', onFirstInteraction)
+    window.addEventListener('touchstart', onFirstInteraction)
+    window.addEventListener('keydown', onFirstInteraction)
+    return () => {
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
+    }
+  }, [])
+
   return (
-    <section id="about" className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+    <section id="about" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       {/* bg glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[120px]"
@@ -65,8 +113,8 @@ export function Team({ founders }: { founders: Founder[] }) {
               />
 
               {/* Top hero area */}
-              <div className="relative h-56 overflow-hidden sm:h-64">
-                {/* Background gradient (scales on hover) */}
+              <div className="relative aspect-[4/5] overflow-hidden sm:h-64 sm:aspect-auto">
+                {/* Background gradient (scales on hover) — always present as base */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"
                   style={{
@@ -74,7 +122,22 @@ export function Team({ founders }: { founders: Founder[] }) {
                       'linear-gradient(135deg, #141414 0%, #0A0A0A 100%)',
                   }}
                 />
-                {/* Radial cyan glow */}
+
+                {/* Looping founder intro video (kiran + taroon only) */}
+                {FOUNDER_VIDEOS[m.slug] && (
+                  <video
+                    src={FOUNDER_VIDEOS[m.slug]}
+                    autoPlay
+                    loop
+                    muted
+                    playsInline
+                    preload="auto"
+                    aria-hidden="true"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                  />
+                )}
+
+                {/* Radial cyan glow (sits above video) */}
                 <div
                   aria-hidden="true"
                   className="absolute inset-0 transition-opacity duration-500"
@@ -93,19 +156,21 @@ export function Team({ founders }: { founders: Founder[] }) {
                     backgroundSize: '28px 28px',
                   }}
                 />
-                {/* Big initial letter */}
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <span
-                    className="select-none text-[120px] font-bold leading-none sm:text-[140px]"
-                    style={{
-                      color: '#00DEFF',
-                      fontFamily: 'var(--font-space-grotesk)',
-                      textShadow: 'rgba(0,222,255,0.357) 0px 0px 24.74px',
-                    }}
-                  >
-                    {m.initial}
-                  </span>
-                </div>
+                {/* Big initial letter — only shown for founders WITHOUT a video */}
+                {!FOUNDER_VIDEOS[m.slug] && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span
+                      className="select-none text-[120px] font-bold leading-none sm:text-[140px]"
+                      style={{
+                        color: '#00DEFF',
+                        fontFamily: 'var(--font-space-grotesk)',
+                        textShadow: 'rgba(0,222,255,0.357) 0px 0px 24.74px',
+                      }}
+                    >
+                      {m.initial}
+                    </span>
+                  </div>
+                )}
 
                 {/* Top-right "View Portfolio" arrow icon */}
                 <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white/40 backdrop-blur-sm transition-all duration-300 group-hover:border-[#00DEFF]/60 group-hover:bg-[#00DEFF]/10 group-hover:text-[#00DEFF]">

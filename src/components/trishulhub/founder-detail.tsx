@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -60,6 +61,17 @@ type Founder = {
   }[]
 }
 
+/*
+ * Founder intro videos — same clips used on the team section cards, shown
+ * here on the portfolio hero so visitors see the same looping video when
+ * they click a founder's image. Kiran and Taroon have custom videos; other
+ * founders fall back to the existing image / initial-letter design.
+ */
+const FOUNDER_VIDEOS: Record<string, string> = {
+  kiran: '/videos/founder-kiran.mp4',
+  taroon: '/videos/founder-taroon.mp4',
+}
+
 export function FounderDetailClient({
   slug,
   founder: f,
@@ -67,6 +79,36 @@ export function FounderDetailClient({
   slug: string
   founder: Founder
 }) {
+  /* Looping founder intro video (kiran + taroon only) */
+  const founderVideo = FOUNDER_VIDEOS[slug]
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  // Explicit .play() kick — some browsers block autoplay until the user
+  // has interacted with the page. Retry on first interaction.
+  useEffect(() => {
+    const v = videoRef.current
+    if (!v) return
+    const tryPlay = () => {
+      v.muted = true
+      v.play().catch(() => {})
+    }
+    tryPlay()
+    const onFirstInteraction = () => {
+      tryPlay()
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
+    }
+    window.addEventListener('click', onFirstInteraction)
+    window.addEventListener('touchstart', onFirstInteraction)
+    window.addEventListener('keydown', onFirstInteraction)
+    return () => {
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
+    }
+  }, [])
+
   return (
     <div className="min-h-screen bg-[#0A0A0A] text-white">
       {/* ===== Top nav ===== */}
@@ -227,8 +269,19 @@ export function FounderDetailClient({
                 }}
               />
 
-              {f.image ? (
-                 
+              {founderVideo ? (
+                <video
+                  ref={videoRef}
+                  src={founderVideo}
+                  autoPlay
+                  loop
+                  muted
+                  playsInline
+                  preload="auto"
+                  aria-hidden="true"
+                  className="absolute inset-0 h-full w-full object-cover"
+                />
+              ) : f.image ? (
                 <img
                   src={f.image}
                   alt={f.name}

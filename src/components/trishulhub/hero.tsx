@@ -1,11 +1,18 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Hls from 'hls.js'
 import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 
-const HLS_URL = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8'
+/* Local looping background video for the hero section.
+ * Replaces the previous Mux HLS stream — this is a plain MP4 served from
+ * /public/videos/hero-bg.mp4, played on an infinite loop with no audio.
+ * Using a local file eliminates the hls.js dependency, the network round-trip
+ * to Mux, and the ready/error/force-loop state machine that was needed for
+ * streaming. A native <video loop muted autoPlay playsInline> is bullet-proof
+ * across browsers.
+ */
+const HERO_VIDEO_URL = '/videos/hero-bg.mp4'
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
@@ -16,79 +23,46 @@ export function Hero() {
     const v = videoRef.current
     if (!v) return
 
-    let hls: Hls | null = null
     let cancelled = false
 
     const onReady = () => {
       if (!cancelled) setVideoReady(true)
     }
 
-    // Force-loop helper — restarts playback from 0 whenever the stream ends,
-    // guaranteeing infinite looping even if the native `loop` attribute fails
-    // (some HLS streams / browsers don't honour `loop` reliably).
-    const forceLoop = () => {
-      try {
-        v.currentTime = 0
-        v.play().catch(() => {})
-      } catch {
-        /* ignore */
-      }
-    }
-    v.addEventListener('ended', forceLoop)
-
-    // Also re-kick playback if it pauses unexpectedly (some mobile browsers
-    // pause HLS streams to save power — we want continuous background motion).
-    const autoResume = () => {
-      if (v.paused && !v.ended) {
-        v.play().catch(() => {})
-      }
-    }
-    v.addEventListener('pause', autoResume)
-
-    // Safari + iOS support HLS natively
-    if (v.canPlayType('application/vnd.apple.mpegurl')) {
-      v.src = HLS_URL
-      v.loop = true // belt-and-suspenders (also set as JSX attribute)
-      v.addEventListener('loadedmetadata', onReady)
-      v.addEventListener('loadeddata', onReady)
-      v.addEventListener('canplay', onReady)
-      v.play().catch(() => {})
-    } else if (Hls.isSupported()) {
-      // Chrome / Firefox / Edge — use hls.js
-      hls = new Hls({
-        enableWorker: true,
-        lowLatencyMode: false,
-        backBufferLength: 30,
-        // Tune for smoother autoplay on mobile
-        maxBufferLength: 20,
-        maxMaxBufferLength: 40,
-      })
-      hls.loadSource(HLS_URL)
-      hls.attachMedia(v)
-      v.loop = true // belt-and-suspenders
-      hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        v.play().catch(() => {})
-      })
-      // When the buffer ends, restart from 0 to ensure infinite loop
-      hls.on(Hls.Events.BUFFER_ENDED, () => {
-        try {
-          v.currentTime = 0
-          v.play().catch(() => {})
-        } catch {
-          /* ignore */
-        }
-      })
-      hls.on(Hls.Events.FRAG_LOADED, onReady)
-      v.addEventListener('canplay', onReady)
-      v.addEventListener('loadeddata', onReady)
-    } else {
-      // Fallback — cannot play (defer to avoid setState-in-effect)
-      queueMicrotask(() => {
-        if (!cancelled) setVideoError(true)
+    // Kick off playback (some browsers won't autoPlay without an explicit
+    // .play() call even when the autoPlay attribute is set).
+    const tryPlay = () => {
+      v.muted = true
+      v.play().catch(() => {
+        // Autoplay was blocked — will retry on first user interaction.
       })
     }
 
-    // Safety: if nothing fires in 5s, show fallback anyway
+    v.addEventListener('loadeddata', onReady)
+    v.addEventListener('canplay', onReady)
+    v.addEventListener('playing', onReady)
+    v.addEventListener('error', () => {
+      if (!cancelled) setVideoError(true)
+    })
+
+    // If the video is already loaded (cached), fire ready immediately.
+    if (v.readyState >= 2) onReady()
+
+    tryPlay()
+
+    // Belt-and-suspenders: retry play() on first user interaction in case
+    // autoplay was blocked initially (common on mobile Safari / iOS).
+    const onFirstInteraction = () => {
+      tryPlay()
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
+    }
+    window.addEventListener('click', onFirstInteraction)
+    window.addEventListener('touchstart', onFirstInteraction)
+    window.addEventListener('keydown', onFirstInteraction)
+
+    // Safety: if nothing fires in 5s, show fallback.
     const safety = setTimeout(() => {
       if (!cancelled && !videoReady) setVideoError(true)
     }, 5000)
@@ -96,37 +70,45 @@ export function Hero() {
     return () => {
       cancelled = true
       clearTimeout(safety)
-      v.removeEventListener('loadedmetadata', onReady)
       v.removeEventListener('loadeddata', onReady)
       v.removeEventListener('canplay', onReady)
-      v.removeEventListener('ended', forceLoop)
-      v.removeEventListener('pause', autoResume)
-      if (hls) hls.destroy()
+      v.removeEventListener('playing', onReady)
+      window.removeEventListener('click', onFirstInteraction)
+      window.removeEventListener('touchstart', onFirstInteraction)
+      window.removeEventListener('keydown', onFirstInteraction)
     }
-     
   }, [])
+
+  // Force-loop helper — restarts playback from 0 whenever the stream ends,
+  // guaranteeing infinite looping even if the native `loop` attribute fails
+  // (rare, but happens on some Android browsers).
+  const handleEnded = () => {
+    const v = videoRef.current
+    if (!v) return
+    try {
+      v.currentTime = 0
+      v.play().catch(() => {})
+    } catch {
+      /* ignore */
+    }
+  }
 
   return (
     <section
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Background video (bottom layer) — HLS stream, infinite loop */}
+      {/* Background video (bottom layer) — local MP4, infinite loop */}
       <video
         ref={videoRef}
+        src={HERO_VIDEO_URL}
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
         aria-hidden="true"
-        onEnded={(e) => {
-          // Triple-redundant looping: native loop attr + this onEnded handler
-          // + the useEffect 'ended' listener. Whichever fires first wins.
-          const el = e.currentTarget
-          el.currentTime = 0
-          el.play().catch(() => {})
-        }}
+        onEnded={handleEnded}
         className="absolute inset-0 h-full w-full object-cover"
         style={{
           opacity: videoReady && !videoError ? 1 : 0,

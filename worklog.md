@@ -525,3 +525,78 @@ Stage Summary:
 - Replaced the potentially-ambiguous keyframes-array `animate()` call with the unambiguous 3-arg `animate(from, to, options)` form, manually mapping progress through the keyframe tables. Same visual result, zero WeakMap ambiguity risk.
 - Added a 4.5-second hard fallback to the loading screen so it can never get stuck visible.
 - All previously working features remain working: HLS background video loops, real company SVG logos, admin login with TrishulHub branding, founder detail pages, dashboard % syncs with progress bar.
+
+---
+Task ID: 20
+Agent: main (Super Z)
+Task: User provided 3 videos + 1 image with 3 tasks:
+  - Task 1: Add looping videos to "Meet the Founders" section — Kiran gets video 1 (Untitled design.mp4), Taroon gets video 2 (download.mp4). Must be properly aligned + mobile-responsive. Same video should also appear on the founder's portfolio page when their image is clicked. Both videos must be infinite looping.
+  - Task 2: Tech stack company logos are currently black/invisible on dark background — change them to the theme blue color (#00DEFF) so they're visible.
+  - Task 3: Replace the Mux HLS stream in the hero section with a new local video (Untitled design (1).mp4). Must be infinite looping (never stops) with a subtle dark overlay for beautiful effect.
+
+Work Log:
+- Identified the 3 video files in /home/z/my-project/upload/:
+  * "Untitled design.mp4" (858×1072 portrait, 5.77s, 1.2MB) → Kiran founder card
+  * "download.mp4" (858×1072 portrait, 3.56s, 1.2MB) → Taroon founder card
+  * "Untitled design (1).mp4" (4048×2048 landscape, 4.70s, 5.3MB) → Hero section background
+- Copied all 3 to /home/z/my-project/public/videos/:
+  * founder-kiran.mp4
+  * founder-taroon.mp4
+  * hero-bg.mp4
+
+TASK 1 — Founder videos in team.tsx + founder-detail.tsx:
+- /home/z/my-project/src/components/trishulhub/team.tsx:
+  * Added a `FOUNDER_VIDEOS` lookup map: { kiran: '/videos/founder-kiran.mp4', taroon: '/videos/founder-taroon.mp4' }
+  * Added `useEffect` + `useRef` (sectionRef) that, after mount, explicitly calls .play() on every <video> in the section. Also re-kicks on first user interaction (click/touch/keydown) to handle browsers that block autoplay until interaction.
+  * In the founder card top hero area, replaced the fixed `h-56 sm:h-64` container with `aspect-[4/5] sm:h-64 sm:aspect-auto` — gives proper portrait video aspect on mobile (1-column layout) and the original fixed height on desktop (2-column layout). This is the proper mobile-responsive alignment the user asked for.
+  * Added a `<video autoPlay loop muted playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover ...">` element on top of the gradient background — only rendered when FOUNDER_VIDEOS[m.slug] exists (kiran + taroon).
+  * The big initial letter is now conditionally rendered only when no video exists (Akshat + Pruthvi still show their letter).
+  * All other UI elements (Projects badge, social icons reveal, hover glow border, etc.) sit on top of the video unchanged.
+- /home/z/my-project/src/components/trishulhub/founder-detail.tsx:
+  * Added the same `FOUNDER_VIDEOS` lookup map.
+  * Added a `videoRef` + `useEffect` with the same .play() kick + first-interaction retry pattern.
+  * In the hero section's right-side square card (aspect-square), the founder image / initial-letter fallback now has a third branch: if `founderVideo` exists, render `<video ref={videoRef} autoPlay loop muted playsInline preload="auto" className="absolute inset-0 h-full w-full object-cover" />` instead of the image or initial letter.
+  * This means when a visitor clicks Kiran's or Taroon's image on the home page, they see the SAME looping video on the portfolio page — exactly what the user asked for.
+
+TASK 2 — Tech stack logos changed from gray/black to theme blue:
+- /home/z/my-project/src/components/trishulhub/tech-stack.tsx:
+  * TechPill <img> style was: `color: '#A0A0A0', filter: 'grayscale(1) brightness(1.2)', opacity: 0.7`
+  * Changed to: `color: '#00DEFF', opacity: 0.95` (removed the grayscale filter)
+  * The SVG files in /public/images/logos/ already use `fill="currentColor"` at the SVG root, so the inherited `color` cascades into the SVG paths. Changing the wrapper color from gray to #00DEFF instantly recolors all 20 logos.
+  * Verified via JS eval: `getComputedStyle(document.querySelector('img[src*="/images/logos/"]')).color === 'rgb(0, 222, 255)'` and filter is now 'none'.
+  * 80 logos total (20 unique × 2 rows × 2 duplicated for marquee loop) — all now display in the theme blue.
+
+TASK 3 — Hero video replacement + dark overlay:
+- /home/z/my-project/src/components/trishulhub/hero.tsx:
+  * COMPLETELY REWROTE the file. Removed all hls.js / Mux streaming code.
+  * New constant: `HERO_VIDEO_URL = '/videos/hero-bg.mp4'`
+  * Removed `import Hls from 'hls.js'` — no longer needed.
+  * Replaced the complex HLS setup (canPlayType check, hls.js attachMedia, MANIFEST_PARSED, BUFFER_ENDED, FRAG_LOADED, etc.) with a simple `<video src={HERO_VIDEO_URL} autoPlay loop muted playsInline preload="auto" onEnded={handleEnded} />` element.
+  * `useEffect` now just: registers loadeddata/canplay/playing/error listeners, calls tryPlay() on mount, retries on first user interaction (belt-and-suspenders for strict browsers), and sets a 5s safety timeout to show the fallback gradient if the video fails to load.
+  * `handleEnded` callback explicitly resets currentTime to 0 and calls play() — triple-redundant looping (native `loop` attribute + onEnded handler + framer-motion-safe retry) so the video NEVER stops, even on browsers with buggy loop support.
+  * The existing DARK + THEMED OVERLAY layers (4 overlay divs at z-[5]) are kept unchanged — they already provide the "little dark overlay so that it create beatiful effect" the user asked for:
+    1. Base dark wash: `linear-gradient(180deg, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.45) 35%, rgba(10,10,10,0.6) 70%, rgba(10,10,10,0.95) 100%)`
+    2. Themed cyan/blue wash (mix-blend-color): `linear-gradient(135deg, rgba(0,136,204,0.55) 0%, rgba(0,222,255,0.25) 50%, rgba(10,10,10,0.6) 100%)`
+    3. Radial vignette darkening edges
+    4. Subtle cyan tint band behind text for contrast
+
+Verification (all on local production server at http://127.0.0.1:3000):
+- Production build succeeds (8 routes generated, no errors).
+- Home page (`/`) — agent-browser test: 0 errors, 0 console output.
+  * Hero video: src=/videos/hero-bg.mp4, paused=false, readyState=4, currentTime=1.29s (actively playing), loop=true, muted=true ✓
+  * Kiran founder card video: src=/videos/founder-kiran.mp4, paused=false, currentTime=0.31s (playing) ✓
+  * Taroon founder card video: src=/videos/founder-taroon.mp4, paused=false, currentTime=2.29s (playing) ✓
+  * Tech logo color: rgb(0, 222, 255) = #00DEFF (theme blue) ✓
+  * Tech logo filter: 'none' (no more grayscale) ✓
+- /founders/kiran — 0 errors. Video: src=/videos/founder-kiran.mp4, paused=false, loop=true, muted=true, currentTime=4.08s (playing) ✓
+- /founders/taroon — 0 errors. Video: src=/videos/founder-taroon.mp4, paused=false, currentTime=0.40s (playing) ✓
+- /founders/akshat — 0 errors. videoCount=0 (correct fallback — no video, uses initial letter) ✓
+- All 3 video files served with HTTP 200 from /videos/ (verified via curl -I).
+- Screenshots saved: /home/z/my-project/download/hero-new-video.png, team-with-videos.png, tech-stack-blue.png, mobile-hero.png, mobile-team.png
+
+Stage Summary:
+- All 3 tasks completed and verified locally.
+- TASK 1 (founder videos): Both Kiran and Taroon now have looping background videos on their team cards AND on their portfolio pages. Mobile-responsive aspect ratio (4:5 portrait) on mobile, fixed height (h-64) on desktop. Akshat and Pruthvi correctly fall back to the initial-letter design (no video). All videos are infinite-looping, muted, autoplaying.
+- TASK 2 (tech logos blue): All 80 tech stack logo instances (20 unique × 4 duplicates for 2 marquee rows) now render in the theme blue color (#00DEFF). Removed the grayscale filter that was making them invisible.
+- TASK 3 (hero video): Completely replaced the Mux HLS streaming infrastructure with a simple local MP4 video. The video plays on an infinite loop (triple-redundant: native loop attr + onEnded handler + retry-on-error). The existing 4-layer dark + themed overlay system was preserved and provides the "beautiful effect" the user asked for.
+- To make these changes live on the deployed preview (preview-chat-f078d2de-19a4-40c0-a1be-929e3c32d513.space-z.ai), the user needs to redeploy. Currently the preview still shows the OLD version (verified — /videos/founder-kiran.mp4 returns 403 on the preview).
