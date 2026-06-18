@@ -4,12 +4,33 @@ import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, animate } from 'framer-motion'
 import { TrendingUp, Wallet, PieChart, Target, ArrowUpRight, Activity } from 'lucide-react'
 
+/*
+ * SSR/HYDRATION SAFETY
+ * -------------------
+ * All hooks below return `0` on the server AND during the very first client
+ * render (before `useEffect` runs). This guarantees the server-rendered HTML
+ * matches the client's initial hydrated HTML exactly — no "tree hydrated but
+ * some attributes didn't match" errors.
+ *
+ * The `mounted` flag flips to `true` inside `useEffect`, and only then do we
+ * kick off framer-motion `animate()` calls. This prevents any WeakMap-related
+ * errors that can occur if framer-motion tries to register a value before the
+ * client is fully mounted.
+ */
+
 /* ---------- Hook: looping count-up using framer-motion animate() ---------- */
 function useLoopingNumber(target: number, duration: number, paused: boolean) {
   const [val, setVal] = useState(0)
+  const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    if (paused) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    // Don't run animation until mounted AND not paused.
+    // Returning early when !mounted guarantees identical SSR/initial-client render.
+    if (!mounted || paused) {
       return
     }
     const controls = animate(0, target, {
@@ -21,49 +42,62 @@ function useLoopingNumber(target: number, duration: number, paused: boolean) {
       onUpdate: (latest) => setVal(latest),
     })
     return () => controls.stop()
-  }, [target, duration, paused])
+  }, [target, duration, paused, mounted])
 
-  return paused ? 0 : val
+  // When paused OR not yet mounted, return 0 (matches SSR output).
+  return !mounted || paused ? 0 : val
 }
 
-/* ---------- Hook: looping multi-keyframe number (synced to bar keyframes) ---------- */
-/* Animates through [0, 12, 48, 76, 100, 0] with the same timing as the
-   progress bar so the displayed % always matches the bar's actual width. */
+/* ---------- Hook: looping multi-keyframe number (synced to bar keyframes) ----------
+ * Animates through [0, 12, 48, 76, 100, 0] with the same timing as the
+ * progress bar so the displayed % always matches the bar's actual width.
+ *
+ * Implementation note: we drive a simple 0→100 progress value via
+ * `animate(from: number, to: number, options)` (the safest 3-arg form),
+ * and map the progress fraction through the same keyframe stops & times
+ * the motion.div bar uses. This avoids any ambiguity with array-as-second-arg
+ * overloads and keeps the displayed value perfectly in sync with the bar.
+ */
+const GOAL_TIMES = [0, 0.18, 0.45, 0.7, 0.9, 1] as const
+const GOAL_VALUES = [0, 12, 48, 76, 100, 0] as const
+function goalPctFromProgress(p: number): number {
+  // p ∈ [0, 1] → returns interpolated value from the keyframe tables.
+  if (p <= GOAL_TIMES[0]) return GOAL_VALUES[0]
+  if (p >= GOAL_TIMES[GOAL_TIMES.length - 1]) return GOAL_VALUES[GOAL_VALUES.length - 1]
+  let i = 0
+  while (i < GOAL_TIMES.length - 1 && p > GOAL_TIMES[i + 1]) i++
+  const span = GOAL_TIMES[i + 1] - GOAL_TIMES[i]
+  const localT = span === 0 ? 0 : (p - GOAL_TIMES[i]) / span
+  return GOAL_VALUES[i] + (GOAL_VALUES[i + 1] - GOAL_VALUES[i]) * localT
+}
+
 function useLoopingGoalPercent(paused: boolean) {
   const [val, setVal] = useState(0)
+  const [mounted, setMounted] = useState(false)
+
   useEffect(() => {
-    if (paused) {
+    setMounted(true)
+  }, [])
+
+  useEffect(() => {
+    if (!mounted || paused) {
       return
     }
-    // IMPORTANT: framer-motion's animate() interprets the FIRST arg as a
-    // "subject" (DOM element) — passing a keyframes array as first arg
-    // throws "Invalid value used as weak map key" because it tries to mount
-    // the array as a DOM element. The correct API is:
-    //   animate(from: number, keyframes: number[], options)
-    //
-    // NOTE: When `to` is an array, framer-motion uses ONLY the array as the
-    // keyframes (the `from` value is ignored — see motion-dom source line
-    // `keyframes: Array.isArray(target) ? target : [null, target]`).
-    //
-    // To match the motion.div bar exactly (which uses
-    //   width: ['0%', '12%', '48%', '76%', '100%', '0%']
-    //   times: [0, 0.18, 0.45, 0.7, 0.9, 1])
-    // we pass the FULL keyframe set [0, 12, 48, 76, 100, 0] (6 values) and
-    // the matching times array (6 entries) so framer-motion honours our
-    // custom timing instead of falling back to default offsets.
-    const controls = animate(0, [0, 12, 48, 76, 100, 0], {
+    // Drive a 0→100 progress value, then map through the keyframe table.
+    // This uses the simplest 3-arg `animate(from, to, options)` form which
+    // cannot throw "Invalid value used as weak map key" (no array passed
+    // as a subject/keyframe ambiguity).
+    const controls = animate(0, 100, {
       duration: 5.5,
       ease: 'easeInOut',
       repeat: Infinity,
       repeatType: 'loop',
-      times: [0, 0.18, 0.45, 0.7, 0.9, 1],
-      onUpdate: (latest) => setVal(latest),
+      onUpdate: (latest) => setVal(goalPctFromProgress(latest / 100)),
     })
     return () => controls.stop()
-  }, [paused])
+  }, [paused, mounted])
 
-  // When paused, force 0 (avoids setState-in-effect lint error)
-  return paused ? 0 : val
+  return !mounted || paused ? 0 : val
 }
 
 /* ---------- Formatters ---------- */

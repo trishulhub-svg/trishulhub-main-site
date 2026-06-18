@@ -485,3 +485,43 @@ Stage Summary:
 - FIX 3 (preventive): LoadingScreen now returns null on server + first client render, only mounting the loader UI after useEffect fires — eliminates any SSR/hydration mismatch in the loader
 - All 4 prior tasks still work: HLS video loops, real company logos show, login page has TrishulHub branding without credentials, dashboard % syncs with bar
 - Screenshots: v4-fixed-dashboard.png, v4-fixed-fullpage.png
+
+---
+Task ID: 19
+Agent: main (Super Z)
+Task: User reported preview not loading ("i cant see my preview please fix it") with prior errors: client-side exception, hydration mismatch, "Invalid value used as weak map key"
+
+Work Log:
+- Read /home/z/my-project/src/components/trishulhub/stats-dashboard.tsx — confirmed `useLoopingGoalPercent` hook calls `animate(0, [0, 12, 48, 76, 100, 0], { times: [0, 0.18, 0.45, 0.7, 0.9, 1], ... })`. Tested this signature in isolation with a Node script — it does NOT throw on its own (framer-motion's 3-arg `(value: number, keyframes: number[], options)` overload is valid).
+- Read /home/z/my-project/src/components/trishulhub/hero.tsx — confirmed `videoReady`/`videoError` are both `false` on SSR and on initial client render (before useEffect), so `style.opacity` is `0` on both. No hydration mismatch in hero.
+- Read /home/z/my-project/src/components/trishulhub/loading-screen.tsx — confirmed it already has a `mounted` flag and returns null on SSR. Good.
+- Ran production build (bun run build) — succeeded, 8 routes generated.
+- Started standalone server (`PORT=3000 HOSTNAME=127.0.0.1 setsid -f bash -c 'exec node .next/standalone/server.js'`).
+- Tested local server with agent-browser: page loads, NO errors, NO console output, all sections render (Hero, Stats Dashboard, Tech Stack, Services, Portfolio, Team, CTA, Footer).
+- Tested deployed preview at https://preview-chat-f078d2de-19a4-40c0-a1be-929e3c32d513.space-z.ai/ with agent-browser (with cache-busting query param): page loads successfully, NO errors, NO console output, all interactive elements work, dashboard animations run when scrolled into view ($1,246,359 portfolio, $82.7k savings, $12.1k investments, etc.).
+- Also tested /admin/login and /founders/kiran on the preview — both load without errors.
+
+DEFENSIVE FIXES APPLIED (prevent any future regression of the original error):
+
+1. /home/z/my-project/src/components/trishulhub/stats-dashboard.tsx
+   - Added `mounted` flag pattern to both `useLoopingNumber` and `useLoopingGoalPercent` hooks. They now return `0` on SSR AND during the very first client render (before `useEffect` runs), guaranteeing identical server/client initial output — no hydration mismatch possible.
+   - Replaced `useLoopingGoalPercent`'s `animate(0, [0, 12, 48, 76, 100, 0], { times: [...] })` call with the simpler, unambiguous `animate(0, 100, { duration: 5.5, ... })` form. We then map the 0→100 progress through a small `goalPctFromProgress()` helper that uses the same `[0, 0.18, 0.45, 0.7, 0.9, 1]` times and `[0, 12, 48, 76, 100, 0]` values. This achieves the same visual sync with the motion.div bar but uses only the safest 3-arg `animate(from, to, options)` form — no array-as-second-arg ambiguity, so it cannot throw "Invalid value used as weak map key" under any circumstances.
+   - Added explicit SSR/HYDRATION SAFETY doc comment at the top of the file.
+
+2. /home/z/my-project/src/components/trishulhub/loading-screen.tsx
+   - Added a 4.5-second HARD FALLBACK timeout that fires `setDone(true)` regardless of whether the requestAnimationFrame loop completes. This ensures the loading screen ALWAYS disappears — even if RAF is throttled (backgrounded tab, low-power mode, slow device, etc.), the user will never be stuck staring at "100% LOADING" forever.
+   - Updated cleanupRef to also clear the new hardFallback timer.
+
+Verification:
+- Production build succeeds (8 routes generated, no errors).
+- Local server (http://127.0.0.1:3000/) — agent-browser test: 0 errors, 0 console output, all sections render, dashboard animates.
+- Deployed preview (https://preview-chat-f078d2de-19a4-40c0-a1be-929e3c32d513.space-z.ai/) — agent-browser test with cache-buster: 0 errors, 0 console output, all sections render, dashboard animates.
+- Tested /admin/login and /founders/kiran on preview — both load successfully with 0 errors.
+- Screenshots saved: /home/z/my-project/download/preview-working.png
+
+Stage Summary:
+- The preview is fully working. The user's originally reported errors (client-side exception, hydration mismatch, "Invalid value used as weak map key") are no longer reproducible on either local or deployed environments.
+- Applied defensive `mounted` flag pattern to all framer-motion `animate()` consumers in stats-dashboard.tsx to guarantee identical SSR/initial-client render.
+- Replaced the potentially-ambiguous keyframes-array `animate()` call with the unambiguous 3-arg `animate(from, to, options)` form, manually mapping progress through the keyframe tables. Same visual result, zero WeakMap ambiguity risk.
+- Added a 4.5-second hard fallback to the loading screen so it can never get stuck visible.
+- All previously working features remain working: HLS background video loops, real company SVG logos, admin login with TrishulHub branding, founder detail pages, dashboard % syncs with progress bar.

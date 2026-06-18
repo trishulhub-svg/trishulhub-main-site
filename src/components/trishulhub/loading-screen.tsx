@@ -19,6 +19,7 @@ export function LoadingScreen() {
     const kickoff = () => {
       setMounted(true)
       let raf = 0
+      let finishTimer: ReturnType<typeof setTimeout> | undefined
       const start = performance.now()
       const duration = 2600
       const tick = (now: number) => {
@@ -29,11 +30,20 @@ export function LoadingScreen() {
         if (t < 1) {
           raf = requestAnimationFrame(tick)
         } else {
-          setTimeout(() => setDone(true), 450)
+          finishTimer = setTimeout(() => setDone(true), 450)
         }
       }
       raf = requestAnimationFrame(tick)
-      cleanupRef.current = () => cancelAnimationFrame(raf)
+      // HARD FALLBACK: ensure the loading screen ALWAYS hides, even if RAF
+      // is throttled (backgrounded tab, low-power mode, slow device) or
+      // the tick loop stalls for any reason. 4.5s = 2.6s anim + 450ms delay
+      // + generous buffer.
+      const hardFallback = setTimeout(() => setDone(true), 4500)
+      cleanupRef.current = () => {
+        cancelAnimationFrame(raf)
+        if (finishTimer) clearTimeout(finishTimer)
+        clearTimeout(hardFallback)
+      }
     }
     const t = setTimeout(kickoff, 0)
     return () => {
