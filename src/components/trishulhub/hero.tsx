@@ -17,7 +17,13 @@ const HERO_VIDEO_URL = '/videos/hero-bg.mp4'
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
-  const [videoError, setVideoError] = useState(false)
+  // NOTE: We intentionally do NOT track `videoError` for opacity control.
+  // The previous implementation hid the video on any 'error' event, but
+  // browsers can fire transient errors mid-playback (especially for large
+  // or high-res videos) — hiding a video that was already playing makes
+  // it "disappear after 2-3 seconds", which is the exact bug we're fixing.
+  // Now the video stays visible once it has started, and we just keep
+  // retrying playback in the background if anything goes wrong.
 
   useEffect(() => {
     const v = videoRef.current
@@ -33,17 +39,30 @@ export function Hero() {
     // .play() call even when the autoPlay attribute is set).
     const tryPlay = () => {
       v.muted = true
-      v.play().catch(() => {
-        // Autoplay was blocked — will retry on first user interaction.
-      })
+      const p = v.play()
+      if (p && typeof p.catch === 'function') {
+        p.catch(() => {
+          // Autoplay was blocked — will retry on first user interaction.
+        })
+      }
     }
 
     v.addEventListener('loadeddata', onReady)
     v.addEventListener('canplay', onReady)
     v.addEventListener('playing', onReady)
-    v.addEventListener('error', () => {
-      if (!cancelled) setVideoError(true)
-    })
+    // On transient errors, DO NOT hide the video — just force a replay from
+    // the start. This is what keeps the hero video from "disappearing after
+    // 2-3 seconds" when the browser hiccups on a large video file.
+    const onError = () => {
+      try {
+        v.currentTime = 0
+        const p = v.play()
+        if (p && typeof p.catch === 'function') p.catch(() => {})
+      } catch {
+        /* ignore */
+      }
+    }
+    v.addEventListener('error', onError)
 
     // If the video is already loaded (cached), fire ready immediately.
     if (v.readyState >= 2) onReady()
@@ -62,17 +81,29 @@ export function Hero() {
     window.addEventListener('touchstart', onFirstInteraction)
     window.addEventListener('keydown', onFirstInteraction)
 
-    // Safety: if nothing fires in 5s, show fallback.
-    const safety = setTimeout(() => {
-      if (!cancelled && !videoReady) setVideoError(true)
-    }, 5000)
+    // Periodic health-check: every 2s, if the video is paused but should be
+    // playing, kick it again. This catches the rare case where the browser
+    // silently pauses a background video (power-saving mode, tab throttling)
+    // without firing an error event.
+    const healthCheck = setInterval(() => {
+      if (cancelled) return
+      if (v.paused && !v.ended) {
+        tryPlay()
+      }
+    }, 2000)
+
+    // When the video loops back to the start, ensure ready stays true.
+    const onSeeked = () => onReady()
+    v.addEventListener('seeked', onSeeked)
 
     return () => {
       cancelled = true
-      clearTimeout(safety)
+      clearInterval(healthCheck)
       v.removeEventListener('loadeddata', onReady)
       v.removeEventListener('canplay', onReady)
       v.removeEventListener('playing', onReady)
+      v.removeEventListener('error', onError)
+      v.removeEventListener('seeked', onSeeked)
       window.removeEventListener('click', onFirstInteraction)
       window.removeEventListener('touchstart', onFirstInteraction)
       window.removeEventListener('keydown', onFirstInteraction)
@@ -87,7 +118,8 @@ export function Hero() {
     if (!v) return
     try {
       v.currentTime = 0
-      v.play().catch(() => {})
+      const p = v.play()
+      if (p && typeof p.catch === 'function') p.catch(() => {})
     } catch {
       /* ignore */
     }
@@ -111,16 +143,18 @@ export function Hero() {
         onEnded={handleEnded}
         className="absolute inset-0 h-full w-full object-cover"
         style={{
-          opacity: videoReady && !videoError ? 1 : 0,
+          // Once the video has signalled it's ready, keep it visible.
+          // We do NOT hide on transient errors (see comment above).
+          opacity: videoReady ? 1 : 0,
           transition: 'opacity 1s ease-out',
         }}
       />
 
-      {/* Fallback background grid (visible until video loads OR if video fails) */}
+      {/* Fallback background grid (visible only until the video first loads) */}
       <div
         className="pointer-events-none absolute inset-0 bg-grid"
         style={{
-          opacity: videoReady && !videoError ? 0 : 0.6,
+          opacity: videoReady ? 0 : 0.6,
           transition: 'opacity 1s ease-out',
         }}
       />
@@ -130,7 +164,7 @@ export function Hero() {
         style={{
           background:
             'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
-          opacity: videoReady && !videoError ? 0 : 1,
+          opacity: videoReady ? 0 : 1,
           transition: 'opacity 1s ease-out',
         }}
       />
@@ -145,29 +179,32 @@ export function Hero() {
         style={{ background: 'radial-gradient(circle, #0088CC 0%, transparent 70%)' }}
       />
 
-      {/* DARK + THEMED OVERLAY for readability (sits above video) */}
-      {/* Base dark wash to fade video into the site theme */}
+      {/* DARK + THEMED OVERLAY for readability (sits above video)
+       * User asked for a "LITTLE dark overlay" — subtle, just enough to
+       * keep text readable while the video stays clearly visible.
+       * Previous overlay was 82-95% black which hid the video completely. */}
+      {/* Subtle top + bottom darkening for text legibility (sides stay clear) */}
       <div
         className="pointer-events-none absolute inset-0 z-[5]"
         style={{
           background:
-            'linear-gradient(180deg, rgba(10,10,10,0.82) 0%, rgba(10,10,10,0.45) 35%, rgba(10,10,10,0.6) 70%, rgba(10,10,10,0.95) 100%)',
+            'linear-gradient(180deg, rgba(10,10,10,0.55) 0%, rgba(10,10,10,0.15) 30%, rgba(10,10,10,0.25) 65%, rgba(10,10,10,0.75) 100%)',
         }}
       />
-      {/* Themed cyan/blue color wash so video blends with site palette */}
+      {/* Themed cyan/blue color wash so video blends with site palette (subtle) */}
       <div
         className="pointer-events-none absolute inset-0 z-[5] mix-blend-color"
         style={{
           background:
-            'linear-gradient(135deg, rgba(0,136,204,0.55) 0%, rgba(0,222,255,0.25) 50%, rgba(10,10,10,0.6) 100%)',
+            'linear-gradient(135deg, rgba(0,136,204,0.25) 0%, rgba(0,222,255,0.12) 50%, rgba(10,10,10,0.2) 100%)',
         }}
       />
-      {/* Radial vignette darkening edges */}
+      {/* Soft radial vignette for cinematic feel (very subtle) */}
       <div
         className="pointer-events-none absolute inset-0 z-[5]"
         style={{
           background:
-            'radial-gradient(ellipse 80% 70% at 50% 50%, transparent 0%, rgba(10,10,10,0.45) 55%, rgba(10,10,10,0.9) 100%)',
+            'radial-gradient(ellipse 90% 80% at 50% 50%, transparent 0%, rgba(10,10,10,0.2) 60%, rgba(10,10,10,0.55) 100%)',
         }}
       />
       {/* Subtle cyan tint band behind text for contrast */}

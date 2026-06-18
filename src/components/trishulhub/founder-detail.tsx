@@ -242,7 +242,15 @@ export function FounderDetailClient({
             transition={{ duration: 0.7, delay: 0.2 }}
             className="order-1 lg:order-2"
           >
-            <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl border border-[#00DEFF]/20">
+            {/* Right: photo / initial card
+             * Video is 858x1072 (4:5 portrait). Previously this container
+             * used aspect-square (1:1), which cropped the top of the head/
+             * hair when the 4:5 portrait video was object-cover'd into it.
+             * Switching to aspect-[4/5] makes the container match the video
+             * exactly, so nothing is cropped. object-position: center top
+             * is a belt-and-suspenders guard for any rounding.
+             */}
+            <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl border border-[#00DEFF]/20">
               {/* Background gradient */}
               <div
                 className="absolute inset-0"
@@ -280,6 +288,7 @@ export function FounderDetailClient({
                   preload="auto"
                   aria-hidden="true"
                   className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: 'center top' }}
                 />
               ) : f.image ? (
                 <img

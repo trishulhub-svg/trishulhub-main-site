@@ -112,8 +112,17 @@ export function Team({ founders }: { founders: Founder[] }) {
                 }}
               />
 
-              {/* Top hero area */}
-              <div className="relative aspect-[4/5] overflow-hidden sm:h-64 sm:aspect-auto">
+              {/* Top hero area
+               * Video is 858x1072 (4:5 portrait). We use aspect-[4/5]
+               * CONSISTENTLY on mobile AND desktop so the video never gets
+               * cropped (the previous sm:h-64 sm:aspect-auto override turned
+               * the desktop container into a wide rectangle, squashing the
+               * portrait video and cutting off the top of the head/hair).
+               * We also use object-position: center top as a belt-and-suspenders
+               * guard so the head is always prioritised if any tiny rounding
+               * crop happens at the bottom.
+               */}
+              <div className="relative aspect-[4/5] overflow-hidden">
                 {/* Background gradient (scales on hover) — always present as base */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"
@@ -134,6 +143,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                     preload="auto"
                     aria-hidden="true"
                     className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    style={{ objectPosition: 'center top' }}
                   />
                 )}
 

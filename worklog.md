@@ -600,3 +600,77 @@ Stage Summary:
 - TASK 2 (tech logos blue): All 80 tech stack logo instances (20 unique × 4 duplicates for 2 marquee rows) now render in the theme blue color (#00DEFF). Removed the grayscale filter that was making them invisible.
 - TASK 3 (hero video): Completely replaced the Mux HLS streaming infrastructure with a simple local MP4 video. The video plays on an infinite loop (triple-redundant: native loop attr + onEnded handler + retry-on-error). The existing 4-layer dark + themed overlay system was preserved and provides the "beautiful effect" the user asked for.
 - To make these changes live on the deployed preview (preview-chat-f078d2de-19a4-40c0-a1be-929e3c32d513.space-z.ai), the user needs to redeploy. Currently the preview still shows the OLD version (verified — /videos/founder-kiran.mp4 returns 403 on the preview).
+
+---
+Task ID: 21
+Agent: main (Super Z)
+Task: User reported 3 follow-up issues after Task 20:
+  - Task 1: Hero video plays for only 2-3 seconds then disappears (main issue)
+  - Task 2: Tech-stack company logos still showing black on dark background (despite previous currentColor fix)
+  - Task 3: Founder videos in "Meet The Founder" section + portfolio pages are cropped from top — face and hair not visible. User wants the "perfect ratio" for both sections.
+
+Work Log:
+
+TASK 1 — Hero video disappearing after 2-3s:
+- ROOT CAUSE: The hero video file was 4048×2048 (5.3MB) — far too large for browsers to decode reliably. After playing for 2-3 seconds, the browser's video decoder would hiccup, firing a transient `error` event. The previous hero.tsx code had `setVideoError(true)` on any error event, which set the video opacity to 0 → video "disappeared". Additionally, there was a 5-second safety timeout that would also hide the video if `loadeddata`/`canplay`/`playing` hadn't fired yet.
+- FIX PART A — Re-encoded the video (scripts/reencode-hero-video.sh):
+  * Original: 4048×2048, 5.3MB, 4.7s
+  * New: 1920×972, 725KB, 4.7s (H.264, CRF 23, yuv420p, +faststart)
+  * Same 2:1 aspect ratio, 86% smaller, decodes smoothly in all browsers
+- FIX PART B — Rewrote hero.tsx error handling:
+  * Removed the `videoError` state entirely (no more opacity-driven hiding)
+  * Removed the 5-second safety timeout
+  * Added `onError` handler that just resets `currentTime=0` and calls `play()` again (keeps video visible + keeps trying)
+  * Added a 2-second `healthCheck` interval that re-kicks playback if the video is paused (covers power-saving / tab throttling)
+  * Added `seeked` listener to ensure `videoReady` stays true across loops
+- FIX PART C — Lightened the dark overlay (user originally asked for "LITTLE dark overlay" but previous overlay was 82-95% black, hiding the video completely):
+  * Base wash: 82%/45%/60%/95% → 55%/15%/25%/75%
+  * Cyan/blue color wash: 55%/25%/60% → 25%/12%/20%
+  * Radial vignette: 45%/90% → 20%/55%
+- VERIFICATION: Hero video plays through 4.7s and loops seamlessly (samples: t=1.55s, 2.79s, 4.03s, then 0.55s = looped, then 1.79s in 2nd loop). VLM confirmed: "The background video is visible. The video content shows a swirling, cosmic-like scene with dark tones, blue hues, and what appears to be a tunnel or vortex effect."
+
+TASK 2 — Tech-stack logos still black:
+- ROOT CAUSE: The previous fix set `color: '#00DEFF'` on the `<img>` wrapper expecting `fill="currentColor"` on the SVG to inherit it. THIS DOES NOT WORK for SVGs loaded via `<img src="*.svg">` — the `<img>` element is a "replaced element" that renders the SVG as an opaque image; CSS `color` / `fill` on the parent does NOT propagate into the SVG document inside the `<img>`. The SVGs were rendering with their original `currentColor` which resolves to black for `<img>` elements.
+- FIX: Patched all 20 SVG files in /public/images/logos/ to hardcode `fill="#00DEFF"` directly (replacing `fill="currentColor"`). See scripts/patch-svg-fills-blue.sh.
+- VERIFICATION via canvas pixel sampling of all 20 unique logos:
+  * react: 834 theme-blue pixels, 0 black ✓
+  * nextdotjs: 1675 blue, 0 black ✓
+  * typescript: 1928 blue, 0 black ✓
+  * (all 20 logos): BLUE ✓ with 0 black pixels each
+
+TASK 3 — Founder videos cropped from top (face/hair not visible):
+- ROOT CAUSE: The founder videos are 858×1072 (4:5 portrait aspect ratio), but the containers were wrong aspect ratios:
+  * team.tsx: container was `aspect-[4/5] sm:h-64 sm:aspect-auto` — on desktop, the `sm:h-64 sm:aspect-auto` override turned it into a 256px-tall wide rectangle (≈2:1), forcing `object-cover` to crop the top and bottom of the 4:5 portrait video. Hair and chin got cut off.
+  * founder-detail.tsx: container was `aspect-square` (1:1), which crops top and bottom of a 4:5 portrait video even more aggressively.
+- FIX — Used 4:5 aspect ratio consistently (matches the video's natural ratio, so `object-cover` doesn't need to crop anything):
+  * team.tsx: changed container to `aspect-[4/5]` only (removed `sm:h-64 sm:aspect-auto` override). Added `style={{ objectPosition: 'center top' }}` on the `<video>` as a belt-and-suspenders guard.
+  * founder-detail.tsx: changed container from `aspect-square` to `aspect-[4/5]`. Added `style={{ objectPosition: 'center top' }}` on the `<video>`.
+- VERIFICATION (agent-browser):
+  * Team section Kiran video: parent 558×698 = 4:5 ✓, videoAspect 0.800 ✓, objPos "50% 0%" ✓
+  * Team section Taroon video: same ✓
+  * Portfolio Kiran video: parent 446×558 = 4:5 ✓, objPos "50% 0%" ✓
+  * Portfolio Taroon video: same ✓
+- VERIFICATION (VLM screenshot analysis):
+  * Team section: "Kiran's card: The video shows a person's face with the full head visible (no cropping of the top of the head/hair). Taroon's card: Similarly, the video shows a person's face with the full head visible (no cropping)."
+  * Kiran portfolio: "person (Kiran) in a suit, smiling. The full head/hair is not cropped from the top."
+  * Taroon portfolio: "person in a dark suit... full head and hair visible (not cropped from the top)."
+
+Production build verification:
+- bun run build succeeded (8 routes generated)
+- Lint: 0 new errors (2 pre-existing set-state-in-effect warnings in stats-dashboard.tsx, unrelated to this task)
+- Local server (http://127.0.0.1:3000/) runs stably
+- All 3 video files (hero-bg.mp4, founder-kiran.mp4, founder-taroon.mp4) serve HTTP 200 with correct content
+- All 20 SVG logos serve HTTP 200 with `fill="#00DEFF"` confirmed via curl
+- Screenshots saved to /home/z/my-project/download/:
+  * v5-hero-lighter-overlay.png (hero video now visible)
+  * v5-team-face-visible.png (founder card videos show full face)
+  * v5-kiran-portfolio-face.png (Kiran portfolio video shows full face)
+  * v5-taroon-portfolio-face.png (Taroon portfolio video shows full face)
+  * v5-tech-stack-blue-logos.png (all 20 logos in theme blue)
+
+Stage Summary:
+- Task 1 ✓: Hero video re-encoded from 5.3MB to 725KB + error handling rewritten so transient decoding errors no longer hide the video + overlay lightened from 82-95% black to 15-75% black so video is actually visible. VLM confirmed video is now visible.
+- Task 2 ✓: All 20 SVG logos patched from `fill="currentColor"` to `fill="#00DEFF"` directly inside the SVG files. This is the ONLY reliable way to recolor SVGs loaded via `<img>` tags (CSS color/fill on parent does not cascade into replaced elements). Pixel-sampling verified all 20 logos render in theme blue with zero black pixels.
+- Task 3 ✓: Founder video containers now use `aspect-[4/5]` consistently (matching the 858×1072 video's natural ratio) on both the team section AND the portfolio page. No more cropping from top — VLM confirmed full head/hair visible for both Kiran and Taroon on both team cards and portfolio pages.
+- To make these changes live on the deployed preview, the user needs to redeploy.
+
