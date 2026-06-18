@@ -1,30 +1,49 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export function LoadingScreen() {
   const [progress, setProgress] = useState(0)
   const [done, setDone] = useState(false)
+  // `mounted` ensures we only render the actual UI on the client, eliminating
+  // any chance of SSR/client hydration mismatch (the server renders nothing,
+  // the client renders the loader once mounted).
+  const [mounted, setMounted] = useState(false)
+  const cleanupRef = useRef<() => void>(() => {})
 
   useEffect(() => {
-    let raf = 0
-    const start = performance.now()
-    const duration = 2600
-    const tick = (now: number) => {
-      const t = Math.min((now - start) / duration, 1)
-      // ease-out cubic
-      const eased = 1 - Math.pow(1 - t, 3)
-      setProgress(Math.round(eased * 100))
-      if (t < 1) {
-        raf = requestAnimationFrame(tick)
-      } else {
-        setTimeout(() => setDone(true), 450)
+    // Defer the mount flag + animation setup to next tick so we don't call
+    // setState synchronously inside the effect body (avoids the React 19
+    // "set-state-in-effect" warning while preserving identical behaviour).
+    const kickoff = () => {
+      setMounted(true)
+      let raf = 0
+      const start = performance.now()
+      const duration = 2600
+      const tick = (now: number) => {
+        const t = Math.min((now - start) / duration, 1)
+        // ease-out cubic
+        const eased = 1 - Math.pow(1 - t, 3)
+        setProgress(Math.round(eased * 100))
+        if (t < 1) {
+          raf = requestAnimationFrame(tick)
+        } else {
+          setTimeout(() => setDone(true), 450)
+        }
       }
+      raf = requestAnimationFrame(tick)
+      cleanupRef.current = () => cancelAnimationFrame(raf)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
+    const t = setTimeout(kickoff, 0)
+    return () => {
+      clearTimeout(t)
+      cleanupRef.current?.()
+    }
   }, [])
+
+  // Render nothing on the server; mount on client only.
+  if (!mounted) return null
 
   return (
     <AnimatePresence>

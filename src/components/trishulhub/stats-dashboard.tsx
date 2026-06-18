@@ -35,15 +35,29 @@ function useLoopingGoalPercent(paused: boolean) {
     if (paused) {
       return
     }
-    // Pass keyframes array as first arg → framer-motion interpolates between
-    // them using `times`. Identical keyframes/times to the progress bar above.
-    const controls = animate([0, 12, 48, 76, 100, 0], {
+    // IMPORTANT: framer-motion's animate() interprets the FIRST arg as a
+    // "subject" (DOM element) — passing a keyframes array as first arg
+    // throws "Invalid value used as weak map key" because it tries to mount
+    // the array as a DOM element. The correct API is:
+    //   animate(from: number, keyframes: number[], options)
+    //
+    // NOTE: When `to` is an array, framer-motion uses ONLY the array as the
+    // keyframes (the `from` value is ignored — see motion-dom source line
+    // `keyframes: Array.isArray(target) ? target : [null, target]`).
+    //
+    // To match the motion.div bar exactly (which uses
+    //   width: ['0%', '12%', '48%', '76%', '100%', '0%']
+    //   times: [0, 0.18, 0.45, 0.7, 0.9, 1])
+    // we pass the FULL keyframe set [0, 12, 48, 76, 100, 0] (6 values) and
+    // the matching times array (6 entries) so framer-motion honours our
+    // custom timing instead of falling back to default offsets.
+    const controls = animate(0, [0, 12, 48, 76, 100, 0], {
       duration: 5.5,
       ease: 'easeInOut',
       repeat: Infinity,
       repeatType: 'loop',
       times: [0, 0.18, 0.45, 0.7, 0.9, 1],
-      onUpdate: (latest) => setVal(latest as number),
+      onUpdate: (latest) => setVal(latest),
     })
     return () => controls.stop()
   }, [paused])
