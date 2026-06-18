@@ -1,32 +1,74 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
+import Hls from 'hls.js'
 import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
+
+const HLS_URL = 'https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8'
 
 export function Hero() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const [videoReady, setVideoReady] = useState(false)
+  const [videoError, setVideoError] = useState(false)
 
   useEffect(() => {
     const v = videoRef.current
     if (!v) return
-    const onReady = () => setVideoReady(true)
-    // Show video as soon as metadata (dimensions/duration) is known
-    v.addEventListener('loadedmetadata', onReady)
-    v.addEventListener('loadeddata', onReady)
-    v.addEventListener('canplay', onReady)
-    // Fallback: if metadata already loaded, show via microtask (avoids sync setState in effect)
-    if (v.readyState >= 1) {
-      queueMicrotask(() => setVideoReady(true))
+
+    let hls: Hls | null = null
+    let cancelled = false
+
+    const onReady = () => {
+      if (!cancelled) setVideoReady(true)
     }
-    // try to play (some browsers need a nudge)
-    v.play().catch(() => {})
+
+    // Safari + iOS support HLS natively
+    if (v.canPlayType('application/vnd.apple.mpegurl')) {
+      v.src = HLS_URL
+      v.addEventListener('loadedmetadata', onReady)
+      v.addEventListener('loadeddata', onReady)
+      v.addEventListener('canplay', onReady)
+      v.play().catch(() => {})
+    } else if (Hls.isSupported()) {
+      // Chrome / Firefox / Edge — use hls.js
+      hls = new Hls({
+        enableWorker: true,
+        lowLatencyMode: false,
+        backBufferLength: 30,
+        // Tune for smoother autoplay on mobile
+        maxBufferLength: 20,
+        maxMaxBufferLength: 40,
+      })
+      hls.loadSource(HLS_URL)
+      hls.attachMedia(v)
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        v.play().catch(() => {})
+      })
+      hls.on(Hls.Events.FRAG_LOADED, onReady)
+      v.addEventListener('canplay', onReady)
+      v.addEventListener('loadeddata', onReady)
+    } else {
+      // Fallback — cannot play (defer to avoid setState-in-effect)
+      queueMicrotask(() => {
+        if (!cancelled) setVideoError(true)
+      })
+    }
+
+    // Safety: if nothing fires in 5s, show fallback anyway
+    const safety = setTimeout(() => {
+      if (!cancelled && !videoReady) setVideoError(true)
+    }, 5000)
+
     return () => {
+      cancelled = true
+      clearTimeout(safety)
       v.removeEventListener('loadedmetadata', onReady)
       v.removeEventListener('loadeddata', onReady)
       v.removeEventListener('canplay', onReady)
+      if (hls) hls.destroy()
     }
+     
   }, [])
 
   return (
@@ -34,7 +76,7 @@ export function Hero() {
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Background video (bottom layer) */}
+      {/* Background video (bottom layer) — HLS stream */}
       <video
         ref={videoRef}
         autoPlay
@@ -45,17 +87,28 @@ export function Hero() {
         aria-hidden="true"
         className="absolute inset-0 h-full w-full object-cover"
         style={{
-          opacity: videoReady ? 1 : 0,
+          opacity: videoReady && !videoError ? 1 : 0,
           transition: 'opacity 1s ease-out',
         }}
-      >
-        <source src="/videos/hero-bg.mp4" type="video/mp4" />
-      </video>
+      />
 
-      {/* Fallback background grid (visible until video loads) */}
+      {/* Fallback background grid (visible until video loads OR if video fails) */}
       <div
-        className="pointer-events-none absolute inset-0 bg-grid opacity-60"
-        style={{ opacity: videoReady ? 0 : 0.6, transition: 'opacity 1s ease-out' }}
+        className="pointer-events-none absolute inset-0 bg-grid"
+        style={{
+          opacity: videoReady && !videoError ? 0 : 0.6,
+          transition: 'opacity 1s ease-out',
+        }}
+      />
+      {/* Fallback gradient (subtle dark base so section isn't pitch black while loading) */}
+      <div
+        className="pointer-events-none absolute inset-0"
+        style={{
+          background:
+            'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
+          opacity: videoReady && !videoError ? 0 : 1,
+          transition: 'opacity 1s ease-out',
+        }}
       />
 
       {/* Radial glows (sit above video, below overlays) */}

@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Menu, X } from 'lucide-react'
+import { Menu, X, Lock } from 'lucide-react'
 
 const links = [
   { label: 'Home', href: '#home' },
@@ -61,6 +61,13 @@ export function Navbar() {
 
           <div className="flex items-center gap-2">
             <a
+              href="/admin/login"
+              className="hidden items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-all hover:border-[#00DEFF]/50 hover:bg-[#00DEFF]/5 hover:text-[#00DEFF] sm:inline-flex"
+            >
+              <Lock size={13} />
+              Login
+            </a>
+            <a
               href="#contact"
               className="hidden rounded-full bg-[#00DEFF] px-5 py-2 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_20px_rgba(0,222,255,0.5)] sm:inline-block"
             >
@@ -101,6 +108,14 @@ export function Navbar() {
               className="mt-1 rounded-lg bg-[#00DEFF] px-4 py-3 text-center text-sm font-semibold text-[#0A0A0A]"
             >
               Get Started
+            </a>
+            <a
+              href="/admin/login"
+              onClick={() => setOpen(false)}
+              className="flex items-center justify-center gap-2 rounded-lg border border-white/15 px-4 py-3 text-center text-sm font-medium text-white/80"
+            >
+              <Lock size={14} />
+              Founder Login
             </a>
           </motion.nav>
         )}

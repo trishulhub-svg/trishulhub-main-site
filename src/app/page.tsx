@@ -1,5 +1,3 @@
-'use client'
-
 import { LoadingScreen } from '@/components/trishulhub/loading-screen'
 import { Navbar } from '@/components/trishulhub/navbar'
 import { Hero } from '@/components/trishulhub/hero'
@@ -10,8 +8,30 @@ import { Portfolio } from '@/components/trishulhub/portfolio'
 import { Team } from '@/components/trishulhub/team'
 import { CTA } from '@/components/trishulhub/cta'
 import { Footer } from '@/components/trishulhub/footer'
+import { db } from '@/lib/db'
 
-export default function Home() {
+export default async function Home() {
+  // Fetch founders from DB so admin edits reflect here too
+  const founders = await db.founder.findMany({
+    select: {
+      slug: true,
+      initial: true,
+      name: true,
+      role: true,
+      projects: true,
+      bio: true,
+    },
+    orderBy: { createdAt: 'asc' },
+  })
+
+  // Fallback if DB is empty
+  const foundersData = founders.length > 0 ? founders : [
+    { slug: 'kiran', initial: 'K', name: 'Kiran', role: 'Fullstack Developer', projects: '50+', bio: 'Fullstack developer with expertise in React, Node.js, and modern web technologies.' },
+    { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Co-Founder', projects: '40+', bio: 'Visionary leader driving TrishulHub\'s strategic growth.' },
+    { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Fullstack Developer & SMM Lead', projects: '45+', bio: 'Bridging development and marketing with expertise in React, SEO, and social media.' },
+    { slug: 'pruthvi', initial: 'P', name: 'Pruthvi', role: 'Management & Operations Head', projects: '35+', bio: 'Operations expert ensuring smooth project delivery.' },
+  ]
+
   return (
     <div className="relative flex min-h-screen flex-col bg-[#0A0A0A]">
       <LoadingScreen />
@@ -22,7 +42,7 @@ export default function Home() {
         <TechStack />
         <Services />
         <Portfolio />
-        <Team />
+        <Team founders={foundersData} />
         <CTA />
       </main>
       <Footer />

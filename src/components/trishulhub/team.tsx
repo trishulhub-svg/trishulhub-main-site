@@ -1,40 +1,18 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Github, Linkedin, Twitter, Mail } from 'lucide-react'
+import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react'
 
-const team = [
-  {
-    initial: 'K',
-    name: 'Kiran',
-    role: 'Fullstack Developer & Co-Founder',
-    projects: '50+',
-    bio: 'Fullstack developer with expertise in React, Node.js, and modern web technologies. Passionate about building scalable solutions that drive business growth.',
-  },
-  {
-    initial: 'T',
-    name: 'Taroon',
-    role: 'CEO & Co-Founder',
-    projects: '40+',
-    bio: 'Visionary leader driving TrishulHub\u2019s strategic growth. Specializes in business strategy, team building, and client relations with a focus on delivering excellence.',
-  },
-  {
-    initial: 'A',
-    name: 'Akshat',
-    role: 'Fullstack Developer & SMM Lead',
-    projects: '45+',
-    bio: 'Bridging development and marketing with expertise in React, SEO, and social media strategy. Creates integrated solutions that maximize digital impact.',
-  },
-  {
-    initial: 'P',
-    name: 'Pruthvi',
-    role: 'Management & Operations Head',
-    projects: '35+',
-    bio: 'Operations expert ensuring smooth project delivery through agile methodologies, effective communication, and strong client relationships.',
-  },
-]
+type Founder = {
+  slug: string
+  initial: string
+  name: string
+  role: string
+  projects: string
+  bio: string
+}
 
-export function Team() {
+export function Team({ founders }: { founders: Founder[] }) {
   return (
     <section id="about" className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       {/* bg glow */}
@@ -60,20 +38,21 @@ export function Team() {
             style={{ color: '#A0A0A0' }}
           >
             The minds behind TrishulHub — a team of passionate experts dedicated
-            to delivering excellence in every project.
+            to delivering excellence in every project. Click any founder to view their full portfolio.
           </p>
         </div>
 
         {/* Grid - 2 columns */}
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-          {team.map((m, i) => (
-            <motion.div
-              key={m.name}
+          {founders.map((m, i) => (
+            <motion.a
+              key={m.slug}
+              href={`/founders/${m.slug}`}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: '-40px' }}
               transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 cursor-pointer"
             >
               {/* Hover glow border layer */}
               <div
@@ -128,6 +107,11 @@ export function Team() {
                   </span>
                 </div>
 
+                {/* Top-right "View Portfolio" arrow icon */}
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white/40 backdrop-blur-sm transition-all duration-300 group-hover:border-[#00DEFF]/60 group-hover:bg-[#00DEFF]/10 group-hover:text-[#00DEFF]">
+                  <ArrowUpRight size={16} />
+                </div>
+
                 {/* Bottom reveal bar (slides up on hover) */}
                 <div
                   className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0"
@@ -139,34 +123,30 @@ export function Team() {
                   }}
                 >
                   <div className="flex items-center justify-center gap-3 py-4">
-                    <a
-                      href="#"
+                    <span
                       aria-label={`${m.name} on GitHub`}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
                     >
                       <Github size={16} />
-                    </a>
-                    <a
-                      href="#"
+                    </span>
+                    <span
                       aria-label={`${m.name} on LinkedIn`}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
                     >
                       <Linkedin size={16} />
-                    </a>
-                    <a
-                      href="#"
+                    </span>
+                    <span
                       aria-label={`${m.name} on Twitter`}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
                     >
                       <Twitter size={16} />
-                    </a>
-                    <a
-                      href="#"
+                    </span>
+                    <span
                       aria-label={`Email ${m.name}`}
                       className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
                     >
                       <Mail size={16} />
-                    </a>
+                    </span>
                   </div>
                 </div>
 
@@ -200,6 +180,12 @@ export function Team() {
                   {m.bio}
                 </p>
 
+                {/* "View Portfolio" link */}
+                <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-[#00DEFF] opacity-80 transition-all duration-300 group-hover:gap-2.5 group-hover:opacity-100">
+                  View Full Portfolio
+                  <ArrowUpRight size={12} />
+                </div>
+
                 {/* Divider line (scales in on hover) */}
                 <div
                   className="mt-4 h-px w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
@@ -209,7 +195,7 @@ export function Team() {
                   }}
                 />
               </div>
-            </motion.div>
+            </motion.a>
           ))}
         </div>
 

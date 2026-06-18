@@ -224,3 +224,142 @@ Stage Summary:
 - All 13 prior tasks preserved (layout, sections, animations, hero video, etc.)
 - Lint clean, Prisma client generated, no runtime errors
 - Project ready for continued development/iteration
+
+---
+Task ID: 15
+Agent: main
+Task: TASK 1 — Replace hero background video with HLS stream from Mux URL, mobile-friendly, perfectly overlaid
+
+Work Log:
+- Installed hls.js@1.6.16 (Safari supports HLS natively; Chrome/Firefox/Edge need hls.js)
+- Rewrote src/components/trishulhub/hero.tsx with HLS streaming logic:
+  * Native HLS path: if video.canPlayType('application/vnd.apple.mpegurl') → set v.src = HLS_URL directly (Safari/iOS)
+  * hls.js path: Hls.isSupported() → new Hls({enableWorker, backBufferLength, maxBufferLength tuned for smooth autoplay}), loadSource + attachMedia, play on MANIFEST_PARSED
+  * FRAG_LOADED + canplay + loadeddata events all trigger videoReady fade-in
+  * Safety timeout (5s) falls back to gradient if stream never loads
+  * QueueMicrotask for setState calls (avoids react-hooks/set-state-in-effect lint error)
+- Preserved ALL existing overlay layers: dark gradient, themed cyan/blue color wash (mix-blend-color), radial vignette, cyan tint band, decorative orbiting rings, grid fallback
+- Mobile-friendly: video element uses object-cover + absolute inset-0 + h-full w-full, playsInline + muted + autoPlay + loop (iOS autoplay requires muted+playsInline)
+
+Verification:
+- Browser: video element present, src = https://stream.mux.com/Aa02T7oM1wH5Mk5EEVDYhbZ1ChcdhRsS2m1NYyx4Ua1g.m3u8
+- iPhone 14 viewport (390x844): no horizontal overflow, video element present, all hero text readable
+- Lint clean (0 errors, 0 warnings)
+- Screenshot: /home/z/my-project/download/v2-task1-hero-hls.png (desktop), v2-task1-hero-mobile.png (mobile)
+
+Stage Summary:
+- Hero now streams Mux HLS video as background with all original overlays preserved
+- Cross-browser: works on Safari (native), Chrome/Firefox/Edge (hls.js), with graceful fallback
+- Mobile-friendly: object-cover, playsInline, no overflow on iPhone viewport
+
+---
+Task ID: 16
+Agent: main
+Task: TASK 2 — Remove Co-Founder from Kiran + make founder cards clickable + build LinkedIn-style personal portfolio detail pages
+
+Work Log:
+- Fixed Kiran's role in DB seed: changed from "Fullstack Developer & Co-Founder" to just "Fullstack Developer"
+- Expanded Prisma schema with Founder model: id, slug, name, initial, role, bio, projects, image, dateOfBirth, address, zipCode, email, phone, origin, github/linkedin/twitter/website, skills (JSON), education (JSON), experience (JSON), projectsList (JSON), username, password
+- Ran prisma db push + generate successfully
+- Seeded 4 founders with rich profile data (bios, 6 skills each, 2 education entries, 2 experience entries, 3 projects each) via scripts/seed-founders.ts
+- Converted src/app/page.tsx to async server component that fetches founders from DB
+- Updated src/components/trishulhub/team.tsx:
+  * Takes founders prop (DB-driven)
+  * Converted founder cards from <motion.div> to <motion.a href={`/founders/${slug}`}> (clickable)
+  * Added top-right "View Portfolio" ArrowUpRight icon on each card
+  * Added "View Full Portfolio" link with arrow in card footer
+  * Kept all existing effects (hover glow, social reveal bar, divider scale, etc.)
+- Built dynamic route src/app/founders/[slug]/page.tsx with generateStaticParams + generateMetadata
+- Built src/components/trishulhub/founder-detail.tsx with personal-portfolio design (adapted from user's reference image, themed with cyan #00DEFF instead of orange):
+  * Sticky top nav: Back to TrishulHub link + TRISHULHUB logo
+  * HERO SECTION: grid layout (text left, photo right) — "HELLO!" badge + "I'm [Name]" headline + role + bio + Hire Me / My Works CTAs + social row (GitHub/LinkedIn/Twitter/Website) + photo card with gradient bg + grid pattern + big initial letter (if no photo) + projects badge
+  * ABOUT ME SECTION: 4/5 portrait photo card + details list (Name, DOB, Address, Origin, Zip, Email, Phone) with cyan icons + Get In Touch button
+  * MY SKILLS SECTION: 2-col grid of skill bars with cyan gradient fills + glow shadows + percentage labels + animated width fill on scroll
+  * MY EDUCATION SECTION: timeline cards with GraduationCap icon, degree/school/year/description
+  * MY EXPERIENCE SECTION: timeline cards with Briefcase icon, role/company/period/description
+  * MY PROJECTS SECTION: 3-col grid of project cards with FolderGit2 icon, name/description/year/link
+  * GET IN TOUCH SECTION: contact CTAs (email + phone)
+  * Footer: copyright line
+
+Verification:
+- All 4 founder routes return 200 (kiran, taroon, akshat, pruthvi)
+- Kiran's role on home page Team section: "Fullstack Developer" (Co-Founder removed) — confirmed via JS eval
+- Taroon still has "CEO & Co-Founder" (correct)
+- Kiran portfolio page contains: HELLO!, I'm, Kiran, Fullstack Developer, About Me, My Skills, My Education, My Experience, My Projects, Get In Touch — all sections confirmed
+- iPhone 14 viewport: no horizontal overflow
+- Clickable cards confirmed: <a href> wraps each founder card
+- Screenshots: v2-task2-kiran-portfolio.png (desktop full), v2-task2-akshat-mobile.png (mobile)
+
+Stage Summary:
+- Kiran is now just "Fullstack Developer" (Co-Founder removed per user request)
+- Founder cards on home page are clickable → /founders/[slug] portfolio pages
+- Each portfolio page has full personal-portfolio design (cyan theme) with hero, about, skills, education, experience, projects, contact sections
+- All founder data stored in Prisma DB — admin edits (Task 3) reflect instantly on portfolio pages
+
+---
+Task ID: 17
+Agent: main
+Task: TASK 3 — Login button in menu + admin panel for 4 founders to edit their portfolio + TrishulHub logo top-right of admin (links to /)
+
+Work Log:
+- Added "Founder" login + admin panel infrastructure:
+  * src/lib/auth.ts — JWT-based session helpers (signSession, verifySession, getSession, setSessionCookie, clearSessionCookie, getCurrentFounder), 7-day cookie expiry, httpOnly + sameSite=lax
+  * Installed jsonwebtoken + @types/jsonwebtoken
+- API routes (all runtime: nodejs, dynamic: force-dynamic):
+  * POST /admin/api/login — validates username/password against DB, sets session cookie, returns founder info
+  * POST /admin/api/logout — clears session cookie
+  * GET /admin/api/me — returns current authenticated founder (or 401)
+  * GET /admin/api/update-profile — returns full founder record for editor
+  * PUT /admin/api/update-profile — updates founder fields (validates types, sanitizes arrays, optional password change)
+  * POST /admin/api/upload-image — accepts FormData image upload (PNG/JPEG/WebP/GIF, max 5MB), saves to /public/uploads/founders/, returns public URL
+- Login page (src/app/admin/login/page.tsx + login-client.tsx):
+  * Server component redirects to /admin if already authed
+  * Centered glassmorphism card on dark themed bg (cyan radial glows, grid pattern)
+  * Username + password fields with icons, show/hide password toggle
+  * Loading state, error message display
+  * Hint box shows demo credentials (kiran/kiran123, taroon/taroon123, akshat/akshat123, pruthvi/pruthvi123)
+  * TrishulHub logo top-right corner → links to / (main site)
+  * "← Home" link top-left
+- Admin dashboard (src/app/admin/page.tsx + dashboard-client.tsx):
+  * Server component redirects to /admin/login if not authed
+  * 7-tab editor: Profile (photo upload + basic info), About & Contact (personal details + social links), Skills (add/remove with range sliders), Education (add/remove cards), Experience (add/remove cards), Projects (add/remove cards), Security (password change)
+  * Save Changes button (top-right + bottom) — calls PUT /admin/api/update-profile with all fields
+  * "Saved ✓" toast confirmation, error display
+  * Image upload via /admin/api/upload-image (FormData), live preview
+  * "View Portfolio" button links to /founders/[slug] in new tab
+  * "Signed in as [username]" indicator
+  * TrishulHub logo TOP-RIGHT corner → links to / (main site)
+  * Sign Out button → POST /admin/api/logout → redirect to /admin/login
+  * Fully mobile-friendly: tabs wrap, inputs stack, bottom save bar
+- Added Login button to navbar (src/components/trishulhub/navbar.tsx):
+  * Desktop: "🔒 Login" pill button next to "Get Started" (hidden on mobile, shows on sm+)
+  * Mobile menu: "Founder Login" link with lock icon
+  * Both link to /admin/login
+
+Verification:
+- Lint clean (0 errors, 0 warnings)
+- API tests via curl:
+  * Wrong password → 401 {"ok":false,"error":"Invalid username or password."}
+  * Correct password (kiran/kiran123) → 200 {"ok":true,"founder":{slug,name,role,username}} + session cookie set
+  * /admin without cookie → 307 redirect to /admin/login
+  * /admin with cookie → 200 dashboard loads
+  * /admin/api/me with cookie → returns founder info
+  * PUT /admin/api/update-profile → updates bio+projects, changes reflect on /founders/kiran public page immediately (verified: "Test updated bio" + "999+" appear on public page)
+- Browser end-to-end test:
+  * Login page loads with all elements (Founder Login heading, Sign In button, credentials hint, TrishulHub logo linking to /)
+  * Filled username=kiran, password=kiran123, clicked Sign In → redirected to /admin dashboard
+  * Dashboard shows "Edit Kiran's Portfolio" heading, all 7 tabs (Profile, About & Contact, Skills, Education, Experience, Projects, Security)
+  * TrishulHub logo top-right links to / (1 anchor found)
+  * View Portfolio link (2 anchors to /founders/ found)
+  * Tab switching works (Profile → Skills shows React/Next.js 95% input, Education shows B.E. input, Experience shows TrishulHub input, Projects shows TrishulHub CRM input)
+  * Reset test data back to original after verification
+- Screenshots: v2-task3-admin-login.png, v2-task3-admin-dashboard.png, v2-task3-admin-profile.png
+
+Stage Summary:
+- Login button added to navbar (desktop + mobile menu)
+- /admin/login page with username/password auth + TrishulHub logo top-right → links to /
+- /admin dashboard with 7-tab editor: Profile (with photo upload), About & Contact, Skills, Education, Experience, Projects, Security (password change)
+- All changes save instantly to DB → reflect on public /founders/[slug] portfolio pages
+- 4 founder accounts seeded: kiran/kiran123, taroon/taroon123, akshat/akshat123, pruthvi/pruthvi123
+- JWT cookie auth (7-day expiry, httpOnly, sameSite=lax)
+- Image upload to /public/uploads/founders/ (5MB limit, PNG/JPEG/WebP/GIF)
