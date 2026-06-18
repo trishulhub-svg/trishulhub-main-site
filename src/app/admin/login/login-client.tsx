@@ -96,6 +96,31 @@ export function LoginClient() {
               style={{ boxShadow: '0 0 0 1px rgba(0,222,255,0.15), 0 0 60px rgba(0,222,255,0.1)' }}
             />
 
+            {/* TrishulHub branding at top of login (above Founder Login) */}
+            <div className="relative mb-7 flex flex-col items-center gap-2">
+              <a
+                href="/"
+                className="group flex items-center gap-2.5"
+                title="Back to TrishulHub"
+              >
+                <img
+                  src="/images/trishulhub-logo.png"
+                  alt="TrishulHub logo"
+                  width={44}
+                  height={44}
+                  className="h-11 w-11 transition-transform duration-300 group-hover:scale-110"
+                  style={{ filter: 'drop-shadow(0 0 12px rgba(0,222,255,0.45))' }}
+                />
+                <span
+                  className="text-2xl font-bold tracking-[0.12em] sm:text-3xl"
+                  style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                >
+                  <span className="text-white">TRISHUL</span>
+                  <span className="gradient-text">HUB</span>
+                </span>
+              </a>
+            </div>
+
             {/* Logo / Heading */}
             <div className="relative mb-8 text-center">
               <h1 className="text-2xl font-bold tracking-tight sm:text-3xl" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
@@ -194,13 +219,10 @@ export function LoginClient() {
               </button>
             </form>
 
-            {/* Demo credentials hint */}
+            {/* Security note (credentials are private — founders set their own) */}
             <div className="relative mt-6 rounded-lg border border-white/5 bg-white/[0.02] p-3 text-center">
               <p className="text-xs text-white/40">
-                Founder credentials: <span className="font-mono text-[#00DEFF]/80">kiran / kiran123</span> · <span className="font-mono text-[#00DEFF]/80">taroon / taroon123</span>
-              </p>
-              <p className="mt-1 text-xs text-white/40">
-                <span className="font-mono text-[#00DEFF]/80">akshat / akshat123</span> · <span className="font-mono text-[#00DEFF]/80">pruthvi / pruthvi123</span>
+                Authorized founder access only · credentials are private
               </p>
             </div>
           </div>

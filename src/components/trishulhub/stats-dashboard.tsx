@@ -26,6 +26,32 @@ function useLoopingNumber(target: number, duration: number, paused: boolean) {
   return paused ? 0 : val
 }
 
+/* ---------- Hook: looping multi-keyframe number (synced to bar keyframes) ---------- */
+/* Animates through [0, 12, 48, 76, 100, 0] with the same timing as the
+   progress bar so the displayed % always matches the bar's actual width. */
+function useLoopingGoalPercent(paused: boolean) {
+  const [val, setVal] = useState(0)
+  useEffect(() => {
+    if (paused) {
+      return
+    }
+    // Pass keyframes array as first arg → framer-motion interpolates between
+    // them using `times`. Identical keyframes/times to the progress bar above.
+    const controls = animate([0, 12, 48, 76, 100, 0], {
+      duration: 5.5,
+      ease: 'easeInOut',
+      repeat: Infinity,
+      repeatType: 'loop',
+      times: [0, 0.18, 0.45, 0.7, 0.9, 1],
+      onUpdate: (latest) => setVal(latest as number),
+    })
+    return () => controls.stop()
+  }, [paused])
+
+  // When paused, force 0 (avoids setState-in-effect lint error)
+  return paused ? 0 : val
+}
+
 /* ---------- Formatters ---------- */
 const fmtInt = (n: number) => Math.round(n).toLocaleString('en-US')
 const fmtUsd = (n: number) => '$' + Math.round(n).toLocaleString('en-US')
@@ -106,7 +132,8 @@ export function StatsDashboard() {
   const savings = useLoopingNumber(45200, 2.4, !inView)
   const investments = useLoopingNumber(82700, 2.8, !inView)
   const budget = useLoopingNumber(12100, 2.2, !inView)
-  const goalPct = useLoopingNumber(12, 2.8, !inView)
+  // Goal % syncs EXACTLY with the progress bar keyframes (0→12→48→76→100→0)
+  const goalPct = useLoopingGoalPercent(!inView)
 
   const dashCards = [
     { label: 'Smart Savings', raw: savings, fmt: fmtK, icon: Wallet },

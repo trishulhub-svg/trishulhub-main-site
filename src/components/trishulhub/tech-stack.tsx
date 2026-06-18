@@ -1,45 +1,55 @@
 'use client'
 
 const techs = [
-  { abbr: 'Re', name: 'React' },
-  { abbr: 'Ne', name: 'Next.js' },
-  { abbr: 'TS', name: 'TypeScript' },
-  { abbr: 'No', name: 'Node.js' },
-  { abbr: 'Tw', name: 'Tailwind CSS' },
-  { abbr: 'Pr', name: 'Prisma' },
-  { abbr: 'Mo', name: 'MongoDB' },
-  { abbr: 'Pg', name: 'PostgreSQL' },
-  { abbr: 'Aw', name: 'AWS' },
-  { abbr: 'Do', name: 'Docker' },
-  { abbr: 'Py', name: 'Python' },
-  { abbr: 'Gq', name: 'GraphQL' },
-  { abbr: 'Rd', name: 'Redis' },
-  { abbr: 'Ve', name: 'Vercel' },
-  { abbr: 'Gi', name: 'Git' },
-  { abbr: 'Fi', name: 'Figma' },
-  { abbr: 'Gs', name: 'GSAP' },
-  { abbr: 'Fm', name: 'Framer Motion' },
-  { abbr: 'Li', name: 'Linux' },
-  { abbr: 'Ng', name: 'Nginx' },
+  { slug: 'react', name: 'React', color: '#61DAFB' },
+  { slug: 'nextdotjs', name: 'Next.js', color: '#FFFFFF' },
+  { slug: 'typescript', name: 'TypeScript', color: '#3178C6' },
+  { slug: 'nodedotjs', name: 'Node.js', color: '#5FA04E' },
+  { slug: 'tailwindcss', name: 'Tailwind CSS', color: '#06B6D4' },
+  { slug: 'prisma', name: 'Prisma', color: '#2D3748' },
+  { slug: 'mongodb', name: 'MongoDB', color: '#47A248' },
+  { slug: 'postgresql', name: 'PostgreSQL', color: '#4169E1' },
+  { slug: 'amazonwebservices', name: 'AWS', color: '#FF9900' },
+  { slug: 'docker', name: 'Docker', color: '#2496ED' },
+  { slug: 'python', name: 'Python', color: '#3776AB' },
+  { slug: 'graphql', name: 'GraphQL', color: '#E10098' },
+  { slug: 'redis', name: 'Redis', color: '#FF4438' },
+  { slug: 'vercel', name: 'Vercel', color: '#FFFFFF' },
+  { slug: 'git', name: 'Git', color: '#F05032' },
+  { slug: 'figma', name: 'Figma', color: '#F24E1E' },
+  { slug: 'greensock', name: 'GSAP', color: '#88CE02' },
+  { slug: 'framer', name: 'Framer Motion', color: '#0055FF' },
+  { slug: 'linux', name: 'Linux', color: '#FCC624' },
+  { slug: 'nginx', name: 'Nginx', color: '#009639' },
 ]
 
-function TechPill({ abbr, name }: { abbr: string; name: string }) {
+function TechPill({ slug, name, color }: { slug: string; name: string; color: string }) {
   return (
     <div className="group/pill flex shrink-0 items-center gap-3 rounded-full border border-white/10 px-5 py-3 transition-all duration-300 hover:scale-110 hover:border-[#00DEFF]">
       <span
-        className="flex h-9 w-9 items-center justify-center rounded-lg border text-xs font-bold uppercase tracking-tight grayscale transition-all duration-300 group-hover/pill:grayscale-0"
+        className="flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-300"
         style={{
           borderColor: 'rgba(0,222,255,0.35)',
           backgroundColor: 'rgba(0,222,255,0.05)',
-          color: '#A0A0A0',
         }}
       >
-        <span className="transition-colors duration-300 group-hover/pill:text-[#00DEFF]">
-          {abbr}
-        </span>
+        {/* Real company logo (SVG, inherits color via currentColor) */}
+        <img
+          src={`/images/logos/${slug}.svg`}
+          alt={`${name} logo`}
+          width={20}
+          height={20}
+          className="h-5 w-5 transition-all duration-300"
+          style={{
+            color: '#A0A0A0',
+            filter: 'grayscale(1) brightness(1.2)',
+            opacity: 0.7,
+          }}
+          loading="lazy"
+        />
       </span>
       <span
-        className="whitespace-nowrap text-sm font-medium text-white"
+        className="whitespace-nowrap text-sm font-medium text-white transition-colors duration-300 group-hover/pill:text-[#00DEFF]"
         style={{ fontFamily: 'var(--font-inter)' }}
       >
         {name}
@@ -97,14 +107,14 @@ export function TechStack() {
         {/* Row 1 - scrolls left */}
         <div className="flex w-max animate-marquee gap-4">
           {row.map((t, i) => (
-            <TechPill key={`r1-${t.name}-${i}`} abbr={t.abbr} name={t.name} />
+            <TechPill key={`r1-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} />
           ))}
         </div>
 
         {/* Row 2 - scrolls right (reverse) */}
         <div className="flex w-max animate-marquee-slow gap-4 [animation-direction:reverse]">
           {row.map((t, i) => (
-            <TechPill key={`r2-${t.name}-${i}`} abbr={t.abbr} name={t.name} />
+            <TechPill key={`r2-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} />
           ))}
         </div>
       </div>

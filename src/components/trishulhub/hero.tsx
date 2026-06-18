@@ -23,9 +23,32 @@ export function Hero() {
       if (!cancelled) setVideoReady(true)
     }
 
+    // Force-loop helper — restarts playback from 0 whenever the stream ends,
+    // guaranteeing infinite looping even if the native `loop` attribute fails
+    // (some HLS streams / browsers don't honour `loop` reliably).
+    const forceLoop = () => {
+      try {
+        v.currentTime = 0
+        v.play().catch(() => {})
+      } catch {
+        /* ignore */
+      }
+    }
+    v.addEventListener('ended', forceLoop)
+
+    // Also re-kick playback if it pauses unexpectedly (some mobile browsers
+    // pause HLS streams to save power — we want continuous background motion).
+    const autoResume = () => {
+      if (v.paused && !v.ended) {
+        v.play().catch(() => {})
+      }
+    }
+    v.addEventListener('pause', autoResume)
+
     // Safari + iOS support HLS natively
     if (v.canPlayType('application/vnd.apple.mpegurl')) {
       v.src = HLS_URL
+      v.loop = true // belt-and-suspenders (also set as JSX attribute)
       v.addEventListener('loadedmetadata', onReady)
       v.addEventListener('loadeddata', onReady)
       v.addEventListener('canplay', onReady)
@@ -42,8 +65,18 @@ export function Hero() {
       })
       hls.loadSource(HLS_URL)
       hls.attachMedia(v)
+      v.loop = true // belt-and-suspenders
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
         v.play().catch(() => {})
+      })
+      // When the buffer ends, restart from 0 to ensure infinite loop
+      hls.on(Hls.Events.BUFFER_ENDED, () => {
+        try {
+          v.currentTime = 0
+          v.play().catch(() => {})
+        } catch {
+          /* ignore */
+        }
       })
       hls.on(Hls.Events.FRAG_LOADED, onReady)
       v.addEventListener('canplay', onReady)
@@ -66,6 +99,8 @@ export function Hero() {
       v.removeEventListener('loadedmetadata', onReady)
       v.removeEventListener('loadeddata', onReady)
       v.removeEventListener('canplay', onReady)
+      v.removeEventListener('ended', forceLoop)
+      v.removeEventListener('pause', autoResume)
       if (hls) hls.destroy()
     }
      
@@ -76,7 +111,7 @@ export function Hero() {
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Background video (bottom layer) — HLS stream */}
+      {/* Background video (bottom layer) — HLS stream, infinite loop */}
       <video
         ref={videoRef}
         autoPlay
@@ -85,6 +120,13 @@ export function Hero() {
         playsInline
         preload="auto"
         aria-hidden="true"
+        onEnded={(e) => {
+          // Triple-redundant looping: native loop attr + this onEnded handler
+          // + the useEffect 'ended' listener. Whichever fires first wins.
+          const el = e.currentTarget
+          el.currentTime = 0
+          el.play().catch(() => {})
+        }}
         className="absolute inset-0 h-full w-full object-cover"
         style={{
           opacity: videoReady && !videoError ? 1 : 0,
