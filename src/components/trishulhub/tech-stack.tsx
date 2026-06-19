@@ -1,5 +1,7 @@
 'use client'
 
+import { AnimatedHeading } from './animated-heading'
+
 const techs = [
   { slug: 'react', name: 'React', color: '#61DAFB' },
   { slug: 'nextdotjs', name: 'Next.js', color: '#FFFFFF' },
@@ -71,12 +73,16 @@ export function TechStack() {
           <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
             Technologies
           </span>
-          <h2
+          <AnimatedHeading
+            as="h2"
+            variant="rise"
+            stagger={0.1}
+            duration={0.6}
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Our Tech Stack
-          </h2>
+            Our *Tech* *Stack*
+          </AnimatedHeading>
           <p
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}

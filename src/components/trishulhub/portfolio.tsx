@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { AnimatedHeading } from './animated-heading'
 
 const projects = [
   {
@@ -38,9 +39,15 @@ export function Portfolio() {
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 px-4 py-1 text-xs font-medium uppercase tracking-[0.2em] text-[#00DEFF]">
             Portfolio
           </div>
-          <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
-            Selected Work
-          </h2>
+          <AnimatedHeading
+            as="h2"
+            variant="rise"
+            stagger={0.1}
+            duration={0.6}
+            className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
+          >
+            Selected *Work*
+          </AnimatedHeading>
           <p className="mx-auto mt-4 max-w-2xl text-base text-white/50 sm:text-lg">
             A glimpse of the digital products we&apos;ve crafted for clients
             across industries.

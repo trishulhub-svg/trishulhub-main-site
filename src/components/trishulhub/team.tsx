@@ -3,6 +3,7 @@
 import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react'
+import { AnimatedHeading } from './animated-heading'
 
 type Founder = {
   slug: string
@@ -82,12 +83,16 @@ export function Team({ founders }: { founders: Founder[] }) {
           <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
             Our Team
           </span>
-          <h2
+          <AnimatedHeading
+            as="h2"
+            variant="rise"
+            stagger={0.1}
+            duration={0.6}
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Meet The Founders
-          </h2>
+            Meet Our *Team*
+          </AnimatedHeading>
           <p
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
@@ -300,9 +305,9 @@ export function Team({ founders }: { founders: Founder[] }) {
         <div className="mt-12 text-center">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/50 px-7 py-3 text-sm font-semibold text-[#00DEFF] transition-all duration-300 hover:bg-[#00DEFF] hover:text-[#0A0A0A] hover:shadow-[0_0_30px_rgba(0,222,255,0.4)]"
+            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/50 px-7 py-3 text-sm font-semibold text-[#00DEFF] transition-all duration-300 hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
           >
-            Meet The Team
+            <span className="relative z-10">Meet The Team</span>
           </a>
         </div>
       </div>

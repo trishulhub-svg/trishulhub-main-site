@@ -11,6 +11,7 @@ import {
   ArrowUpRight,
   ArrowRight,
 } from 'lucide-react'
+import { AnimatedHeading } from './animated-heading'
 
 const services = [
   {
@@ -60,16 +61,16 @@ export function Services() {
           >
             What We Do
           </motion.span>
-          <motion.h2
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.05 }}
+          <AnimatedHeading
+            as="h2"
+            variant="rise"
+            stagger={0.1}
+            duration={0.6}
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Premium Digital Solutions
-          </motion.h2>
+            Premium Digital *Solutions*
+          </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -165,10 +166,12 @@ export function Services() {
         <div className="mt-12 text-center">
           <a
             href="#contact"
-            className="inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-white transition-all duration-300 hover:border-[#00DEFF]/50 hover:bg-[#00DEFF]/5 hover:text-[#00DEFF]"
+            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-white transition-all duration-300 hover:text-[#00DEFF]"
           >
-            View All Services
-            <ArrowRight size={16} />
+            <span className="relative z-10 inline-flex items-center gap-2">
+              View All Services
+              <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+            </span>
           </a>
         </div>
       </div>

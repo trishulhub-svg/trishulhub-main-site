@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Mail, MapPin } from 'lucide-react'
+import { AnimatedHeading } from './animated-heading'
 
 export function CTA() {
   return (
@@ -27,11 +28,15 @@ export function CTA() {
           <div className="pointer-events-none absolute inset-0 bg-grid opacity-30" />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl">
-              Have an idea in mind?
-              <br />
-              <span className="gradient-text">Let&apos;s turn it into reality.</span>
-            </h2>
+            <AnimatedHeading
+              as="h2"
+              variant="rise"
+              stagger={0.09}
+              duration={0.65}
+              className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
+            >
+              Have an idea in mind? Let&apos;s turn it into *reality.*
+            </AnimatedHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-white/60 sm:text-lg">
               Work with TrishulHub to build scalable, high-quality digital
               solutions that help your business grow, perform better, and stay
@@ -42,14 +47,16 @@ export function CTA() {
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row sm:gap-6">
               <a
                 href="mailto:trishulhub@gmail.com"
-                className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_30px_rgba(0,222,255,0.5)] sm:w-auto"
+                className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all sm:w-auto"
               >
-                Get in Touch
-                <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                <span className="relative z-10 inline-flex items-center gap-2">
+                  Get in Touch
+                  <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+                </span>
               </a>
               <a
                 href="mailto:trishulhub@gmail.com"
-                className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#00DEFF]"
+                className="btn-ghost inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#00DEFF]"
               >
                 <Mail size={16} />
                 trishulhub@gmail.com

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
+import { AnimatedHeading } from './animated-heading'
 
 /* Local looping background video for the hero section.
  * Replaces the previous Mux HLS stream — this is a plain MP4 served from
@@ -216,10 +217,6 @@ export function Hero() {
         }}
       />
 
-      {/* Decorative orbiting ring */}
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-[4] h-[700px] w-[700px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#00DEFF]/10" />
-      <div className="pointer-events-none absolute left-1/2 top-1/2 z-[4] h-[1000px] w-[1000px] -translate-x-1/2 -translate-y-1/2 rounded-full border border-[#00DEFF]/5" />
-
       <div className="relative z-10 mx-auto max-w-5xl text-center">
         {/* Pill badge */}
         <motion.div
@@ -235,17 +232,21 @@ export function Hero() {
           Digital Solutions Company
         </motion.div>
 
-        {/* Headline */}
-        <motion.h1
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
+        {/* Headline — word-by-word animated reveal on mount.
+         * Each word rises from below with a staggered blur-to-clear transition.
+         * The cyan "REAL GROWTH." line uses the *asterisk* highlight syntax
+         * in AnimatedHeading so "GROWTH" gets the cyan color treatment. */}
+        <AnimatedHeading
+          as="h1"
+          variant="blur"
+          stagger={0.12}
+          duration={0.8}
+          whenInView={false}
           className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]"
           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
         >
-          <span className="block text-white">DIGITAL SOLUTIONS.</span>
-          <span className="block gradient-text">REAL GROWTH.</span>
-        </motion.h1>
+          DIGITAL SOLUTIONS. *REAL* *GROWTH.*
+        </AnimatedHeading>
 
         {/* Subtitle */}
         <motion.p
@@ -269,17 +270,21 @@ export function Hero() {
         >
           <a
             href="#contact"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_30px_rgba(0,222,255,0.5)] sm:w-auto"
+            className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all sm:w-auto"
           >
-            Let&apos;s Get Started
-            <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            <span className="relative z-10 inline-flex items-center gap-2">
+              Let&apos;s Get Started
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+            </span>
           </a>
           <a
             href="#portfolio"
-            className="group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:border-[#00DEFF]/50 hover:bg-[#00DEFF]/5 hover:text-[#00DEFF] sm:w-auto"
+            className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:text-[#00DEFF] sm:w-auto"
           >
-            <Play size={14} className="fill-current" />
-            View Our Work
+            <span className="relative z-10 inline-flex items-center gap-2">
+              <Play size={14} className="fill-current" />
+              View Our Work
+            </span>
           </a>
         </motion.div>
       </div>
