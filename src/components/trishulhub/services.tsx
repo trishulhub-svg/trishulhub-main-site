@@ -11,7 +11,6 @@ import {
   ArrowUpRight,
   ArrowRight,
 } from 'lucide-react'
-import { FloatingVideo } from './floating-video'
 
 const services = [
   {
@@ -49,24 +48,6 @@ const services = [
 export function Services() {
   return (
     <section id="services" className="relative overflow-hidden py-24 sm:py-32">
-      {/* Floating decorative video — iridescent 3D cubes, bottom-left corner.
-        * Black background → mix-blend-mode: screen makes it transparent.
-        * Cubes already have blue/cyan iridescence; small hue nudge pushes
-        * purple/pink reflections toward cyan to better match the site palette. */}
-      <FloatingVideo
-        src="/videos/decor/vision-cubes.mp4"
-        corner="bottom-left"
-        size={130}
-        inset={28}
-        hueRotate={-15}
-        saturate={1.25}
-        brightness={1.1}
-        opacity={0.85}
-        zIndex={3}
-        floatAmplitude={7}
-        floatDuration={8}
-        hideBelow={768}
-      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Heading */}
         <div className="mb-14 text-center">

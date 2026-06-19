@@ -3,7 +3,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
-import { FloatingVideo } from './floating-video'
 
 /* Local looping background video for the hero section.
  * Replaces the previous Mux HLS stream — this is a plain MP4 served from
@@ -300,25 +299,6 @@ export function Hero() {
           />
         </div>
       </motion.div>
-
-      {/* Floating decorative video — Firefly 3D "TH" logo, top-right corner.
-        * Black background → mix-blend-mode: screen makes it transparent.
-        * Already matches brand cyan, so no hue-rotate needed.
-        * Sits above all background layers but below the headline / CTAs. */}
-      <FloatingVideo
-        src="/videos/decor/logo-th-rotate.mp4"
-        corner="top-right"
-        size={150}
-        inset={32}
-        hueRotate={0}
-        saturate={1.2}
-        brightness={1.15}
-        opacity={0.9}
-        zIndex={7}
-        floatAmplitude={10}
-        floatDuration={7}
-        hideBelow={768}
-      />
     </section>
   )
 }

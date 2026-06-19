@@ -97,11 +97,38 @@ export function LoadingScreen() {
                   filter: 'blur(14px)',
                 }}
               />
-              <img
-                src="/images/trishulhub-logo.png"
-                alt="TrishulHub logo"
-                className="relative h-28 w-28 object-contain sm:h-36 sm:w-36"
+              {/* Logo VIDEO (replaces static image) — Firefly 3D rotating "TH".
+               * Same size as the original static logo (h-28 w-28 / sm:h-36 sm:w-36).
+               * Original logo was circular, so the video is clipped to a circle
+               * via border-radius: 50% — this contains the video's black bg
+               * inside a clean disc that matches the original logo's shape.
+               * object-cover crops the 9:16 source to the 1:1 square, keeping
+               * the centered TH letters visible. Loops infinitely with
+               * autoPlay + loop + muted + playsInline.
+               *
+               * The bright radial glow behind the video + mix-blend-mode: screen
+               * work together to fade the video's black background into the
+               * cyan glow, so the disc edges blend smoothly into the loader. */}
+              <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -inset-3 rounded-full"
                 style={{
+                  background:
+                    'radial-gradient(circle, rgba(0,222,255,0.65) 0%, rgba(0,136,204,0.4) 45%, transparent 75%)',
+                  filter: 'blur(10px)',
+                }}
+              />
+              <video
+                src="/videos/decor/logo-th-rotate.mp4"
+                autoPlay
+                loop
+                muted
+                playsInline
+                preload="auto"
+                aria-label="TrishulHub logo"
+                className="relative h-28 w-28 overflow-hidden rounded-full object-cover sm:h-36 sm:w-36"
+                style={{
+                  mixBlendMode: 'screen',
                   filter:
                     'drop-shadow(0 0 18px rgba(0,222,255,0.6)) drop-shadow(0 0 36px rgba(0,136,204,0.35))',
                 }}
