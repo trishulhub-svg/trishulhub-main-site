@@ -2,6 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
+import { FloatingVideo } from './floating-video'
 
 const projects = [
   {
@@ -33,6 +34,23 @@ const projects = [
 export function Portfolio() {
   return (
     <section id="portfolio" className="relative py-20 sm:py-28">
+      {/* Floating decorative video — serpentine iridescent glass, top-right corner.
+        * Black background → mix-blend-mode: screen makes it transparent.
+        * Glass already has strong blue/teal palette — natively matches the site. */}
+      <FloatingVideo
+        src="/videos/decor/gift-glass.mp4"
+        corner="top-right"
+        size={140}
+        inset={32}
+        hueRotate={0}
+        saturate={1.3}
+        brightness={1.15}
+        opacity={0.8}
+        zIndex={3}
+        floatAmplitude={9}
+        floatDuration={7.5}
+        hideBelow={768}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center">
           <div className="mb-4 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 px-4 py-1 text-xs font-medium uppercase tracking-[0.2em] text-[#00DEFF]">

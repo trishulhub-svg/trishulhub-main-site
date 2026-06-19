@@ -2,10 +2,29 @@
 
 import { motion } from 'framer-motion'
 import { ArrowRight, Mail, MapPin } from 'lucide-react'
+import { FloatingVideo } from './floating-video'
 
 export function CTA() {
   return (
     <section id="contact" className="relative py-20 sm:py-28">
+      {/* Floating decorative video — metallic iridescent ring, bottom-right corner.
+        * Black background → mix-blend-mode: screen makes it transparent.
+        * Ring has cyan top + red bottom; slight hue-rotate nudges red → magenta
+        * so it stays closer to the cyan/purple tech palette. */}
+      <FloatingVideo
+        src="/videos/decor/birthday-ring.mp4"
+        corner="bottom-right"
+        size={130}
+        inset={28}
+        hueRotate={20}
+        saturate={1.3}
+        brightness={1.15}
+        opacity={0.85}
+        zIndex={3}
+        floatAmplitude={8}
+        floatDuration={6.5}
+        hideBelow={768}
+      />
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 40 }}
