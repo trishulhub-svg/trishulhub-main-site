@@ -113,23 +113,25 @@ export function Team({ founders }: { founders: Founder[] }) {
               />
 
               {/* Top hero area
-               * Video is 858x1072 (4:5 portrait). We use a 3:2 LANDSCAPE
-               * aspect ratio for the container (shorter than the video's
-               * natural 4:5 portrait) so the card doesn't take up too much
-               * vertical space. With `object-position: center top`, the
-               * <video> is scaled to fit the container width and cropped
-               * from the BOTTOM only — the head/hair/face at the top of
-               * the portrait video remain fully visible. The lower body
-               * (chest/shoulders) is what gets cropped, which is fine.
+               * Video is 858x1072 (4:5 portrait). The founder's folded hands
+               * appear at roughly 65-75% from the top of the video frame.
+               *
+               * We use aspect-[1/1] (square) for the container. With
+               * `object-position: center top`, the portrait video is scaled
+               * to fit the container WIDTH and the bottom ~20% is cropped.
+               * This shows the TOP ~80% of the video — which includes the
+               * head (0-25%), face (15-40%), upper body (30-60%), AND the
+               * folded hands (65-75%). Only the lower torso (80-100%) is
+               * cropped, which is fine.
                *
                * Card heights this produces:
-               *   Mobile  (~340px col): ~227px tall
-               *   Desktop (~558px col): ~372px tall
-               * Both are reasonable "small card" sizes — the previous
-               * aspect-[4/5] was making the desktop card 698px tall which
-               * was way too large.
+               *   Mobile  (~356px col): 356x356px
+               *   Desktop (~558px col): 558x558px
+               * This is the "slightly bigger" size the user asked for —
+               * between the too-tall aspect-[4/5] (698px) and the
+               * too-short aspect-[3/2] (372px).
                */}
-              <div className="relative aspect-[3/2] overflow-hidden">
+              <div className="relative aspect-square overflow-hidden">
                 {/* Background gradient (scales on hover) — always present as base */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"

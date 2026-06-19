@@ -701,3 +701,40 @@ Stage Summary:
 - Portfolio page keeps the full 4:5 portrait video (appropriate for the larger feature display).
 - User needs to redeploy to see changes on the live preview.
 
+
+---
+Task ID: 23
+Agent: main (Super Z)
+Task: User feedback — "make slightly bigger i want to see their hands folded so make sure it also visible there"
+
+Work Log:
+- Used VLM to analyze the actual position of folded hands in the founder videos:
+  * Extracted 4 frames from each video at different timestamps
+  * VLM analysis: folded hands appear at 65-75% from the top of the video frame
+  * Earlier Task 22 used aspect-[3/2] (showed only top 53% of video → hands cropped)
+- Math calculation for required aspect ratio:
+  * Video is 858×1072 (4:5 portrait, aspect 0.8)
+  * To show folded hands at 75% from top, need container that shows top ~80% of video
+  * With object-fit: cover + object-position: center top, container aspect-[1/1] (square) shows top 80.1% of video — perfect
+- Changed team.tsx container from `aspect-[3/2]` (558×372, showed top 53%) → `aspect-square` (558×558, shows top 80%)
+- Card sizes now:
+  * Mobile (356px col): 356×356px (was 356×237 in Task 22)
+  * Desktop (558px col): 558×558px (was 558×372 in Task 22)
+  * Slightly bigger than Task 22 but still 140px shorter than the original Task 21 aspect-[4/5] (698px) which user said was too tall
+
+Verification:
+- bun run build succeeded
+- agent-browser desktop: parent 558×558, aspect 1.000 (square ✓), objectPosition "50% 0%" ✓
+- agent-browser mobile (390×844): parent 356×356 ✓
+- VLM frame analysis: confirmed top 80% crop of video frame shows folded hands ("person's folded hands (arms crossed, hands clasped) are visible. They are located in the lower portion of the image, specifically across the mid-to-lower chest area")
+- VLM desktop screenshot at t=1.5s (Kiran): "folded hands (arms crossed over chest) are visible. The lower portion of the video shows Kiran's torso with arms crossed"
+- VLM mobile screenshot: "Yes, folded hands (arms crossed) are visible at the bottom of the square video. The card size is reasonable for mobile"
+- Screenshots: v7-team-square-with-hands.png, v7-team-hands-visible-t2s.png, v7-team-hands-t3s.png, v7-team-square-mobile.png
+
+Stage Summary:
+- Founder video cards in team section now use aspect-square (1:1) — shows the top 80% of the portrait video, which includes head (0-25%), face (15-40%), upper body (30-60%), AND folded hands (65-75%). Only the lower torso (80-100%) is cropped.
+- Desktop card: 558×558px (between the too-tall 698px of Task 21 and the too-short 372px of Task 22)
+- Mobile card: 356×356px
+- VLM confirmed folded hands are visible in the bottom portion of the video card on both desktop and mobile.
+- User needs to redeploy to see changes on the live preview.
+
