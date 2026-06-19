@@ -674,3 +674,30 @@ Stage Summary:
 - Task 3 ✓: Founder video containers now use `aspect-[4/5]` consistently (matching the 858×1072 video's natural ratio) on both the team section AND the portfolio page. No more cropping from top — VLM confirmed full head/hair visible for both Kiran and Taroon on both team cards and portfolio pages.
 - To make these changes live on the deployed preview, the user needs to redeploy.
 
+
+---
+Task ID: 22
+Agent: main (Super Z)
+Task: User feedback — "the meet the founders video was too large in length wise make them small they look too big make it"
+
+Work Log:
+- The previous Task 21 fix used `aspect-[4/5]` (portrait) for the team.tsx founder video container, matching the video's natural 858×1072 ratio. This produced a 558×698px card on desktop — way too tall for a "team card" layout.
+- Fix: Changed team.tsx container from `aspect-[4/5]` → `aspect-[3/2]` (landscape). With `object-position: center top` (kept from Task 21), the portrait video is scaled to fit the container WIDTH and cropped only from the BOTTOM (lower body/shoulders), so the head/hair/face at the top remain fully visible.
+- New card sizes:
+  * Mobile (~356px col): 356×237px (was 356×445px) — 47% shorter
+  * Desktop (~558px col): 558×372px (was 558×698px) — 47% shorter
+- The portfolio page (founder-detail.tsx) KEEPS `aspect-[4/5]` — that's the larger feature display where the full portrait video is appropriate.
+
+Verification:
+- bun run build succeeded
+- agent-browser desktop test: parent 558×372, aspect 1.500 (3:2 ✓), objectPosition "50% 0%" ✓
+- agent-browser mobile test (390×844 viewport): parent 356×237, aspect 1.502 ✓
+- VLM desktop screenshot: "The video cards appear reasonably sized—tall enough to be noticeable but not overly tall... The person's face/head is fully visible in both videos, with no cropping from the top... The video containers have a roughly 2:1 width-to-height ratio (landscape rectangle)"
+- VLM mobile screenshot: "The video card (Kiran's card) is a reasonable size on mobile—its height is balanced, not overly tall. The person's face is fully visible (not cropped from the top)."
+- Screenshots: /home/z/my-project/download/v6-team-smaller-cards.png, v6-team-smaller-mobile.png
+
+Stage Summary:
+- Founder video cards in the "Meet The Founders" team section are now 47% shorter (558×372 desktop, 356×237 mobile) while still showing the full face/head/hair at the top of the video.
+- Portfolio page keeps the full 4:5 portrait video (appropriate for the larger feature display).
+- User needs to redeploy to see changes on the live preview.
+

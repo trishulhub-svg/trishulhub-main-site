@@ -113,16 +113,23 @@ export function Team({ founders }: { founders: Founder[] }) {
               />
 
               {/* Top hero area
-               * Video is 858x1072 (4:5 portrait). We use aspect-[4/5]
-               * CONSISTENTLY on mobile AND desktop so the video never gets
-               * cropped (the previous sm:h-64 sm:aspect-auto override turned
-               * the desktop container into a wide rectangle, squashing the
-               * portrait video and cutting off the top of the head/hair).
-               * We also use object-position: center top as a belt-and-suspenders
-               * guard so the head is always prioritised if any tiny rounding
-               * crop happens at the bottom.
+               * Video is 858x1072 (4:5 portrait). We use a 3:2 LANDSCAPE
+               * aspect ratio for the container (shorter than the video's
+               * natural 4:5 portrait) so the card doesn't take up too much
+               * vertical space. With `object-position: center top`, the
+               * <video> is scaled to fit the container width and cropped
+               * from the BOTTOM only — the head/hair/face at the top of
+               * the portrait video remain fully visible. The lower body
+               * (chest/shoulders) is what gets cropped, which is fine.
+               *
+               * Card heights this produces:
+               *   Mobile  (~340px col): ~227px tall
+               *   Desktop (~558px col): ~372px tall
+               * Both are reasonable "small card" sizes — the previous
+               * aspect-[4/5] was making the desktop card 698px tall which
+               * was way too large.
                */}
-              <div className="relative aspect-[4/5] overflow-hidden">
+              <div className="relative aspect-[3/2] overflow-hidden">
                 {/* Background gradient (scales on hover) — always present as base */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"
