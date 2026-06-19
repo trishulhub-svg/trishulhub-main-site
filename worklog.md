@@ -738,3 +738,119 @@ Stage Summary:
 - VLM confirmed folded hands are visible in the bottom portion of the video card on both desktop and mobile.
 - User needs to redeploy to see changes on the live preview.
 
+
+---
+Task ID: 24
+Agent: main (Super Z)
+Task: User's 3 new tasks:
+  - Task 1: Add 3 new videos (Kiran, Akshat, Pruthvi) to Meet The Founders section + their portfolio pages. Keep Taroon same. Remove overlay from team section videos (make them raw). Make team section video cards smaller.
+  - Task 2: Admin panel access to change portfolio + meet-the-founder section video. Add option to upload either video OR photo, which auto-applies to both home page + portfolio section.
+  - Task 3: Make website scrolling very very smooth and fast.
+
+Work Log:
+
+TASK 1a — Re-encoded 3 new founder videos (scripts/reencode-new-founder-videos.sh):
+- User uploaded 3 videos to /home/z/my-project/upload/ (Portfolio 1 .mp4, Portfolio 1 (1).mp4, Portfolio 1 (2).mp4)
+- All were 2574×3218 (4:5 portrait, ~4-5MB each — way too large for web)
+- Used VLM to identify which video is which founder:
+  * "Portfolio 1 (1).mp4" → Kiran (VLM: "person appears to be the same as Kiran — matches face shape, hair, and features")
+  * "Portfolio 1 .mp4" → Akshat (beard/mustache, red wristband, blue tie)
+  * "Portfolio 1 (2).mp4" → Pruthvi (no facial hair, gray tie)
+- Re-encoded all 3 to 858×1072 (~350-400KB each):
+  * founder-kiran.mp4: 5.77s → 5.77s, 404KB
+  * founder-akshat.mp4: 2.4s → 2.4s, 347KB
+  * founder-pruthvi.mp4: 2.6s → 2.6s, 319KB
+- Taroon video unchanged (per user request)
+
+TASK 1b — Rewrote team.tsx:
+- Added akshat + pruthvi to FOUNDER_VIDEOS map (all 4 founders now have videos)
+- REMOVED ALL OVERLAYS from the video card area (user: "the video looks little overlaid so remove that overlay from the video and make it raw"):
+  * Removed the radial cyan glow overlay (rgba(0,222,255,0.18) radial-gradient)
+  * Removed the grid pattern overlay (28px grid)
+  * Kept ONLY the base background gradient (visible only while video loads, then covered completely by the video)
+  * Kept the bottom reveal bar (only shows on hover, doesn't permanently overlay)
+  * Kept the projects badge + view-portfolio arrow (UI elements, not video overlays)
+- Made cards SMALLER (user: "make width and length of meet the founders section video card little small"):
+  * Changed grid container from max-w-6xl (1152px) → max-w-5xl (1024px) — 558px→498px per card on desktop
+  * Reduced gap from gap-6 sm:gap-8 → gap-5 sm:gap-6
+  * Reduced padding from p-6 → p-5
+- Added photo + DB videoUrl fallback chain: founder.videoUrl (DB) → FOUNDER_VIDEOS[slug] (hardcoded) → founder.image (DB photo) → initial letter
+
+TASK 1c — Updated founder-detail.tsx (portfolio pages):
+- Added akshat + pruthvi to FOUNDER_VIDEOS map
+- Added videoUrl to Founder type
+- Changed founderVideo resolution: f.videoUrl || FOUNDER_VIDEOS[slug] || null
+- REMOVED the radial glow + grid pattern overlay from the portfolio video card area (same raw-video treatment as team section)
+- Kept aspect-[4/5] (matches video's natural 4:5 portrait, no cropping) with object-position: center top
+- All 4 founder portfolio pages now play their respective videos
+
+TASK 2a — Prisma schema:
+- Added `videoUrl String?` field to Founder model in /prisma/schema.prisma
+- Ran `bunx prisma db push` to apply migration
+- Ran `bunx prisma generate` to regenerate Prisma client
+
+TASK 2b — Admin API:
+- Created /src/app/admin/api/upload-video/route.ts:
+  * Accepts FormData video upload
+  * Validates: video/mp4, video/webm, video/ogg, video/quicktime + extensions mp4/webm/ogg/mov/m4v
+  * Max 30MB (videos larger than images)
+  * Saves to /public/uploads/founders/founder-{slug}-video-{timestamp}.{ext}
+  * Returns {ok: true, url: '/uploads/founders/...'}
+- Updated /src/app/admin/api/update-profile/route.ts:
+  * Added `videoUrl?: string | null` to UpdateBody type
+  * GET endpoint now returns founder.videoUrl
+  * PUT endpoint accepts videoUrl field and saves to DB
+
+TASK 2c — Admin dashboard UI:
+- Added Video icon to lucide-react imports
+- Added `videoUrl: string | null` to Founder type
+- Added `uploadingVideo` state
+- Added `handleVideoUpload(file)` function — POSTs to /admin/api/upload-video, sets founder.videoUrl
+- Added `videoUrl: founder.videoUrl` to handleSave body
+- Added new "Intro Video" Card in Profile tab (between Profile Photo and Basic Info):
+  * Live video preview (autoPlay loop muted playsInline)
+  * Upload Video button with file accept for mp4/webm/ogg/mov/m4v
+  * Helper text: "MP4, WebM, MOV · Max 30MB · 4:5 portrait aspect recommended"
+  * Description: "This video plays on a loop on your Meet The Founders team card AND on your portfolio page hero. It takes priority over the photo."
+  * Remove Video button → falls back to photo
+- Also updated Profile Photo card with description: "Used as a fallback if no intro video is set, and as the photo in the About Me section of your portfolio page."
+
+TASK 2d — Updated pages to fetch + pass videoUrl:
+- /src/app/page.tsx: added image + videoUrl to prisma findMany select + fallback data
+- /src/app/founders/[slug]/page.tsx: added videoUrl: founder.videoUrl to data object
+- /src/app/admin/page.tsx: added videoUrl: founder.videoUrl to safeFounder object
+
+TASK 3 — Smooth + fast scrolling:
+- Updated /src/app/globals.css @layer base:
+  * Kept `scroll-behavior: smooth` on html
+  * Added `scroll-padding-top: 100px` (so anchor jumps don't hide content under sticky navbar)
+  * Added `-webkit-overflow-scrolling: touch` (momentum scrolling on iOS)
+  * Added `overscroll-behavior-y: none` on html (prevents scroll-chaining)
+  * Added `overscroll-behavior-y: contain` on body (prevents bounce glitches)
+  * Added `text-rendering: optimizeLegibility` + font smoothing for crisper text during scroll
+  * Added `overflow-anchor: none` on body
+  * Added `@media (prefers-reduced-motion: reduce)` block — disables smooth scrolling + animations for accessibility
+- Updated /src/components/trishulhub/loading-screen.tsx:
+  * Reduced loading animation duration from 2600ms → 1500ms (44% faster)
+  * Reduced post-load delay from 450ms → 250ms
+  * Reduced hard fallback timeout from 4500ms → 3000ms
+  * Total loading time: 3.05s → 1.75s (43% faster)
+
+Verification:
+- Production build succeeded (10 routes now, including new /admin/api/upload-video)
+- All 4 founder videos serve HTTP 200 from /videos/ (kiran 404KB, taroon 1.17MB, akshat 347KB, pruthvi 319KB)
+- Home page team section: all 4 founder videos playing, parent 498×498 (square, smaller than before), object-position 50% 0%
+- All 4 portfolio pages: videos playing in 4:5 aspect containers
+- VLM verified: "video appears RAW—no cyan/blue tint, no grid pattern, and no glow overlay; it looks natural and clean"
+- Admin dashboard: "Intro Video card with Upload Video button" confirmed visible
+- End-to-end API test: login → upload-video (200 OK, returns URL) → update-profile with videoUrl (200 OK) → me endpoint returns videoUrl
+- CSS smooth scrolling active: html.scrollBehavior="smooth", html.scrollPaddingTop="100px"
+- Loading screen now disappears at ~2000ms (was ~3050ms)
+- Screenshots: v8-team-row1.png, v8-team-row2.png, v8-admin-video-card.png, v8-final-home-hero.png
+
+Stage Summary:
+- TASK 1 ✓: 3 new founder videos (Kiran/Akshat/Pruthvi) added to team section + portfolio pages. Taroon unchanged. All overlay layers REMOVED from team section videos (raw video). Team cards smaller (498×498 desktop vs 558×558 before).
+- TASK 2 ✓: Admin panel now has "Intro Video" upload card in Profile tab. Founder uploads either a video OR a photo. Video takes priority and auto-applies to BOTH home team card AND portfolio hero. New /admin/api/upload-video endpoint + videoUrl DB field. Remove Video button falls back to photo.
+- TASK 3 ✓: Smooth scrolling via CSS scroll-behavior:smooth + scroll-padding-top + overscroll-behavior + iOS momentum scrolling + reduced-motion accessibility. Loading screen 43% faster (3.05s → 1.75s).
+- To make these changes live on the deployed preview, the user needs to redeploy.
+

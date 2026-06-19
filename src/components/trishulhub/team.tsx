@@ -11,16 +11,23 @@ type Founder = {
   role: string
   projects: string
   bio: string
+  videoUrl?: string | null
+  image?: string | null
 }
 
 /*
- * Founder intro videos — looping background clips for the founder cards.
- * Kiran and Taroon have custom intro videos; other founders fall back to
- * the gradient + big-initial design (no video).
+ * Founder intro videos — looping clips for the founder cards.
+ * ALL 4 founders (Kiran, Taroon, Akshat, Pruthvi) now have intro videos.
+ *
+ * If a founder's DB record has a `videoUrl` set (uploaded via the admin
+ * panel), that takes priority. Otherwise we fall back to the hardcoded
+ * defaults below.
  */
 const FOUNDER_VIDEOS: Record<string, string> = {
   kiran: '/videos/founder-kiran.mp4',
   taroon: '/videos/founder-taroon.mp4',
+  akshat: '/videos/founder-akshat.mp4',
+  pruthvi: '/videos/founder-pruthvi.mp4',
 }
 
 export function Team({ founders }: { founders: Founder[] }) {
@@ -69,7 +76,7 @@ export function Team({ founders }: { founders: Founder[] }) {
         style={{ background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)' }}
       />
 
-      <div className="relative z-10 mx-auto max-w-6xl">
+      <div className="relative z-10 mx-auto max-w-5xl">
         {/* Heading */}
         <div className="mb-14 text-center">
           <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
@@ -90,9 +97,16 @@ export function Team({ founders }: { founders: Founder[] }) {
           </p>
         </div>
 
-        {/* Grid - 2 columns */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 sm:gap-8">
-          {founders.map((m, i) => (
+        {/* Grid - 2 columns. max-w-5xl (was 6xl) makes each card smaller
+            per user request ("make width and length of video card little small"). */}
+        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
+          {founders.map((m, i) => {
+            // Resolve which media to show: DB-uploaded video takes priority,
+            // then hardcoded FOUNDER_VIDEOS, then DB-uploaded image, then
+            // the big initial-letter fallback.
+            const founderVideo = m.videoUrl || FOUNDER_VIDEOS[m.slug] || null
+            const founderImage = m.image || null
+            return (
             <motion.a
               key={m.slug}
               href={`/founders/${m.slug}`}
@@ -124,15 +138,21 @@ export function Team({ founders }: { founders: Founder[] }) {
                * folded hands (65-75%). Only the lower torso (80-100%) is
                * cropped, which is fine.
                *
-               * Card heights this produces:
-               *   Mobile  (~356px col): 356x356px
-               *   Desktop (~558px col): 558x558px
-               * This is the "slightly bigger" size the user asked for —
-               * between the too-tall aspect-[4/5] (698px) and the
-               * too-short aspect-[3/2] (372px).
+               * USER REQUEST (Task 1, this iteration): "the video looks
+               * little overlaid so remove that overlay from the video and
+               * make it raw dont add any overlay". So we NO LONGER render
+               * the radial cyan glow, the grid pattern overlay, or the
+               * background gradient ON TOP of the video. The video plays
+               * RAW, exactly as uploaded.
+               *
+               * We keep the background gradient as a BASE (only visible
+               * while the video is loading, or for founders that have no
+               * video). Once the video paints, it covers the gradient
+               * completely — so the gradient is never "overlaid" on top
+               * of the video.
                */}
               <div className="relative aspect-square overflow-hidden">
-                {/* Background gradient (scales on hover) — always present as base */}
+                {/* Background gradient — base layer, hidden once video/image paints */}
                 <div
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"
                   style={{
@@ -141,10 +161,10 @@ export function Team({ founders }: { founders: Founder[] }) {
                   }}
                 />
 
-                {/* Looping founder intro video (kiran + taroon only) */}
-                {FOUNDER_VIDEOS[m.slug] && (
+                {/* Looping founder intro video — RAW, no overlays on top */}
+                {founderVideo && (
                   <video
-                    src={FOUNDER_VIDEOS[m.slug]}
+                    src={founderVideo}
                     autoPlay
                     loop
                     muted
@@ -156,27 +176,18 @@ export function Team({ founders }: { founders: Founder[] }) {
                   />
                 )}
 
-                {/* Radial cyan glow (sits above video) */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 transition-opacity duration-500"
-                  style={{
-                    background:
-                      'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,222,255,0.18) 0%, transparent 70%)',
-                  }}
-                />
-                {/* Grid pattern overlay */}
-                <div
-                  aria-hidden="true"
-                  className="absolute inset-0 opacity-[0.06]"
-                  style={{
-                    backgroundImage:
-                      'linear-gradient(rgba(255,255,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.6) 1px, transparent 1px)',
-                    backgroundSize: '28px 28px',
-                  }}
-                />
-                {/* Big initial letter — only shown for founders WITHOUT a video */}
-                {!FOUNDER_VIDEOS[m.slug] && (
+                {/* Founder photo fallback (only if no video AND image exists) */}
+                {!founderVideo && founderImage && (
+                  <img
+                    src={founderImage}
+                    alt={m.name}
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    style={{ objectPosition: 'center top' }}
+                  />
+                )}
+
+                {/* Big initial letter — only shown for founders WITHOUT video AND without image */}
+                {!founderVideo && !founderImage && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span
                       className="select-none text-[120px] font-bold leading-none sm:text-[140px]"
@@ -196,7 +207,8 @@ export function Team({ founders }: { founders: Founder[] }) {
                   <ArrowUpRight size={16} />
                 </div>
 
-                {/* Bottom reveal bar (slides up on hover) */}
+                {/* Bottom reveal bar (slides up on hover) — kept because it
+                    only appears on hover, doesn't permanently overlay the video */}
                 <div
                   className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0"
                   style={{
@@ -247,7 +259,7 @@ export function Team({ founders }: { founders: Founder[] }) {
               </div>
 
               {/* Bottom text area */}
-              <div className="relative flex flex-1 flex-col gap-2 p-6">
+              <div className="relative flex flex-1 flex-col gap-2 p-5">
                 <h3
                   className="text-xl font-bold text-white"
                   style={{ fontFamily: 'var(--font-space-grotesk)' }}
@@ -280,7 +292,8 @@ export function Team({ founders }: { founders: Founder[] }) {
                 />
               </div>
             </motion.a>
-          ))}
+            )
+          })}
         </div>
 
         {/* Meet the team button */}

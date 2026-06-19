@@ -30,6 +30,7 @@ type Founder = {
   bio: string
   projects: string
   image: string | null
+  videoUrl: string | null
   dateOfBirth: string | null
   address: string | null
   zipCode: string | null
@@ -64,12 +65,17 @@ type Founder = {
 /*
  * Founder intro videos — same clips used on the team section cards, shown
  * here on the portfolio hero so visitors see the same looping video when
- * they click a founder's image. Kiran and Taroon have custom videos; other
- * founders fall back to the existing image / initial-letter design.
+ * they click a founder's image. ALL 4 founders have intro videos now.
+ *
+ * If a founder's DB record has a `videoUrl` set (uploaded via the admin
+ * panel), that takes priority. Otherwise we fall back to the hardcoded
+ * defaults below.
  */
 const FOUNDER_VIDEOS: Record<string, string> = {
   kiran: '/videos/founder-kiran.mp4',
   taroon: '/videos/founder-taroon.mp4',
+  akshat: '/videos/founder-akshat.mp4',
+  pruthvi: '/videos/founder-pruthvi.mp4',
 }
 
 export function FounderDetailClient({
@@ -79,8 +85,9 @@ export function FounderDetailClient({
   slug: string
   founder: Founder
 }) {
-  /* Looping founder intro video (kiran + taroon only) */
-  const founderVideo = FOUNDER_VIDEOS[slug]
+  /* Looping founder intro video — DB-uploaded video takes priority,
+     then hardcoded FOUNDER_VIDEOS fallback, then image, then initial. */
+  const founderVideo = f.videoUrl || FOUNDER_VIDEOS[slug] || null
   const videoRef = useRef<HTMLVideoElement>(null)
 
   // Explicit .play() kick — some browsers block autoplay until the user
@@ -243,37 +250,24 @@ export function FounderDetailClient({
             className="order-1 lg:order-2"
           >
             {/* Right: photo / initial card
-             * Video is 858x1072 (4:5 portrait). Previously this container
-             * used aspect-square (1:1), which cropped the top of the head/
-             * hair when the 4:5 portrait video was object-cover'd into it.
-             * Switching to aspect-[4/5] makes the container match the video
-             * exactly, so nothing is cropped. object-position: center top
-             * is a belt-and-suspenders guard for any rounding.
+             * Video is 858x1072 (4:5 portrait). Container uses aspect-[4/5]
+             * to match the video's natural ratio exactly — nothing gets
+             * cropped (full head-to-toe visible).
+             *
+             * USER REQUEST (Task 1, this iteration): "the video looks little
+             * overlaid so remove that overlay from the video and make it raw".
+             * So we NO LONGER render the radial glow, grid pattern overlay,
+             * or the themed gradient ON TOP of the video. The video plays RAW.
+             * The base gradient is kept only as a placeholder while the video
+             * loads (it gets covered completely once the video paints).
              */}
             <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-3xl border border-[#00DEFF]/20">
-              {/* Background gradient */}
+              {/* Background gradient — base layer, hidden once video/image paints */}
               <div
                 className="absolute inset-0"
                 style={{
                   background:
                     'linear-gradient(135deg, #0a2a35 0%, #0A0A0A 50%, #061218 100%)',
-                }}
-              />
-              {/* Radial glow */}
-              <div
-                className="absolute inset-0"
-                style={{
-                  background:
-                    'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,222,255,0.35) 0%, transparent 70%)',
-                }}
-              />
-              {/* Grid pattern */}
-              <div
-                className="absolute inset-0 opacity-[0.08]"
-                style={{
-                  backgroundImage:
-                    'linear-gradient(rgba(0,222,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,222,255,0.6) 1px, transparent 1px)',
-                  backgroundSize: '28px 28px',
                 }}
               />
 
@@ -295,6 +289,7 @@ export function FounderDetailClient({
                   src={f.image}
                   alt={f.name}
                   className="absolute inset-0 h-full w-full object-cover"
+                  style={{ objectPosition: 'center top' }}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">

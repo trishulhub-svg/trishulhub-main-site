@@ -82,12 +82,50 @@
   * {
     @apply border-border outline-ring/50;
   }
+  /* SMOOTH + FAST SCROLLING
+   * - scroll-behavior: smooth on html enables smooth anchor scrolling
+   *   for #home, #portfolio, #contact, etc. links.
+   * - We also add scroll-padding-top so anchor jumps don't hide content
+   *   under the sticky navbar.
+   * - The high-perf scrollbar-touch property + overscroll-behavior
+   *   prevent scroll-chaining and bounce glitches on macOS / iOS.
+   * - `overflow-scrolling: touch` enables momentum scrolling on iOS.
+   * - We disable smooth-scroll on users who prefer reduced motion
+   *   (accessibility). */
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 100px;
+    -webkit-overflow-scrolling: touch;
+    overscroll-behavior-y: none;
+    /* GPU-accelerated scrolling on supporting browsers */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   body {
     @apply bg-background text-foreground;
     background-color: #0a0a0a;
+    /* Smooth out paint operations during scroll — most modern browsers
+       respect this for the body's compositor layer. */
+    overflow-anchor: none;
+    overscroll-behavior-y: contain;
+  }
+  /* Tell the browser that will-change elements should be on their own
+     compositor layer — this prevents repaints during scroll. */
+  video, img, canvas {
+    will-change: auto;
+  }
+  /* Respect users who prefer reduced motion — they get instant scrolling */
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+    * {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 

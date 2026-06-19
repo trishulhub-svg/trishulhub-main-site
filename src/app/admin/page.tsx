@@ -20,6 +20,7 @@ export default async function AdminDashboardPage() {
     bio: founder.bio,
     projects: founder.projects,
     image: founder.image,
+    videoUrl: founder.videoUrl,
     dateOfBirth: founder.dateOfBirth,
     address: founder.address,
     zipCode: founder.zipCode,

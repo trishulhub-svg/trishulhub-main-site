@@ -21,7 +21,10 @@ export function LoadingScreen() {
       let raf = 0
       let finishTimer: ReturnType<typeof setTimeout> | undefined
       const start = performance.now()
-      const duration = 2600
+      // FAST LOAD — reduced from 2600ms to 1500ms so the site feels snappy.
+      // The user explicitly asked for "very very smooth and fast" scrolling
+      // and a long loading screen makes the whole site feel slow.
+      const duration = 1500
       const tick = (now: number) => {
         const t = Math.min((now - start) / duration, 1)
         // ease-out cubic
@@ -30,15 +33,15 @@ export function LoadingScreen() {
         if (t < 1) {
           raf = requestAnimationFrame(tick)
         } else {
-          finishTimer = setTimeout(() => setDone(true), 450)
+          finishTimer = setTimeout(() => setDone(true), 250)
         }
       }
       raf = requestAnimationFrame(tick)
       // HARD FALLBACK: ensure the loading screen ALWAYS hides, even if RAF
       // is throttled (backgrounded tab, low-power mode, slow device) or
-      // the tick loop stalls for any reason. 4.5s = 2.6s anim + 450ms delay
+      // the tick loop stalls for any reason. 3s = 1.5s anim + 250ms delay
       // + generous buffer.
-      const hardFallback = setTimeout(() => setDone(true), 4500)
+      const hardFallback = setTimeout(() => setDone(true), 3000)
       cleanupRef.current = () => {
         cancelAnimationFrame(raf)
         if (finishTimer) clearTimeout(finishTimer)

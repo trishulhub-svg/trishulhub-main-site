@@ -24,6 +24,7 @@ import {
   Trash2,
   Upload,
   ExternalLink,
+  Video,
 } from 'lucide-react'
 
 type Skill = { name: string; level: number }
@@ -40,6 +41,7 @@ type Founder = {
   bio: string
   projects: string
   image: string | null
+  videoUrl: string | null
   dateOfBirth: string | null
   address: string | null
   zipCode: string | null
@@ -68,6 +70,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [error, setError] = useState<string | null>(null)
   const [newPassword, setNewPassword] = useState('')
   const [uploading, setUploading] = useState(false)
+  const [uploadingVideo, setUploadingVideo] = useState(false)
 
   // Auto-clear save notice
   useEffect(() => {
@@ -86,6 +89,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         bio: founder.bio,
         projects: founder.projects,
         image: founder.image,
+        videoUrl: founder.videoUrl,
         dateOfBirth: founder.dateOfBirth,
         address: founder.address,
         zipCode: founder.zipCode,
@@ -145,6 +149,36 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
       setError('Network error during upload')
     } finally {
       setUploading(false)
+    }
+  }
+
+  /*
+   * Upload an intro video for the founder. The video is saved to
+   * /public/uploads/founders/ and the URL is stored in the founder's
+   * `videoUrl` DB field. On save, the video automatically appears on:
+   *   - the home page 'Meet The Founders' team card (replacing the photo)
+   *   - the founder's portfolio page hero (replacing the photo)
+   * If a founder has BOTH a video and a photo, the video takes priority
+   * for the team card / portfolio hero. Setting video back to null
+   * (Remove Video button) falls back to the photo.
+   */
+  async function handleVideoUpload(file: File) {
+    setUploadingVideo(true)
+    setError(null)
+    try {
+      const fd = new FormData()
+      fd.append('file', file)
+      const res = await fetch('/admin/api/upload-video', { method: 'POST', body: fd })
+      const data = await res.json()
+      if (!res.ok || !data.ok) {
+        setError(data?.error || 'Video upload failed')
+        return
+      }
+      setFounder((f) => ({ ...f, videoUrl: data.url }))
+    } catch {
+      setError('Network error during video upload')
+    } finally {
+      setUploadingVideo(false)
     }
   }
 
@@ -387,12 +421,72 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   <p className="mt-2 text-xs text-white/40">
                     PNG, JPEG, WebP, or GIF · Max 5MB · Square aspect recommended
                   </p>
+                  <p className="mt-1 text-xs text-white/40">
+                    Used as a fallback if no intro video is set, and as the photo in the About Me section of your portfolio page.
+                  </p>
                   {founder.image && (
                     <button
                       onClick={() => setFounder((f) => ({ ...f, image: null }))}
                       className="mt-3 block text-xs text-red-400 hover:underline"
                     >
                       Remove photo
+                    </button>
+                  )}
+                </div>
+              </div>
+            </Card>
+          )}
+
+          {tab === 'profile' && (
+            <Card title="Intro Video" icon={<Video size={16} />}>
+              <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
+                {/* Preview */}
+                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#00DEFF]/30 bg-[#0A0A0A]">
+                  {founder.videoUrl ? (
+                    <video
+                      src={founder.videoUrl}
+                      autoPlay
+                      loop
+                      muted
+                      playsInline
+                      className="h-full w-full object-cover"
+                      style={{ objectPosition: 'center top' }}
+                    />
+                  ) : (
+                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#0a2a35] to-[#0A0A0A]">
+                      <Video size={28} style={{ color: '#00DEFF' }} />
+                      <span className="mt-1 text-[10px] text-white/40">No video</span>
+                    </div>
+                  )}
+                </div>
+                <div className="flex-1">
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#00DEFF]/40 px-4 py-2 text-sm font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]">
+                    {uploadingVideo ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
+                    {uploadingVideo ? 'Uploading...' : 'Upload Video'}
+                    <input
+                      type="file"
+                      accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.mov,.m4v"
+                      className="hidden"
+                      disabled={uploadingVideo}
+                      onChange={(e) => {
+                        const file = e.target.files?.[0]
+                        if (file) handleVideoUpload(file)
+                        e.target.value = ''
+                      }}
+                    />
+                  </label>
+                  <p className="mt-2 text-xs text-white/40">
+                    MP4, WebM, MOV · Max 30MB · 4:5 portrait aspect recommended (e.g. 858×1072)
+                  </p>
+                  <p className="mt-1 text-xs text-white/40">
+                    This video plays on a loop on your <span className="text-[#00DEFF]">Meet The Founders</span> team card AND on your <span className="text-[#00DEFF]">portfolio page hero</span>. It takes priority over the photo. Click <span className="text-[#00DEFF]">Save Changes</span> below to apply.
+                  </p>
+                  {founder.videoUrl && (
+                    <button
+                      onClick={() => setFounder((f) => ({ ...f, videoUrl: null }))}
+                      className="mt-3 block text-xs text-red-400 hover:underline"
+                    >
+                      Remove video (fall back to photo)
                     </button>
                   )}
                 </div>

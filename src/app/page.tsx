@@ -20,16 +20,18 @@ export default async function Home() {
       role: true,
       projects: true,
       bio: true,
+      image: true,
+      videoUrl: true,
     },
     orderBy: { createdAt: 'asc' },
   })
 
   // Fallback if DB is empty
   const foundersData = founders.length > 0 ? founders : [
-    { slug: 'kiran', initial: 'K', name: 'Kiran', role: 'Fullstack Developer', projects: '50+', bio: 'Fullstack developer with expertise in React, Node.js, and modern web technologies.' },
-    { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Co-Founder', projects: '40+', bio: 'Visionary leader driving TrishulHub\'s strategic growth.' },
-    { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Fullstack Developer & SMM Lead', projects: '45+', bio: 'Bridging development and marketing with expertise in React, SEO, and social media.' },
-    { slug: 'pruthvi', initial: 'P', name: 'Pruthvi', role: 'Management & Operations Head', projects: '35+', bio: 'Operations expert ensuring smooth project delivery.' },
+    { slug: 'kiran', initial: 'K', name: 'Kiran', role: 'Fullstack Developer', projects: '50+', bio: 'Fullstack developer with expertise in React, Node.js, and modern web technologies.', image: null, videoUrl: null },
+    { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Co-Founder', projects: '40+', bio: 'Visionary leader driving TrishulHub\'s strategic growth.', image: null, videoUrl: null },
+    { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Fullstack Developer & SMM Lead', projects: '45+', bio: 'Bridging development and marketing with expertise in React, SEO, and social media.', image: null, videoUrl: null },
+    { slug: 'pruthvi', initial: 'P', name: 'Pruthvi', role: 'Management & Operations Head', projects: '35+', bio: 'Operations expert ensuring smooth project delivery.', image: null, videoUrl: null },
   ]
 
   return (
