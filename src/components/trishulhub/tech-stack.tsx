@@ -1,6 +1,8 @@
 'use client'
 
+import { motion, useReducedMotion } from 'framer-motion'
 import { AnimatedHeading } from './animated-heading'
+import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
 const techs = [
   { slug: 'react', name: 'React', color: '#61DAFB' },
@@ -25,9 +27,26 @@ const techs = [
   { slug: 'nginx', name: 'Nginx', color: '#009639' },
 ]
 
-function TechPill({ slug, name, color }: { slug: string; name: string; color: string }) {
+function TechPill({ slug, name, color, index }: { slug: string; name: string; color: string; index: number }) {
+  const reduce = useReducedMotion()
   return (
-    <div className="group/pill flex shrink-0 items-center gap-3 rounded-full border border-white/10 px-5 py-3 transition-all duration-300 hover:scale-110 hover:border-[#00DEFF]">
+    <motion.div
+      initial={reduce ? { opacity: 0 } : { opacity: 0, scale: 0.8, rotateY: -15 }}
+      whileInView={reduce ? { opacity: 1 } : { opacity: 1, scale: 1, rotateY: 0 }}
+      viewport={{ once: true, amount: 0.1 }}
+      transition={{ duration: 0.5, delay: (index % 10) * STAGGER.fast, ease: EASE_OUT_EXPO }}
+      whileHover={
+        reduce
+          ? undefined
+          : {
+              scale: 1.1,
+              rotateY: 5,
+              boxShadow: '0 0 24px rgba(0,222,255,0.35)',
+            }
+      }
+      style={{ transformStyle: 'preserve-3d', perspective: 1000 }}
+      className="group/pill flex shrink-0 items-center gap-3 rounded-full border border-white/10 bg-white/[0.02] px-5 py-3 transition-colors duration-200 hover:border-[#00DEFF]"
+    >
       <span
         className="flex h-9 w-9 items-center justify-center rounded-lg border transition-all duration-300"
         style={{
@@ -35,19 +54,13 @@ function TechPill({ slug, name, color }: { slug: string; name: string; color: st
           backgroundColor: 'rgba(0,222,255,0.05)',
         }}
       >
-        {/* Real company logo (SVG, inherits color via currentColor) */}
         <img
           src={`/images/logos/${slug}.svg`}
           alt={`${name} logo`}
           width={20}
           height={20}
           className="h-5 w-5 transition-all duration-300"
-          style={{
-            // Theme blue so logos are visible on the dark background —
-            // SVGs use fill="currentColor", so this `color` cascades to them.
-            color: '#00DEFF',
-            opacity: 0.95,
-          }}
+          style={{ color: '#00DEFF', opacity: 0.95 }}
           loading="lazy"
         />
       </span>
@@ -57,7 +70,7 @@ function TechPill({ slug, name, color }: { slug: string; name: string; color: st
       >
         {name}
       </span>
-    </div>
+    </motion.div>
   )
 }
 
@@ -70,9 +83,15 @@ export function TechStack() {
       {/* Heading */}
       <div className="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-14 text-center">
-          <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+          >
             Technologies
-          </span>
+          </motion.span>
           <AnimatedHeading
             as="h2"
             variant="rise"
@@ -83,13 +102,17 @@ export function TechStack() {
           >
             Our *Tech* *Stack*
           </AnimatedHeading>
-          <p
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_EXPO }}
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
           >
             We leverage the industry&apos;s most powerful tools and frameworks to
             build fast, scalable, and future-proof digital products.
-          </p>
+          </motion.p>
         </div>
       </div>
 
@@ -112,16 +135,16 @@ export function TechStack() {
         />
 
         {/* Row 1 - scrolls left */}
-        <div className="flex w-max animate-marquee gap-4">
+        <div className="flex w-max animate-marquee gap-4" style={{ animationPlayState: 'running' }}>
           {row.map((t, i) => (
-            <TechPill key={`r1-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} />
+            <TechPill key={`r1-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} index={i} />
           ))}
         </div>
 
         {/* Row 2 - scrolls right (reverse) */}
         <div className="flex w-max animate-marquee-slow gap-4 [animation-direction:reverse]">
           {row.map((t, i) => (
-            <TechPill key={`r2-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} />
+            <TechPill key={`r2-${t.slug}-${i}`} slug={t.slug} name={t.name} color={t.color} index={i} />
           ))}
         </div>
       </div>

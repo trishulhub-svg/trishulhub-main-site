@@ -1,9 +1,10 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion, animate, useInView } from 'framer-motion'
 import { Github, Linkedin, Twitter, Mail, ArrowUpRight } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
+import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type Founder = {
   slug: string
@@ -31,13 +32,79 @@ const FOUNDER_VIDEOS: Record<string, string> = {
   pruthvi: '/videos/founder-pruthvi.mp4',
 }
 
+/* ------------------------------------------------------------------ */
+/* ProjectsCountUp — animates the "N+ Projects" badge from 0 → N       */
+/* when the card scrolls into view, then re-animates on hover.         */
+/* ------------------------------------------------------------------ */
+function ProjectsCountUp({ raw }: { raw: string }) {
+  const ref = useRef<HTMLSpanElement>(null)
+  const inView = useInView(ref, { once: false, amount: 0.5 })
+  const reduce = useReducedMotion()
+
+  // Parse the leading number + suffix (e.g. "50+" → 50 and "+")
+  const match = raw.match(/^(\d+)(.*)$/)
+  const target = match ? parseInt(match[1], 10) : 0
+  const suffix = match ? match[2] : ''
+
+  useEffect(() => {
+    if (reduce) return
+    const el = ref.current
+    if (!el) return
+    if (!inView) return
+
+    const controls = animate(0, target, {
+      duration: 1.4,
+      ease: 'easeOut',
+      onUpdate: (latest) => {
+        el.textContent = `${Math.round(latest)}${suffix}`
+      },
+    })
+    return () => controls.stop()
+  }, [inView, target, suffix, reduce])
+
+  // On hover of the parent card, re-trigger the count-up
+  useEffect(() => {
+    if (reduce) return
+    const el = ref.current
+    if (!el) return
+    const card = el.closest('[data-team-card]')
+    if (!card) return
+
+    const onEnter = () => {
+      const controls = animate(0, target, {
+        duration: 1.2,
+        ease: 'easeOut',
+        onUpdate: (latest) => {
+          el.textContent = `${Math.round(latest)}${suffix}`
+        },
+      })
+      // Store stop function on the element so we can clean it up
+      ;(el as HTMLElement & { _stop?: () => void })._stop = () => controls.stop()
+    }
+    const onLeave = () => {
+      const stop = (el as HTMLElement & { _stop?: () => void })._stop
+      if (stop) stop()
+    }
+    card.addEventListener('mouseenter', onEnter)
+    card.addEventListener('mouseleave', onLeave)
+    return () => {
+      card.removeEventListener('mouseenter', onEnter)
+      card.removeEventListener('mouseleave', onLeave)
+    }
+  }, [target, suffix, reduce])
+
+  // Reduced-motion: just show the static number
+  if (reduce) {
+    return <span ref={ref}>{raw}</span>
+  }
+
+  return <span ref={ref}>0{suffix}</span>
+}
+
 export function Team({ founders }: { founders: Founder[] }) {
   const sectionRef = useRef<HTMLElement>(null)
+  const reduce = useReducedMotion()
 
-  // Some browsers won't autoplay muted videos reliably (especially on mobile
-  // or when the page was loaded in a background tab). As a belt-and-suspenders
-  // measure, after mount we explicitly call .play() on every founder video in
-  // this section. If a video is already playing, .play() is a no-op.
   useEffect(() => {
     const section = sectionRef.current
     if (!section) return
@@ -50,8 +117,6 @@ export function Team({ founders }: { founders: Founder[] }) {
         })
       })
     }
-    // Kick once on mount, and again on first user interaction (covers the
-    // case where the browser blocks autoplay until the user interacts).
     kick()
     const onFirstInteraction = () => {
       kick()
@@ -80,9 +145,15 @@ export function Team({ founders }: { founders: Founder[] }) {
       <div className="relative z-10 mx-auto max-w-5xl">
         {/* Heading */}
         <div className="mb-14 text-center">
-          <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
+          <motion.span
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+          >
             Our Team
-          </span>
+          </motion.span>
           <AnimatedHeading
             as="h2"
             variant="rise"
@@ -93,32 +164,55 @@ export function Team({ founders }: { founders: Founder[] }) {
           >
             Meet Our *Team*
           </AnimatedHeading>
-          <p
+          <motion.p
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_EXPO }}
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
           >
             The minds behind TrishulHub — a team of passionate experts dedicated
             to delivering excellence in every project. Click any founder to view their full portfolio.
-          </p>
+          </motion.p>
         </div>
 
-        {/* Grid - 2 columns. max-w-5xl (was 6xl) makes each card smaller
-            per user request ("make width and length of video card little small"). */}
-        <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6">
-          {founders.map((m, i) => {
-            // Resolve which media to show: DB-uploaded video takes priority,
-            // then hardcoded FOUNDER_VIDEOS, then DB-uploaded image, then
-            // the big initial-letter fallback.
+        {/* Grid — staggered left-to-right reveal */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: 0.15 } },
+          }}
+          className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6"
+        >
+          {founders.map((m) => {
             const founderVideo = m.videoUrl || FOUNDER_VIDEOS[m.slug] || null
             const founderImage = m.image || null
             return (
             <motion.a
               key={m.slug}
               href={`/founders/${m.slug}`}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: '-40px' }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
+              data-team-card
+              variants={{
+                hidden: { opacity: 0, x: -50 },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+                },
+              }}
+              whileHover={
+                reduce
+                  ? undefined
+                  : {
+                      y: -10,
+                      boxShadow: '0 25px 50px -12px rgba(0,222,255,0.25)',
+                    }
+              }
+              transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
               className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 cursor-pointer"
             >
               {/* Hover glow border layer */}
@@ -131,42 +225,18 @@ export function Team({ founders }: { founders: Founder[] }) {
                 }}
               />
 
-              {/* Top hero area
-               * Video is 858x1072 (4:5 portrait). The founder's folded hands
-               * appear at roughly 65-75% from the top of the video frame.
-               *
-               * We use aspect-[1/1] (square) for the container. With
-               * `object-position: center top`, the portrait video is scaled
-               * to fit the container WIDTH and the bottom ~20% is cropped.
-               * This shows the TOP ~80% of the video — which includes the
-               * head (0-25%), face (15-40%), upper body (30-60%), AND the
-               * folded hands (65-75%). Only the lower torso (80-100%) is
-               * cropped, which is fine.
-               *
-               * USER REQUEST (Task 1, this iteration): "the video looks
-               * little overlaid so remove that overlay from the video and
-               * make it raw dont add any overlay". So we NO LONGER render
-               * the radial cyan glow, the grid pattern overlay, or the
-               * background gradient ON TOP of the video. The video plays
-               * RAW, exactly as uploaded.
-               *
-               * We keep the background gradient as a BASE (only visible
-               * while the video is loading, or for founders that have no
-               * video). Once the video paints, it covers the gradient
-               * completely — so the gradient is never "overlaid" on top
-               * of the video.
-               */}
+              {/* Top hero area */}
               <div className="relative aspect-square overflow-hidden">
-                {/* Background gradient — base layer, hidden once video/image paints */}
+                {/* Background gradient */}
                 <div
-                  className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-110"
+                  className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
                   style={{
                     background:
                       'linear-gradient(135deg, #141414 0%, #0A0A0A 100%)',
                   }}
                 />
 
-                {/* Looping founder intro video — RAW, no overlays on top */}
+                {/* Looping founder intro video */}
                 {founderVideo && (
                   <video
                     src={founderVideo}
@@ -176,22 +246,22 @@ export function Team({ founders }: { founders: Founder[] }) {
                     playsInline
                     preload="auto"
                     aria-hidden="true"
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     style={{ objectPosition: 'center top' }}
                   />
                 )}
 
-                {/* Founder photo fallback (only if no video AND image exists) */}
+                {/* Founder photo fallback */}
                 {!founderVideo && founderImage && (
                   <img
                     src={founderImage}
                     alt={m.name}
-                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-110"
+                    className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                     style={{ objectPosition: 'center top' }}
                   />
                 )}
 
-                {/* Big initial letter — only shown for founders WITHOUT video AND without image */}
+                {/* Big initial letter fallback */}
                 {!founderVideo && !founderImage && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span
@@ -212,8 +282,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   <ArrowUpRight size={16} />
                 </div>
 
-                {/* Bottom reveal bar (slides up on hover) — kept because it
-                    only appears on hover, doesn't permanently overlay the video */}
+                {/* Bottom reveal bar (slides up on hover) — contains social links */}
                 <div
                   className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0"
                   style={{
@@ -251,7 +320,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   </div>
                 </div>
 
-                {/* Projects badge (top-left) */}
+                {/* Projects badge (top-left) — animated count-up */}
                 <div className="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm"
                   style={{
                     backgroundColor: 'rgba(0,222,255,0.12)',
@@ -259,7 +328,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                     border: '1px solid rgba(0,222,255,0.3)',
                   }}
                 >
-                  {m.projects} Projects Delivered
+                  <ProjectsCountUp raw={m.projects} /> Projects Delivered
                 </div>
               </div>
 
@@ -299,16 +368,22 @@ export function Team({ founders }: { founders: Founder[] }) {
             </motion.a>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* Meet the team button */}
         <div className="mt-12 text-center">
-          <a
+          <motion.a
             href="#contact"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+            whileHover={reduce ? undefined : { scale: 1.04 }}
+            whileTap={reduce ? undefined : { scale: 0.97 }}
             className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/50 px-7 py-3 text-sm font-semibold text-[#00DEFF] transition-all duration-300 hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
           >
             <span className="relative z-10">Meet The Team</span>
-          </a>
+          </motion.a>
         </div>
       </div>
     </section>

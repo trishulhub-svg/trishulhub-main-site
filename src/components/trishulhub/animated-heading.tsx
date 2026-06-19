@@ -114,7 +114,7 @@ export function AnimatedHeading({
                 }}
               >
                 {isHighlight ? (
-                  <span style={{ color: highlightColor }}>
+                  <span className="gradient-text-animated">
                     {coreWord}
                     {trailingPunct && (
                       <span style={{ color: 'inherit' }}>{trailingPunct}</span>

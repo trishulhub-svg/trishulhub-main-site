@@ -1,6 +1,6 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
   Code2,
   Globe,
@@ -12,6 +12,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
+import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
 const services = [
   {
@@ -47,6 +48,7 @@ const services = [
 ]
 
 export function Services() {
+  const reduce = useReducedMotion()
   return (
     <section id="services" className="relative overflow-hidden py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -55,8 +57,8 @@ export function Services() {
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
             className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
           >
             What We Do
@@ -74,8 +76,8 @@ export function Services() {
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.6, delay: 0.1 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_EXPO }}
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
           >
@@ -84,28 +86,51 @@ export function Services() {
           </motion.p>
         </div>
 
-        {/* Grid */}
-        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {services.map((s, i) => {
+        {/* Grid with staggered card reveal */}
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.1 }}
+          variants={{
+            hidden: {},
+            visible: { transition: { staggerChildren: STAGGER.normal } },
+          }}
+          className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {services.map((s) => {
             const Icon = s.icon
             return (
               <motion.div
                 key={s.title}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
-                transition={{ duration: 0.5, delay: (i % 3) * 0.08 }}
-                className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-8 transition-all duration-300 hover:-translate-y-2 hover:border-[#00DEFF]/50 hover:bg-[#00DEFF]/[0.04] hover:shadow-[0_24px_70px_-15px_rgba(0,222,255,0.35)]"
+                variants={{
+                  hidden: { opacity: 0, y: 60 },
+                  visible: {
+                    opacity: 1,
+                    y: 0,
+                    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
+                  },
+                }}
+                whileHover={
+                  reduce
+                    ? undefined
+                    : {
+                        y: -12,
+                        boxShadow: '0 25px 50px -15px rgba(0,222,255,0.25)',
+                      }
+                }
+                transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+                className="group relative flex h-full flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-8 transition-colors duration-400 hover:border-[#00DEFF]/60 hover:bg-[#00DEFF]/[0.04]"
+                style={{ transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)' }}
               >
-                {/* 3rd hover: gradient sheen sweep across whole card */}
+                {/* Gradient sheen sweep across whole card on hover */}
                 <div
                   aria-hidden="true"
                   className="sheen pointer-events-none absolute inset-y-0 left-0 w-1/2 bg-gradient-to-r from-transparent via-[#00DEFF]/20 to-transparent"
                 />
-                {/* Radial spotlight that appears on hover */}
+                {/* Radial spotlight on hover */}
                 <div
                   aria-hidden="true"
-                  className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+                  className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-400 group-hover:opacity-100"
                   style={{
                     background:
                       'radial-gradient(circle at 50% 0%, rgba(0,222,255,0.10) 0%, transparent 60%)',
@@ -113,16 +138,17 @@ export function Services() {
                 />
 
                 {/* Top-right corner arrow icon */}
-                <div className="absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 transition-all duration-300 group-hover:border-[#00DEFF]/50 group-hover:bg-[#00DEFF]/10">
-                  <ArrowUpRight className="h-4 w-4 text-white/30 transition-colors duration-300 group-hover:text-[#00DEFF]" />
+                <div className="absolute right-6 top-6 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 transition-all duration-400 group-hover:border-[#00DEFF]/50 group-hover:bg-[#00DEFF]/10">
+                  <ArrowUpRight className="h-4 w-4 text-white/30 transition-colors duration-400 group-hover:text-[#00DEFF]" />
                 </div>
 
-                {/* Main icon box */}
+                {/* Main icon box — scales + rotates on hover */}
                 <div
-                  className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl border transition-transform duration-300 group-hover:rotate-[5deg] group-hover:scale-110"
+                  className="mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl border transition-transform duration-400 group-hover:rotate-[5deg] group-hover:scale-110"
                   style={{
                     borderColor: 'rgba(0,222,255,0.4)',
                     backgroundColor: 'rgba(0,222,255,0.06)',
+                    transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
                   }}
                 >
                   <Icon
@@ -148,31 +174,40 @@ export function Services() {
                   {s.desc}
                 </p>
 
-                {/* Learn More */}
+                {/* "Learn More" — slides up on hover, opacity 0.7 → 1 */}
                 <a
                   href="#"
-                  className="mt-6 inline-flex items-center gap-2 text-sm font-medium transition-colors duration-300 group-hover:text-[#00DEFF]"
-                  style={{ color: '#A0A0A0' }}
+                  className="mt-6 inline-flex items-center gap-2 text-sm font-medium opacity-70 transition-all duration-400 group-hover:translate-y-[-2px] group-hover:opacity-100 group-hover:text-[#00DEFF]"
+                  style={{
+                    color: '#A0A0A0',
+                    transitionTimingFunction: 'cubic-bezier(0.16, 1, 0.3, 1)',
+                  }}
                 >
                   Learn More
-                  <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
+                  <ArrowRight className="h-4 w-4 transition-transform duration-400 group-hover:translate-x-[5px]" />
                 </a>
               </motion.div>
             )
           })}
-        </div>
+        </motion.div>
 
         {/* View all */}
         <div className="mt-12 text-center">
-          <a
+          <motion.a
             href="#contact"
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.1 }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+            whileHover={reduce ? undefined : { scale: 1.04 }}
+            whileTap={reduce ? undefined : { scale: 0.97 }}
             className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-white/15 px-7 py-3 text-sm font-semibold text-white transition-all duration-300 hover:text-[#00DEFF]"
           >
             <span className="relative z-10 inline-flex items-center gap-2">
               View All Services
               <ArrowRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-1" />
             </span>
-          </a>
+          </motion.a>
         </div>
       </div>
     </section>

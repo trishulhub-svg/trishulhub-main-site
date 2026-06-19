@@ -8,7 +8,7 @@ import { Portfolio } from '@/components/trishulhub/portfolio'
 import { Team } from '@/components/trishulhub/team'
 import { CTA } from '@/components/trishulhub/cta'
 import { Footer } from '@/components/trishulhub/footer'
-import { SpacyBackground } from '@/components/trishulhub/spacy-background'
+import { SmoothScrollProvider } from '@/components/trishulhub/smooth-scroll-provider'
 import { db } from '@/lib/db'
 
 export default async function Home() {
@@ -36,23 +36,21 @@ export default async function Home() {
   ]
 
   return (
-    <div className="relative flex min-h-screen flex-col bg-[#0A0A0A]">
-      {/* Spacy animated background — fixed full-viewport layer of twinkling
-       * stars + drifting nebula blobs + occasional shooting stars. Sits at
-       * z-index 0, pointer-events: none, so all sections render above it. */}
-      <SpacyBackground />
-      <LoadingScreen />
-      <Navbar />
-      <main className="relative z-10 flex-1">
-        <Hero />
-        <StatsDashboard />
-        <TechStack />
-        <Services />
-        <Portfolio />
-        <Team founders={foundersData} />
-        <CTA />
-      </main>
-      <Footer />
-    </div>
+    <SmoothScrollProvider>
+      <div className="relative flex min-h-screen flex-col bg-[#0A0A0A]">
+        <LoadingScreen />
+        <Navbar />
+        <main className="relative z-10 flex-1">
+          <Hero />
+          <StatsDashboard />
+          <TechStack />
+          <Services />
+          <Portfolio />
+          <Team founders={foundersData} />
+          <CTA />
+        </main>
+        <Footer />
+      </div>
+    </SmoothScrollProvider>
   )
 }
