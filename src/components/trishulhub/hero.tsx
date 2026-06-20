@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
-import { AnimatedText } from './motion-primitives'
+import { AnimatedHeading } from './animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 /* Local looping background video for the hero section.
@@ -195,7 +195,7 @@ export function Hero() {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3, ease: EASE_OUT_EXPO }}
+          transition={{ duration: 0.4, delay: 0.15, ease: EASE_OUT_EXPO }}
           className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-[#00DEFF]"
         >
           <span className="relative flex h-2 w-2">
@@ -205,29 +205,29 @@ export function Hero() {
           Digital Solutions Company
         </motion.div>
 
-        {/* Headline — word-by-word 3D flip reveal.
-         * Each word flips in from rotateX(-90deg) with stagger 0.12s and
-         * cubic-bezier(0.16, 1, 0.3, 1) easing — exactly as user requested. */}
-        <AnimatedText
+        {/* Headline — word-by-word "rise" reveal (same animation as the
+         * "Premium Digital Solutions" section, just fires on mount instead of
+         * on scroll). Each word rises from y:30 → 0 with opacity 0 → 1,
+         * staggered by 0.08s, with cubic-bezier(0.22,1,0.36,1) easing. */}
+        <AnimatedHeading
           as="h1"
-          splitBy="words"
-          variant="flip3d"
-          stagger={0.12}
-          duration={0.8}
+          variant="rise"
+          stagger={0.08}
+          duration={0.6}
           whenInView={false}
           className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]"
           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
         >
           DIGITAL SOLUTIONS. *REAL* *GROWTH.*
-        </AnimatedText>
+        </AnimatedHeading>
 
-        {/* Subtitle — fade-in with blur effect, 0.5s after heading completes. */}
+        {/* Subtitle — fade-in with blur effect, fires shortly after heading starts. */}
         <motion.p
           initial={reduce ? { opacity: 0 } : { opacity: 0, filter: 'blur(10px)' }}
           animate={reduce ? { opacity: 1 } : { opacity: 1, filter: 'blur(0px)' }}
           transition={{
-            duration: 0.6,
-            delay: 0.5,
+            duration: 0.4,
+            delay: 0.3,
             ease: EASE_OUT_EXPO,
           }}
           className="mx-auto mt-8 max-w-2xl text-base text-white/70 sm:text-lg md:text-xl"
@@ -238,13 +238,13 @@ export function Hero() {
           solutions that transform ideas into powerful digital experiences.
         </motion.p>
 
-        {/* CTAs — spring scale-in with 0.1s stagger + hover scale 1.05 */}
+        {/* CTAs — spring scale-in with 0.08s stagger + hover scale 1.05 */}
         <motion.div
           initial="hidden"
           animate="visible"
           variants={{
             hidden: {},
-            visible: { transition: { staggerChildren: 0.1, delayChildren: 1.1 } },
+            visible: { transition: { staggerChildren: 0.08, delayChildren: 0.5 } },
           }}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
@@ -295,7 +295,7 @@ export function Hero() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.5, duration: 0.8 }}
+        transition={{ delay: 0.8, duration: 0.5 }}
         className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
       >
         <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 p-1.5">

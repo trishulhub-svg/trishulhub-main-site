@@ -28,12 +28,20 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     if (reduce) return // skip Lenis for reduced-motion users (native scroll is fine)
 
     const lenis = new Lenis({
-      duration: 1.1,
-      easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      // FAST + SMOOTH tuning. Lower duration = snappier stop, higher lerp =
+      // faster follow. wheelMultiplier > 1 makes wheel scroll cover more
+      // distance per tick (feels faster without losing smoothness).
+      duration: 0.8,
+      easing: (t: number) => 1 - Math.pow(1 - t, 3), // ease-out-cubic — quick start, smooth settle
       smoothWheel: true,
-      wheelMultiplier: 1,
-      touchMultiplier: 1.6,
-      lerp: 0.1,
+      wheelMultiplier: 1.25,
+      touchMultiplier: 1.8,
+      lerp: 0.18,
+      // Prevents iOS bounce / overscroll jank
+      prevent: (node) => {
+        // Don't hijack scroll inside scrollable containers (mobile menus, etc.)
+        return node.tagName === 'SELECT' || !!node.closest('[data-lenis-prevent]')
+      },
     })
 
     // Hook Lenis into the requestAnimationFrame loop
@@ -69,7 +77,7 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
     <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
+      transition={{ duration: 0.4, ease: 'easeOut' }}
     >
       {children}
     </motion.div>

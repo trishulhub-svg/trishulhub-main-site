@@ -110,10 +110,47 @@
     overflow-anchor: none;
     overscroll-behavior-y: contain;
   }
-  /* Tell the browser that will-change elements should be on their own
-     compositor layer — this prevents repaints during scroll. */
+  /* GPU acceleration hints for animated elements.
+   * `translateZ(0)` forces the element onto its own compositor layer so
+   * transforms/animations don't trigger layout or paint on the main thread.
+   * Applied to: motion.divs (which always animate), videos, and any element
+   * with .will-change-transform. */
   video, img, canvas {
     will-change: auto;
+  }
+  /* Smarter GPU hinting — only promote elements that are actually animating
+   * or about to. Avoid promoting EVERYTHING (memory bloat). */
+  [data-framer-motion] > *,
+  .hero-orbs,
+  .animate-marquee,
+  .animate-marquee-slow,
+  .will-change-transform {
+    will-change: transform, opacity;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+  /* Reduce paint cost on hover-only animated elements (cards, buttons).
+   * They only animate on hover, so we keep them as non-promoted until
+   * interaction to save GPU memory. */
+  .group:hover .group-hover\:scale-110,
+  .group:hover .group-hover\:scale-105,
+  .group:hover .group-hover\:-translate-y-2,
+  .group:hover .group-hover\:translate-x-1 {
+    will-change: transform;
+  }
+  /* Content-visibility: auto on sections off-screen — browser skips
+   * rendering/painting work for them until they scroll near viewport.
+   * Huge perf win for long pages with many sections. */
+  section {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 600px;
+  }
+  /* But skip this for the hero (always visible on load) and any section
+   * with a video (we don't want content-visibility pausing the video). */
+  section:has(video),
+  #home {
+    content-visibility: visible;
+    contain-intrinsic-size: auto none;
   }
   /* Respect users who prefer reduced motion — they get instant scrolling */
   @media (prefers-reduced-motion: reduce) {
@@ -125,6 +162,15 @@
       animation-iteration-count: 1 !important;
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
+    }
+    /* Disable GPU promotion for reduced-motion — saves battery */
+    [data-framer-motion] > *,
+    .hero-orbs,
+    .animate-marquee,
+    .animate-marquee-slow,
+    .will-change-transform {
+      will-change: auto;
+      transform: none;
     }
   }
 }

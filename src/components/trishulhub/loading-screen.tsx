@@ -21,10 +21,9 @@ export function LoadingScreen() {
       let raf = 0
       let finishTimer: ReturnType<typeof setTimeout> | undefined
       const start = performance.now()
-      // FAST LOAD — reduced from 2600ms to 1500ms so the site feels snappy.
-      // The user explicitly asked for "very very smooth and fast" scrolling
-      // and a long loading screen makes the whole site feel slow.
-      const duration = 1500
+      // FAST LOAD — 900ms total (down from 1500ms). Snappy feel without
+      // feeling jarring. The user explicitly asked for "fully smooth and fast".
+      const duration = 900
       const tick = (now: number) => {
         const t = Math.min((now - start) / duration, 1)
         // ease-out cubic
@@ -39,9 +38,9 @@ export function LoadingScreen() {
       raf = requestAnimationFrame(tick)
       // HARD FALLBACK: ensure the loading screen ALWAYS hides, even if RAF
       // is throttled (backgrounded tab, low-power mode, slow device) or
-      // the tick loop stalls for any reason. 3s = 1.5s anim + 250ms delay
+      // the tick loop stalls for any reason. 2s = 0.9s anim + 250ms delay
       // + generous buffer.
-      const hardFallback = setTimeout(() => setDone(true), 3000)
+      const hardFallback = setTimeout(() => setDone(true), 2000)
       cleanupRef.current = () => {
         cancelAnimationFrame(raf)
         if (finishTimer) clearTimeout(finishTimer)
@@ -64,7 +63,7 @@ export function LoadingScreen() {
         <motion.div
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0A0A]"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.6, ease: 'easeInOut' }}
+          transition={{ duration: 0.3, ease: 'easeInOut' }}
         >
           {/* Radial glow */}
           <div
