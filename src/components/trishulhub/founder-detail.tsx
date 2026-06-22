@@ -65,14 +65,14 @@ type Founder = {
 /*
  * Founder intro videos — same clips used on the team section cards, shown
  * here on the portfolio hero so visitors see the same looping video when
- * they click a founder's image. ALL 4 founders have intro videos now.
+ * they click a founder's image. ALL 3 founders have intro videos.
+ * Kiran was removed from the team.
  *
  * If a founder's DB record has a `videoUrl` set (uploaded via the admin
  * panel), that takes priority. Otherwise we fall back to the hardcoded
  * defaults below.
  */
 const FOUNDER_VIDEOS: Record<string, string> = {
-  kiran: '/videos/founder-kiran.mp4',
   taroon: '/videos/founder-taroon.mp4',
   akshat: '/videos/founder-akshat.mp4',
   pruthvi: '/videos/founder-pruthvi.mp4',

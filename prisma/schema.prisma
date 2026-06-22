@@ -14,8 +14,13 @@ model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
+  password  String?
+  role      String   @default("customer") // customer | admin
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  cart      Cart?
+  orders    Order[]
 }
 
 model Post {
@@ -30,7 +35,7 @@ model Post {
 
 model Founder {
   id           String   @id @default(cuid())
-  slug         String   @unique // kiran, taroon, akshat, pruthvi
+  slug         String   @unique // taroon, akshat, pruthvi (3 founders)
   name         String
   initial      String
   role         String
@@ -59,4 +64,100 @@ model Founder {
   password     String   // plain for now (4 internal users only)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
+}
+
+// =========================================================
+// E-COMMERCE SCHEMA — products, categories, cart, orders
+// =========================================================
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  image       String?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  products    Product[]
+}
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  // Stored as integer paise/cents to avoid floating-point errors.
+  // Display price = price / 100.
+  price       Int
+  compareAt   Int?      // original price for discount display
+  sku         String?   @unique
+  stock       Int       @default(0)
+  images      String    // JSON array of image URLs
+  features    String    // JSON array of feature strings
+  tags        String    // JSON array of tag strings
+  rating      Float     @default(0)
+  reviewCount Int       @default(0)
+  featured    Boolean   @default(false)
+  active      Boolean   @default(true)
+  // Relations
+  categoryId  String?
+  category    Category? @relation(fields: [categoryId], references: [id])
+  cartItems   CartItem[]
+  orderItems  OrderItem[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model Cart {
+  id        String     @id @default(cuid())
+  userId    String     @unique
+  user      User       @relation(fields: [userId], references: [id])
+  items     CartItem[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model CartItem {
+  id        String   @id @default(cuid())
+  cartId    String
+  cart      Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  quantity  Int      @default(1)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Order {
+  id            String      @id @default(cuid())
+  userId        String
+  user          User        @relation(fields: [userId], references: [id])
+  // Snapshot totals in paise/cents
+  subtotal      Int
+  tax           Int         @default(0)
+  shipping      Int         @default(0)
+  total         Int
+  // Status: pending | paid | shipped | delivered | cancelled
+  status        String      @default("pending")
+  // Stripe / payment provider reference
+  paymentId     String?
+  // Shipping address (JSON string)
+  shippingAddress String?
+  items         OrderItem[]
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+}
+
+model OrderItem {
+  id        String   @id @default(cuid())
+  orderId   String
+  order     Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId String
+  product   Product  @relation(fields: [productId], references: [id])
+  // Snapshot of product details at time of purchase
+  name      String
+  price     Int
+  quantity  Int
+  image     String?
+  createdAt DateTime @default(now())
 }

@@ -19,14 +19,14 @@ type Founder = {
 
 /*
  * Founder intro videos — looping clips for the founder cards.
- * ALL 4 founders (Kiran, Taroon, Akshat, Pruthvi) now have intro videos.
+ * ALL 3 founders (Taroon, Akshat, Pruthvi) have intro videos.
+ * Kiran was removed from the team.
  *
  * If a founder's DB record has a `videoUrl` set (uploaded via the admin
  * panel), that takes priority. Otherwise we fall back to the hardcoded
  * defaults below.
  */
 const FOUNDER_VIDEOS: Record<string, string> = {
-  kiran: '/videos/founder-kiran.mp4',
   taroon: '/videos/founder-taroon.mp4',
   akshat: '/videos/founder-akshat.mp4',
   pruthvi: '/videos/founder-pruthvi.mp4',
@@ -172,7 +172,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
           >
-            The minds behind TrishulHub — a team of passionate experts dedicated
+            The minds behind TrishulHub — a team of three passionate experts dedicated
             to delivering excellence in every project. Click any founder to view their full portfolio.
           </motion.p>
         </div>
@@ -186,7 +186,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             hidden: {},
             visible: { transition: { staggerChildren: 0.15 } },
           }}
-          className="grid grid-cols-1 gap-5 sm:grid-cols-2 sm:gap-6"
+          className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-3"
         >
           {founders.map((m) => {
             const founderVideo = m.videoUrl || FOUNDER_VIDEOS[m.slug] || null

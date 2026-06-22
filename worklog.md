@@ -854,3 +854,42 @@ Stage Summary:
 - TASK 3 ✓: Smooth scrolling via CSS scroll-behavior:smooth + scroll-padding-top + overscroll-behavior + iOS momentum scrolling + reduced-motion accessibility. Loading screen 43% faster (3.05s → 1.75s).
 - To make these changes live on the deployed preview, the user needs to redeploy.
 
+
+---
+Task ID: trishulhub-deploy
+Agent: Main agent (Claude)
+Task: Deploy TrishulHub site to GitHub + Vercel + Turso; remove Kiran from founders/portfolio; update founder info per screenshot
+
+Work Log:
+- Read founder info from uploaded screenshot (Taroon: CEO & Chief Product Architect; Akshat: Head of IT & Development; Pruthviraj: COO & Head of Finance/Admin)
+- Removed Kiran from: page.tsx fallback foundersData, team.tsx FOUNDER_VIDEOS map, founder-detail.tsx FOUNDER_VIDEOS map, admin login placeholder, prisma schema comment
+- Updated founder roles/bios in page.tsx to match the screenshot
+- Changed team grid from sm:grid-cols-2 to lg:grid-cols-3 so all 3 founders appear in a single row on desktop
+- Extended prisma/schema.prisma with 6 new models: User (extended with password/role/cart/orders), Category, Product, Cart, CartItem, Order, OrderItem
+- Set up @prisma/adapter-libsql + @libsql/client@0.8.0 in package.json
+- Wrote src/lib/db.ts with smart routing: Turso adapter when TURSO_DATABASE_URL is set, local SQLite fallback otherwise
+- Created scripts/turso-migrate.mjs (creates 9 tables on Turso via raw SQL) and scripts/turso-seed.mjs (seeds 4 categories, 8 products, 3 founders)
+- Pushed schema + seed data to Turso DB at libsql://trishulhub-main-site-trishulhub-svg.aws-eu-west-1.turso.io
+- Fixed critical Prisma adapter bug: PrismaLibSQL takes a config object { url, authToken }, NOT a pre-built libsql client instance
+- Split env vars: DATABASE_URL=file:placeholder.db (for Prisma schema validation), TURSO_DATABASE_URL + TURSO_AUTH_TOKEN (for the adapter)
+- Marked home page as force-dynamic so build doesn't try to hit Turso during static page generation
+- Made generateStaticParams on /founders/[slug] gracefully handle DB errors during build
+- Cloned target GitHub repo (trishulhub-svg/trishulhub-main-site) with provided token
+- Synced project files (excluding node_modules, .next, .env, etc.) to the cloned repo
+- Created vercel.json with auto-deployment enabled
+- Created .env.example with new env var structure
+- Wrote comprehensive README.md with deployment instructions
+- Pushed 4 commits to GitHub: initial deploy, Prisma adapter fix, placeholder.db removal, gitignore cleanup
+- Verified build passes locally with Turso connection
+- Verified home page returns HTTP 200 with 3 founders (no Kiran) and correct new roles
+- Verified founder detail page (/founders/taroon) returns HTTP 200 with correct role
+- Installed Vercel CLI globally but couldn't deploy (no Vercel auth token provided)
+- Wrote DEPLOYMENT-GUIDE.md with step-by-step Vercel dashboard instructions
+
+Stage Summary:
+- GitHub repo: https://github.com/trishulhub-svg/trishulhub-main-site (4 commits on main, all files synced)
+- Turso DB: 9 tables created, 3 founders + 4 categories + 8 products seeded
+- Local build: passes cleanly with Turso connection
+- Local dev: home page + founder detail pages work correctly with 3 founders (Kiran removed)
+- Vercel deployment: requires user to complete (no Vercel token provided) — see DEPLOYMENT-GUIDE.md
+- All env vars documented in .env.example and DEPLOYMENT-GUIDE.md

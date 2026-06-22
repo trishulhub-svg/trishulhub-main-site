@@ -3,8 +3,16 @@ import { db } from '@/lib/db'
 import { FounderDetailClient } from '@/components/trishulhub/founder-detail'
 
 export async function generateStaticParams() {
-  const founders = await db.founder.findMany({ select: { slug: true } })
-  return founders.map((f) => ({ slug: f.slug }))
+  try {
+    const founders = await db.founder.findMany({ select: { slug: true } })
+    return founders.map((f) => ({ slug: f.slug }))
+  } catch (err) {
+    // During cold-start builds the DB env vars may not be wired up yet.
+    // Returning an empty array here lets the page render dynamically at
+    // runtime instead of failing the entire production build.
+    console.warn('[founders/[slug]] generateStaticParams skipped:', err instanceof Error ? err.message : err)
+    return []
+  }
 }
 
 export const dynamic = 'force-dynamic'

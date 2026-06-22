@@ -1,0 +1,28 @@
+{
+  "choices": [
+    {
+      "finish_reason": "stop",
+      "index": 0,
+      "message": {
+        "content": "### Person 1: Taroon  \n- **Full Name**: Taroon  \n- **Role/Title**: CEO & Chief Product Architect  \n- **Sub-Role**: Super Admin  \n- **Number of Projects**: Not explicitly stated (no numerical value provided)  \n- **Bio/Description**:  \n  - Company vision, strategy, product roadmap  \n  - System architecture of Trishulhub dashboard  \n  - Final authority on tools, tech stack, platforms  \n  - Major client relationships & partnerships  \n  - Override vote on all operational matters  \n- **Other Details**:  \n  - Icon: Trophy/award icon (left of name)  \n  - Color: Orange header bar  \n\n\n### Person 2: Akshat  \n- **Full Name**: Akshat  \n- **Role/Title**: Head of IT & Development  \n- **Sub-Role**: Co-Founder  \n- **Number of Projects**: Not explicitly stated (no numerical value provided)  \n- **Bio/Description**:  \n  - Execution of all dev work (Trishulhub + client)  \n  - Managing 3 trainee developers  \n  - Code quality, deployment, technical delivery  \n  - Translate architecture into working features  \n- **Other Details**:  \n  - Icon: Code brackets icon (left of name)  \n  - Color: Blue header bar  \n\n\n### Person 3: Pruthviraj  \n- **Full Name**: Pruthviraj  \n- **Role/Title**: COO & Head of Finance/Admin  \n- **Sub-Role**: Co-Founder  \n- **Number of Projects**: Not explicitly stated (no numerical value provided)  \n- **Bio/Description**:  \n  - Finance: invoicing, expenses, profit, tax  \n  - HR: onboarding, attendance, payroll  \n  - Operations: process docs, vendor mgmt  \n  - Admin: legal, compliance, contracts  \n- **Other Details**:  \n  - Icon: Building/finance icon (left of name)  \n  - Color: Green header bar",
+        "role": "assistant"
+      }
+    }
+  ],
+  "created": 1782112856,
+  "id": "2026062215204544f7b5daa2ca4e7c",
+  "model": "glm-4.6v",
+  "object": "chat.completion",
+  "request_id": "2026062215204544f7b5daa2ca4e7c",
+  "usage": {
+    "completion_tokens": 413,
+    "completion_tokens_details": {
+      "reasoning_tokens": 0
+    },
+    "prompt_tokens": 549,
+    "prompt_tokens_details": {
+      "cached_tokens": 5
+    },
+    "total_tokens": 962
+  }
+}

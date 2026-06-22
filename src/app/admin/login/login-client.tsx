@@ -148,7 +148,7 @@ export function LoginClient() {
                     autoComplete="username"
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
-                    placeholder="e.g. kiran"
+                    placeholder="e.g. taroon"
                     required
                     disabled={loading}
                     className="w-full rounded-xl border border-white/10 bg-[#0A0A0A]/60 py-3 pl-10 pr-3 text-sm text-white placeholder-white/30 transition-colors focus:border-[#00DEFF]/60 focus:outline-none focus:ring-1 focus:ring-[#00DEFF]/30 disabled:opacity-50"

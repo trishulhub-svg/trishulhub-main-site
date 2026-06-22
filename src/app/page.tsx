@@ -11,6 +11,9 @@ import { Footer } from '@/components/trishulhub/footer'
 import { SmoothScrollProvider } from '@/components/trishulhub/smooth-scroll-provider'
 import { db } from '@/lib/db'
 
+// Render at request time so we don't try to hit Turso during build.
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   // Fetch founders from DB so admin edits reflect here too
   const founders = await db.founder.findMany({
@@ -27,12 +30,11 @@ export default async function Home() {
     orderBy: { createdAt: 'asc' },
   })
 
-  // Fallback if DB is empty
+  // Fallback if DB is empty — 3 founders (Kiran removed)
   const foundersData = founders.length > 0 ? founders : [
-    { slug: 'kiran', initial: 'K', name: 'Kiran', role: 'Fullstack Developer', projects: '50+', bio: 'Fullstack developer with expertise in React, Node.js, and modern web technologies.', image: null, videoUrl: null },
-    { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Co-Founder', projects: '40+', bio: 'Visionary leader driving TrishulHub\'s strategic growth.', image: null, videoUrl: null },
-    { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Fullstack Developer & SMM Lead', projects: '45+', bio: 'Bridging development and marketing with expertise in React, SEO, and social media.', image: null, videoUrl: null },
-    { slug: 'pruthvi', initial: 'P', name: 'Pruthvi', role: 'Management & Operations Head', projects: '35+', bio: 'Operations expert ensuring smooth project delivery.', image: null, videoUrl: null },
+    { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Chief Product Architect', projects: '40+', bio: 'Owns company vision, strategy & product roadmap. Architects the TrishulHub dashboard system and holds final authority on tools, tech stack and platform choices. Manages major client relationships & partnerships and holds the override vote on all operational matters.', image: null, videoUrl: null },
+    { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Head of IT & Development', projects: '45+', bio: 'Leads execution of all development work across TrishulHub and client projects. Manages a team of three trainee developers, owns code quality, deployment and technical delivery, and translates architecture into working, shipped features.', image: null, videoUrl: null },
+    { slug: 'pruthvi', initial: 'P', name: 'Pruthviraj', role: 'COO & Head of Finance/Admin', projects: '35+', bio: 'Oversees finance (invoicing, expenses, profit, tax), HR (onboarding, attendance, payroll), operations (process docs, vendor management) and admin (legal, compliance, contracts). Keeps the company running smoothly behind every project.', image: null, videoUrl: null },
   ]
 
   return (
