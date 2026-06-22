@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Space_Grotesk, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { AgentationDev } from "@/components/dev/agentation";
+import { AgentationLive } from "@/components/agentation";
 
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
@@ -59,7 +59,7 @@ export default function RootLayout({
       >
         {children}
         <Toaster />
-        {process.env.NODE_ENV === "development" && <AgentationDev />}
+        <AgentationLive />
       </body>
     </html>
   );
