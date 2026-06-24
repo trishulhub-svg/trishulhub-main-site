@@ -4,15 +4,11 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-/* Hero background — animated GIF (converted from the original MP4).
- * The MP4 had noticeable load/buffering overhead (codec init, streaming,
- * autoplay-permission state machine). A GIF has no such overhead: it's a
- * single image file that the browser begins decoding and painting as soon
- * as the bytes arrive, with native infinite looping and zero JS glue.
- * File size trade-off is acceptable (988K vs 709K mp4) because the load is
- * perceptually instant — no buffering, no first-frame delay.
+/* Hero section — no background video / GIF.
+ * The previous MP4 and GIF backgrounds were removed per user feedback
+ * (load overhead, jank). The hero now uses only CSS-driven background
+ * layers: a base color, a subtle grid, gradient orbs, and radial glows.
  */
-const HERO_BG_URL = '/videos/hero-bg.gif'
 
 export function Hero() {
   const reduce = useReducedMotion()
@@ -22,30 +18,19 @@ export function Hero() {
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Background GIF (bottom layer) — converted from original MP4 for
-          instant-load, no-buffering playback. */}
-      {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src={HERO_BG_URL}
-        alt=""
-        aria-hidden="true"
-        className="absolute inset-0 h-full w-full object-cover"
-        style={{ opacity: 1 }}
-      />
-
-      {/* Fallback background grid (always present behind GIF for depth) */}
-      <div
-        className="pointer-events-none absolute inset-0 bg-grid"
-        style={{ opacity: 0.15 }}
-      />
-      {/* Fallback gradient (kept for color depth behind GIF) */}
+      {/* Base background — solid dark with a subtle teal tint */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
-          opacity: 0.3,
         }}
+      />
+
+      {/* Subtle background grid for depth */}
+      <div
+        className="pointer-events-none absolute inset-0 bg-grid"
+        style={{ opacity: 0.2 }}
       />
 
       {/* HERO-ONLY floating gradient orbs (replaces site-wide spacy bg) */}
@@ -106,22 +91,15 @@ export function Hero() {
           Digital Solutions Company
         </motion.div>
 
-        {/* Headline — single-block fade-in-up. Replaces the previous
-         * word-by-word staggered rise animation which was jittery on the
-         * large hero text. Matches the simpler entrance used by the section
-         * labels above section titles (e.g. the "Technologies" label above
-         * "Our Tech Stack"). One transform, one opacity, no per-word
-         * layout/paint. */}
-        <motion.h1
-          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
-          animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.15, ease: EASE_OUT_EXPO }}
+        {/* Headline — plain static text. No motion, no per-word stagger,
+         * no fade-in. Just renders immediately on page load. */}
+        <h1
           className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]"
           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
         >
           DIGITAL SOLUTIONS.{' '}
           <span className="gradient-text-animated">REAL GROWTH.</span>
-        </motion.h1>
+        </h1>
 
         {/* Subtitle — fade-in with blur effect, fires shortly after heading starts. */}
         <motion.p
