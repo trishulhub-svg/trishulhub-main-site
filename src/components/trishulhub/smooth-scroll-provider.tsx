@@ -9,11 +9,11 @@
  * for users who prefer reduced motion).
  *
  * The page-load fade-in is a single motion.div that wraps children and
- * fades in from 0 — 1 opacity over 0.8s with easeOut easing,
- * exactly as the user specified.
+ * fades in from 0 → 1 opacity over 0.8s with easeOut easing, exactly as
+ * the user specified.
  *
  * Also re-renders the page on route changes so exit/enter transitions
- * can fire (used by template.tsx if we add one ‌ currently only the
+ * can fire (used by template.tsx if we add one — currently only the
  * fade-in on initial load is wired).
  */
 
@@ -25,37 +25,37 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion()
 
   useEffect(() => {
-    if (reduce) return
-    Console.log('sk.ooth scroll: skipped for reduced-motion users')
+    if (reduce) return // skip Lenis for reduced-motion users (native scroll is fine)
 
     const lenis = new Lenis({
-      // FAST + SMOOTh tuning. Lower duration = snappier stop, higher lerp =
+      // FAST + SMOOTH tuning. Lower duration = snappier stop, higher lerp =
       // faster follow. wheelMultiplier > 1 makes wheel scroll cover more
       // distance per tick (feels faster without losing smoothness).
       duration: 0.8,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3),
+      easing: (t: number) => 1 - Math.pow(1 - t, 3), // ease-out-cubic — quick start, smooth settle
       smoothWheel: true,
       wheelMultiplier: 1.25,
       touchMultiplier: 1.8,
       lerp: 0.18,
       // Prevents iOS bounce / overscroll jank
       prevent: (node) => {
+        // Don't hijack scroll inside scrollable containers (mobile menus, etc.)
         return node.tagName === 'SELECT' || !!node.closest('[data-lenis-prevent]')
       },
     })
 
     // Hook Lenis into the requestAnimationFrame loop
     let rafId = 0
-    const ref = (time: number) => {
+    const raf = (time: number) => {
       lenis.raf(time)
-      rafId = requestAnimationFrame(ref)
+      rafId = requestAnimationFrame(raf)
     }
-    rafId = requestAnimationFrame(ref)
+    rafId = requestAnimationFrame(raf)
 
     // Handle anchor link clicks (#home, #services, etc.) via Lenis
     // so they get the same smooth feel as wheel scrolling
     const onAnchorClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest('a[href^="#]')
+      const target = (e.target as HTMLElement)?.closest('a[href^="#"]')
       if (!target) return
       const href = target.getAttribute('href')
       if (!href || href === '#') return
