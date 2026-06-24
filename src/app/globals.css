@@ -105,7 +105,7 @@
   body {
     @apply bg-background text-foreground;
     background-color: #0a0a0a;
-    /* Smooth out paint operations during scroll — most modern browsers
+    /* Smooth out paint operations during scroll â€” most modern browsers
        respect this for the body's compositor layer. */
     overflow-anchor: none;
     overscroll-behavior-y: contain;
@@ -118,10 +118,9 @@
   video, img, canvas {
     will-change: auto;
   }
-  /* Smarter GPU hinting — only promote elements that are actually animating
+  /* Smarter GPU hinting â€” only promote elements that are actually animating
    * or about to. Avoid promoting EVERYTHING (memory bloat). */
   [data-framer-motion] > *,
-  .hero-orbs,
   .animate-marquee,
   .animate-marquee-slow,
   .will-change-transform {
@@ -138,7 +137,7 @@
   .group:hover .group-hover\:translate-x-1 {
     will-change: transform;
   }
-  /* Content-visibility: auto on sections off-screen — browser skips
+  /* Content-visibility: auto on sections off-screen â€” browser skips
    * rendering/painting work for them until they scroll near viewport.
    * Huge perf win for long pages with many sections. */
   section {
@@ -152,7 +151,7 @@
     content-visibility: visible;
     contain-intrinsic-size: auto none;
   }
-  /* Respect users who prefer reduced motion — they get instant scrolling */
+  /* Respect users who prefer reduced motion â€” they get instant scrolling */
   @media (prefers-reduced-motion: reduce) {
     html {
       scroll-behavior: auto;
@@ -163,9 +162,8 @@
       transition-duration: 0.01ms !important;
       scroll-behavior: auto !important;
     }
-    /* Disable GPU promotion for reduced-motion — saves battery */
+    /* Disable GPU promotion for reduced-motion â€” saves battery */
     [data-framer-motion] > *,
-    .hero-orbs,
     .animate-marquee,
     .animate-marquee-slow,
     .will-change-transform {
@@ -184,8 +182,7 @@
   color: transparent;
 }
 
-/* Animated gradient text — used on highlighted words in section headings.
- * Slowly shifts the gradient angle for a subtle "shimmer" effect. */
+/* Animated gradient text â€” shimmer effect for highlighted words. */
 .gradient-text-animated {
   background: linear-gradient(120deg, #00deff 0%, #0088cc 25%, #00deff 50%, #0088cc 75%, #00deff 100%);
   background-size: 300% 100%;
@@ -198,15 +195,6 @@
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .gradient-text-animated {
-    animation: none;
-    background: linear-gradient(135deg, #00deff 0%, #0088cc 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-  }
 }
 
 /* Custom scrollbar */
@@ -270,7 +258,7 @@
   background: radial-gradient(circle, #00deff 0%, transparent 70%);
 }
 
-/* Service card sheen sweep (3rd hover effect — moves across whole card) */
+/* Service card sheen sweep (3rd hover effect â€” moves across whole card) */
 .sheen {
   transform: translateX(-150%) skewX(-18deg);
   transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
@@ -288,7 +276,7 @@
    - .btn-shine: shared shine sweep on hover
    ============================================================ */
 
-/* Shared shine sweep — uses a pseudo-element sliding left-to-right on hover */
+/* Shared shine sweep â€” uses a pseudo-element sliding left-to-right on hover */
 .btn-shine {
   position: relative;
   overflow: hidden;
@@ -312,13 +300,13 @@
 .btn-shine:hover::before {
   transform: translateX(120%);
 }
-/* Active press feedback — scales down slightly + snaps back */
+/* Active press feedback â€” scales down slightly + snaps back */
 .btn-shine:active {
   transform: scale(0.96);
   transition: transform 0.08s ease-out;
 }
 
-/* Primary cyan button — pulsing cyan glow on idle, intensifies on hover */
+/* Primary cyan button â€” pulsing cyan glow on idle, intensifies on hover */
 .btn-cyan {
   position: relative;
   overflow: hidden;
@@ -351,7 +339,7 @@
   transition: transform 0.08s ease-out;
 }
 
-/* Ghost / outline button — border glows on hover, subtle inner fill breathes */
+/* Ghost / outline button â€” border glows on hover, subtle inner fill breathes */
 .btn-ghost {
   position: relative;
   overflow: hidden;
@@ -403,53 +391,58 @@
 }
 
 /* ============================================================
-   HERO GRADIENT ORBS (only on hero section — not site-wide)
-   Two soft floating orbs that give the hero a "spacy" feel
-   without polluting the rest of the site (user explicitly
-   asked for NO site-wide animated background).
+   HERO GRADIENT ORBS (removed â€” hero now uses video + liquid glass)
    ============================================================ */
-.hero-orbs {
+
+/* ============================================================
+   LIQUID GLASS â€” used on hero marquee items and CTA buttons
+   ============================================================ */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: "";
   position: absolute;
   inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
   pointer-events: none;
-  overflow: hidden;
-  z-index: 3;
 }
-.hero-orbs::before,
-.hero-orbs::after {
-  content: '';
-  position: absolute;
-  width: 55vw;
-  height: 55vw;
-  border-radius: 50%;
-  filter: blur(90px);
-  opacity: 0.22;
-  will-change: transform, opacity;
+
+/* ============================================================
+   HERO MARQUEE â€” infinite horizontal scroll for tech logos
+   ============================================================ */
+@keyframes heroMarquee {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
 }
-.hero-orbs::before {
-  background: radial-gradient(circle, #00DEFF 0%, transparent 60%);
-  top: -15vw;
-  left: -10vw;
-  animation: heroOrbDrift1 22s ease-in-out infinite;
-}
-.hero-orbs::after {
-  background: radial-gradient(circle, #0088CC 0%, transparent 60%);
-  bottom: -20vw;
-  right: -15vw;
-  animation: heroOrbDrift2 28s ease-in-out infinite;
-  opacity: 0.26;
-}
-@keyframes heroOrbDrift1 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.22; }
-  50% { transform: translate(8vw, 6vh) scale(1.12); opacity: 0.32; }
-}
-@keyframes heroOrbDrift2 {
-  0%, 100% { transform: translate(0, 0) scale(1); opacity: 0.26; }
-  50% { transform: translate(-8vw, -6vh) scale(1.1); opacity: 0.34; }
+.hero-marquee {
+  animation: heroMarquee 20s linear infinite;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-orbs::before,
-  .hero-orbs::after {
+  .hero-marquee {
     animation: none;
   }
 }
