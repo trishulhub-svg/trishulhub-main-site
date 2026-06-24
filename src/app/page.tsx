@@ -1,4 +1,3 @@
-import { LoadingScreen } from '@/components/trishulhub/loading-screen'
 import { Navbar } from '@/components/trishulhub/navbar'
 import { Hero } from '@/components/trishulhub/hero'
 import { StatsDashboard } from '@/components/trishulhub/stats-dashboard'
@@ -30,7 +29,7 @@ export default async function Home() {
     orderBy: { createdAt: 'asc' },
   })
 
-  // Fallback if DB is empty — 3 founders (Kiran removed)
+  // Fallback if DB is empty â€” 3 founders (Kiran removed)
   const foundersData = founders.length > 0 ? founders : [
     { slug: 'taroon', initial: 'T', name: 'Taroon', role: 'CEO & Chief Product Architect', projects: '40+', bio: 'Owns company vision, strategy & product roadmap. Architects the TrishulHub dashboard system and holds final authority on tools, tech stack and platform choices. Manages major client relationships & partnerships and holds the override vote on all operational matters.', image: null, videoUrl: null },
     { slug: 'akshat', initial: 'A', name: 'Akshat', role: 'Head of IT & Development', projects: '45+', bio: 'Leads execution of all development work across TrishulHub and client projects. Manages a team of three trainee developers, owns code quality, deployment and technical delivery, and translates architecture into working, shipped features.', image: null, videoUrl: null },
@@ -40,7 +39,6 @@ export default async function Home() {
   return (
     <SmoothScrollProvider>
       <div className="relative flex min-h-screen flex-col bg-[#0A0A0A]">
-        <LoadingScreen />
         <Navbar />
         <main className="relative z-10 flex-1">
           <Hero />
