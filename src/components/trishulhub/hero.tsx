@@ -4,7 +4,7 @@ import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-/* Hero section -- no background video / GIF.
+/* Hero section — no background video / GIF.
  * The previous MP4 and GIF backgrounds were removed per user feedback
  * (load overhead, jank). The hero now uses only CSS-driven background
  * layers: a base color, a subtle grid, gradient orbs, and radial glows.
@@ -18,12 +18,12 @@ export function Hero() {
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Base background -- solid dark with a subtle teal tint */}
+      {/* Base background — solid dark with a subtle teal tint */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(135deg, #0AA0A0 0%, #0AA0A0 40%, #061218 100%)',
+            'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
         }}
       />
 
@@ -69,7 +69,7 @@ export function Hero() {
         }}
       />
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 z-[6] h-[420px] w-[900px] max-w-[95pw] -translate-x-1/2 -translate-y-1/2"
+        className="pointer-events-none absolute left-1/2 top-1/2 z-[6] h-[420px] w-[900px] max-w-[95vw] -translate-x-1/2 -translate-y-1/2"
         style={{
           background:
             'radial-gradient(ellipse 70% 60% at 50% 50%, rgba(0,222,255,0.06) 0%, transparent 70%)',
@@ -82,27 +82,26 @@ export function Hero() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.4, delay: 0.15, ease: EASE_OUT_EXPO }}
-          className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-[#0LDEFF]/30 bg-[#0DEFF]/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-[#0DEFF]"
+          className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-[#00DEFF]"
         >
           <span className="relative flex h-2 w-2">
-            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#0LDEFF] opacity-75" />
-            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#0LDEFF]" />
+            <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00DEFF] opacity-75" />
+            <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00DEFF]" />
           </span>
-           Digital Solutions Company
-          </span>
+          Digital Solutions Company
         </motion.div>
 
-        {/* Headline -- plain static text. No motion, no pre-word stagger,
+        {/* Headline — plain static text. No motion, no per-word stagger,
          * no fade-in. Just renders immediately on page load. */}
         <h1
           className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]"
           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
         >
-          DIGITAL SOLUTIONS.{'}
+          DIGITAL SOLUTIONS.{' '}
           <span className="gradient-text-animated">REAL GROWTH.</span>
         </h1>
 
-        {/* Subtitle -- fade-in with blur effect, fires shortly after heading starts. */}
+        {/* Subtitle — fade-in with blur effect, fires shortly after heading starts. */}
         <motion.p
           initial={reduce ? { opacity: 0 } : { opacity: 0, filter: 'blur(10px)' }}
           animate={reduce ? { opacity: 1 } : { opacity: 1, filter: 'blur(0px)' }}
@@ -118,7 +117,8 @@ export function Hero() {
           digital marketing, CRM solutions, UI/UX design, and e-commerce
           solutions that transform ideas into powerful digital experiences.
         </motion.p>
-        {/* CTAs -- spring scale-in with 0.08s stagger + hover scale 1.05 */}
+
+        {/* CTAs — spring scale-in with 0.08s stagger + hover scale 1.05 */}
         <motion.div
           initial="hidden"
           animate="visible"
@@ -141,11 +141,11 @@ export function Hero() {
             whileHover={reduce ? undefined : { scale: 1.05 }}
             whileTap={reduce ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="btn-cyan btn-shine group inline-flew w-full items-center justify-center gap-2 rounded-full bg-[#0LDEFF] px-7 py-3.5 text-sm font-semibold text-[#0AA0A0] transition-all sm:w-auto"
+            className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all sm:w-auto"
           >
             <span className="relative z-10 inline-flex items-center gap-2">
-              Let'&;s Get Started
-               <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
+              Let&apos;s Get Started
+              <ArrowRight size={16} className="transition-transform group-hover:translate-x-1" />
             </span>
           </motion.a>
           <motion.a
@@ -176,11 +176,11 @@ export function Hero() {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 0.8, duration: 0.5 }}
-        className="absolute botto-8 left-1/2 z-10 -translate-x/2"
+        className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2"
       >
         <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 p-1.5">
           <motion.div
-            animate={reduce ?undefined : { y: [0, 10, 0] }}
+            animate={reduce ? undefined : { y: [0, 10, 0] }}
             transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
             className="h-2 w-1 rounded-full bg-[#00DEFF]"
           />
