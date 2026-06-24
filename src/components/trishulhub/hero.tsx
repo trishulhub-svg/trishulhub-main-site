@@ -1,149 +1,50 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { ArrowRight, Play } from 'lucide-react'
-import { AnimatedHeading } from './animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-/* Local looping background video for the hero section.
- * Replaces the previous Mux HLS stream — this is a plain MP4 served from
- * /public/videos/hero-bg.mp4, played on an infinite loop with no audio.
- * Using a local file eliminates the hls.js dependency, the network round-trip
- * to Mux, and the ready/error/force-loop state machine that was needed for
- * streaming. A native <video loop muted autoPlay playsInline> is bullet-proof
- * across browsers.
+/* Hero background — animated GIF (converted from the original MP4).
+ * The MP4 had noticeable load/buffering overhead (codec init, streaming,
+ * autoplay-permission state machine). A GIF has no such overhead: it's a
+ * single image file that the browser begins decoding and painting as soon
+ * as the bytes arrive, with native infinite looping and zero JS glue.
+ * File size trade-off is acceptable (988K vs 709K mp4) because the load is
+ * perceptually instant — no buffering, no first-frame delay.
  */
-const HERO_VIDEO_URL = '/videos/hero-bg.mp4'
+const HERO_BG_URL = '/videos/hero-bg.gif'
 
 export function Hero() {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [videoReady, setVideoReady] = useState(false)
   const reduce = useReducedMotion()
-
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-
-    let cancelled = false
-
-    const onReady = () => {
-      if (!cancelled) setVideoReady(true)
-    }
-
-    const tryPlay = () => {
-      v.muted = true
-      const p = v.play()
-      if (p && typeof p.catch === 'function') {
-        p.catch(() => {
-          /* autoplay blocked — will retry on first user interaction */
-        })
-      }
-    }
-
-    v.addEventListener('loadeddata', onReady)
-    v.addEventListener('canplay', onReady)
-    v.addEventListener('playing', onReady)
-    const onError = () => {
-      try {
-        v.currentTime = 0
-        const p = v.play()
-        if (p && typeof p.catch === 'function') p.catch(() => {})
-      } catch {
-        /* ignore */
-      }
-    }
-    v.addEventListener('error', onError)
-
-    if (v.readyState >= 2) onReady()
-
-    tryPlay()
-
-    const onFirstInteraction = () => {
-      tryPlay()
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-    window.addEventListener('click', onFirstInteraction)
-    window.addEventListener('touchstart', onFirstInteraction)
-    window.addEventListener('keydown', onFirstInteraction)
-
-    const healthCheck = setInterval(() => {
-      if (cancelled) return
-      if (v.paused && !v.ended) {
-        tryPlay()
-      }
-    }, 2000)
-
-    const onSeeked = () => onReady()
-    v.addEventListener('seeked', onSeeked)
-
-    return () => {
-      cancelled = true
-      clearInterval(healthCheck)
-      v.removeEventListener('loadeddata', onReady)
-      v.removeEventListener('canplay', onReady)
-      v.removeEventListener('playing', onReady)
-      v.removeEventListener('error', onError)
-      v.removeEventListener('seeked', onSeeked)
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-  }, [])
-
-  const handleEnded = () => {
-    const v = videoRef.current
-    if (!v) return
-    try {
-      v.currentTime = 0
-      const p = v.play()
-      if (p && typeof p.catch === 'function') p.catch(() => {})
-    } catch {
-      /* ignore */
-    }
-  }
 
   return (
     <section
       id="home"
       className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Background video (bottom layer) */}
-      <video
-        ref={videoRef}
-        src={HERO_VIDEO_URL}
-        autoPlay
-        loop
-        muted
-        playsInline
-        preload="auto"
+      {/* Background GIF (bottom layer) — converted from original MP4 for
+          instant-load, no-buffering playback. */}
+      {/* eslint-disable-next-line @next/next/no-img-element */}
+      <img
+        src={HERO_BG_URL}
+        alt=""
         aria-hidden="true"
-        onEnded={handleEnded}
         className="absolute inset-0 h-full w-full object-cover"
-        style={{
-          opacity: videoReady ? 1 : 0,
-          transition: 'opacity 1s ease-out',
-        }}
+        style={{ opacity: 1 }}
       />
 
-      {/* Fallback background grid */}
+      {/* Fallback background grid (always present behind GIF for depth) */}
       <div
         className="pointer-events-none absolute inset-0 bg-grid"
-        style={{
-          opacity: videoReady ? 0 : 0.6,
-          transition: 'opacity 1s ease-out',
-        }}
+        style={{ opacity: 0.15 }}
       />
-      {/* Fallback gradient */}
+      {/* Fallback gradient (kept for color depth behind GIF) */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
             'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
-          opacity: videoReady ? 0 : 1,
-          transition: 'opacity 1s ease-out',
+          opacity: 0.3,
         }}
       />
 
@@ -205,21 +106,22 @@ export function Hero() {
           Digital Solutions Company
         </motion.div>
 
-        {/* Headline — word-by-word "rise" reveal (same animation as the
-         * "Premium Digital Solutions" section, just fires on mount instead of
-         * on scroll). Each word rises from y:30 → 0 with opacity 0 → 1,
-         * staggered by 0.08s, with cubic-bezier(0.22,1,0.36,1) easing. */}
-        <AnimatedHeading
-          as="h1"
-          variant="rise"
-          stagger={0.08}
-          duration={0.6}
-          whenInView={false}
+        {/* Headline — single-block fade-in-up. Replaces the previous
+         * word-by-word staggered rise animation which was jittery on the
+         * large hero text. Matches the simpler entrance used by the section
+         * labels above section titles (e.g. the "Technologies" label above
+         * "Our Tech Stack"). One transform, one opacity, no per-word
+         * layout/paint. */}
+        <motion.h1
+          initial={reduce ? { opacity: 0 } : { opacity: 0, y: 20 }}
+          animate={reduce ? { opacity: 1 } : { opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.15, ease: EASE_OUT_EXPO }}
           className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem] xl:text-[6.5rem]"
           style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
         >
-          DIGITAL SOLUTIONS. *REAL* *GROWTH.*
-        </AnimatedHeading>
+          DIGITAL SOLUTIONS.{' '}
+          <span className="gradient-text-animated">REAL GROWTH.</span>
+        </motion.h1>
 
         {/* Subtitle — fade-in with blur effect, fires shortly after heading starts. */}
         <motion.p
