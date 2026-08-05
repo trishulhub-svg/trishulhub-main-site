@@ -15,7 +15,7 @@ export function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-3xl border border-[#00DEFF]/20 bg-gradient-to-br from-[#00DEFF]/[0.07] via-transparent to-[#0088CC]/[0.05] p-8 sm:p-14"
+          className="relative overflow-hidden rounded-3xl border border-[#00DEFF]/20 bg-[#00DEFF]/[0.05] p-8 backdrop-blur-md sm:p-14"
         >
           {/* glows */}
           <div
