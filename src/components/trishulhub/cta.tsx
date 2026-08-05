@@ -75,7 +75,7 @@ export function CTA() {
                 whileHover={reduce ? undefined : { scale: 1.05 }}
                 whileTap={reduce ? undefined : { scale: 0.97 }}
                 transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-                className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all sm:w-auto"
+                className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-7 py-3.5 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:w-auto"
               >
                 <span className="relative z-10 inline-flex items-center gap-2">
                   Get in Touch

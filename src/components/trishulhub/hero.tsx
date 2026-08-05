@@ -27,13 +27,14 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
+      className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
+      {/* Soft vignette only — Spline iframe is the real background */}
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            'linear-gradient(135deg, #0A0A0A 0%, #0A0A0A 40%, #061218 100%)',
+            'radial-gradient(ellipse 70% 55% at 50% 45%, transparent 0%, rgba(10,10,10,0.25) 70%, rgba(10,10,10,0.55) 100%)',
         }}
       />
 
@@ -85,7 +86,7 @@ export function Hero() {
             whileHover={reduce ? undefined : { scale: 1.05 }}
             whileTap={reduce ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all sm:w-auto"
+            className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-7 py-3.5 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:w-auto"
           >
             <span className="relative z-10 inline-flex items-center gap-2">
               Let&apos;s Get Started
@@ -97,7 +98,7 @@ export function Hero() {
             whileHover={reduce ? undefined : { scale: 1.05 }}
             whileTap={reduce ? undefined : { scale: 0.97 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:text-[#00DEFF] sm:w-auto"
+            className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition-all hover:text-[#00DEFF] sm:w-auto"
           >
             <span className="relative z-10 inline-flex items-center gap-2">
               <Play size={14} className="fill-current" />

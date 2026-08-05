@@ -13,7 +13,7 @@ const company = ['About', 'Services', 'Portfolio', 'Contact']
 
 export function Footer() {
   return (
-    <footer className="relative mt-auto border-t border-white/10 bg-[#0A0A0A]">
+    <footer className="relative z-10 mt-auto border-t border-white/10 bg-[#0A0A0A]/80 backdrop-blur-md">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00DEFF]/40 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">

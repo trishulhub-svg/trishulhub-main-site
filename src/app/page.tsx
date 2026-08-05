@@ -1,4 +1,5 @@
 import { LoadingScreen } from '@/components/trishulhub/loading-screen'
+import { SplineBackground } from '@/components/trishulhub/spline-background'
 import { Navbar } from '@/components/trishulhub/navbar'
 import { Hero } from '@/components/trishulhub/hero'
 import { StatsDashboard } from '@/components/trishulhub/stats-dashboard'
@@ -39,10 +40,11 @@ export default async function Home() {
 
   return (
     <SmoothScrollProvider>
-      <div className="relative flex min-h-screen flex-col bg-[#0A0A0A]">
+      <div className="relative flex min-h-screen flex-col bg-transparent">
+        <SplineBackground />
         <LoadingScreen />
         <Navbar />
-        <main className="relative z-10 flex-1">
+        <main className="relative z-10 flex min-h-screen flex-1 flex-col">
           <Hero />
           <StatsDashboard />
           <TechStack />

@@ -34,10 +34,10 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`mt-3 flex items-center justify-between rounded-2xl border px-4 py-3 transition-all duration-300 sm:px-6 ${
+          className={`mt-3 flex items-center justify-between rounded-2xl border border-white/10 bg-white/5 px-4 py-3 backdrop-blur-md transition-all duration-300 sm:px-6 ${
             scrolled
-              ? 'border-white/10 bg-[#0A0A0A]/70 backdrop-blur-xl shadow-[0_8px_30px_rgba(0,0,0,0.35)]'
-              : 'border-transparent bg-transparent'
+              ? 'shadow-[0_8px_30px_rgba(0,0,0,0.35)]'
+              : ''
           }`}
         >
           {/* Logo — scale in on mount (0.9 → 1, opacity 0 → 1) per user spec */}
@@ -75,7 +75,7 @@ export function Navbar() {
               whileHover={reduce ? undefined : { scale: 1.05 }}
               whileTap={reduce ? undefined : { scale: 0.97 }}
               transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-              className="btn-ghost hidden items-center gap-1.5 rounded-full border border-white/15 px-4 py-2 text-sm font-medium text-white/80 transition-all hover:text-[#00DEFF] sm:inline-flex"
+              className="btn-ghost hidden items-center gap-1.5 rounded-full border border-white/15 bg-white/5 px-4 py-2 text-sm font-medium text-white/80 backdrop-blur-md transition-all hover:text-[#00DEFF] sm:inline-flex"
             >
               <Lock size={13} />
               <span className="relative z-10">Login</span>
@@ -85,7 +85,7 @@ export function Navbar() {
               whileHover={reduce ? undefined : { scale: 1.05 }}
               whileTap={reduce ? undefined : { scale: 0.97 }}
               transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-              className="btn-cyan btn-shine hidden rounded-full bg-[#00DEFF] px-5 py-2 text-sm font-semibold text-[#0A0A0A] transition-all sm:inline-block"
+              className="btn-cyan btn-shine hidden rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-5 py-2 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:inline-block"
             >
               <span className="relative z-10">Get Started</span>
             </motion.a>
@@ -107,7 +107,7 @@ export function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="mt-2 flex flex-col gap-1 rounded-2xl border border-white/10 bg-[#0A0A0A]/95 p-3 backdrop-blur-xl md:hidden"
+            className="mt-2 flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-md md:hidden"
           >
             {links.map((l) => (
               <a
@@ -122,7 +122,7 @@ export function Navbar() {
             <a
               href="#contact"
               onClick={() => setOpen(false)}
-              className="mt-1 rounded-lg bg-[#00DEFF] px-4 py-3 text-center text-sm font-semibold text-[#0A0A0A]"
+              className="mt-1 rounded-lg border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-4 py-3 text-center text-sm font-semibold text-[#00DEFF] backdrop-blur-md"
             >
               Get Started
             </a>
