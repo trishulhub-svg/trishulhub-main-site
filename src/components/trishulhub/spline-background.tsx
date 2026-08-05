@@ -11,7 +11,7 @@ export function SplineBackground() {
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none fixed inset-0 z-0 overflow-hidden"
+      className="pointer-events-none fixed inset-0 z-0 overflow-hidden bg-black"
     >
       <iframe
         src={SPLINE_SCENE}
@@ -22,14 +22,6 @@ export function SplineBackground() {
         className="h-full w-full border-0"
         loading="eager"
         allow="autoplay"
-      />
-      {/* Soft brand wash so the orb sits in TrishulHub’s near-black + cyan world */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse 80% 60% at 50% 40%, transparent 0%, rgba(10,10,10,0.35) 55%, rgba(10,10,10,0.75) 100%)',
-        }}
       />
     </div>
   )
