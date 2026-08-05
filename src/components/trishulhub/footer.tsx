@@ -6,7 +6,7 @@ const services = [
   'Digital Marketing',
   'CRM Solutions',
   'UI/UX Design',
-  'E-commerce Solutions',
+  'Custom Admin',
 ]
 
 const company = ['About', 'Services', 'Portfolio', 'Contact']

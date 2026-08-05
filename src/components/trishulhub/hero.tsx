@@ -71,7 +71,7 @@ export function Hero() {
             style={{ textShadow: '0 2px 16px rgba(0,0,0,0.7)' }}
           >
             TrishulHub delivers premium software development, web development,
-            digital marketing, CRM solutions, UI/UX design, and e-commerce
+            digital marketing, CRM solutions, UI/UX design, and custom admin
             solutions that transform ideas into powerful digital experiences.
           </p>
         </motion.div>

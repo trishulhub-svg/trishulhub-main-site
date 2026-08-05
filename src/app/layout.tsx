@@ -19,7 +19,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: "TrishulHub | Digital Solutions. Real Growth.",
   description:
-    "TrishulHub delivers premium software development, web development, digital marketing, CRM solutions, UI/UX design, and e-commerce solutions that transform ideas into powerful digital experiences.",
+    "TrishulHub delivers premium software development, web development, digital marketing, CRM solutions, UI/UX design, and custom admin solutions that transform ideas into powerful digital experiences.",
   keywords: [
     "TrishulHub",
     "software development",
@@ -27,7 +27,7 @@ export const metadata: Metadata = {
     "digital marketing",
     "CRM solutions",
     "UI/UX design",
-    "e-commerce solutions",
+    "custom admin",
     "Next.js",
     "React",
   ],
@@ -35,7 +35,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "TrishulHub | Digital Solutions. Real Growth.",
     description:
-      "Premium software development, web development, digital marketing, CRM solutions, UI/UX design, and e-commerce solutions.",
+      "Premium software development, web development, digital marketing, CRM solutions, UI/UX design, and custom admin solutions.",
     siteName: "TrishulHub",
     type: "website",
   },

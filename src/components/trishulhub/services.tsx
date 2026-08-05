@@ -7,7 +7,7 @@ import {
   Megaphone,
   Users,
   PenTool,
-  ShoppingBag,
+  LayoutDashboard,
   ArrowUpRight,
   ArrowRight,
 } from 'lucide-react'
@@ -41,9 +41,9 @@ const services = [
     desc: 'User-centered design that combines aesthetics with functionality, creating intuitive and engaging digital experiences.',
   },
   {
-    icon: ShoppingBag,
-    title: 'E-commerce Solutions',
-    desc: 'Complete e-commerce platforms with secure payments, inventory management, and seamless shopping experiences.',
+    icon: LayoutDashboard,
+    title: 'Custom Admin',
+    desc: 'Tailored admin dashboards with role-based access, analytics, and streamlined controls to manage your business operations.',
   },
 ]
 
