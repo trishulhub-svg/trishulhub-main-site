@@ -17,33 +17,31 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TrishulHub | Digital Solutions. Real Growth.",
+  title: "TrishulHub | Websites. Software. CRM That Fits.",
   description:
-    "TrishulHub delivers premium software development, web development, digital marketing, CRM solutions, UI/UX design, and custom admin solutions that transform ideas into powerful digital experiences.",
+    "TrishulHub builds custom websites, business admin software, and CRM systems shaped around how you sell, operate, and support customers.",
   keywords: [
     "TrishulHub",
-    "software development",
-    "web development",
-    "digital marketing",
+    "website development",
+    "custom software",
     "CRM solutions",
-    "UI/UX design",
-    "custom admin",
+    "admin panel",
     "Next.js",
     "React",
   ],
   authors: [{ name: "TrishulHub" }],
   openGraph: {
-    title: "TrishulHub | Digital Solutions. Real Growth.",
+    title: "TrishulHub | Websites. Software. CRM That Fits.",
     description:
-      "Premium software development, web development, digital marketing, CRM solutions, UI/UX design, and custom admin solutions.",
+      "Custom websites, business software, and CRM systems built around your workflow.",
     siteName: "TrishulHub",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TrishulHub | Digital Solutions. Real Growth.",
+    title: "TrishulHub | Websites. Software. CRM That Fits.",
     description:
-      "Premium digital solutions that transform ideas into powerful digital experiences.",
+      "Custom websites, business software, and CRM systems built around your workflow.",
   },
 };
 
