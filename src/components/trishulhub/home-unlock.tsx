@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Globe, LayoutDashboard, Users, Zap } from 'lucide-react'
@@ -70,12 +70,74 @@ const plans: {
   },
 ]
 
+type LineGeom = {
+  id: PlanId
+  y: number
+}
+
 export function HomeUnlock() {
   const [active, setActive] = useState<PlanId>('website')
   const current = useMemo(
     () => plans.find((p) => p.id === active) ?? plans[0],
     [active],
   )
+
+  const bridgeRef = useRef<HTMLDivElement>(null)
+  const buttonRefs = useRef<Record<PlanId, HTMLButtonElement | null>>({
+    website: null,
+    software: null,
+    crm: null,
+  })
+  const [lines, setLines] = useState<LineGeom[]>([])
+  const [bridgeHeight, setBridgeHeight] = useState(240)
+  const [midY, setMidY] = useState(120)
+
+  const measure = () => {
+    const bridge = bridgeRef.current
+    if (!bridge) return
+    const bridgeBox = bridge.getBoundingClientRect()
+    if (bridgeBox.height <= 0) return
+
+    setBridgeHeight(bridgeBox.height)
+    setMidY(bridgeBox.height / 2)
+
+    const next: LineGeom[] = []
+    for (const plan of plans) {
+      const btn = buttonRefs.current[plan.id]
+      if (!btn) continue
+      const box = btn.getBoundingClientRect()
+      const y = box.top + box.height / 2 - bridgeBox.top
+      next.push({ id: plan.id, y })
+    }
+    setLines(next)
+  }
+
+  useLayoutEffect(() => {
+    measure()
+  }, [])
+
+  useEffect(() => {
+    const onResize = () => measure()
+    window.addEventListener('resize', onResize)
+    const ro =
+      typeof ResizeObserver !== 'undefined'
+        ? new ResizeObserver(() => measure())
+        : null
+    if (bridgeRef.current) ro?.observe(bridgeRef.current)
+    for (const plan of plans) {
+      const el = buttonRefs.current[plan.id]
+      if (el) ro?.observe(el)
+    }
+    // Re-measure after fonts/layout settle
+    const t1 = window.setTimeout(measure, 50)
+    const t2 = window.setTimeout(measure, 250)
+    return () => {
+      window.removeEventListener('resize', onResize)
+      ro?.disconnect()
+      window.clearTimeout(t1)
+      window.clearTimeout(t2)
+    }
+  }, [])
 
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
@@ -100,6 +162,9 @@ export function HomeUnlock() {
                 return (
                   <button
                     key={plan.id}
+                    ref={(el) => {
+                      buttonRefs.current[plan.id] = el
+                    }}
                     type="button"
                     onClick={() => setActive(plan.id)}
                     className={`relative flex min-h-[64px] w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all ${
@@ -122,44 +187,41 @@ export function HomeUnlock() {
                     {isActive ? (
                       <Zap size={16} className="shrink-0 text-[#0A0A0A]" />
                     ) : null}
-                    {isActive && (
-                      <span className="absolute -right-1.5 top-1/2 hidden h-3 w-3 -translate-y-1/2 translate-x-full rounded-full bg-[#00DEFF] shadow-[0_0_12px_rgba(0,222,255,0.9)] lg:block" />
-                    )}
                   </button>
                 )
               })}
             </div>
           </div>
 
-          {/* MIDDLE — long dashed connector lines aligned to buttons */}
-          <div className="relative hidden lg:col-span-3 lg:flex lg:flex-col">
-            {/* Matches left title + description + mt-8 so lines start at the buttons */}
-            <div className="h-[152px] shrink-0" aria-hidden="true" />
-            <div className="relative min-h-[220px] flex-1">
-              <svg
-                className="pointer-events-none absolute inset-0 h-full w-full"
-                viewBox="0 0 240 240"
-                preserveAspectRatio="none"
-                fill="none"
-                aria-hidden="true"
-              >
-                {plans.map((plan, i) => {
-                  const y = 32 + i * 76
-                  const isActive = plan.id === active
-                  return (
-                    <path
-                      key={plan.id}
-                      d={`M8 ${y} C 80 ${y}, 110 120, 170 120 L 240 120`}
-                      stroke={isActive ? '#00DEFF' : '#525252'}
-                      strokeOpacity={isActive ? 1 : 0.45}
-                      strokeWidth="1.75"
-                      strokeDasharray="8 8"
-                      className={isActive ? 'animate-flow' : undefined}
-                    />
-                  )
-                })}
-              </svg>
-            </div>
+          {/* MIDDLE — long dashed connectors, measured to button centers */}
+          <div
+            ref={bridgeRef}
+            className="relative hidden lg:col-span-3 lg:block"
+          >
+            <svg
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              viewBox={`0 0 240 ${bridgeHeight}`}
+              preserveAspectRatio="none"
+              fill="none"
+              aria-hidden="true"
+            >
+              {lines.map((line) => {
+                const isActive = line.id === active
+                const y = Math.round(line.y * 10) / 10
+                const end = Math.round(midY * 10) / 10
+                return (
+                  <path
+                    key={line.id}
+                    d={`M0 ${y} C 90 ${y}, 120 ${end}, 180 ${end} L 240 ${end}`}
+                    stroke={isActive ? '#00DEFF' : '#525252'}
+                    strokeOpacity={isActive ? 1 : 0.45}
+                    strokeWidth="1.75"
+                    strokeDasharray="8 8"
+                    className={isActive ? 'animate-flow' : undefined}
+                  />
+                )
+              })}
+            </svg>
           </div>
 
           {/* RIGHT — narrower detail card */}
