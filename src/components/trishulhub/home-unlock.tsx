@@ -131,31 +131,35 @@ export function HomeUnlock() {
             </div>
           </div>
 
-          {/* MIDDLE — long dashed connector lines */}
-          <div className="relative hidden lg:col-span-3 lg:block">
-            <svg
-              className="pointer-events-none absolute inset-0 h-full w-full"
-              viewBox="0 0 240 320"
-              preserveAspectRatio="none"
-              fill="none"
-              aria-hidden="true"
-            >
-              {plans.map((plan, i) => {
-                const y = 118 + i * 76
-                const isActive = plan.id === active
-                return (
-                  <path
-                    key={plan.id}
-                    d={`M0 ${y} C 70 ${y}, 100 160, 160 160 L 240 160`}
-                    stroke={isActive ? '#00DEFF' : '#525252'}
-                    strokeOpacity={isActive ? 1 : 0.45}
-                    strokeWidth="1.75"
-                    strokeDasharray="8 8"
-                    className={isActive ? 'animate-flow' : undefined}
-                  />
-                )
-              })}
-            </svg>
+          {/* MIDDLE — long dashed connector lines aligned to buttons */}
+          <div className="relative hidden lg:col-span-3 lg:flex lg:flex-col">
+            {/* Matches left title + description + mt-8 so lines start at the buttons */}
+            <div className="h-[152px] shrink-0" aria-hidden="true" />
+            <div className="relative min-h-[220px] flex-1">
+              <svg
+                className="pointer-events-none absolute inset-0 h-full w-full"
+                viewBox="0 0 240 240"
+                preserveAspectRatio="none"
+                fill="none"
+                aria-hidden="true"
+              >
+                {plans.map((plan, i) => {
+                  const y = 32 + i * 76
+                  const isActive = plan.id === active
+                  return (
+                    <path
+                      key={plan.id}
+                      d={`M8 ${y} C 80 ${y}, 110 120, 170 120 L 240 120`}
+                      stroke={isActive ? '#00DEFF' : '#525252'}
+                      strokeOpacity={isActive ? 1 : 0.45}
+                      strokeWidth="1.75"
+                      strokeDasharray="8 8"
+                      className={isActive ? 'animate-flow' : undefined}
+                    />
+                  )
+                })}
+              </svg>
+            </div>
           </div>
 
           {/* RIGHT — narrower detail card */}
