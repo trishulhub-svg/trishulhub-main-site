@@ -82,11 +82,10 @@ export function HomeUnlock() {
       <div className="pointer-events-none absolute inset-0 opacity-[0.1] stars-bg" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-10">
-          {/* LEFT — title + plan selectors (image 2) */}
-          <div className="flex flex-col lg:col-span-5">
+        <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-0">
+          {/* LEFT — title + plan selectors */}
+          <div className="flex flex-col lg:col-span-4">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              <span className="text-white/25">03. </span>
               Unlock custom growth
             </h2>
             <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
@@ -129,40 +128,43 @@ export function HomeUnlock() {
                   </button>
                 )
               })}
-
-              <svg
-                className="pointer-events-none absolute left-full top-0 z-10 hidden h-full w-28 lg:block"
-                viewBox="0 0 112 240"
-                preserveAspectRatio="none"
-                fill="none"
-                aria-hidden="true"
-              >
-                {plans.map((plan, i) => {
-                  const y = 32 + i * 76
-                  const isActive = plan.id === active
-                  return (
-                    <path
-                      key={plan.id}
-                      d={`M0 ${y} C 40 ${y}, 40 120, 80 120 L 112 120`}
-                      stroke={isActive ? '#00DEFF' : '#525252'}
-                      strokeOpacity={isActive ? 1 : 0.45}
-                      strokeWidth="1.5"
-                      strokeDasharray="8 8"
-                      className={isActive ? 'animate-flow' : undefined}
-                    />
-                  )
-                })}
-              </svg>
             </div>
           </div>
 
-          {/* RIGHT — detail card same visual weight */}
+          {/* MIDDLE — long dashed connector lines */}
+          <div className="relative hidden lg:col-span-3 lg:block">
+            <svg
+              className="pointer-events-none absolute inset-0 h-full w-full"
+              viewBox="0 0 240 320"
+              preserveAspectRatio="none"
+              fill="none"
+              aria-hidden="true"
+            >
+              {plans.map((plan, i) => {
+                const y = 118 + i * 76
+                const isActive = plan.id === active
+                return (
+                  <path
+                    key={plan.id}
+                    d={`M0 ${y} C 70 ${y}, 100 160, 160 160 L 240 160`}
+                    stroke={isActive ? '#00DEFF' : '#525252'}
+                    strokeOpacity={isActive ? 1 : 0.45}
+                    strokeWidth="1.75"
+                    strokeDasharray="8 8"
+                    className={isActive ? 'animate-flow' : undefined}
+                  />
+                )
+              })}
+            </svg>
+          </div>
+
+          {/* RIGHT — narrower detail card */}
           <motion.div
             key={current.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#121212] p-7 shadow-[0_0_0_1px_rgba(0,222,255,0.1),0_0_40px_rgba(0,222,255,0.12)] sm:p-9 lg:col-span-7"
+            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#121212] p-6 shadow-[0_0_0_1px_rgba(0,222,255,0.1),0_0_40px_rgba(0,222,255,0.12)] sm:p-8 lg:col-span-5"
           >
             <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00DEFF]/55 to-transparent" />
             <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-[#00DEFF]/45 via-transparent to-transparent" />
