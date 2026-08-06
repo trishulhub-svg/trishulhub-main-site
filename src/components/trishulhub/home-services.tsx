@@ -176,36 +176,21 @@ function PipelineRow({
         <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-white/10">
           <motion.div
             className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#00DEFF] via-[#33E6FF] to-[#0088CC]"
-            animate={
-              glow
-                ? {
-                    width: `${value}%`,
-                    boxShadow: [
-                      '0 0 10px rgba(0,222,255,0.35)',
-                      '0 0 22px rgba(0,222,255,0.7)',
-                      '0 0 10px rgba(0,222,255,0.35)',
-                    ],
-                  }
-                : { width: `${value}%`, boxShadow: '0 0 0 rgba(0,222,255,0)' }
-            }
-            transition={{
-              width: { duration: 0.05 },
-              boxShadow: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' },
+            style={{
+              width: `${value}%`,
+              boxShadow: glow ? '0 0 14px rgba(0,222,255,0.45)' : 'none',
             }}
-            style={{ width: `${value}%` }}
           />
-          {/* looping shimmer */}
+          {/* one-shot shimmer — no infinite loop (lighter scroll) */}
           {glow && (
             <motion.div
               aria-hidden="true"
-              className="pointer-events-none absolute inset-y-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+              className="pointer-events-none absolute inset-y-0 bg-gradient-to-r from-transparent via-white/45 to-transparent"
               initial={{ left: '-30%' }}
               animate={{ left: '120%' }}
               transition={{
-                duration: 1.8,
+                duration: 1.5,
                 delay: delay / 1000 + 0.2,
-                repeat: Infinity,
-                repeatDelay: 0.9,
                 ease: 'easeInOut',
               }}
               style={{ width: '28%' }}
@@ -226,25 +211,6 @@ function PipelineRow({
 }
 
 function ImpactCard() {
-  const trackRef = useRef<HTMLDivElement>(null)
-
-  useEffect(() => {
-    const track = trackRef.current
-    if (!track) return
-    let raf = 0
-    let y = 0
-    const speed = 0.35
-    const step = () => {
-      y -= speed
-      const half = track.scrollHeight / 2
-      if (Math.abs(y) >= half) y = 0
-      track.style.transform = `translateY(${y}px)`
-      raf = requestAnimationFrame(step)
-    }
-    raf = requestAnimationFrame(step)
-    return () => cancelAnimationFrame(raf)
-  }, [])
-
   const loop = [...tickerItems, ...tickerItems]
 
   return (
@@ -270,7 +236,8 @@ function ImpactCard() {
       <div className="relative mb-6 min-h-[200px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[#111111] to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-[#111111] to-transparent" />
-        <div ref={trackRef} className="will-change-transform">
+        {/* CSS ticker — no perpetual rAF (smoother scroll) */}
+        <div className="impact-ticker will-change-transform">
           {loop.map((item, i) => (
             <div
               key={`${item}-${i}`}

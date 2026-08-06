@@ -514,3 +514,21 @@
 .animate-flow {
   animation: flowDash 1.2s linear infinite;
 }
+
+/* Vertical impact ticker — GPU-friendly CSS instead of rAF */
+@keyframes impactTicker {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(0, -50%, 0);
+  }
+}
+.impact-ticker {
+  animation: impactTicker 28s linear infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .impact-ticker {
+    animation: none;
+  }
+}
