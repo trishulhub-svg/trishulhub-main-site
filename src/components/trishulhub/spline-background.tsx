@@ -4,8 +4,7 @@ const SPLINE_SCENE =
   'https://my.spline.design/reactiveorb-s0GzgSco0uSVSXvwMHuJvPQs/'
 
 /**
- * Fixed full-viewport Spline scene. Lives at z-0 under site content.
- * Low opacity so the orb stays atmospheric, not distracting.
+ * Fixed Spline orb — kept very low so content stays readable.
  */
 export function SplineBackground() {
   return (
@@ -19,11 +18,11 @@ export function SplineBackground() {
         frameBorder={0}
         width="100%"
         height="100%"
-        className="h-full w-full border-0 opacity-[0.28]"
+        className="h-full w-full border-0 opacity-[0.16]"
         loading="eager"
         allow="autoplay"
       />
-      <div className="absolute inset-0 bg-[#050505]/45" />
+      <div className="absolute inset-0 bg-[#050505]/55" />
     </div>
   )
 }

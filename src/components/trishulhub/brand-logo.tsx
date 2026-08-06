@@ -44,10 +44,7 @@ export function BrandLogo({
         />
       </span>
       {showWordmark && (
-        <span
-          className="text-lg font-bold tracking-[0.12em] sm:text-xl"
-          style={{ fontFamily: 'var(--font-space-grotesk)' }}
-        >
+        <span className="font-display text-lg font-bold tracking-[0.12em] sm:text-xl">
           <span className="text-white">TRISHUL</span>
           <span className="gradient-text">HUB</span>
         </span>

@@ -18,6 +18,7 @@ import {
   Globe,
   LayoutDashboard,
   Workflow,
+  Asterisk,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
@@ -37,10 +38,10 @@ const services = [
       { icon: TrendingUp, label: 'Convert Faster' },
     ],
     rows: [
-      { topic: 'Ecommerce Store', reach: 'Full stack', velocity: 'Popular', hot: false },
-      { topic: 'Business Site', reach: '6–10 pages', velocity: 'Most booked', hot: true },
+      { topic: '#Ecommerce', reach: 'Store + cart', velocity: 'Popular', hot: false },
+      { topic: '#BusinessSite', reach: 'Lead-focused', velocity: 'Most booked', hot: true },
     ],
-    tableHeaders: ['Project Type', 'Scope', 'Demand'] as const,
+    tableHeaders: ['Project Type', 'Focus', 'Demand'] as const,
     features: [
       {
         icon: Crosshair,
@@ -71,8 +72,8 @@ const services = [
       { icon: Gauge, label: 'Track Ops' },
     ],
     rows: [
-      { topic: 'Inventory Panel', reach: 'Stock + SKUs', velocity: 'Stable', hot: false },
-      { topic: 'Healthcare Admin', reach: 'Patients + ops', velocity: 'In demand', hot: true },
+      { topic: '#Inventory', reach: 'Stock + SKUs', velocity: 'Stable', hot: false },
+      { topic: '#Healthcare', reach: 'Patients + ops', velocity: 'In demand', hot: true },
     ],
     tableHeaders: ['System Type', 'Focus', 'Priority'] as const,
     features: [
@@ -105,8 +106,8 @@ const services = [
       { icon: UserCheck, label: 'Close Deals' },
     ],
     rows: [
-      { topic: 'Lead Intake', reach: 'New contacts', velocity: 'Warm', hot: false },
-      { topic: 'Sales Pipeline', reach: 'Open deals', velocity: 'Hot', hot: true },
+      { topic: '#NewLeads', reach: 'Contacts', velocity: 'Warm', hot: false },
+      { topic: '#Pipeline', reach: 'Open deals', velocity: 'Hot', hot: true },
     ],
     tableHeaders: ['Workflow', 'Focus', 'Signal'] as const,
     features: [
@@ -148,9 +149,9 @@ export function ServicesPage() {
           >
             Three systems. One craft studio.
           </AnimatedHeading>
-          <p className="mt-5 font-sans text-base text-white/55 sm:text-lg">
-            Web development, custom software, and CRM — each service sits in its
-            own card with a clear preview and contact path.
+          <p className="mt-5 font-sans text-base text-neutral-400 sm:text-lg">
+            Web development, custom software, and CRM — each service in its own
+            card with matching dual panels and a clear contact path.
           </p>
         </div>
 
@@ -161,9 +162,9 @@ export function ServicesPage() {
             hidden: {},
             visible: { transition: { staggerChildren: STAGGER.normal } },
           }}
-          className="flex flex-col gap-16 lg:gap-20"
+          className="flex flex-col gap-20 lg:gap-28"
         >
-          {services.map((s) => (
+          {services.map((s, idx) => (
             <motion.section
               key={s.id}
               id={s.id}
@@ -175,52 +176,61 @@ export function ServicesPage() {
                   transition: { duration: 0.55, ease: EASE_OUT_EXPO },
                 },
               }}
-              className="scroll-mt-28 overflow-hidden rounded-[28px] border border-white/10 bg-[#0F0F0F] p-6 shadow-[0_20px_60px_rgba(0,0,0,0.45)] sm:p-8 lg:p-10"
+              className="scroll-mt-28"
             >
-              {/* Header — faint number + title + CTA */}
-              <div className="relative mb-8 flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                <div className="relative max-w-2xl pt-2">
-                  <div
-                    aria-hidden="true"
-                    className="pointer-events-none absolute -left-1 -top-6 font-display text-7xl font-bold leading-none text-white/[0.06] sm:text-8xl"
-                  >
-                    {s.num}.
-                  </div>
-                  <h2 className="relative font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-                    {s.title}
-                  </h2>
-                  <p className="relative mt-3 font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
-                    {s.desc}
-                  </p>
-                </div>
-                <Link
-                  href="/contact"
-                  className="relative z-10 inline-flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition hover:brightness-110"
-                >
-                  {s.startLabel}
-                </Link>
-              </div>
+              {idx > 0 && (
+                <div className="mb-16 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent lg:mb-20" />
+              )}
 
-              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
-                <LeftAnalyticsCard service={s} />
-                <RightPreviewCard id={s.id} />
-              </div>
-
-              <div className="mt-10 grid grid-cols-1 gap-8 border-t border-white/10 pt-8 sm:grid-cols-3 sm:gap-6">
-                {s.features.map((f) => (
-                  <div key={f.title} className="max-w-sm">
-                    <div className="mb-3 h-px w-10 bg-white/20" />
-                    <div className="mb-3 flex h-10 w-10 items-center justify-center text-[#00DEFF]">
-                      <f.icon size={22} strokeWidth={1.75} />
+              {/* Outer opaque service card */}
+              <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#0F0F0F] p-6 sm:p-8 lg:p-10">
+                {/* Header like image 1: faint number + title + CTA */}
+                <div className="relative mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-start lg:justify-between">
+                  <div className="relative max-w-2xl overflow-hidden pt-4">
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -left-2 -top-2 font-display text-8xl font-bold leading-none text-white/[0.05] sm:text-9xl"
+                    >
+                      {s.num}.
                     </div>
-                    <h3 className="font-display text-base font-semibold text-white">
-                      {f.title}
-                    </h3>
-                    <p className="mt-2 font-sans text-sm leading-relaxed text-neutral-400">
-                      {f.text}
+                    <h2 className="relative font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                      {s.title}
+                    </h2>
+                    <p className="relative mt-3 max-w-xl font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
+                      {s.desc}
                     </p>
                   </div>
-                ))}
+                  <Link
+                    href="/contact"
+                    className="relative z-10 inline-flex shrink-0 items-center justify-center self-start rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition hover:brightness-110"
+                  >
+                    {s.startLabel}
+                  </Link>
+                </div>
+
+                {/* Equal dual cards */}
+                <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
+                  <LeftAnalyticsCard service={s} />
+                  <RightPreviewCard id={s.id} />
+                </div>
+
+                {/* Feature trio — thin top lines like image */}
+                <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-8">
+                  {s.features.map((f) => (
+                    <div key={f.title}>
+                      <div className="mb-5 h-px w-full bg-white/15" />
+                      <div className="mb-3 text-[#00DEFF]">
+                        <f.icon size={22} strokeWidth={1.75} />
+                      </div>
+                      <h3 className="font-display text-base font-semibold text-white">
+                        {f.title}
+                      </h3>
+                      <p className="mt-2 font-sans text-sm leading-relaxed text-neutral-400">
+                        {f.text}
+                      </p>
+                    </div>
+                  ))}
+                </div>
               </div>
             </motion.section>
           ))}
@@ -236,7 +246,7 @@ function LeftAnalyticsCard({
   service: (typeof services)[number]
 }) {
   return (
-    <div className="electric-card flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6 sm:p-7">
+    <div className="electric-card flex h-full min-h-[440px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6 sm:p-7">
       <div className="grid grid-cols-3 gap-3">
         {service.actions.map((a) => (
           <div key={a.label} className="flex flex-col items-center text-center">
@@ -265,11 +275,11 @@ function LeftAnalyticsCard({
               }`}
             >
               <div className="flex items-center gap-2 text-neutral-300">
-                {row.hot ? (
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#00DEFF]" />
-                ) : (
-                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-transparent" />
-                )}
+                <span
+                  className={`h-1.5 w-1.5 shrink-0 rounded-full ${
+                    row.hot ? 'bg-[#00DEFF]' : 'bg-transparent'
+                  }`}
+                />
                 <span className="truncate">{row.topic}</span>
               </div>
               <div className="truncate text-center text-neutral-400">
@@ -287,6 +297,7 @@ function LeftAnalyticsCard({
         </div>
       </div>
 
+      {/* Connect Facebook Ads style bar */}
       <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/50 px-4 py-3">
         <div className="font-sans text-sm text-neutral-300">Contact TrishulHub</div>
         <Link
@@ -302,13 +313,13 @@ function LeftAnalyticsCard({
 
 function RightPreviewCard({ id }: { id: ServiceId }) {
   if (id === 'website') return <WebsiteGeneralPreview />
-  if (id === 'software') return <SoftwareGeneralPreview />
-  return <CrmGeneralPreview />
+  if (id === 'software') return <OrbitHubPreview kind="software" />
+  return <OrbitHubPreview kind="crm" />
 }
 
 function WebsiteGeneralPreview() {
   return (
-    <div className="electric-card flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616]">
+    <div className="electric-card flex h-full min-h-[440px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616]">
       <div className="flex items-center gap-2 border-b border-white/10 bg-black/50 px-4 py-3">
         <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
         <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
@@ -358,100 +369,78 @@ function WebsiteGeneralPreview() {
   )
 }
 
-function SoftwareGeneralPreview() {
+function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
+  const center =
+    kind === 'software' ? (
+      <Boxes size={22} />
+    ) : (
+      <Asterisk size={22} strokeWidth={2.5} />
+    )
+  const label = kind === 'software' ? 'Ops Hub' : 'CRM Hub'
+  const badge = kind === 'software' ? 'Admin preview' : 'Pipeline preview'
+  const nodes =
+    kind === 'software'
+      ? [
+          { label: 'Stock', a: 0 },
+          { label: 'Users', a: 60 },
+          { label: 'Orders', a: 120 },
+          { label: 'Reports', a: 180 },
+          { label: 'Roles', a: 240 },
+          { label: 'Alerts', a: 300 },
+        ]
+      : [
+          { label: 'Leads', a: 0 },
+          { label: 'Deals', a: 60 },
+          { label: 'Team', a: 120 },
+          { label: 'Chat', a: 180 },
+          { label: 'Tasks', a: 240 },
+          { label: 'Stats', a: 300 },
+        ]
+
   return (
-    <div className="electric-card relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,222,255,0.14),transparent_55%)]" />
-      <div className="relative mb-4 flex items-center justify-between">
+    <div className="electric-card relative flex h-full min-h-[440px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,222,255,0.16),transparent_55%)]" />
+      <div className="relative mb-2 flex items-center justify-between">
         <div className="flex items-center gap-2 font-sans text-xs text-neutral-400">
-          <LayoutDashboard size={14} className="text-[#00DEFF]" />
-          Ops Hub
+          {kind === 'software' ? (
+            <LayoutDashboard size={14} className="text-[#00DEFF]" />
+          ) : (
+            <Users size={14} className="text-[#00DEFF]" />
+          )}
+          {label}
         </div>
         <span className="rounded-full bg-[#00DEFF]/15 px-2.5 py-0.5 font-sans text-[10px] text-[#00DEFF]">
-          Admin preview
+          {badge}
         </span>
       </div>
-      <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="absolute h-48 w-48 rounded-full border border-[#00DEFF]/20" />
-        <div className="absolute h-32 w-32 rounded-full border border-[#00DEFF]/25" />
-        <div className="absolute h-16 w-16 rounded-full border border-[#00DEFF]/35" />
+
+      <div className="relative flex flex-1 items-center justify-center">
+        <div className="absolute h-52 w-52 rounded-full border border-[#00DEFF]/15" />
+        <div className="absolute h-36 w-36 rounded-full border border-[#00DEFF]/25" />
+        <div className="absolute h-20 w-20 rounded-full border border-[#00DEFF]/30" />
         <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_40px_rgba(0,222,255,0.45)]">
-          <Boxes size={22} />
+          {center}
         </div>
-        {[
-          { label: 'Stock', angle: -20 },
-          { label: 'Users', angle: 40 },
-          { label: 'Orders', angle: 100 },
-          { label: 'Reports', angle: 160 },
-          { label: 'Roles', angle: 220 },
-          { label: 'Alerts', angle: 280 },
-        ].map((item, i) => {
-          const rad = ((item.angle + i * 8) * Math.PI) / 180
-          const r = 110
+        {nodes.map((n) => {
+          const rad = (n.a * Math.PI) / 180
+          const r = 118
           return (
             <div
-              key={item.label}
+              key={n.label}
               className="absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] font-sans text-[10px] text-neutral-300"
               style={{
                 transform: `translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
               }}
             >
-              {item.label.slice(0, 2)}
+              {n.label.slice(0, 2)}
             </div>
           )
         })}
       </div>
-      <p className="relative mt-4 text-center font-sans text-xs text-neutral-400">
-        Custom software modules orbit your core admin
-      </p>
-    </div>
-  )
-}
-
-function CrmGeneralPreview() {
-  return (
-    <div className="electric-card relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,222,255,0.12),transparent_55%)]" />
-      <div className="relative mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-2 font-sans text-xs text-neutral-400">
-          <Users size={14} className="text-[#00DEFF]" />
-          CRM Hub
-        </div>
-        <span className="rounded-full bg-[#00DEFF]/15 px-2.5 py-0.5 font-sans text-[10px] text-[#00DEFF]">
-          Pipeline preview
-        </span>
-      </div>
-      <div className="relative flex flex-1 flex-col items-center justify-center">
-        <div className="absolute h-48 w-48 rounded-full border border-[#00DEFF]/15" />
-        <div className="absolute h-32 w-32 rounded-full border border-[#00DEFF]/25" />
-        <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_40px_rgba(0,222,255,0.45)]">
-          <GitBranch size={22} />
-        </div>
-        {[
-          { Icon: Users, a: 0 },
-          { Icon: MessageCircle, a: 60 },
-          { Icon: UserCheck, a: 120 },
-          { Icon: Globe, a: 180 },
-          { Icon: TrendingUp, a: 240 },
-          { Icon: LayoutDashboard, a: 300 },
-        ].map(({ Icon, a }) => {
-          const rad = (a * Math.PI) / 180
-          const r = 112
-          return (
-            <div
-              key={a}
-              className="absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] text-neutral-300"
-              style={{
-                transform: `translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
-              }}
-            >
-              <Icon size={16} />
-            </div>
-          )
-        })}
-      </div>
-      <p className="relative mt-4 text-center font-sans text-xs text-neutral-400">
-        Customers, employees, and deals in one hub
+      <p className="relative mt-2 text-center font-sans text-xs text-neutral-400">
+        {kind === 'software'
+          ? 'Custom software modules orbit your core admin'
+          : 'Customers, employees, and deals in one hub'}
       </p>
     </div>
   )

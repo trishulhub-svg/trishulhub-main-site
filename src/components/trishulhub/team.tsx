@@ -162,7 +162,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Meet Our *Team*
+            Meet Our Team
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

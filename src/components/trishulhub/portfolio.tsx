@@ -58,7 +58,7 @@ export function Portfolio() {
             duration={0.6}
             className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
           >
-            Selected *Work*
+            Selected Work
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

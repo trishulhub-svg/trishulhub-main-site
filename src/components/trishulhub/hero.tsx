@@ -54,11 +54,8 @@ export function Hero() {
 
         <motion.div variants={heroItem}>
           <h1
-            className="text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]"
-            style={{
-              fontFamily: 'var(--font-space-grotesk)',
-              textShadow: '0 4px 30px rgba(0,0,0,0.6)',
-            }}
+            className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]"
+            style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
           >
             WEBSITES. SOFTWARE.{' '}
             <span className="gradient-text-animated">CRM THAT FITS.</span>

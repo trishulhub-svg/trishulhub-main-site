@@ -100,7 +100,7 @@ export function TechStack() {
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Our *Tech* *Stack*
+            Our Tech Stack
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
