@@ -10,13 +10,13 @@ const services = [
   {
     id: 'website',
     icon: Globe,
-    title: 'Website Development',
+    title: 'Web Development',
     desc: 'Custom websites for every kind of customer need — stores, brands, local businesses, and portfolios that look sharp and convert.',
   },
   {
     id: 'software',
     icon: LayoutDashboard,
-    title: 'Custom Software',
+    title: 'Custom Software Development',
     desc: 'Admin panels and app systems for inventory, healthcare, ecommerce ops, and whatever your business needs to run day to day.',
   },
   {
