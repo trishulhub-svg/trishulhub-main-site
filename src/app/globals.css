@@ -105,7 +105,6 @@
   .font-display {
     font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   }
-}
   /* GPU acceleration hints for animated elements.
    * `translateZ(0)` forces the element onto its own compositor layer so
    * transforms/animations don't trigger layout or paint on the main thread.
