@@ -183,15 +183,18 @@ export function ServicesPage() {
 
               {/* Outer opaque service card */}
               <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#0F0F0F] p-6 sm:p-8 lg:p-10">
-                {/* Header like image 1: faint number + title + CTA */}
+                {/* Header: visible step number + title + CTA */}
                 <div className="relative mb-8 flex flex-col gap-5 lg:mb-10 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="relative max-w-2xl overflow-hidden pt-4">
+                  <div className="relative max-w-2xl pt-2">
                     <div
                       aria-hidden="true"
-                      className="pointer-events-none absolute -left-2 -top-2 font-display text-8xl font-bold leading-none text-white/[0.05] sm:text-9xl"
+                      className="pointer-events-none absolute -left-1 -top-6 select-none font-display text-7xl font-bold leading-none text-[#00DEFF]/25 sm:-top-8 sm:text-8xl md:text-9xl"
                     >
                       {s.num}.
                     </div>
+                    <p className="relative mb-2 font-display text-sm font-semibold tracking-[0.2em] text-[#00DEFF]">
+                      {s.num}
+                    </p>
                     <h2 className="relative font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
                       {s.title}
                     </h2>
