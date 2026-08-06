@@ -476,3 +476,37 @@
   background: #0a0a0a;
   color: #fff;
 }
+
+/* Electric card glow — cyan theme (prompt shadow adapted) */
+.electric-card {
+  transition:
+    box-shadow 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+    border-color 0.35s ease,
+    transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.electric-card:hover {
+  border-color: rgba(0, 222, 255, 0.35);
+  box-shadow: 0 0 30px rgba(0, 222, 255, 0.3);
+}
+
+/* Subtle star field — 200x200 radial pattern, opacity controlled by utility */
+.stars-bg {
+  background-image: radial-gradient(
+    rgba(255, 255, 255, 0.55) 1px,
+    transparent 1px
+  );
+  background-size: 200px 200px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.orbit-spin {
+  animation: spin 60s linear infinite;
+}
+.orbit-spin-reverse {
+  animation: spin 60s linear infinite reverse;
+}

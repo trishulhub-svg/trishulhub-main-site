@@ -5,14 +5,17 @@ import Link from 'next/link'
 import { AnimatePresence, motion } from 'framer-motion'
 import {
   ArrowRight,
-  Globe,
-  LayoutDashboard,
-  Users,
-  X,
   Eye,
   Mail,
+  Sparkles,
+  X,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
+import {
+  WebsiteOsPanel,
+  SoftwareOsPanel,
+  CrmOsPanel,
+} from '@/components/trishulhub/service-os-panels'
 import { WebsitePreviewTemplate } from '@/components/trishulhub/preview/website-preview'
 import { SoftwarePreviewTemplate } from '@/components/trishulhub/preview/software-preview'
 import { CrmPreviewTemplate } from '@/components/trishulhub/preview/crm-preview'
@@ -29,36 +32,51 @@ type PreviewMode = ServiceId | null
 const services = [
   {
     id: 'website' as const,
-    icon: Globe,
+    num: '01',
     title: 'Website Development',
-    desc: 'We build websites for every kind of customer need — ecommerce, business sites, portfolios, local brands, and more.',
-    points: [
-      'Custom design matched to your brand',
-      'Mobile-first, fast, conversion-ready',
-      'Preview a template before you talk to us',
+    headline: 'Scale your presence instantly',
+    desc: 'Custom websites for every customer need — ecommerce, business, portfolio, or local brand — designed to load fast and convert.',
+    ctaLine: 'Ready to shape your site with us?',
+    startLabel: 'Start building your site',
+    previewHint: 'Describe your business and hit Preview',
+    bullets: [
+      'Brand-true layouts for any industry',
+      'Mobile-first, conversion-ready structure',
+      'Preview a template before you commit',
     ],
+    Panel: WebsiteOsPanel,
   },
   {
     id: 'software' as const,
-    icon: LayoutDashboard,
-    title: 'Custom Software Development',
-    desc: 'Admin panels and app systems so customers can manage inventory, healthcare, ecommerce ops, or any workflow they need.',
-    points: [
-      'Built around your real operations',
-      'Role-based access & dashboards',
-      'Describe your need → see a software preview',
+    num: '02',
+    title: 'Custom Software',
+    headline: 'Run operations on your terms',
+    desc: 'Admin panels and app systems for inventory, healthcare, ecommerce ops, and any workflow your team needs day to day.',
+    ctaLine: 'Need a panel built around your process?',
+    startLabel: 'Start designing your software',
+    previewHint: 'Describe your software and hit Preview',
+    bullets: [
+      'Role-based dashboards & controls',
+      'Mapped to inventory, health, shop, HR, and more',
+      'Brief → live admin-style preview',
     ],
+    Panel: SoftwareOsPanel,
   },
   {
     id: 'crm' as const,
-    icon: Users,
+    num: '03',
     title: 'CRM Solutions',
-    desc: 'CRM software to manage employees, customers, pipelines, and follow-ups — so your team stays aligned.',
-    points: [
+    headline: 'Keep every relationship clear',
+    desc: 'CRM software to manage employees, customers, pipelines, and follow-ups — so your team stays aligned without chaos.',
+    ctaLine: 'Want a CRM that matches how you sell?',
+    startLabel: 'Start organizing your CRM',
+    previewHint: 'Add your domain and hit Preview',
+    bullets: [
       'Customers + employees in one place',
       'Pipeline and follow-up visibility',
       'CRM-themed landing preview included',
     ],
+    Panel: CrmOsPanel,
   },
 ]
 
@@ -76,13 +94,16 @@ export function ServicesPage() {
 
   return (
     <div className="relative pb-24 pt-28 sm:pt-32">
+      <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.2] stars-bg" />
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-16 max-w-3xl">
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+            className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
           >
+            <Sparkles size={14} />
             Services
           </motion.span>
           <AnimatedHeading
@@ -91,11 +112,11 @@ export function ServicesPage() {
             className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Three ways we help your *business run*
+            Three systems. *One craft studio.*
           </AnimatedHeading>
           <p className="mt-5 text-base text-white/55 sm:text-lg">
-            Pick a service, contact us, or open Preview to generate a tailored
-            landing / admin mock from your details.
+            Each service uses the same high-fidelity card layout — Contact us to
+            talk, or describe your business and Preview a tailored mock.
           </p>
         </div>
 
@@ -106,67 +127,93 @@ export function ServicesPage() {
             hidden: {},
             visible: { transition: { staggerChildren: STAGGER.normal } },
           }}
-          className="space-y-8"
+          className="space-y-10"
         >
           {services.map((s) => {
-            const Icon = s.icon
+            const Panel = s.Panel
             return (
               <motion.section
                 key={s.id}
                 id={s.id}
                 variants={{
-                  hidden: { opacity: 0, y: 40 },
+                  hidden: { opacity: 0, y: 48 },
                   visible: {
                     opacity: 1,
                     y: 0,
-                    transition: { duration: 0.55, ease: EASE_OUT_EXPO },
+                    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
                   },
                 }}
-                className="scroll-mt-28 overflow-hidden rounded-3xl border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md sm:p-10"
+                className="electric-card scroll-mt-28 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md sm:p-8 lg:p-10"
               >
-                <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
-                  <div className="max-w-2xl">
-                    <div className="mb-5 inline-flex h-14 w-14 items-center justify-center rounded-xl border border-[#00DEFF]/35 bg-[#00DEFF]/10">
-                      <Icon className="h-7 w-7 text-[#00DEFF]" />
-                    </div>
-                    <h2
-                      className="text-2xl font-bold text-white sm:text-3xl"
+                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
+                  {/* Left copy — Scale your reach pattern */}
+                  <div className="lg:col-span-5">
+                    <div
+                      className="text-5xl font-light text-white/10 sm:text-6xl"
                       style={{ fontFamily: 'var(--font-space-grotesk)' }}
                     >
+                      {s.num}
+                    </div>
+                    <div className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#00DEFF]">
                       {s.title}
+                    </div>
+                    <h2
+                      className="mt-3 text-3xl font-light leading-tight text-white sm:text-4xl"
+                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                    >
+                      {s.headline}
                     </h2>
-                    <p className="mt-3 text-sm leading-relaxed text-white/55 sm:text-base">
+                    <p className="mt-4 text-sm leading-relaxed text-neutral-400 sm:text-base">
                       {s.desc}
                     </p>
+
                     <ul className="mt-5 space-y-2">
-                      {s.points.map((p) => (
+                      {s.bullets.map((b) => (
                         <li
-                          key={p}
+                          key={b}
                           className="flex items-start gap-2 text-sm text-white/65"
                         >
                           <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00DEFF]" />
-                          {p}
+                          {b}
                         </li>
                       ))}
                     </ul>
-                  </div>
 
-                  <div className="flex w-full flex-col gap-3 sm:w-auto sm:min-w-[220px]">
+                    <p className="mt-7 text-sm text-white/70">{s.ctaLine}</p>
                     <Link
                       href="/contact"
-                      className="btn-cyan btn-shine inline-flex items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-6 py-3 text-sm font-semibold text-[#00DEFF] backdrop-blur-md hover:bg-[#00DEFF]/20"
+                      className="btn-cyan btn-shine mt-3 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-gradient-to-b from-[#00DEFF]/25 to-[#0088CC]/20 px-5 py-2.5 text-sm font-semibold text-[#00DEFF] shadow-[0_0_24px_rgba(0,222,255,0.2)] backdrop-blur-md hover:from-[#00DEFF]/35"
                     >
                       <Mail size={15} />
                       Contact us
                     </Link>
-                    <button
-                      type="button"
-                      onClick={() => setMode(s.id)}
-                      className="btn-ghost inline-flex items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
+
+                    <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
+                      <div className="text-xs uppercase tracking-[0.2em] text-white/40">
+                        {s.previewHint}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => setMode(s.id)}
+                        className="btn-ghost mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white hover:border-[#00DEFF]/45 hover:text-[#00DEFF] sm:w-auto"
+                      >
+                        <Eye size={15} />
+                        Hit Preview
+                      </button>
+                    </div>
+
+                    <Link
+                      href="/contact"
+                      className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-[#00DEFF]"
                     >
-                      <Eye size={15} />
-                      Preview
-                    </button>
+                      {s.startLabel}
+                      <ArrowRight size={15} />
+                    </Link>
+                  </div>
+
+                  {/* Right OS / creative panel */}
+                  <div className="lg:col-span-7">
+                    <Panel />
                   </div>
                 </div>
               </motion.section>
