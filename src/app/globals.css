@@ -6,7 +6,8 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-space-grotesk), sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-geist-mono);
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -82,34 +83,29 @@
   * {
     @apply border-border outline-ring/50;
   }
-  /* SMOOTH + FAST SCROLLING
-   * - scroll-behavior: smooth on html enables smooth anchor scrolling
-   *   for #home, #portfolio, #contact, etc. links.
-   * - We also add scroll-padding-top so anchor jumps don't hide content
-   *   under the sticky navbar.
-   * - The high-perf scrollbar-touch property + overscroll-behavior
-   *   prevent scroll-chaining and bounce glitches on macOS / iOS.
-   * - `overflow-scrolling: touch` enables momentum scrolling on iOS.
-   * - We disable smooth-scroll on users who prefer reduced motion
-   *   (accessibility). */
   html {
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
     -webkit-overflow-scrolling: touch;
     overscroll-behavior-y: none;
-    /* GPU-accelerated scrolling on supporting browsers */
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
     background-color: #0a0a0a;
-    /* Smooth out paint operations during scroll — most modern browsers
-       respect this for the body's compositor layer. */
     overflow-anchor: none;
     overscroll-behavior-y: contain;
   }
+  h1,
+  h2,
+  h3,
+  h4,
+  .font-display {
+    font-family: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  }
+}
   /* GPU acceleration hints for animated elements.
    * `translateZ(0)` forces the element onto its own compositor layer so
    * transforms/animations don't trigger layout or paint on the main thread.

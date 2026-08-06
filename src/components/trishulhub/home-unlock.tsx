@@ -3,52 +3,74 @@
 import { useMemo, useState } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { AnimatedHeading } from './animated-heading'
+import { ArrowRight, Globe, LayoutDashboard, Users, Zap } from 'lucide-react'
 
 type PlanId = 'website' | 'software' | 'crm'
 
 const plans: {
   id: PlanId
   label: string
-  title: string
-  priceNote: string
+  icon: typeof Zap
+  blurb: string
+  price: string
+  period: string
+  description: string
   features: string[]
+  cta: string
 }[] = [
   {
     id: 'website',
-    label: 'Website',
-    title: 'Website Development',
-    priceNote: 'Custom sites for any business',
+    label: 'Web Development',
+    icon: Globe,
+    blurb: 'Sites that convert',
+    price: 'Custom',
+    period: '/project',
+    description:
+      'Ideal for brands that need a clean, conversion-ready website tailored to their offer.',
     features: [
       'Brand-matched landing pages',
       'Ecommerce or business layouts',
       'Mobile-first structure',
-      'Launch-ready contact flows',
+      'Contact & lead flows',
+      'Launch support',
     ],
+    cta: 'Start your website',
   },
   {
     id: 'software',
-    label: 'Software',
-    title: 'Custom Software',
-    priceNote: 'Admin panels & app systems',
+    label: 'Custom Software',
+    icon: LayoutDashboard,
+    blurb: 'Ops that scale',
+    price: 'Custom',
+    period: '/build',
+    description:
+      'Ideal for teams that need an admin panel or app system shaped around real workflows.',
     features: [
       'Inventory, health, shop, HR modules',
       'Role-based access',
-      'Workflow alerts & dashboards',
-      'Built around your process',
+      'Workflow alerts',
+      'Live dashboards',
+      'Process-fit UX',
     ],
+    cta: 'Start your software',
   },
   {
     id: 'crm',
-    label: 'CRM',
-    title: 'CRM Solutions',
-    priceNote: 'People & pipeline clarity',
+    label: 'CRM Solutions',
+    icon: Users,
+    blurb: 'Relationships clear',
+    price: 'Custom',
+    period: '/system',
+    description:
+      'Ideal for teams managing customers, employees, pipelines, and follow-ups in one place.',
     features: [
       'Customers + employees together',
-      'Pipeline and follow-ups',
-      'Team ownership visibility',
-      'Calm shared workspace',
+      'Pipeline visibility',
+      'Follow-up reminders',
+      'Team ownership',
+      'Shared workspace',
     ],
+    cta: 'Start your CRM',
   },
 ]
 
@@ -61,112 +83,123 @@ export function HomeUnlock() {
 
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.2] stars-bg" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-[#00DEFF]/10 blur-[120px]" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.12] stars-bg" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-14 max-w-2xl">
-          <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
-            Unlock custom growth
-          </span>
-          <AnimatedHeading
-            as="h2"
-            variant="rise"
-            className="text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl"
-            style={{ fontFamily: 'var(--font-space-grotesk)' }}
-          >
-            Choose the system you want to unlock
-          </AnimatedHeading>
-          <p className="mt-4 text-base text-neutral-400">
-            Switch between Website, Software, and CRM — same interactive flow,
-            TrishulHub services instead of pricing tiers.
-          </p>
-        </div>
+        <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-12 lg:gap-8">
+          {/* Left column — title + plan buttons */}
+          <div className="lg:col-span-5">
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+              <span className="text-white/25">03. </span>
+              Unlock custom growth
+            </h2>
+            <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
+              Choose the system you want to unlock — web development, custom
+              software, or CRM — then talk to us to make it real.
+            </p>
 
-        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
-          {/* Left plan buttons */}
-          <div className="relative lg:col-span-4">
-            <div className="flex flex-col gap-3">
+            <div className="relative mt-8 space-y-3">
               {plans.map((plan) => {
                 const isActive = plan.id === active
+                const Icon = plan.icon
                 return (
                   <button
                     key={plan.id}
                     type="button"
                     onClick={() => setActive(plan.id)}
-                    className={`relative rounded-2xl border px-5 py-4 text-left transition-all ${
+                    className={`relative flex w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all ${
                       isActive
-                        ? 'border-[#00DEFF]/50 bg-[#00DEFF]/10 shadow-[0_0_30px_rgba(0,222,255,0.3)]'
-                        : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                        ? 'bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_30px_rgba(0,222,255,0.35)]'
+                        : 'border border-white/10 bg-white/[0.04] text-neutral-300 hover:border-white/20'
                     }`}
                   >
-                    {isActive && (
-                      <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 translate-x-full rounded-full bg-[#00DEFF] shadow-[0_0_12px_rgba(0,222,255,0.8)] lg:right-0 lg:translate-x-[18px]" />
+                    <div className="flex items-center gap-3">
+                      <Icon
+                        size={18}
+                        className={isActive ? 'text-[#0A0A0A]' : 'text-neutral-400'}
+                      />
+                      <span className="font-display text-base font-semibold">
+                        {plan.label}
+                      </span>
+                    </div>
+                    {isActive ? (
+                      <Zap size={16} className="text-[#0A0A0A]" />
+                    ) : (
+                      <Icon size={16} className="text-neutral-500" />
                     )}
-                    <div
-                      className="text-lg font-medium text-white"
-                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
-                    >
-                      {plan.label}
-                    </div>
-                    <div className="mt-1 text-xs text-neutral-400">
-                      {plan.priceNote}
-                    </div>
+                    {isActive && (
+                      <span className="absolute -right-1.5 top-1/2 hidden h-3 w-3 -translate-y-1/2 translate-x-full rounded-full bg-[#00DEFF] shadow-[0_0_12px_rgba(0,222,255,0.9)] lg:block" />
+                    )}
                   </button>
                 )
               })}
-            </div>
 
-            {/* Dashed connectors (desktop) */}
-            <svg
-              className="pointer-events-none absolute left-full top-0 z-10 hidden h-full w-24 translate-y-4 lg:block"
-              viewBox="0 0 96 280"
-              fill="none"
-              aria-hidden="true"
-            >
-              {plans.map((plan, i) => {
-                const y = 36 + i * 88
-                const isActive = plan.id === active
-                return (
-                  <path
-                    key={plan.id}
-                    d={`M-8 ${y} C 30 ${y}, 30 ${160}, 70 ${160} L 96 ${160}`}
-                    stroke={isActive ? '#00DEFF' : '#525252'}
-                    strokeOpacity={isActive ? 1 : 0.55}
-                    strokeWidth="1.5"
-                    strokeDasharray="8 8"
-                    className={isActive ? 'animate-flow' : ''}
-                  />
-                )
-              })}
-            </svg>
+              {/* Dashed connectors */}
+              <svg
+                className="pointer-events-none absolute left-full top-0 z-10 hidden h-[240px] w-28 translate-y-2 lg:block"
+                viewBox="0 0 112 240"
+                fill="none"
+                aria-hidden="true"
+              >
+                {plans.map((plan, i) => {
+                  const y = 28 + i * 72
+                  const isActive = plan.id === active
+                  return (
+                    <path
+                      key={plan.id}
+                      d={`M0 ${y} C 36 ${y}, 36 120, 78 120 L 112 120`}
+                      stroke={isActive ? '#00DEFF' : '#525252'}
+                      strokeOpacity={isActive ? 1 : 0.45}
+                      strokeWidth="1.5"
+                      strokeDasharray="8 8"
+                      className={isActive ? 'animate-flow' : undefined}
+                    />
+                  )
+                })}
+              </svg>
+            </div>
           </div>
 
-          {/* Details card */}
+          {/* Right pricing-style card — same visual weight as image 2 */}
           <motion.div
             key={current.id}
-            initial={{ opacity: 0, y: 16 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35 }}
-            className="electric-card relative z-10 overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] p-7 sm:p-9 lg:col-span-8"
+            transition={{ duration: 0.3 }}
+            className="relative z-10 min-h-[460px] overflow-hidden rounded-[28px] border border-white/10 bg-[#121212] p-7 shadow-[0_0_0_1px_rgba(0,222,255,0.08),0_0_40px_rgba(0,222,255,0.12)] sm:p-9 lg:col-span-7"
           >
-            <div className="text-xs uppercase tracking-[0.25em] text-[#00DEFF]">
-              Selected path
-            </div>
-            <h3
-              className="mt-3 text-3xl font-light text-white"
-              style={{ fontFamily: 'var(--font-space-grotesk)' }}
-            >
-              {current.title}
-            </h3>
-            <p className="mt-2 text-sm text-neutral-400">{current.priceNote}</p>
+            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00DEFF]/50 to-transparent" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-[#00DEFF]/40 via-transparent to-transparent" />
 
-            <ul className="mt-8 space-y-3">
+            <div className="flex flex-wrap items-start justify-between gap-4">
+              <h3 className="font-display text-3xl font-semibold text-white sm:text-4xl">
+                {current.label}
+              </h3>
+              <div className="text-right">
+                <span className="font-display text-2xl font-semibold text-white sm:text-3xl">
+                  {current.price}
+                </span>
+                <span className="ml-1 font-sans text-sm text-[#00DEFF]">
+                  {current.period}
+                </span>
+              </div>
+            </div>
+
+            <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-neutral-400">
+              {current.description}
+            </p>
+
+            <div className="my-6 h-px w-full bg-white/10" />
+
+            <ul className="space-y-3">
               {current.features.map((f) => (
-                <li key={f} className="flex items-start gap-3 text-sm text-neutral-200">
+                <li
+                  key={f}
+                  className="flex items-start gap-3 font-sans text-sm text-neutral-200"
+                >
                   <svg
-                    width="18"
-                    height="18"
+                    width="16"
+                    height="16"
                     viewBox="0 0 24 24"
                     className="mt-0.5 shrink-0 text-[#00DEFF]"
                     fill="currentColor"
@@ -179,20 +212,15 @@ export function HomeUnlock() {
               ))}
             </ul>
 
-            <div className="mt-9 flex flex-wrap gap-3">
-              <Link
-                href={`/services#${current.id}`}
-                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.3)]"
-              >
-                View {current.label} service
-              </Link>
-              <Link
-                href="/contact"
-                className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
-              >
-                Contact us
-              </Link>
-            </div>
+            <Link
+              href="/contact"
+              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#00DEFF] via-[#00C4E8] to-[#0088CC] px-6 py-3.5 font-sans text-sm font-semibold text-[#0A0A0A] shadow-[0_0_28px_rgba(0,222,255,0.35)] transition hover:brightness-110"
+            >
+              {current.cta}
+              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/15">
+                <ArrowRight size={14} />
+              </span>
+            </Link>
           </motion.div>
         </div>
       </div>
