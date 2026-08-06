@@ -49,7 +49,7 @@ export function HomeServices() {
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Three focused services. *Zero fluff.*
+            Three focused services. Zero fluff.
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

@@ -1,127 +1,199 @@
 'use client'
 
-import { useRef } from 'react'
+import { useMemo, useState } from 'react'
 import Link from 'next/link'
-import { motion, useScroll, useTransform } from 'framer-motion'
-import {
-  ArrowRight,
-  Globe,
-  LayoutDashboard,
-  Users,
-  Zap,
-  Shield,
-  Cpu,
-} from 'lucide-react'
+import { motion } from 'framer-motion'
 import { AnimatedHeading } from './animated-heading'
-import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const orbitIcons = [
-  { Icon: Globe, label: 'Web' },
-  { Icon: LayoutDashboard, label: 'Admin' },
-  { Icon: Users, label: 'CRM' },
-  { Icon: Zap, label: 'Speed' },
-  { Icon: Shield, label: 'Secure' },
-  { Icon: Cpu, label: 'Build' },
+type PlanId = 'website' | 'software' | 'crm'
+
+const plans: {
+  id: PlanId
+  label: string
+  title: string
+  priceNote: string
+  features: string[]
+}[] = [
+  {
+    id: 'website',
+    label: 'Website',
+    title: 'Website Development',
+    priceNote: 'Custom sites for any business',
+    features: [
+      'Brand-matched landing pages',
+      'Ecommerce or business layouts',
+      'Mobile-first structure',
+      'Launch-ready contact flows',
+    ],
+  },
+  {
+    id: 'software',
+    label: 'Software',
+    title: 'Custom Software',
+    priceNote: 'Admin panels & app systems',
+    features: [
+      'Inventory, health, shop, HR modules',
+      'Role-based access',
+      'Workflow alerts & dashboards',
+      'Built around your process',
+    ],
+  },
+  {
+    id: 'crm',
+    label: 'CRM',
+    title: 'CRM Solutions',
+    priceNote: 'People & pipeline clarity',
+    features: [
+      'Customers + employees together',
+      'Pipeline and follow-ups',
+      'Team ownership visibility',
+      'Calm shared workspace',
+    ],
+  },
 ]
 
 export function HomeUnlock() {
-  const ref = useRef<HTMLElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start end', 'end start'],
-  })
-  const rotate = useTransform(scrollYProgress, [0, 1], [0, 40])
+  const [active, setActive] = useState<PlanId>('website')
+  const current = useMemo(
+    () => plans.find((p) => p.id === active) ?? plans[0],
+    [active],
+  )
 
   return (
-    <section ref={ref} className="relative overflow-hidden py-24 sm:py-32">
+    <section className="relative overflow-hidden py-24 sm:py-32">
       <div className="pointer-events-none absolute inset-0 opacity-[0.2] stars-bg" />
-      <div className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[800px] -translate-x-1/2 rounded-full bg-[#00DEFF]/10 blur-[120px]" />
-      <div className="pointer-events-none absolute bottom-0 right-0 h-[600px] w-[600px] rounded-full bg-[#0088CC]/15 blur-[120px]" />
+      <div className="pointer-events-none absolute left-1/2 top-0 h-[420px] w-[720px] -translate-x-1/2 rounded-full bg-[#00DEFF]/10 blur-[120px]" />
 
-      <div className="relative mx-auto grid max-w-7xl grid-cols-1 items-center gap-14 px-4 sm:px-6 lg:grid-cols-12 lg:px-8">
-        <div className="lg:col-span-6">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
-          >
+      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="mb-14 max-w-2xl">
+          <span className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
             Unlock custom growth
-          </motion.span>
+          </span>
           <AnimatedHeading
             as="h2"
             variant="rise"
             className="text-3xl font-light leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Unlock systems that *actually fit* how you work
+            Choose the system you want to unlock
           </AnimatedHeading>
-          <p className="mt-5 max-w-xl text-base text-neutral-400">
-            Websites, custom software, and CRM — orbiting one craft approach.
-            Preview a mock, then we build the real thing around your customers
-            and team.
+          <p className="mt-4 text-base text-neutral-400">
+            Switch between Website, Software, and CRM — same interactive flow,
+            TrishulHub services instead of pricing tiers.
           </p>
-          <div className="mt-8 flex flex-wrap gap-3">
-            <Link
-              href="/services"
-              className="btn-cyan btn-shine inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-gradient-to-b from-[#00DEFF]/25 to-[#0088CC]/20 px-6 py-3 text-sm font-semibold text-[#00DEFF] shadow-[0_0_24px_rgba(0,222,255,0.25)]"
-            >
-              Explore services
-              <ArrowRight size={15} />
-            </Link>
-            <Link
-              href="/contact"
-              className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-semibold text-white backdrop-blur-md hover:text-[#00DEFF]"
-            >
-              Talk to us
-            </Link>
-          </div>
         </div>
 
-        <div className="relative flex items-center justify-center lg:col-span-6">
-          <div className="relative h-[320px] w-[320px] scale-[0.65] sm:h-[420px] sm:w-[420px] sm:scale-100">
-            {/* static rings */}
-            <div className="absolute inset-6 rounded-full border border-white/10 opacity-30" />
-            <div className="absolute inset-16 rounded-full border border-white/10 opacity-20" />
-            <div className="absolute inset-[5.5rem] rounded-full border border-[#00DEFF]/20 opacity-30" />
-
-            <motion.div
-              style={{ rotate }}
-              className="orbit-spin absolute inset-0"
-            >
-              {orbitIcons.map((item, i) => {
-                const angle = (i / orbitIcons.length) * Math.PI * 2
-                const r = 150
-                const x = Math.cos(angle) * r
-                const y = Math.sin(angle) * r
+        <div className="grid grid-cols-1 gap-10 lg:grid-cols-12 lg:items-start">
+          {/* Left plan buttons */}
+          <div className="relative lg:col-span-4">
+            <div className="flex flex-col gap-3">
+              {plans.map((plan) => {
+                const isActive = plan.id === active
                 return (
-                  <div
-                    key={item.label}
-                    className="absolute left-1/2 top-1/2"
-                    style={{
-                      transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-                    }}
+                  <button
+                    key={plan.id}
+                    type="button"
+                    onClick={() => setActive(plan.id)}
+                    className={`relative rounded-2xl border px-5 py-4 text-left transition-all ${
+                      isActive
+                        ? 'border-[#00DEFF]/50 bg-[#00DEFF]/10 shadow-[0_0_30px_rgba(0,222,255,0.3)]'
+                        : 'border-white/10 bg-white/[0.03] hover:border-white/20'
+                    }`}
                   >
-                    <div className="orbit-spin-reverse flex h-12 w-12 items-center justify-center rounded-2xl border border-white/15 bg-neutral-900/90 text-[#00DEFF] shadow-[0_0_20px_rgba(0,222,255,0.2)] backdrop-blur-md">
-                      <item.Icon size={18} />
+                    {isActive && (
+                      <span className="absolute -right-1.5 top-1/2 h-3 w-3 -translate-y-1/2 translate-x-full rounded-full bg-[#00DEFF] shadow-[0_0_12px_rgba(0,222,255,0.8)] lg:right-0 lg:translate-x-[18px]" />
+                    )}
+                    <div
+                      className="text-lg font-medium text-white"
+                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                    >
+                      {plan.label}
                     </div>
-                  </div>
+                    <div className="mt-1 text-xs text-neutral-400">
+                      {plan.priceNote}
+                    </div>
+                  </button>
                 )
               })}
-            </motion.div>
-
-            <div className="electric-card absolute left-1/2 top-1/2 flex h-28 w-28 -translate-x-1/2 -translate-y-1/2 flex-col items-center justify-center rounded-[24px] border border-white/10 bg-neutral-900/90 text-center backdrop-blur-md">
-              <div
-                className="text-2xl font-light text-white"
-                style={{ fontFamily: 'var(--font-space-grotesk)' }}
-              >
-                3
-              </div>
-              <div className="mt-1 text-[10px] uppercase tracking-[0.2em] text-white/45">
-                Core lanes
-              </div>
             </div>
+
+            {/* Dashed connectors (desktop) */}
+            <svg
+              className="pointer-events-none absolute left-full top-0 z-10 hidden h-full w-24 translate-y-4 lg:block"
+              viewBox="0 0 96 280"
+              fill="none"
+              aria-hidden="true"
+            >
+              {plans.map((plan, i) => {
+                const y = 36 + i * 88
+                const isActive = plan.id === active
+                return (
+                  <path
+                    key={plan.id}
+                    d={`M-8 ${y} C 30 ${y}, 30 ${160}, 70 ${160} L 96 ${160}`}
+                    stroke={isActive ? '#00DEFF' : '#525252'}
+                    strokeOpacity={isActive ? 1 : 0.55}
+                    strokeWidth="1.5"
+                    strokeDasharray="8 8"
+                    className={isActive ? 'animate-flow' : ''}
+                  />
+                )
+              })}
+            </svg>
           </div>
+
+          {/* Details card */}
+          <motion.div
+            key={current.id}
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.35 }}
+            className="electric-card relative z-10 overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] p-7 sm:p-9 lg:col-span-8"
+          >
+            <div className="text-xs uppercase tracking-[0.25em] text-[#00DEFF]">
+              Selected path
+            </div>
+            <h3
+              className="mt-3 text-3xl font-light text-white"
+              style={{ fontFamily: 'var(--font-space-grotesk)' }}
+            >
+              {current.title}
+            </h3>
+            <p className="mt-2 text-sm text-neutral-400">{current.priceNote}</p>
+
+            <ul className="mt-8 space-y-3">
+              {current.features.map((f) => (
+                <li key={f} className="flex items-start gap-3 text-sm text-neutral-200">
+                  <svg
+                    width="18"
+                    height="18"
+                    viewBox="0 0 24 24"
+                    className="mt-0.5 shrink-0 text-[#00DEFF]"
+                    fill="currentColor"
+                    aria-hidden="true"
+                  >
+                    <path d="M22 12 6 22V2z" />
+                  </svg>
+                  {f}
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-9 flex flex-wrap gap-3">
+              <Link
+                href={`/services#${current.id}`}
+                className="inline-flex items-center justify-center rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.3)]"
+              >
+                View {current.label} service
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center rounded-xl border border-white/15 bg-white/5 px-5 py-3 text-sm font-semibold text-white hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
+              >
+                Contact us
+              </Link>
+            </div>
+          </motion.div>
         </div>
       </div>
     </section>

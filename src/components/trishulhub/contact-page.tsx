@@ -44,7 +44,7 @@ export function ContactPage() {
               className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
               style={{ fontFamily: 'var(--font-space-grotesk)' }}
             >
-              Tell us what you need *built*
+              Tell us what you need built
             </AnimatedHeading>
             <p className="mt-5 max-w-xl text-base text-white/55 sm:text-lg">
               Website, custom software, or CRM — share a short note and we will

@@ -1,97 +1,134 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import {
-  ArrowRight,
-  Eye,
-  Mail,
+  Crosshair,
+  RefreshCw,
+  Shield,
   Sparkles,
-  X,
+  MessageCircle,
+  TrendingUp,
+  LayoutTemplate,
+  Boxes,
+  Gauge,
+  Users,
+  UserCheck,
+  GitBranch,
+  Globe,
+  LayoutDashboard,
+  Workflow,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
-import {
-  WebsiteOsPanel,
-  SoftwareOsPanel,
-  CrmOsPanel,
-} from '@/components/trishulhub/service-os-panels'
-import { WebsitePreviewTemplate } from '@/components/trishulhub/preview/website-preview'
-import { SoftwarePreviewTemplate } from '@/components/trishulhub/preview/software-preview'
-import { CrmPreviewTemplate } from '@/components/trishulhub/preview/crm-preview'
-import {
-  WEBSITE_TYPES,
-  type WebsiteType,
-  displayDomain,
-} from '@/lib/preview'
 import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
 type ServiceId = 'website' | 'software' | 'crm'
-type PreviewMode = ServiceId | null
 
 const services = [
   {
     id: 'website' as const,
-    num: '01',
-    title: 'Website Development',
-    headline: 'Scale your presence instantly',
-    desc: 'Custom websites for every customer need — ecommerce, business, portfolio, or local brand — designed to load fast and convert.',
-    ctaLine: 'Ready to shape your site with us?',
+    title: 'Scale your presence instantly',
+    desc: 'TrishulHub designs and builds websites for every kind of customer need — ecommerce, business, portfolio, or local brand — ready to launch and convert.',
     startLabel: 'Start building your site',
-    previewHint: 'Describe your business and hit Preview',
-    bullets: [
-      'Brand-true layouts for any industry',
-      'Mobile-first, conversion-ready structure',
-      'Preview a template before you commit',
+    actions: [
+      { icon: Sparkles, label: 'Design System' },
+      { icon: LayoutTemplate, label: 'Page Builder' },
+      { icon: TrendingUp, label: 'Convert Faster' },
     ],
-    Panel: WebsiteOsPanel,
+    rows: [
+      { topic: '#Ecommerce', reach: '1.2k', velocity: 'Medium', hot: false },
+      { topic: '#BusinessSite', reach: '3.4k', velocity: 'High', hot: true },
+    ],
+    tableHeaders: ['Site Type', 'Pages', 'Demand'] as const,
+    features: [
+      {
+        icon: Crosshair,
+        title: 'Brand-first layouts',
+        text: 'Every page is shaped around your offer, audience, and conversion goals — not a generic template dump.',
+      },
+      {
+        icon: RefreshCw,
+        title: 'Fast iteration',
+        text: 'Ship a polished first version, then refine sections, CTAs, and flows as your business grows.',
+      },
+      {
+        icon: Shield,
+        title: 'Solid foundations',
+        text: 'Mobile-ready structure, clear navigation, and performance-minded builds from day one.',
+      },
+    ],
   },
   {
     id: 'software' as const,
-    num: '02',
-    title: 'Custom Software',
-    headline: 'Run operations on your terms',
-    desc: 'Admin panels and app systems for inventory, healthcare, ecommerce ops, and any workflow your team needs day to day.',
-    ctaLine: 'Need a panel built around your process?',
+    title: 'Run operations on your terms',
+    desc: 'Custom admin panels and app systems for inventory, healthcare, ecommerce ops, HR, and any workflow your team needs day to day.',
     startLabel: 'Start designing your software',
-    previewHint: 'Describe your software and hit Preview',
-    bullets: [
-      'Role-based dashboards & controls',
-      'Mapped to inventory, health, shop, HR, and more',
-      'Brief → live admin-style preview',
+    actions: [
+      { icon: Boxes, label: 'Build Modules' },
+      { icon: Workflow, label: 'Map Workflows' },
+      { icon: Gauge, label: 'Track Ops' },
     ],
-    Panel: SoftwareOsPanel,
+    rows: [
+      { topic: '#Inventory', reach: '48', velocity: 'Stable', hot: false },
+      { topic: '#Healthcare', reach: '126', velocity: 'Critical', hot: true },
+    ],
+    tableHeaders: ['Module', 'Records', 'Priority'] as const,
+    connectLabel: 'Contact us',
+    features: [
+      {
+        icon: Crosshair,
+        title: 'Process-fit panels',
+        text: 'Screens and roles match how your staff actually works — warehouse, clinic, shop floor, or office.',
+      },
+      {
+        icon: RefreshCw,
+        title: 'Automated workflows',
+        text: 'Alerts, approvals, and status updates run in the background so teams stay ahead of the work.',
+      },
+      {
+        icon: Shield,
+        title: 'Access control',
+        text: 'Role-based permissions keep sensitive data safe while giving each user what they need.',
+      },
+    ],
   },
   {
     id: 'crm' as const,
-    num: '03',
-    title: 'CRM Solutions',
-    headline: 'Keep every relationship clear',
+    title: 'Keep every relationship clear',
     desc: 'CRM software to manage employees, customers, pipelines, and follow-ups — so your team stays aligned without chaos.',
-    ctaLine: 'Want a CRM that matches how you sell?',
     startLabel: 'Start organizing your CRM',
-    previewHint: 'Add your domain and hit Preview',
-    bullets: [
-      'Customers + employees in one place',
-      'Pipeline and follow-up visibility',
-      'CRM-themed landing preview included',
+    actions: [
+      { icon: Users, label: 'Capture Leads' },
+      { icon: MessageCircle, label: 'Follow Up' },
+      { icon: UserCheck, label: 'Close Deals' },
     ],
-    Panel: CrmOsPanel,
+    rows: [
+      { topic: '#NewLeads', reach: '84', velocity: 'Warm', hot: false },
+      { topic: '#Pipeline', reach: '17', velocity: 'Hot', hot: true },
+    ],
+    tableHeaders: ['Stage', 'Count', 'Signal'] as const,
+    connectLabel: 'Contact us',
+    features: [
+      {
+        icon: Crosshair,
+        title: 'Precision follow-ups',
+        text: 'Know who needs a reply, who is ready to buy, and which employees own each relationship.',
+      },
+      {
+        icon: RefreshCw,
+        title: 'Pipeline automation',
+        text: 'Move deals and tasks forward with reminders and status triggers that keep momentum.',
+      },
+      {
+        icon: Shield,
+        title: 'Team alignment',
+        text: 'One shared view of customers and staff — less dropped context, clearer ownership.',
+      },
+    ],
   },
 ]
 
 export function ServicesPage() {
-  const [mode, setMode] = useState<PreviewMode>(null)
-
-  useEffect(() => {
-    if (typeof window === 'undefined') return
-    const hash = window.location.hash.replace('#', '') as ServiceId
-    if (hash === 'website' || hash === 'software' || hash === 'crm') {
-      const el = document.getElementById(hash)
-      el?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-    }
-  }, [])
-
   return (
     <div className="relative pb-24 pt-28 sm:pt-32">
       <div className="pointer-events-none absolute inset-0 -z-10 opacity-[0.2] stars-bg" />
@@ -101,9 +138,8 @@ export function ServicesPage() {
           <motion.span
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 inline-flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
           >
-            <Sparkles size={14} />
             Services
           </motion.span>
           <AnimatedHeading
@@ -112,11 +148,11 @@ export function ServicesPage() {
             className="text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Three systems. *One craft studio.*
+            Three systems. One craft studio.
           </AnimatedHeading>
           <p className="mt-5 text-base text-white/55 sm:text-lg">
-            Each service uses the same high-fidelity card layout — Contact us to
-            talk, or describe your business and Preview a tailored mock.
+            Website development, custom software, and CRM — each shown in the
+            same dual-card layout with a live-style preview on the right.
           </p>
         </div>
 
@@ -127,357 +163,302 @@ export function ServicesPage() {
             hidden: {},
             visible: { transition: { staggerChildren: STAGGER.normal } },
           }}
-          className="space-y-10"
+          className="space-y-24"
         >
-          {services.map((s) => {
-            const Panel = s.Panel
-            return (
-              <motion.section
-                key={s.id}
-                id={s.id}
-                variants={{
-                  hidden: { opacity: 0, y: 48 },
-                  visible: {
-                    opacity: 1,
-                    y: 0,
-                    transition: { duration: 0.6, ease: EASE_OUT_EXPO },
-                  },
-                }}
-                className="electric-card scroll-mt-28 overflow-hidden rounded-[32px] border border-white/10 bg-white/[0.03] p-6 backdrop-blur-md sm:p-8 lg:p-10"
-              >
-                <div className="grid grid-cols-1 gap-8 lg:grid-cols-12 lg:gap-10">
-                  {/* Left copy — Scale your reach pattern */}
-                  <div className="lg:col-span-5">
-                    <div
-                      className="text-5xl font-light text-white/10 sm:text-6xl"
-                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
-                    >
-                      {s.num}
-                    </div>
-                    <div className="mt-2 text-xs font-semibold uppercase tracking-[0.25em] text-[#00DEFF]">
-                      {s.title}
-                    </div>
-                    <h2
-                      className="mt-3 text-3xl font-light leading-tight text-white sm:text-4xl"
-                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
-                    >
-                      {s.headline}
-                    </h2>
-                    <p className="mt-4 text-sm leading-relaxed text-neutral-400 sm:text-base">
-                      {s.desc}
-                    </p>
-
-                    <ul className="mt-5 space-y-2">
-                      {s.bullets.map((b) => (
-                        <li
-                          key={b}
-                          className="flex items-start gap-2 text-sm text-white/65"
-                        >
-                          <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#00DEFF]" />
-                          {b}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <p className="mt-7 text-sm text-white/70">{s.ctaLine}</p>
-                    <Link
-                      href="/contact"
-                      className="btn-cyan btn-shine mt-3 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-gradient-to-b from-[#00DEFF]/25 to-[#0088CC]/20 px-5 py-2.5 text-sm font-semibold text-[#00DEFF] shadow-[0_0_24px_rgba(0,222,255,0.2)] backdrop-blur-md hover:from-[#00DEFF]/35"
-                    >
-                      <Mail size={15} />
-                      Contact us
-                    </Link>
-
-                    <div className="mt-5 rounded-2xl border border-white/10 bg-black/30 p-4">
-                      <div className="text-xs uppercase tracking-[0.2em] text-white/40">
-                        {s.previewHint}
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => setMode(s.id)}
-                        className="btn-ghost mt-3 inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-5 py-2.5 text-sm font-semibold text-white hover:border-[#00DEFF]/45 hover:text-[#00DEFF] sm:w-auto"
-                      >
-                        <Eye size={15} />
-                        Hit Preview
-                      </button>
-                    </div>
-
-                    <Link
-                      href="/contact"
-                      className="mt-6 inline-flex items-center gap-2 text-sm font-medium text-white/80 transition-colors hover:text-[#00DEFF]"
-                    >
-                      {s.startLabel}
-                      <ArrowRight size={15} />
-                    </Link>
-                  </div>
-
-                  {/* Right OS / creative panel */}
-                  <div className="lg:col-span-7">
-                    <Panel />
-                  </div>
+          {services.map((s) => (
+            <motion.section
+              key={s.id}
+              id={s.id}
+              variants={{
+                hidden: { opacity: 0, y: 40 },
+                visible: {
+                  opacity: 1,
+                  y: 0,
+                  transition: { duration: 0.55, ease: EASE_OUT_EXPO },
+                },
+              }}
+              className="scroll-mt-28"
+            >
+              {/* Header row — title left, start CTA right */}
+              <div className="mb-8 flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
+                <div className="max-w-2xl">
+                  <h2
+                    className="text-3xl font-semibold tracking-tight text-white sm:text-4xl"
+                    style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                  >
+                    {s.title}
+                  </h2>
+                  <p className="mt-3 text-sm leading-relaxed text-neutral-400 sm:text-base">
+                    {s.desc}
+                  </p>
                 </div>
-              </motion.section>
-            )
-          })}
+                <Link
+                  href="/contact"
+                  className="inline-flex shrink-0 items-center justify-center rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition hover:brightness-110"
+                >
+                  {s.startLabel}
+                </Link>
+              </div>
+
+              {/* Equal dual cards */}
+              <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
+                <LeftAnalyticsCard service={s} />
+                <RightPreviewCard id={s.id} />
+              </div>
+
+              {/* Bottom feature trio */}
+              <div className="mt-10 grid grid-cols-1 gap-8 sm:grid-cols-3 sm:gap-6">
+                {s.features.map((f) => (
+                  <div key={f.title} className="max-w-sm">
+                    <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl border border-white/10 bg-white/[0.03] text-[#00DEFF]">
+                      <f.icon size={20} strokeWidth={1.75} />
+                    </div>
+                    <h3
+                      className="text-base font-semibold text-white"
+                      style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                    >
+                      {f.title}
+                    </h3>
+                    <p className="mt-2 text-sm leading-relaxed text-neutral-400">
+                      {f.text}
+                    </p>
+                  </div>
+                ))}
+              </div>
+            </motion.section>
+          ))}
         </motion.div>
       </div>
-
-      <PreviewModal mode={mode} onClose={() => setMode(null)} />
     </div>
   )
 }
 
-function PreviewModal({
-  mode,
-  onClose,
+function LeftAnalyticsCard({
+  service,
 }: {
-  mode: PreviewMode
-  onClose: () => void
+  service: (typeof services)[number]
 }) {
-  if (!mode) return null
-  return <PreviewModalContent key={mode} mode={mode} onClose={onClose} />
-}
-
-function PreviewModalContent({
-  mode,
-  onClose,
-}: {
-  mode: NonNullable<PreviewMode>
-  onClose: () => void
-}) {
-  const [websiteName, setWebsiteName] = useState('')
-  const [websiteType, setWebsiteType] = useState<WebsiteType>('business')
-  const [softwareDomain, setSoftwareDomain] = useState('')
-  const [softwareDesc, setSoftwareDesc] = useState('')
-  const [crmDomain, setCrmDomain] = useState('')
-  const [crmName, setCrmName] = useState('')
-  const [showResult, setShowResult] = useState(false)
-
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose()
-    }
-    window.addEventListener('keydown', onKey)
-    document.body.style.overflow = 'hidden'
-    return () => {
-      window.removeEventListener('keydown', onKey)
-      document.body.style.overflow = ''
-    }
-  }, [onClose])
-
-  const brandFromName = useMemo(() => {
-    const raw = websiteName.trim()
-    if (!raw) return 'Your Brand'
-    return raw
-      .replace(/\.(com|in|io|net|org|co).*$/i, '')
-      .replace(/[-_]+/g, ' ')
-      .replace(/\b\w/g, (c) => c.toUpperCase())
-  }, [websiteName])
-
-  const title =
-    mode === 'website'
-      ? 'Website preview'
-      : mode === 'software'
-        ? 'Custom software preview'
-        : 'CRM preview'
-
-  const canGenerate =
-    mode === 'website'
-      ? websiteName.trim().length > 1
-      : mode === 'software'
-        ? softwareDomain.trim().length > 1 && softwareDesc.trim().length > 8
-        : crmDomain.trim().length > 1
-
-  const onSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!canGenerate) return
-    setShowResult(true)
-  }
-
   return (
-    <AnimatePresence>
-      <motion.div
-        className="fixed inset-0 z-[80] flex items-end justify-center sm:items-center"
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        exit={{ opacity: 0 }}
-      >
-        <button
-          type="button"
-          aria-label="Close preview"
-          className="absolute inset-0 bg-black/70 backdrop-blur-sm"
-          onClick={onClose}
-        />
-        <motion.div
-          initial={{ opacity: 0, y: 40, scale: 0.98 }}
-          animate={{ opacity: 1, y: 0, scale: 1 }}
-          exit={{ opacity: 0, y: 20 }}
-          transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-          className="relative z-10 max-h-[92vh] w-full max-w-3xl overflow-y-auto rounded-t-3xl border border-white/10 bg-[#0A0A0A] p-5 shadow-2xl sm:rounded-3xl sm:p-7"
-        >
-          <div className="mb-5 flex items-start justify-between gap-3">
-            <div>
-              <div className="text-xs uppercase tracking-[0.25em] text-[#00DEFF]">
-                Interactive preview
-              </div>
-              <h3
-                className="mt-1 text-2xl font-bold text-white"
-                style={{ fontFamily: 'var(--font-space-grotesk)' }}
-              >
-                {title}
-              </h3>
+    <div className="electric-card flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] p-6 sm:p-7">
+      {/* Top action icons */}
+      <div className="grid grid-cols-3 gap-3">
+        {service.actions.map((a) => (
+          <div key={a.label} className="flex flex-col items-center text-center">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full border border-white/10 bg-white/[0.04] text-[#00DEFF]">
+              <a.icon size={22} strokeWidth={1.75} />
             </div>
-            <button
-              type="button"
-              onClick={onClose}
-              className="rounded-full border border-white/15 p-2 text-white/70 hover:text-white"
-            >
-              <X size={16} />
-            </button>
+            <div className="mt-3 text-xs font-medium text-neutral-300">
+              {a.label}
+            </div>
           </div>
+        ))}
+      </div>
 
-          {!showResult ? (
-            <form onSubmit={onSubmit} className="space-y-4">
-              {mode === 'website' && (
-                <>
-                  <Field label="Website / brand name">
-                    <input
-                      value={websiteName}
-                      onChange={(e) => setWebsiteName(e.target.value)}
-                      placeholder="e.g. NovaMart or novamart.com"
-                      className="field-input"
-                      required
-                    />
-                  </Field>
-                  <Field label="Website type">
-                    <select
-                      value={websiteType}
-                      onChange={(e) =>
-                        setWebsiteType(e.target.value as WebsiteType)
-                      }
-                      className="field-input"
-                    >
-                      {WEBSITE_TYPES.map((t) => (
-                        <option key={t.value} value={t.value}>
-                          {t.label}
-                        </option>
-                      ))}
-                    </select>
-                  </Field>
-                </>
-              )}
-
-              {mode === 'software' && (
-                <>
-                  <Field label="Domain / product name">
-                    <input
-                      value={softwareDomain}
-                      onChange={(e) => setSoftwareDomain(e.target.value)}
-                      placeholder="e.g. stockflow.com"
-                      className="field-input"
-                      required
-                    />
-                  </Field>
-                  <Field label="Describe your software">
-                    <textarea
-                      value={softwareDesc}
-                      onChange={(e) => setSoftwareDesc(e.target.value)}
-                      placeholder="e.g. We need an admin panel to manage warehouse inventory, suppliers, and low-stock alerts..."
-                      className="field-input min-h-[120px] resize-y"
-                      required
-                    />
-                  </Field>
-                </>
-              )}
-
-              {mode === 'crm' && (
-                <>
-                  <Field label="Domain name">
-                    <input
-                      value={crmDomain}
-                      onChange={(e) => setCrmDomain(e.target.value)}
-                      placeholder="e.g. teamreach.com"
-                      className="field-input"
-                      required
-                    />
-                  </Field>
-                  <Field label="Company / CRM name (optional)">
-                    <input
-                      value={crmName}
-                      onChange={(e) => setCrmName(e.target.value)}
-                      placeholder="e.g. TeamReach CRM"
-                      className="field-input"
-                    />
-                  </Field>
-                </>
-              )}
-
-              <button
-                type="submit"
-                disabled={!canGenerate}
-                className="btn-cyan btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-6 py-3 text-sm font-semibold text-[#00DEFF] disabled:cursor-not-allowed disabled:opacity-40"
+      {/* Topic table */}
+      <div className="mt-8 flex-1">
+        <div className="grid grid-cols-3 gap-2 border-b border-white/10 pb-2 text-[10px] font-medium uppercase tracking-[0.18em] text-neutral-500">
+          <span>{service.tableHeaders[0]}</span>
+          <span className="text-center">{service.tableHeaders[1]}</span>
+          <span className="text-right">{service.tableHeaders[2]}</span>
+        </div>
+        <div className="mt-1">
+          {service.rows.map((row) => (
+            <div
+              key={row.topic}
+              className={`grid grid-cols-3 items-center gap-2 rounded-xl px-2 py-3 text-sm ${
+                row.hot ? 'bg-white/[0.03]' : ''
+              }`}
+            >
+              <div className="flex items-center gap-2 text-neutral-300">
+                {row.hot ? (
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[#00DEFF]" />
+                ) : (
+                  <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-transparent" />
+                )}
+                {row.topic}
+              </div>
+              <div className="text-center text-neutral-400">{row.reach}</div>
+              <div
+                className={`text-right font-medium ${
+                  row.hot ? 'text-[#00DEFF]' : 'text-neutral-400'
+                }`}
               >
-                Generate preview
-                <ArrowRight size={15} />
-              </button>
-            </form>
-          ) : (
-            <div className="space-y-4">
-              <button
-                type="button"
-                onClick={() => setShowResult(false)}
-                className="text-xs text-white/45 hover:text-[#00DEFF]"
-              >
-                ← Edit details
-              </button>
-
-              {mode === 'website' && (
-                <WebsitePreviewTemplate
-                  brand={brandFromName}
-                  domain={displayDomain(websiteName)}
-                  type={websiteType}
-                />
-              )}
-              {mode === 'software' && (
-                <SoftwarePreviewTemplate
-                  domain={softwareDomain}
-                  description={softwareDesc}
-                />
-              )}
-              {mode === 'crm' && (
-                <CrmPreviewTemplate
-                  domain={crmDomain}
-                  company={crmName || brandFromDomain(crmDomain)}
-                />
-              )}
+                {row.velocity}
+              </div>
             </div>
-          )}
-        </motion.div>
-      </motion.div>
-    </AnimatePresence>
+          ))}
+        </div>
+      </div>
+
+      {/* Connect Facebook Ads style bar → Contact us */}
+      <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/40 px-4 py-3">
+        <div className="text-sm text-neutral-300">Contact TrishulHub</div>
+        <Link
+          href="/contact"
+          className="rounded-lg border border-white/15 bg-neutral-900 px-3.5 py-1.5 text-xs font-medium text-white transition hover:border-[#00DEFF]/50 hover:text-[#00DEFF]"
+        >
+          Contact us
+        </Link>
+      </div>
+    </div>
   )
 }
 
-function Field({
-  label,
-  children,
-}: {
-  label: string
-  children: React.ReactNode
-}) {
+function RightPreviewCard({ id }: { id: ServiceId }) {
+  if (id === 'website') return <WebsiteGeneralPreview />
+  if (id === 'software') return <SoftwareGeneralPreview />
+  return <CrmGeneralPreview />
+}
+
+function WebsiteGeneralPreview() {
   return (
-    <label className="block">
-      <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/40">
-        {label}
-      </span>
-      {children}
-    </label>
+    <div className="electric-card flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#111111]">
+      <div className="flex items-center gap-2 border-b border-white/10 bg-black/50 px-4 py-3">
+        <span className="h-2.5 w-2.5 rounded-full bg-red-400/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-amber-400/80" />
+        <span className="h-2.5 w-2.5 rounded-full bg-emerald-400/80" />
+        <div className="ml-2 flex-1 truncate rounded-md bg-white/5 px-3 py-1 text-center text-[11px] text-white/45">
+          https://yourbrand.com
+        </div>
+      </div>
+      <div className="flex flex-1 flex-col p-6">
+        <div className="flex items-center justify-between">
+          <div className="text-sm font-semibold text-white">Your Brand</div>
+          <div className="hidden gap-4 text-xs text-white/40 sm:flex">
+            <span>Services</span>
+            <span>About</span>
+            <span>Contact</span>
+          </div>
+        </div>
+        <div className="mt-8 flex-1">
+          <div className="text-[10px] uppercase tracking-[0.25em] text-[#00DEFF]">
+            General website preview
+          </div>
+          <h3
+            className="mt-3 max-w-sm text-2xl font-light leading-tight text-white sm:text-3xl"
+            style={{ fontFamily: 'var(--font-space-grotesk)' }}
+          >
+            A clean landing page built around your offer
+          </h3>
+          <p className="mt-3 max-w-md text-sm text-neutral-400">
+            Hero, services, proof, and contact — the default TrishulHub website
+            structure before we tailor it to your business.
+          </p>
+          <div className="mt-6 inline-flex rounded-full bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-4 py-2 text-xs font-semibold text-[#0A0A0A]">
+            Book a call
+          </div>
+        </div>
+        <div className="mt-6 grid grid-cols-3 gap-2">
+          {['Offer', 'Work', 'Contact'].map((t) => (
+            <div
+              key={t}
+              className="rounded-xl border border-white/10 bg-white/[0.03] px-3 py-4 text-center text-xs text-neutral-400"
+            >
+              {t}
+            </div>
+          ))}
+        </div>
+      </div>
+    </div>
   )
 }
 
-function brandFromDomain(domain: string) {
-  return displayDomain(domain)
-    .split('.')[0]
-    .replace(/[-_]+/g, ' ')
-    .replace(/\b\w/g, (c) => c.toUpperCase())
+function SoftwareGeneralPreview() {
+  return (
+    <div className="electric-card relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] p-6">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,222,255,0.18),transparent_55%)]" />
+      <div className="relative mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <LayoutDashboard size={14} className="text-[#00DEFF]" />
+          Ops Hub
+        </div>
+        <span className="rounded-full bg-[#00DEFF]/15 px-2.5 py-0.5 text-[10px] text-[#00DEFF]">
+          Admin preview
+        </span>
+      </div>
+
+      <div className="relative flex flex-1 flex-col items-center justify-center">
+        <div className="absolute h-48 w-48 rounded-full border border-[#00DEFF]/20" />
+        <div className="absolute h-32 w-32 rounded-full border border-[#00DEFF]/25" />
+        <div className="absolute h-16 w-16 rounded-full border border-[#00DEFF]/35" />
+        <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_40px_rgba(0,222,255,0.45)]">
+          <Boxes size={22} />
+        </div>
+        {[
+          { label: 'Stock', angle: -20 },
+          { label: 'Users', angle: 40 },
+          { label: 'Orders', angle: 100 },
+          { label: 'Reports', angle: 160 },
+          { label: 'Roles', angle: 220 },
+          { label: 'Alerts', angle: 280 },
+        ].map((item, i) => {
+          const rad = ((item.angle + i * 8) * Math.PI) / 180
+          const r = 110
+          return (
+            <div
+              key={item.label}
+              className="absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] text-[10px] text-neutral-300"
+              style={{
+                transform: `translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
+              }}
+            >
+              {item.label.slice(0, 2)}
+            </div>
+          )
+        })}
+      </div>
+      <p className="relative mt-4 text-center text-xs text-neutral-400">
+        Custom software modules orbit your core admin
+      </p>
+    </div>
+  )
+}
+
+function CrmGeneralPreview() {
+  return (
+    <div className="electric-card relative flex h-full min-h-[420px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#111111] p-6">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(0,222,255,0.16),transparent_55%)]" />
+      <div className="relative mb-4 flex items-center justify-between">
+        <div className="flex items-center gap-2 text-xs text-neutral-400">
+          <Users size={14} className="text-[#00DEFF]" />
+          CRM Hub
+        </div>
+        <span className="rounded-full bg-[#00DEFF]/15 px-2.5 py-0.5 text-[10px] text-[#00DEFF]">
+          Pipeline preview
+        </span>
+      </div>
+      <div className="relative flex flex-1 flex-col items-center justify-center">
+        <div className="absolute h-48 w-48 rounded-full border border-[#00DEFF]/15" />
+        <div className="absolute h-32 w-32 rounded-full border border-[#00DEFF]/25" />
+        <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_40px_rgba(0,222,255,0.45)]">
+          <GitBranch size={22} />
+        </div>
+        {[
+          { Icon: Users, a: 0 },
+          { Icon: MessageCircle, a: 60 },
+          { Icon: UserCheck, a: 120 },
+          { Icon: Globe, a: 180 },
+          { Icon: TrendingUp, a: 240 },
+          { Icon: LayoutDashboard, a: 300 },
+        ].map(({ Icon, a }) => {
+          const rad = (a * Math.PI) / 180
+          const r = 112
+          return (
+            <div
+              key={a}
+              className="absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] text-neutral-300"
+              style={{
+                transform: `translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
+              }}
+            >
+              <Icon size={16} />
+            </div>
+          )
+        })}
+      </div>
+      <p className="relative mt-4 text-center text-xs text-neutral-400">
+        Customers, employees, and deals in one hub
+      </p>
+    </div>
+  )
 }

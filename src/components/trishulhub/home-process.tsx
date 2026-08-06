@@ -54,7 +54,7 @@ export function HomeProcess() {
             className="text-3xl font-bold text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            From idea to *working product*
+            From idea to working product
           </AnimatedHeading>
         </div>
 

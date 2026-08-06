@@ -64,7 +64,7 @@ export function AboutPage() {
             className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-7xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            We build the systems *behind growing businesses*
+            We build the systems behind growing businesses
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 24 }}

@@ -71,7 +71,7 @@ export function Services() {
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Premium Digital *Solutions*
+            Premium Digital Solutions
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
