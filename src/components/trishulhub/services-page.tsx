@@ -14,7 +14,6 @@ import {
   Gauge,
   Users,
   UserCheck,
-  GitBranch,
   Globe,
   LayoutDashboard,
   Workflow,
