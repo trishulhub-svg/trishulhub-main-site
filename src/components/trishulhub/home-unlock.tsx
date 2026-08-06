@@ -141,7 +141,7 @@ export function HomeUnlock() {
 
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.1] stars-bg" />
+      <div className="pointer-events-none absolute inset-0 opacity-[0.28] stars-bg" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-0">
@@ -193,7 +193,7 @@ export function HomeUnlock() {
             </div>
           </div>
 
-          {/* MIDDLE — long dashed connectors, measured to button centers */}
+          {/* MIDDLE — long dashed connectors (desktop) */}
           <div
             ref={bridgeRef}
             className="relative hidden lg:col-span-3 lg:block"
@@ -209,10 +209,17 @@ export function HomeUnlock() {
                 const isActive = line.id === active
                 const y = Math.round(line.y * 10) / 10
                 const end = Math.round(midY * 10) / 10
+                // Web Development gets a strong S-curve; others stay distinct arcs
+                const d =
+                  line.id === 'website'
+                    ? `M0 ${y} C 48 ${y - 78}, 96 ${end + 92}, 168 ${end - 8} S 210 ${end}, 240 ${end}`
+                    : line.id === 'software'
+                      ? `M0 ${y} C 70 ${y - 18}, 130 ${end + 22}, 180 ${end} L 240 ${end}`
+                      : `M0 ${y} C 55 ${y + 64}, 110 ${end - 72}, 180 ${end} L 240 ${end}`
                 return (
                   <path
                     key={line.id}
-                    d={`M0 ${y} C 90 ${y}, 120 ${end}, 180 ${end} L 240 ${end}`}
+                    d={d}
                     stroke={isActive ? '#00DEFF' : '#525252'}
                     strokeOpacity={isActive ? 1 : 0.45}
                     strokeWidth="1.75"
@@ -221,6 +228,60 @@ export function HomeUnlock() {
                   />
                 )
               })}
+            </svg>
+          </div>
+
+          {/* Mobile curved connectors — visible below plan buttons */}
+          <div
+            className="relative mx-auto h-28 w-full max-w-md lg:hidden"
+            aria-hidden="true"
+          >
+            <svg
+              className="absolute inset-0 h-full w-full overflow-visible"
+              viewBox="0 0 360 112"
+              fill="none"
+              preserveAspectRatio="xMidYMid meet"
+            >
+              {(
+                [
+                  {
+                    id: 'website' as PlanId,
+                    d: 'M 60 6 C 40 40, 100 58, 180 104',
+                  },
+                  {
+                    id: 'software' as PlanId,
+                    d: 'M 180 6 C 180 42, 180 70, 180 104',
+                  },
+                  {
+                    id: 'crm' as PlanId,
+                    d: 'M 300 6 C 320 40, 260 58, 180 104',
+                  },
+                ] as const
+              ).map((line) => {
+                const isActive = line.id === active
+                return (
+                  <path
+                    key={line.id}
+                    d={line.d}
+                    stroke={isActive ? '#00DEFF' : '#525252'}
+                    strokeOpacity={isActive ? 1 : 0.4}
+                    strokeWidth={isActive ? 2 : 1.5}
+                    strokeDasharray="7 7"
+                    strokeLinecap="round"
+                    className={isActive ? 'animate-flow' : undefined}
+                  />
+                )
+              })}
+              <motion.circle
+                key={active}
+                cx={180}
+                cy={104}
+                r={5}
+                fill="#00DEFF"
+                initial={{ scale: 0, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ type: 'spring', stiffness: 320, damping: 18 }}
+              />
             </svg>
           </div>
 

@@ -33,7 +33,6 @@ const tickerItems = [
 export function HomeServices() {
   return (
     <section id="services" className="relative overflow-hidden py-24 sm:py-32">
-      {/* Ambient blobs — cyan theme */}
       <div
         aria-hidden="true"
         className="pointer-events-none absolute -left-40 top-[-120px] h-[600px] w-[600px] rounded-full bg-[#00DEFF]/10 blur-[120px]"
@@ -63,7 +62,8 @@ export function HomeServices() {
           </AnimatedHeading>
         </div>
 
-        <div className="grid grid-cols-1 gap-5 lg:grid-cols-2 lg:gap-6">
+        {/* Equal-height cards so bottom headings sit on one parallel row on desktop */}
+        <div className="grid grid-cols-1 items-stretch gap-5 lg:grid-cols-2 lg:gap-6">
           <AutomationCard />
           <ImpactCard />
         </div>
@@ -83,12 +83,13 @@ function AutomationCard() {
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-      className="group relative overflow-hidden rounded-[28px] border border-white/10 bg-[#111111] p-6 sm:p-8"
+      className="group relative flex h-full min-h-[460px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#111111] p-6 sm:p-8"
     >
       <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-[#00DEFF]/10 blur-3xl transition-opacity group-hover:opacity-100" />
 
-      <div className="relative mb-6 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
+      {/* Top heading — aligned with right card heading */}
+      <div className="relative mb-6 flex min-h-[48px] items-center gap-3">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
           <Gauge size={20} />
         </div>
         <h3 className="font-display text-lg font-semibold text-white sm:text-xl">
@@ -96,23 +97,24 @@ function AutomationCard() {
         </h3>
       </div>
 
-      <div className="relative space-y-5">
-        {pipelines.map((p) => (
-          <PipelineRow key={p.name} {...p} active={inView} />
+      <div className="relative flex-1 space-y-6">
+        {pipelines.map((p, i) => (
+          <PipelineRow key={p.name} {...p} active={inView} delay={i * 180} />
         ))}
       </div>
 
-      <div className="relative mt-8 border-t border-white/10 pt-6">
-        <div className="mb-2 flex items-center gap-2 text-[#00DEFF]">
-          <Zap size={16} />
+      {/* Bottom heading — parallel with Engineered for Impact */}
+      <div className="relative mt-auto border-t border-white/10 pt-6">
+        <div className="mb-2 flex min-h-[28px] items-center gap-2 text-[#00DEFF]">
+          <Zap size={16} className="shrink-0" />
           <h4 className="font-display text-base font-semibold text-white">
             Intelligent Workflow Automation
           </h4>
         </div>
-        <p className="font-sans text-sm leading-relaxed text-neutral-400">
+        <p className="min-h-[60px] font-sans text-sm leading-relaxed text-neutral-400">
           Monitor process efficiency, task completion, and system automation in
-          real-time. We build custom engines that eliminate manual bottlenecks,
-          reduce human error.
+          real-time. We build custom engines that eliminate manual bottlenecks
+          and reduce human error.
         </p>
       </div>
     </motion.div>
@@ -124,49 +126,102 @@ function PipelineRow({
   tag,
   pct,
   active,
+  delay = 0,
 }: {
   name: string
   tag: string
   pct: number
   active: boolean
+  delay?: number
 }) {
   const [value, setValue] = useState(0)
+  const [glow, setGlow] = useState(false)
 
   useEffect(() => {
     if (!active) return
     let raf = 0
-    const start = performance.now()
-    const duration = 1200
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration)
-      const eased = 1 - Math.pow(1 - t, 3)
-      setValue(Math.round(eased * pct))
-      if (t < 1) raf = requestAnimationFrame(tick)
+    let start = 0
+    const duration = 1400
+    const timeout = window.setTimeout(() => {
+      setGlow(true)
+      start = performance.now()
+      const tick = (now: number) => {
+        const t = Math.min(1, (now - start) / duration)
+        const eased = 1 - Math.pow(1 - t, 3)
+        setValue(Math.round(eased * pct))
+        if (t < 1) raf = requestAnimationFrame(tick)
+      }
+      raf = requestAnimationFrame(tick)
+    }, delay)
+    return () => {
+      window.clearTimeout(timeout)
+      cancelAnimationFrame(raf)
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [active, pct])
+  }, [active, pct, delay])
 
   return (
-    <div>
-      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
+    <motion.div
+      initial={{ opacity: 0, x: -12 }}
+      animate={active ? { opacity: 1, x: 0 } : undefined}
+      transition={{ duration: 0.45, delay: delay / 1000, ease: EASE_OUT_EXPO }}
+      className="rounded-2xl border border-white/5 bg-white/[0.02] p-4"
+    >
+      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
         <div className="font-sans text-sm font-medium text-white">{name}</div>
         <span className="rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/10 px-2.5 py-0.5 font-sans text-[10px] font-medium uppercase tracking-wider text-[#00DEFF]">
           {tag}
         </span>
       </div>
       <div className="flex items-center gap-3">
-        <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
-          <div
-            className="h-full rounded-full bg-gradient-to-r from-[#00DEFF] to-[#0088CC]"
+        <div className="relative h-3 flex-1 overflow-hidden rounded-full bg-white/10">
+          <motion.div
+            className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-[#00DEFF] via-[#33E6FF] to-[#0088CC]"
+            animate={
+              glow
+                ? {
+                    width: `${value}%`,
+                    boxShadow: [
+                      '0 0 10px rgba(0,222,255,0.35)',
+                      '0 0 22px rgba(0,222,255,0.7)',
+                      '0 0 10px rgba(0,222,255,0.35)',
+                    ],
+                  }
+                : { width: `${value}%`, boxShadow: '0 0 0 rgba(0,222,255,0)' }
+            }
+            transition={{
+              width: { duration: 0.05 },
+              boxShadow: { duration: 1.6, repeat: Infinity, ease: 'easeInOut' },
+            }}
             style={{ width: `${value}%` }}
           />
+          {/* looping shimmer */}
+          {glow && (
+            <motion.div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-y-0 bg-gradient-to-r from-transparent via-white/50 to-transparent"
+              initial={{ left: '-30%' }}
+              animate={{ left: '120%' }}
+              transition={{
+                duration: 1.8,
+                delay: delay / 1000 + 0.2,
+                repeat: Infinity,
+                repeatDelay: 0.9,
+                ease: 'easeInOut',
+              }}
+              style={{ width: '28%' }}
+            />
+          )}
         </div>
-        <div className="w-10 text-right font-display text-sm font-semibold text-[#00DEFF]">
+        <motion.div
+          key={value}
+          initial={{ scale: 0.85, opacity: 0.5 }}
+          animate={{ scale: 1, opacity: 1 }}
+          className="w-12 text-right font-display text-base font-semibold tabular-nums text-[#00DEFF]"
+        >
           {value}%
-        </div>
+        </motion.div>
       </div>
-    </div>
+    </motion.div>
   )
 }
 
@@ -198,12 +253,13 @@ function ImpactCard() {
       whileInView={{ opacity: 1, y: 0, scale: 1 }}
       viewport={{ once: true, amount: 0.2 }}
       transition={{ duration: 0.55, delay: 0.08, ease: EASE_OUT_EXPO }}
-      className="group relative flex min-h-[420px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#111111] p-6 sm:p-8"
+      className="group relative flex h-full min-h-[460px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#111111] p-6 sm:p-8"
     >
       <div className="pointer-events-none absolute -left-10 top-[-80px] h-56 w-56 rounded-full bg-[#0088CC]/15 blur-3xl transition-opacity group-hover:opacity-100" />
 
-      <div className="relative mb-5 flex items-center gap-3">
-        <div className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
+      {/* Top heading — same row height as left card */}
+      <div className="relative mb-6 flex min-h-[48px] items-center gap-3">
+        <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
           <Activity size={20} />
         </div>
         <h3 className="font-display text-lg font-semibold text-white sm:text-xl">
@@ -211,8 +267,7 @@ function ImpactCard() {
         </h3>
       </div>
 
-      {/* Infinite vertical ticker */}
-      <div className="relative mb-6 h-48 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
+      <div className="relative mb-6 min-h-[200px] flex-1 overflow-hidden rounded-2xl border border-white/10 bg-black/40">
         <div className="pointer-events-none absolute inset-x-0 top-0 z-10 h-8 bg-gradient-to-b from-[#111111] to-transparent" />
         <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 h-8 bg-gradient-to-t from-[#111111] to-transparent" />
         <div ref={trackRef} className="will-change-transform">
@@ -228,14 +283,18 @@ function ImpactCard() {
         </div>
       </div>
 
+      {/* Bottom heading — same row structure as Intelligent Workflow Automation */}
       <div className="relative mt-auto border-t border-white/10 pt-6">
-        <h4 className="font-display text-base font-semibold text-white">
-          Engineered for Impact
-        </h4>
-        <p className="mt-2 font-sans text-sm leading-relaxed text-neutral-400">
+        <div className="mb-2 flex min-h-[28px] items-center gap-2 text-[#00DEFF]">
+          <Sparkles size={16} className="shrink-0" />
+          <h4 className="font-display text-base font-semibold text-white">
+            Engineered for Impact
+          </h4>
+        </div>
+        <p className="min-h-[60px] font-sans text-sm leading-relaxed text-neutral-400">
           We don&apos;t just build software; we accelerate business growth.
-          Explore the measurable outcomes and operational excellence Avg.
-          Deployment: 15 days
+          Explore the measurable outcomes and operational excellence. Avg.
+          Deployment: 15 days.
         </p>
       </div>
     </motion.div>

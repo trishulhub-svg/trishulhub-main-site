@@ -4,7 +4,7 @@ const SPLINE_SCENE =
   'https://my.spline.design/reactiveorb-s0GzgSco0uSVSXvwMHuJvPQs/'
 
 /**
- * Fixed Spline orb — kept very low so content stays readable.
+ * Fixed Spline orb — visible enough to feel present, soft wash so copy stays readable.
  */
 export function SplineBackground() {
   return (
@@ -18,11 +18,11 @@ export function SplineBackground() {
         frameBorder={0}
         width="100%"
         height="100%"
-        className="h-full w-full border-0 opacity-[0.16]"
+        className="h-full w-full scale-110 border-0 opacity-[0.42]"
         loading="eager"
         allow="autoplay"
       />
-      <div className="absolute inset-0 bg-[#050505]/55" />
+      <div className="absolute inset-0 bg-[#050505]/28" />
     </div>
   )
 }
