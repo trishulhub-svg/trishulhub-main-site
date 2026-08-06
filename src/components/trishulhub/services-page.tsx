@@ -73,7 +73,6 @@ const services = [
       { topic: '#Healthcare', reach: '126', velocity: 'Critical', hot: true },
     ],
     tableHeaders: ['Module', 'Records', 'Priority'] as const,
-    connectLabel: 'Contact us',
     features: [
       {
         icon: Crosshair,
@@ -107,7 +106,6 @@ const services = [
       { topic: '#Pipeline', reach: '17', velocity: 'Hot', hot: true },
     ],
     tableHeaders: ['Stage', 'Count', 'Signal'] as const,
-    connectLabel: 'Contact us',
     features: [
       {
         icon: Crosshair,
