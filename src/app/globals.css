@@ -515,6 +515,81 @@
   animation: flowDash 1.2s linear infinite;
 }
 
+/* Primary CTA — infinite auto-hover glow pulse */
+@keyframes th-btn-glow-idle {
+  0%,
+  42% {
+    opacity: 1;
+  }
+  58%,
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes th-btn-glow-hover {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  58%,
+  100% {
+    opacity: 1;
+  }
+}
+@keyframes th-btn-arrow {
+  0%,
+  42% {
+    transform: translateX(0);
+  }
+  58%,
+  100% {
+    transform: translateX(4px);
+  }
+}
+
+.th-glow-idle {
+  opacity: 1;
+  animation: th-btn-glow-idle 2.8s ease-in-out infinite;
+  transition: opacity 1.2s ease-in-out;
+}
+.th-glow-on {
+  opacity: 0;
+  animation: th-btn-glow-hover 2.8s ease-in-out infinite;
+  transition: opacity 1.2s ease-in-out;
+}
+.th-glow-arrow {
+  animation: th-btn-arrow 2.8s ease-in-out infinite;
+  transition: transform 0.3s ease;
+}
+
+/* Real hover pauses auto pulse and locks to hover look */
+.th-glow-btn:hover .th-glow-idle {
+  animation: none;
+  opacity: 0;
+}
+.th-glow-btn:hover .th-glow-on {
+  animation: none;
+  opacity: 1;
+}
+.th-glow-btn:hover .th-glow-arrow {
+  animation: none;
+  transform: translateX(4px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .th-glow-idle,
+  .th-glow-on,
+  .th-glow-arrow {
+    animation: none !important;
+  }
+  .th-glow-idle {
+    opacity: 1;
+  }
+  .th-glow-on {
+    opacity: 0;
+  }
+}
+
 /* Get-in-touch noodle beams */
 @keyframes noodleFlow {
   0% {

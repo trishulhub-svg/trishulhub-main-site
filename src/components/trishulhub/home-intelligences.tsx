@@ -18,15 +18,15 @@ const intelligences = [
 
 /** Hub box 80×80 centered at (450, 380) → top border y=340 */
 const HUB_TOP = 340
-/** Line ends below icon + label so text is clear */
-const LINE_END_Y = 108
+/** Just under icon labels — close, not overlapping text */
+const LINE_END_Y = 82
 
 const paths = intelligences.map((item) => {
   const endX = item.x
   const midX = 450 + (endX - 450) * 0.35
   return {
-    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 70}, ${endX} ${LINE_END_Y}`,
-    len: 380 + Math.abs(endX - 450) * 0.32,
+    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 55}, ${endX} ${LINE_END_Y}`,
+    len: 360 + Math.abs(endX - 450) * 0.3,
   }
 })
 
