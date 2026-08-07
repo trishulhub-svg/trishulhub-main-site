@@ -6,9 +6,8 @@ import { AnimatedHeading } from './animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const VB_W = 900
-const VB_H = 400
+const VB_H = 420
 
-/** Icon centers in viewBox — lines end at bottom edge of icon boxes (y≈56) */
 const intelligences = [
   { name: 'GitHub', src: '/images/logos/github.svg', x: 90 },
   { name: 'Turso', src: '/images/logos/turso.svg', x: 270 },
@@ -17,16 +16,17 @@ const intelligences = [
   { name: 'Cursor', src: '/images/logos/cursor.svg', x: 810 },
 ]
 
-/** Hub box: 80×80 centered at (450, 360) → top border at y=320 */
-const HUB_TOP = 320
-const ICON_BOTTOM = 56
+/** Hub box 80×80 centered at (450, 380) → top border y=340 */
+const HUB_TOP = 340
+/** Line ends below icon + label so text is clear */
+const LINE_END_Y = 108
 
 const paths = intelligences.map((item) => {
   const endX = item.x
   const midX = 450 + (endX - 450) * 0.35
   return {
-    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 80}, ${midX} ${ICON_BOTTOM + 80}, ${endX} ${ICON_BOTTOM}`,
-    len: 420 + Math.abs(endX - 450) * 0.35,
+    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 70}, ${endX} ${LINE_END_Y}`,
+    len: 380 + Math.abs(endX - 450) * 0.32,
   }
 })
 
@@ -60,8 +60,7 @@ export function HomeIntelligences() {
         </div>
 
         <div className="relative mx-auto mt-14 w-full max-w-5xl sm:mt-16">
-          <div className="relative aspect-[900/400] w-full">
-            {/* Lines — from hub box top border to icons (no dots) */}
+          <div className="relative aspect-[900/420] w-full">
             <svg
               viewBox={`0 0 ${VB_W} ${VB_H}`}
               className="absolute inset-0 h-full w-full"
@@ -92,7 +91,6 @@ export function HomeIntelligences() {
               ))}
             </svg>
 
-            {/* Icons — centers share x with path ends */}
             {intelligences.map((item, i) => (
               <motion.div
                 key={item.name}
@@ -120,19 +118,19 @@ export function HomeIntelligences() {
                     className="h-5 w-5 object-contain brightness-0 invert sm:h-6 sm:w-6"
                   />
                 </span>
-                <span className="mt-1.5 hidden font-sans text-[10px] text-neutral-400 sm:block">
+                <span className="relative z-20 mt-1.5 hidden bg-transparent font-sans text-[10px] text-neutral-400 sm:block">
                   {item.name}
                 </span>
               </motion.div>
             ))}
 
-            {/* Hub box — same size, larger logo; lines meet top border */}
+            {/* Same box size — larger centered logo */}
             <div
-              className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
-              style={{ top: `${(360 / VB_H) * 100}%` }}
+              className="absolute left-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+              style={{ top: `${(380 / VB_H) * 100}%` }}
             >
               <span
-                className="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-[#00DEFF]/15 p-1.5 ring-2 ring-[#00DEFF]/45 sm:h-20 sm:w-20 sm:p-2"
+                className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-[#00DEFF]/15 p-0.5 ring-2 ring-[#00DEFF]/45 sm:h-20 sm:w-20 sm:p-1"
                 style={{
                   boxShadow:
                     '0 0 24px rgba(0,222,255,0.55), 0 0 48px rgba(0,222,255,0.28)',
@@ -142,9 +140,9 @@ export function HomeIntelligences() {
                 <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={72}
-                  height={72}
-                  className="h-full w-full object-contain"
+                  width={80}
+                  height={80}
+                  className="h-[92%] w-[92%] object-contain object-center"
                 />
               </span>
             </div>

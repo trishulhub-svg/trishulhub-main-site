@@ -9,7 +9,7 @@ import {
   type ReactNode,
 } from 'react'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import gsap from 'gsap'
 
 type NexusButtonProps = {
   href: string
@@ -24,35 +24,53 @@ const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'
 const FS = `
 precision highp float;
 uniform vec2 u_res;
-uniform float u_time, u_level, u_tilt, u_slosh;
-float h(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+uniform float u_time;
+uniform float u_arcs;
+uniform float u_flash;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
 float noise(vec2 p){
   vec2 i=floor(p), f=fract(p);
   vec2 u=f*f*(3.0-2.0*f);
-  return mix(mix(h(i),h(i+vec2(1.,0.)),u.x),mix(h(i+vec2(0.,1.)),h(i+vec2(1.,1.)),u.x),u.y);
+  return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);
 }
 float fbm(vec2 p){
   float v=0.0; float a=0.5;
-  for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.04+vec2(11.3,7.1); a*=0.5; }
+  for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.05+vec2(9.7,3.1); a*=0.5; }
   return v;
 }
+float sdRBox(vec2 p, vec2 b, float r){
+  vec2 q = abs(p) - b + r;
+  return length(max(q, 0.0)) + min(max(q.x, q.y), 0.0) - r;
+}
 void main(){
-  vec2 uv = gl_FragCoord.xy / u_res;
-  float x = uv.x * (u_res.x / u_res.y);
+  vec2 p = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
+  float ar = u_res.x / u_res.y;
+  vec2 hs = vec2(ar * 0.5 - 0.2, 0.5 - 0.2);
+  float d = sdRBox(p, hs, 0.14);
   float t = u_time;
-  float amp = 0.012 + u_slosh * 0.045;
-  float surf = u_level + u_tilt * (uv.x - 0.5) * 0.34
-    + amp * sin(x * 5.1 + t * 4.6)
-    + amp * 0.62 * sin(x * 9.7 - t * 6.8 + 1.7);
-  float d = surf - uv.y;
-  vec3 col = mix(vec3(0.02, 0.04, 0.07), vec3(0.04, 0.07, 0.12), uv.y);
-  float inside = smoothstep(0.0, 0.012, d);
-  vec3 liq = mix(vec3(0.0, 0.87, 1.0), vec3(0.0, 0.22, 0.45), clamp(d/max(u_level,0.001),0.0,1.0));
-  liq *= 0.8 + 0.42 * fbm(vec2(x * 4.2, (uv.y + t * 0.14) * 4.2));
-  col = mix(col, liq, inside);
-  col += vec3(0.0, 0.87, 1.0) * exp(-abs(d) * 80.0) * 0.85;
-  vec2 e = uv * (1.0 - uv);
-  col *= 0.55 + 0.45 * pow(e.x * e.y * 16.0, 0.22);
+  float hover = clamp(u_arcs / 6.0, 0.0, 1.0);
+  vec3 col = vec3(0.039, 0.039, 0.039);
+  float plate = 1.0 - smoothstep(-0.004, 0.004, d);
+  vec3 plateCol = vec3(0.04, 0.05, 0.055) + vec3(0.014, 0.022, 0.035) * fbm(p * 9.0);
+  plateCol += vec3(0.0, 0.25, 0.3) * exp(d * 9.0) * (0.25 + hover * 0.6);
+  col = mix(col, plateCol, plate);
+  col *= 1.0 + 0.5 * exp(-max(d, 0.0) * 16.0) * (1.0 - plate);
+  float a = atan(p.y, p.x);
+  vec3 arcCol = vec3(0.0);
+  for (int i = 0; i < 6; i++) {
+    float fi = float(i);
+    float w = clamp(u_arcs - fi, 0.0, 1.0);
+    float n1 = fbm(vec2(a * 2.4 + fi * 11.3, t * (1.6 + fi * 0.27) + fi * 53.1));
+    float off = (n1 - 0.5) * (0.11 + u_flash * 0.1);
+    float seg = 0.3 + 0.7 * smoothstep(0.35, 0.75, noise(vec2(a * 1.8 + fi * 7.7, t * (0.9 + fi * 0.13) + fi * 19.0)));
+    float g = 0.0042 / (abs(d + off) + 0.006);
+    arcCol += (vec3(0.0, 0.75, 0.9) * g + vec3(0.6, 1.0, 0.95) * g * g * 0.55) * w * seg;
+  }
+  float outerMask = 1.0 - smoothstep(0.04, 0.15, d);
+  col += arcCol * (0.6 + 0.4 * hover) * outerMask;
+  float ring = 0.006 / (abs(d) + 0.006);
+  col += vec3(0.8, 0.98, 1.0) * ring * u_flash * 1.5 * outerMask;
+  col += vec3(0.7, 0.95, 1.0) * u_flash * 0.16 * outerMask;
   gl_FragColor = vec4(col, 1.0);
 }
 `
@@ -65,65 +83,89 @@ function createShader(gl: WebGLRenderingContext, type: number, src: string) {
   return s
 }
 
+type ValenceState = {
+  arcs: number
+  arcsTarget: number
+  flash: number
+  crawl: number
+  last: number
+  running: boolean
+}
+
 /**
- * Primary CTA — liquid WebGL fill (Valence-style single shell, no outer border frame).
- * TrishulHub cyan + Space Grotesk. Falls back to solid cyan without WebGL.
+ * Valence Core primary CTA — electric arc WebGL plate, no outer border frame.
+ * TrishulHub cyan + Space Grotesk label.
  */
 export function NexusButton({
   href,
   children,
   className = '',
   fullWidth = false,
-  showArrow = true,
 }: NexusButtonProps) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const btnRef = useRef<HTMLAnchorElement>(null)
   const reactId = useId()
+  const stateRef = useRef<ValenceState>({
+    arcs: 2.4,
+    arcsTarget: 2.4,
+    flash: 0,
+    crawl: 0,
+    last: 0,
+    running: true,
+  })
 
-  const onPointerMove = useCallback((e: React.MouseEvent | React.PointerEvent) => {
-    const btn = btnRef.current
-    if (!btn) return
-    const state = (btn as HTMLElement & { __nexus?: NexusState }).__nexus
-    if (!state) return
-    const rect = btn.getBoundingClientRect()
-    const x = (e.clientX - rect.left) / rect.width
-    if (state.lastX !== null) {
-      state.slosh = Math.min(1.4, state.slosh + Math.abs(x - state.lastX) * 2.6)
+  const onEnter = useCallback(() => {
+    stateRef.current.arcsTarget = 5.8
+    if (btnRef.current) btnRef.current.style.transform = 'translateY(-2px)'
+  }, [])
+
+  const onLeave = useCallback(() => {
+    stateRef.current.arcsTarget = 2.4
+    if (btnRef.current) btnRef.current.style.transform = 'translateY(0)'
+  }, [])
+
+  const onDown = useCallback(() => {
+    if (btnRef.current) {
+      btnRef.current.style.transform = 'translateY(1px) scale(0.99)'
     }
-    state.lastX = x
-    state.tiltT = (x - 0.5) * 2
   }, [])
 
-  const onPointerLeave = useCallback(() => {
-    const btn = btnRef.current
-    if (!btn) return
-    const state = (btn as HTMLElement & { __nexus?: NexusState }).__nexus
-    if (!state) return
-    state.lastX = null
-    state.tiltT = 0
+  const onUp = useCallback(() => {
+    if (btnRef.current) btnRef.current.style.transform = 'translateY(-2px)'
+    stateRef.current.flash = 1
   }, [])
 
-  const onClick = useCallback(() => {
+  // Entrance flicker
+  useEffect(() => {
     const btn = btnRef.current
     if (!btn) return
-    const state = (btn as HTMLElement & { __nexus?: NexusState }).__nexus
-    if (!state) return
-    state.gulp = 1
-    state.slosh = Math.min(1.4, state.slosh + 0.7)
-  }, [])
+    gsap.fromTo(
+      btn,
+      { opacity: 0, scale: 0.92 },
+      {
+        keyframes: [
+          { opacity: 0, scale: 0.92, duration: 0 },
+          { opacity: 0.85, duration: 0.1 },
+          { opacity: 0.12, duration: 0.07 },
+          { opacity: 0.92, duration: 0.1 },
+          { opacity: 0.35, duration: 0.08 },
+          { opacity: 1, scale: 1.015, duration: 0.15 },
+          { opacity: 1, scale: 1, duration: 0.65 },
+        ],
+        ease: 'none',
+      },
+    )
+  }, [reactId])
 
   useEffect(() => {
     const canvas = canvasRef.current
     const btn = btnRef.current
     if (!canvas || !btn) return
 
-    const gl = canvas.getContext('webgl', {
-      alpha: false,
-      antialias: false,
-      powerPreference: 'low-power',
-    })
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    const gl = canvas.getContext('webgl', { alpha: false, antialias: true })
     if (!gl) {
-      btn.style.background = '#00DEFF'
+      btn.style.background = '#062630'
       return
     }
 
@@ -150,26 +192,17 @@ export function NexusButton({
 
     const uRes = gl.getUniformLocation(prog, 'u_res')
     const uTime = gl.getUniformLocation(prog, 'u_time')
-    const uLevel = gl.getUniformLocation(prog, 'u_level')
-    const uTilt = gl.getUniformLocation(prog, 'u_tilt')
-    const uSlosh = gl.getUniformLocation(prog, 'u_slosh')
+    const uArcs = gl.getUniformLocation(prog, 'u_arcs')
+    const uFlash = gl.getUniformLocation(prog, 'u_flash')
 
-    const state: NexusState = {
-      level: 0.56,
-      gulp: 0,
-      slosh: 0.4,
-      tilt: 0,
-      tiltT: 0,
-      lastX: null,
-      last: 0,
-      running: true,
-    }
-    ;(btn as HTMLElement & { __nexus?: NexusState }).__nexus = state
+    const state = stateRef.current
+    state.running = true
+    state.last = performance.now()
 
     const resize = () => {
       const dpr = Math.min(window.devicePixelRatio || 1, 2)
-      const w = Math.floor(btn.clientWidth * dpr)
-      const h = Math.floor(btn.clientHeight * dpr)
+      const w = Math.round(btn.clientWidth * dpr)
+      const h = Math.round(btn.clientHeight * dpr)
       if (canvas.width !== w || canvas.height !== h) {
         canvas.width = w
         canvas.height = h
@@ -180,20 +213,17 @@ export function NexusButton({
     let raf = 0
     const render = (now: number) => {
       if (!state.running) return
-      const dt = Math.min(0.05, (now - state.last) / 1000 || 0.016)
+      const dt = Math.min(0.05, (now - state.last) / 1000)
       state.last = now
-      state.slosh *= Math.exp(-1.5 * dt)
-      state.gulp *= Math.exp(-1.1 * dt)
-      state.tilt += (state.tiltT - state.tilt) * Math.min(1, dt * 5)
-      state.level +=
-        (0.56 - 0.36 * state.gulp - state.level) * Math.min(1, dt * 5.5)
+      state.arcs += (state.arcsTarget - state.arcs) * Math.min(1, dt * 5)
+      state.flash *= Math.exp(-3.6 * dt)
+      state.crawl += dt * (0.6 + (state.arcs / 6) * 1.1 + state.flash * 2.0)
 
       resize()
       gl.uniform2f(uRes, canvas.width, canvas.height)
-      gl.uniform1f(uTime, now / 1000)
-      gl.uniform1f(uLevel, state.level)
-      gl.uniform1f(uTilt, state.tilt)
-      gl.uniform1f(uSlosh, state.slosh)
+      gl.uniform1f(uTime, reduced ? 3.0 : state.crawl)
+      gl.uniform1f(uArcs, state.arcs)
+      gl.uniform1f(uFlash, state.flash)
       gl.drawArrays(gl.TRIANGLES, 0, 3)
       raf = requestAnimationFrame(render)
     }
@@ -226,52 +256,44 @@ export function NexusButton({
 
   const shellStyle: CSSProperties = fullWidth
     ? { display: 'block', width: '100%' }
-    : { display: 'inline-block' }
+    : { display: 'inline-flex', justifyContent: 'center' }
 
   return (
-    <div className={`relative group ${className}`} style={shellStyle}>
-      {/* Single shell only — no outer rectangle / gradient border frame */}
+    <div className={`relative ${className}`} style={shellStyle}>
+      {/* Single shell only — no outer rectangle border */}
       <Link
         ref={btnRef}
         href={href}
-        id={`nexus-btn-${reactId}`}
-        onMouseMove={onPointerMove}
-        onMouseLeave={onPointerLeave}
-        onClick={onClick}
-        className={`relative flex h-[58px] items-center justify-center overflow-hidden rounded-2xl border-0 bg-[#050b11] p-0 transition-all duration-300 ease-out hover:-translate-y-[1px] active:translate-y-[1px] active:scale-[0.985] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] ${
-          fullWidth ? 'w-full' : 'min-w-[220px] max-w-full px-7 sm:min-w-[250px]'
+        id={`btn-valence-${reactId}`}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+        onMouseDown={onDown}
+        onMouseUp={onUp}
+        className={`group relative flex h-[72px] items-center justify-center rounded-[18px] bg-transparent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00DEFF] focus-visible:ring-offset-2 focus-visible:ring-offset-neutral-950 sm:h-[84px] ${
+          fullWidth ? 'w-full' : 'w-[240px] max-w-full sm:w-[280px]'
         }`}
         style={{
-          boxShadow:
-            '0 18px 40px rgba(4,24,36,0.4), 0 2px 8px rgba(5,10,15,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+          transition: 'transform .22s cubic-bezier(.34, 1.4, .5, 1)',
+          opacity: 0,
+          transform: 'scale(0.92)',
         }}
       >
         <canvas
           ref={canvasRef}
-          aria-hidden="true"
-          className="pointer-events-none absolute inset-0 block h-full w-full"
+          aria-hidden
+          className="absolute inset-0 block h-full w-full rounded-[18px]"
+          style={{ filter: 'drop-shadow(0 0 15px rgba(0, 222, 255, 0.22))' }}
         />
         <span
-          className="relative z-10 flex items-center gap-2 whitespace-nowrap font-display text-[13px] font-medium tracking-[0.14em] text-[#e0faff] sm:text-sm sm:tracking-[0.18em]"
-          style={{ textShadow: '0 1px 10px rgba(0,18,25,0.85)' }}
+          className="relative z-10 pointer-events-none font-display text-sm font-medium tracking-[0.22em] text-[#e0f7f8]"
+          style={{
+            textShadow:
+              '0 0 12px rgba(0, 210, 255, .6), 0 1px 4px rgba(0, 0, 0, .8)',
+          }}
         >
           {children}
-          {showArrow ? (
-            <ArrowRight size={16} className="opacity-80" strokeWidth={2} />
-          ) : null}
         </span>
       </Link>
     </div>
   )
-}
-
-type NexusState = {
-  level: number
-  gulp: number
-  slosh: number
-  tilt: number
-  tiltT: number
-  lastX: number | null
-  last: number
-  running: boolean
 }
