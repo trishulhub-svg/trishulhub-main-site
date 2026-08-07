@@ -4,6 +4,7 @@ import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mail, MapPin, Send } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
+import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function ContactPage() {
@@ -67,6 +68,7 @@ export function ContactPage() {
           </div>
 
           <motion.form
+            id="contact-form"
             style={{ y: formY }}
             initial={{ opacity: 0, y: 40 }}
             animate={{ opacity: 1, y: 0 }}
@@ -139,6 +141,8 @@ export function ContactPage() {
           </motion.form>
         </div>
       </div>
+
+      <HomeGetInTouch />
     </div>
   )
 }

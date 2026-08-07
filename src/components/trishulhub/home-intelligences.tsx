@@ -1,11 +1,14 @@
 'use client'
 
-import Image from 'next/image'
 import { motion } from 'framer-motion'
 import { Plug, Network, BrainCircuit } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
+const VB_W = 900
+const VB_H = 400
+
+/** Icon centers in viewBox — lines end at bottom edge of icon boxes (y≈56) */
 const intelligences = [
   { name: 'GitHub', src: '/images/logos/github.svg', x: 90 },
   { name: 'Turso', src: '/images/logos/turso.svg', x: 270 },
@@ -14,13 +17,18 @@ const intelligences = [
   { name: 'Cursor', src: '/images/logos/cursor.svg', x: 810 },
 ]
 
-const paths = [
-  { d: 'M450 320 C 450 210, 220 130, 90 48', len: 580 },
-  { d: 'M450 320 C 450 220, 340 140, 270 48', len: 500 },
-  { d: 'M450 320 C 450 160, 450 90, 450 48', len: 280 },
-  { d: 'M450 320 C 450 220, 560 140, 630 48', len: 500 },
-  { d: 'M450 320 C 450 210, 680 130, 810 48', len: 580 },
-]
+/** Hub box: 80×80 centered at (450, 360) → top border at y=320 */
+const HUB_TOP = 320
+const ICON_BOTTOM = 56
+
+const paths = intelligences.map((item) => {
+  const endX = item.x
+  const midX = 450 + (endX - 450) * 0.35
+  return {
+    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 80}, ${midX} ${ICON_BOTTOM + 80}, ${endX} ${ICON_BOTTOM}`,
+    len: 420 + Math.abs(endX - 450) * 0.35,
+  }
+})
 
 export function HomeIntelligences() {
   return (
@@ -51,75 +59,15 @@ export function HomeIntelligences() {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-16 max-w-5xl sm:mt-20">
-          {/* Top icon row */}
-          <div className="relative z-10 flex items-start justify-between gap-2 px-1 sm:px-6">
-            {intelligences.map((item, i) => (
-              <motion.div
-                key={item.name}
-                initial={{ opacity: 0, y: -12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
-                transition={{
-                  duration: 0.55,
-                  delay: i * 0.08,
-                  ease: EASE_OUT_EXPO,
-                }}
-                className="flex flex-col items-center gap-2"
-              >
-                <span className="inline-flex h-12 w-12 items-center justify-center rounded-xl bg-white/5 text-white ring-1 ring-white/15 sm:h-14 sm:w-14">
-                  <Image
-                    src={item.src}
-                    alt={item.name}
-                    width={26}
-                    height={26}
-                    className="h-6 w-6 object-contain brightness-0 invert sm:h-7 sm:w-7"
-                  />
-                </span>
-                <span className="hidden font-sans text-[11px] text-neutral-400 sm:block">
-                  {item.name}
-                </span>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* Animated connection field */}
-          <div className="relative mt-2 h-72 sm:h-80 lg:h-96">
+        <div className="relative mx-auto mt-14 w-full max-w-5xl sm:mt-16">
+          <div className="relative aspect-[900/400] w-full">
+            {/* Lines — from hub box top border to icons (no dots) */}
             <svg
-              viewBox="0 0 900 380"
+              viewBox={`0 0 ${VB_W} ${VB_H}`}
               className="absolute inset-0 h-full w-full"
               fill="none"
               aria-hidden="true"
             >
-              <defs>
-                <filter id="cyanGlow" x="-50%" y="-50%" width="200%" height="200%">
-                  <feGaussianBlur stdDeviation="3" result="blur" />
-                  <feMerge>
-                    <feMergeNode in="blur" />
-                    <feMergeNode in="SourceGraphic" />
-                  </feMerge>
-                </filter>
-              </defs>
-
-              {intelligences.map((item, i) => (
-                <circle
-                  key={`dot-${item.name}`}
-                  cx={item.x}
-                  cy={48}
-                  r={5}
-                  fill="#00DEFF"
-                  filter="url(#cyanGlow)"
-                >
-                  <animate
-                    attributeName="opacity"
-                    values="0.45;1;0.45"
-                    dur="2s"
-                    begin={`${i * 0.2}s`}
-                    repeatCount="indefinite"
-                  />
-                </circle>
-              ))}
-
               {paths.map((p, i) => (
                 <path
                   key={p.d}
@@ -144,28 +92,65 @@ export function HomeIntelligences() {
               ))}
             </svg>
 
-            {/* Center TrishulHub logo (replaces lightning) */}
-            <div className="absolute bottom-3 left-1/2 z-10 -translate-x-1/2 sm:bottom-4">
+            {/* Icons — centers share x with path ends */}
+            {intelligences.map((item, i) => (
+              <motion.div
+                key={item.name}
+                initial={{ opacity: 0, y: -10 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, amount: 0.4 }}
+                transition={{
+                  duration: 0.5,
+                  delay: i * 0.06,
+                  ease: EASE_OUT_EXPO,
+                }}
+                className="absolute z-10 flex -translate-x-1/2 flex-col items-center"
+                style={{
+                  left: `${(item.x / VB_W) * 100}%`,
+                  top: 0,
+                }}
+              >
+                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/5 text-white ring-1 ring-white/15 sm:h-12 sm:w-12">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={item.src}
+                    alt=""
+                    width={24}
+                    height={24}
+                    className="h-5 w-5 object-contain brightness-0 invert sm:h-6 sm:w-6"
+                  />
+                </span>
+                <span className="mt-1.5 hidden font-sans text-[10px] text-neutral-400 sm:block">
+                  {item.name}
+                </span>
+              </motion.div>
+            ))}
+
+            {/* Hub box — same size, larger logo; lines meet top border */}
+            <div
+              className="absolute left-1/2 z-10 -translate-x-1/2 -translate-y-1/2"
+              style={{ top: `${(360 / VB_H) * 100}%` }}
+            >
               <span
-                className="inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-[#00DEFF]/15 ring-2 ring-[#00DEFF]/45 sm:h-20 sm:w-20"
+                className="inline-flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-[#00DEFF]/15 p-1.5 ring-2 ring-[#00DEFF]/45 sm:h-20 sm:w-20 sm:p-2"
                 style={{
                   boxShadow:
                     '0 0 24px rgba(0,222,255,0.55), 0 0 48px rgba(0,222,255,0.28)',
                 }}
               >
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={48}
-                  height={48}
-                  className="h-10 w-10 object-contain sm:h-12 sm:w-12"
+                  width={72}
+                  height={72}
+                  className="h-full w-full object-contain"
                 />
               </span>
             </div>
           </div>
         </div>
 
-        {/* Bottom traits */}
         <div className="mx-auto mt-14 max-w-3xl text-neutral-300 sm:mt-16">
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm sm:gap-5 sm:text-base">
             <div className="inline-flex items-center gap-2.5">

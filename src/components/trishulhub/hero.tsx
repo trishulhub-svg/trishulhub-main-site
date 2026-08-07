@@ -62,15 +62,15 @@ export function Hero() {
             width="100%"
             height="100%"
             id="aura-spline"
-            className="absolute inset-0 h-full w-full border-0"
+            className="absolute inset-0 h-full w-full border-0 opacity-45"
             loading="lazy"
             allow="autoplay"
           />
         ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.14),transparent_60%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.1),transparent_60%)]" />
         )}
-        {/* Soft wash so copy stays readable */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/35 via-[#050505]/45 to-[#050505]" />
+        {/* Stronger wash so Spline sits further back */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/55 via-[#050505]/65 to-[#050505]" />
       </div>
 
       <motion.div

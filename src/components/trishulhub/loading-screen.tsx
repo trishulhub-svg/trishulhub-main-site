@@ -4,9 +4,10 @@ import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import gsap from 'gsap'
 
+const LAUNCH_KEY = 'trishulhub-launched'
+
 const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'
 
-/* TrishulHub cyan portal particles (adapted from launch button) */
 const FS = `
 precision highp float;
 uniform vec2 u_res;
@@ -57,7 +58,8 @@ function compile(gl: WebGLRenderingContext, type: number, src: string) {
 }
 
 /**
- * Interactive loader — logo + LAUNCH portal. Site opens only after click.
+ * One-time LAUNCH gate — button only. Skipped after first launch in this tab
+ * (sessionStorage), so returning to Home never shows it again.
  */
 export function LoadingScreen() {
   const [mounted, setMounted] = useState(false)
@@ -77,13 +79,23 @@ export function LoadingScreen() {
   })
 
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 0)
+    const t = setTimeout(() => {
+      try {
+        if (sessionStorage.getItem(LAUNCH_KEY) === '1') {
+          setDone(true)
+          setMounted(true)
+          return
+        }
+      } catch {
+        /* ignore */
+      }
+      setMounted(true)
+    }, 0)
     return () => clearTimeout(t)
   }, [])
 
-  // Intro + parallax
   useEffect(() => {
-    if (!mounted || !containerRef.current) return
+    if (!mounted || done || !containerRef.current) return
     const el = containerRef.current
     gsap.fromTo(
       el,
@@ -92,23 +104,14 @@ export function LoadingScreen() {
         opacity: 1,
         scale: 1,
         filter: 'blur(0px)',
-        duration: 1.1,
+        duration: 1.0,
         ease: 'back.out(1.7)',
       },
     )
+  }, [mounted, done])
 
-    const onMove = (e: MouseEvent) => {
-      const x = (e.clientX / window.innerWidth - 0.5) * 15
-      const y = (e.clientY / window.innerHeight - 0.5) * 15
-      gsap.to(el, { x, y, duration: 2, ease: 'power2.out' })
-    }
-    document.addEventListener('mousemove', onMove)
-    return () => document.removeEventListener('mousemove', onMove)
-  }, [mounted])
-
-  // WebGL portal
   useEffect(() => {
-    if (!mounted) return
+    if (!mounted || done) return
     const canvas = canvasRef.current
     const btn = btnRef.current
     if (!canvas || !btn) return
@@ -186,13 +189,18 @@ export function LoadingScreen() {
       cancelAnimationFrame(raf)
       gl.getExtension('WEBGL_lose_context')?.loseContext()
     }
-  }, [mounted])
+  }, [mounted, done])
 
   const launch = useCallback(() => {
     if (exiting) return
     stateRef.current.flash = 1
     stateRef.current.warp = 1
     setExiting(true)
+    try {
+      sessionStorage.setItem(LAUNCH_KEY, '1')
+    } catch {
+      /* ignore */
+    }
 
     const overlay = containerRef.current?.closest('[data-loader-root]')
     if (overlay) {
@@ -200,116 +208,69 @@ export function LoadingScreen() {
         opacity: 0,
         scale: 1.06,
         filter: 'blur(12px)',
-        duration: 0.75,
+        duration: 0.7,
         ease: 'power2.inOut',
         onComplete: () => setDone(true),
       })
     } else {
-      setTimeout(() => setDone(true), 700)
+      setTimeout(() => setDone(true), 650)
     }
   }, [exiting])
 
-  if (!mounted) return null
+  if (!mounted || done) return null
 
   return (
     <AnimatePresence>
-      {!done && (
-        <motion.div
-          data-loader-root
-          className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0A0A]"
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.35 }}
-        >
-          <div
-            className="pointer-events-none absolute h-[500px] w-[500px] rounded-full opacity-40 blur-3xl"
-            style={{
-              background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)',
+      <motion.div
+        data-loader-root
+        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0A0A]"
+        exit={{ opacity: 0 }}
+        transition={{ duration: 0.3 }}
+      >
+        <div
+          className="pointer-events-none absolute h-[420px] w-[420px] rounded-full opacity-35 blur-3xl"
+          style={{
+            background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)',
+          }}
+        />
+
+        <div ref={containerRef} className="relative z-10 will-change-transform">
+          <button
+            ref={btnRef}
+            type="button"
+            onClick={launch}
+            onMouseEnter={() => {
+              stateRef.current.warpTarget = 1
             }}
-          />
-
-          <div className="relative z-10 flex flex-col items-center px-4">
-            <motion.div
-              initial={{ scale: 0.7, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className="relative"
-            >
-              <motion.div
-                animate={{ rotate: 360 }}
-                transition={{ repeat: Infinity, duration: 8, ease: 'linear' }}
-                className="pointer-events-none absolute -inset-6 rounded-full opacity-60"
-                style={{
-                  background:
-                    'conic-gradient(from 0deg, transparent 0deg, #00DEFF 90deg, transparent 180deg, #0088CC 270deg, transparent 360deg)',
-                  filter: 'blur(14px)',
-                }}
+            onMouseLeave={() => {
+              stateRef.current.warpTarget = 0
+            }}
+            disabled={exiting}
+            className="group relative block h-[78px] w-[264px] cursor-pointer rounded-[24px] border-0 bg-[linear-gradient(180deg,#2a3a44_0%,#0a1218_55%,#1a2830_100%)] p-[7px] outline-none transition-all duration-300 ease-[cubic-bezier(.34,1.4,.5,1)] hover:-translate-y-[2px] focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] active:translate-y-[1px] active:scale-[0.985] disabled:pointer-events-none"
+            style={{
+              boxShadow:
+                '0 26px 52px rgba(4,24,36,.35), 0 3px 10px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.14)',
+            }}
+          >
+            <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[17px] bg-[#050b11] shadow-[inset_0_2px_8px_rgba(0,0,0,.9)]">
+              <canvas
+                ref={canvasRef}
+                className="absolute inset-0 block h-full w-full"
+                aria-hidden
               />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/trishulhub-logo.png"
-                alt="TrishulHub logo"
-                className="relative h-24 w-24 object-contain sm:h-32 sm:w-32"
+              <span
+                className="relative z-10 pointer-events-none font-display text-sm font-medium uppercase tracking-[0.34em] text-[#e8fbff]"
                 style={{
-                  filter:
-                    'drop-shadow(0 0 18px rgba(0,222,255,0.6)) drop-shadow(0 0 36px rgba(0,136,204,0.35))',
+                  textShadow:
+                    '0 0 14px rgba(0,222,255,.55), 0 1px 6px rgba(0,0,0,.9)',
                 }}
-              />
-            </motion.div>
-
-            <div className="mt-5 flex items-center gap-2">
-              <span className="font-display text-2xl font-bold tracking-[0.2em] sm:text-4xl">
-                <span className="text-white">TRISHUL</span>
-                <span className="gradient-text">HUB</span>
+              >
+                Launch
               </span>
-            </div>
-
-            <p className="mt-3 font-sans text-xs uppercase tracking-[0.28em] text-white/40">
-              Ready when you are
-            </p>
-
-            {/* LAUNCH portal button */}
-            <div className="relative mt-10 flex items-center justify-center py-4">
-              <div ref={containerRef} className="will-change-transform">
-                <button
-                  ref={btnRef}
-                  id="ignition-btn"
-                  type="button"
-                  onClick={launch}
-                  onMouseEnter={() => {
-                    stateRef.current.warpTarget = 1
-                  }}
-                  onMouseLeave={() => {
-                    stateRef.current.warpTarget = 0
-                  }}
-                  disabled={exiting}
-                  className="group relative block h-[78px] w-[264px] cursor-pointer rounded-[24px] border-0 bg-[linear-gradient(180deg,#2a3a44_0%,#0a1218_55%,#1a2830_100%)] p-[7px] outline-none transition-all duration-300 ease-[cubic-bezier(.34,1.4,.5,1)] hover:-translate-y-[2px] hover:shadow-[0_32px_64px_rgba(0,180,220,.28),0_4px_12px_rgba(0,0,0,.4),inset_0_1px_0_rgba(255,255,255,.16)] focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] active:translate-y-[1px] active:scale-[0.985] disabled:pointer-events-none"
-                  style={{
-                    boxShadow:
-                      '0 26px 52px rgba(4,24,36,.35), 0 3px 10px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.14)',
-                  }}
-                >
-                  <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[17px] bg-[#050b11] shadow-[inset_0_2px_8px_rgba(0,0,0,.9)]">
-                    <canvas
-                      ref={canvasRef}
-                      className="absolute inset-0 block h-full w-full"
-                      aria-hidden
-                    />
-                    <span
-                      className="relative z-10 pointer-events-none font-display text-sm font-medium uppercase tracking-[0.34em] text-[#e8fbff]"
-                      style={{
-                        textShadow:
-                          '0 0 14px rgba(0,222,255,.55), 0 1px 6px rgba(0,0,0,.9)',
-                      }}
-                    >
-                      Launch
-                    </span>
-                  </span>
-                </button>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-      )}
+            </span>
+          </button>
+        </div>
+      </motion.div>
     </AnimatePresence>
   )
 }
