@@ -1,9 +1,9 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Mail } from 'lucide-react'
+import { Mail } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
+import { NexusButton } from './nexus-button'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function CTA() {
@@ -38,18 +38,7 @@ export function CTA() {
               we will shape a solution that fits your customers and your team.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <Link
-                href="/contact"
-                className="btn-cyan btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-7 py-3.5 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:w-auto"
-              >
-                <span className="relative z-10 inline-flex items-center gap-2">
-                  Contact us
-                  <ArrowRight
-                    size={16}
-                    className="transition-transform group-hover:translate-x-1"
-                  />
-                </span>
-              </Link>
+              <NexusButton href="/contact">Contact us</NexusButton>
               <a
                 href="mailto:trishulhub@gmail.com"
                 className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#00DEFF]"

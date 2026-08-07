@@ -1,9 +1,9 @@
 'use client'
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Globe, LayoutDashboard, Users, Zap } from 'lucide-react'
+import { Globe, LayoutDashboard, Users, Zap } from 'lucide-react'
+import { NexusButton } from './nexus-button'
 
 type PlanId = 'website' | 'software' | 'crm'
 
@@ -276,15 +276,11 @@ export function HomeUnlock() {
               ))}
             </ul>
 
-            <Link
-              href="/contact"
-              className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-[#00DEFF] via-[#00C4E8] to-[#0088CC] px-6 py-3.5 font-sans text-sm font-semibold text-[#0A0A0A] shadow-[0_0_28px_rgba(0,222,255,0.35)] transition hover:brightness-110"
-            >
-              {current.cta}
-              <span className="inline-flex h-6 w-6 items-center justify-center rounded-full bg-black/15">
-                <ArrowRight size={14} />
-              </span>
-            </Link>
+            <div className="mt-8 w-full">
+              <NexusButton href="/contact" fullWidth>
+                {current.cta}
+              </NexusButton>
+            </div>
           </motion.div>
         </div>
       </div>

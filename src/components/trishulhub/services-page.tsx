@@ -14,12 +14,12 @@ import {
   Gauge,
   Users,
   UserCheck,
-  Globe,
   LayoutDashboard,
   Workflow,
   Asterisk,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
+import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
 type ServiceId = 'website' | 'software' | 'crm'
@@ -161,7 +161,7 @@ export function ServicesPage() {
             hidden: {},
             visible: { transition: { staggerChildren: STAGGER.normal } },
           }}
-          className="flex flex-col gap-20 lg:gap-28"
+          className="flex flex-col"
         >
           {services.map((s, idx) => (
             <motion.section
@@ -177,9 +177,7 @@ export function ServicesPage() {
               }}
               className="scroll-mt-28"
             >
-              {idx > 0 && (
-                <div className="mb-16 h-px w-full bg-gradient-to-r from-transparent via-white/15 to-transparent lg:mb-20" />
-              )}
+              {idx > 0 ? <ServiceConnector from={idx} /> : null}
 
               {/* Outer opaque service card */}
               <div className="overflow-hidden rounded-[28px] border border-white/10 bg-[#0F0F0F] p-6 sm:p-8 lg:p-10">
@@ -202,12 +200,9 @@ export function ServicesPage() {
                       {s.desc}
                     </p>
                   </div>
-                  <Link
-                    href="/contact"
-                    className="relative z-10 inline-flex shrink-0 items-center justify-center self-start rounded-xl bg-gradient-to-b from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition hover:brightness-110"
-                  >
-                    {s.startLabel}
-                  </Link>
+                  <div className="relative z-10 self-start">
+                    <NexusButton href="/contact">{s.startLabel}</NexusButton>
+                  </div>
                 </div>
 
                 {/* Equal dual cards */}
@@ -238,6 +233,40 @@ export function ServicesPage() {
           ))}
         </motion.div>
       </div>
+    </div>
+  )
+}
+
+function ServiceConnector({ from }: { from: number }) {
+  // Unlock-style dashed curves between service cards
+  const d =
+    from === 1
+      ? 'M 40 8 C 120 70, 280 20, 360 88'
+      : 'M 360 8 C 280 70, 120 20, 40 88'
+
+  return (
+    <div
+      className="relative mx-auto h-24 w-full max-w-xl py-2 sm:h-28"
+      aria-hidden="true"
+    >
+      <svg
+        className="absolute inset-0 h-full w-full overflow-visible"
+        viewBox="0 0 400 96"
+        fill="none"
+        preserveAspectRatio="none"
+      >
+        <path
+          d={d}
+          stroke="#00DEFF"
+          strokeOpacity="0.75"
+          strokeWidth="1.75"
+          strokeDasharray="8 8"
+          strokeLinecap="round"
+          className="animate-flow"
+        />
+        <circle cx={from === 1 ? 40 : 360} cy={8} r={4} fill="#00DEFF" />
+        <circle cx={from === 1 ? 360 : 40} cy={88} r={4} fill="#00DEFF" />
+      </svg>
     </div>
   )
 }
@@ -417,27 +446,51 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
       </div>
 
       <div className="relative flex flex-1 items-center justify-center">
-        <div className="absolute h-52 w-52 rounded-full border border-[#00DEFF]/15" />
-        <div className="absolute h-36 w-36 rounded-full border border-[#00DEFF]/25" />
-        <div className="absolute h-20 w-20 rounded-full border border-[#00DEFF]/30" />
+        {/* Slow counter-rotating rings */}
+        <div className="orbit-spin absolute h-52 w-52 rounded-full border border-dashed border-[#00DEFF]/20" />
+        <div className="orbit-spin-reverse absolute h-36 w-36 rounded-full border border-[#00DEFF]/25" />
+        <div className="absolute h-20 w-20 rounded-full border border-[#00DEFF]/35" />
+
         <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_40px_rgba(0,222,255,0.45)]">
           {center}
         </div>
-        {nodes.map((n) => {
-          const rad = (n.a * Math.PI) / 180
-          const r = 118
-          return (
-            <div
-              key={n.label}
-              className="absolute flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] font-sans text-[10px] text-neutral-300"
-              style={{
-                transform: `translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
-              }}
-            >
-              {n.label.slice(0, 2)}
-            </div>
-          )
-        })}
+
+        {/* Orbiting modules — whole ring rotates; labels counter-rotate */}
+        <div
+          className={`absolute h-[236px] w-[236px] ${
+            kind === 'software' ? 'orbit-spin' : 'orbit-spin-reverse'
+          }`}
+          style={{
+            animationDuration: kind === 'software' ? '28s' : '32s',
+          }}
+        >
+          {nodes.map((n) => {
+            const rad = (n.a * Math.PI) / 180
+            const r = 118
+            return (
+              <div
+                key={n.label}
+                className="absolute left-1/2 top-1/2"
+                style={{
+                  transform: `translate(-50%, -50%) translate(${Math.cos(rad) * r}px, ${Math.sin(rad) * r}px)`,
+                }}
+              >
+                <div
+                  className={`flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] font-sans text-[10px] text-neutral-300 shadow-[0_0_16px_rgba(0,222,255,0.15)] ${
+                    kind === 'software'
+                      ? 'orbit-spin-reverse'
+                      : 'orbit-spin'
+                  }`}
+                  style={{
+                    animationDuration: kind === 'software' ? '28s' : '32s',
+                  }}
+                >
+                  {n.label.slice(0, 2)}
+                </div>
+              </div>
+            )
+          })}
+        </div>
       </div>
       <p className="relative mt-2 text-center font-sans text-xs text-neutral-400">
         {kind === 'software'
