@@ -1,91 +1,239 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState, useCallback } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import gsap from 'gsap'
 
+const VS = 'attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}'
+
+/* TrishulHub cyan portal particles (adapted from launch button) */
+const FS = `
+precision highp float;
+uniform vec2 u_res;
+uniform float u_time;
+uniform float u_warp;
+uniform float u_flash;
+uniform float u_speed;
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453123);}
+float noise(vec2 p){
+  vec2 i=floor(p), f=fract(p);
+  vec2 u=f*f*(3.0-2.0*f);
+  return mix(mix(hash(i),hash(i+vec2(1.,0.)),u.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),u.x),u.y);
+}
+float fbm(vec2 p){
+  float v=0.0; float a=0.5;
+  for(int i=0;i<4;i++){ v+=a*noise(p); p=p*2.07+vec2(13.1,5.7); a*=0.5; }
+  return v;
+}
+void main(){
+  vec2 uv = (gl_FragCoord.xy - 0.5 * u_res) / u_res.y;
+  float r = length(uv), rr = max(r, 0.08), a = atan(uv.y, uv.x), t = u_time;
+  vec3 col = vec3(0.012, 0.02, 0.028);
+  float hz = fbm(uv * 2.6 + vec2(t * 0.35 * u_speed, 1.7));
+  col += vec3(0.02, 0.12, 0.18) * hz * (0.7 + 0.6 * u_warp);
+  for (int i = 0; i < 3; i++) {
+    float fi = float(i), ringN = 26.0 + fi * 9.0;
+    vec2 sp = vec2((a / 6.28318 + 0.5) * ringN, (0.3 + fi * 0.22) / rr + t * (2.0 + fi * 1.2) * u_speed);
+    vec2 cell = floor(sp), f = fract(sp);
+    float h = hash(cell + fi * 17.31), on = step(0.68, h);
+    vec2 c = vec2(0.2 + 0.6 * hash(cell + 4.7), 0.5), dlt = f - c;
+    float sy = mix(130.0, 8.0, u_warp), star = on * exp(-(dlt.x * dlt.x * 150.0 + dlt.y * dlt.y * sy));
+    float tw = (0.7 + 0.3 * sin(h * 81.0 + t * 9.0 * u_speed));
+    vec3 sCol = mix(vec3(0.85, 0.98, 1.0), vec3(0.0, 0.87, 1.0), step(0.9, h));
+    col += sCol * star * mix(tw, 1.0, u_warp) * smoothstep(0.02, 0.25, r) * (1.1 + 0.7 * u_warp);
+  }
+  col += vec3(0.55, 0.95, 1.0) * u_warp * 0.32 * exp(-r * 4.0);
+  col = mix(col, vec3(0.9, 0.98, 1.0), clamp(u_flash, 0.0, 1.0));
+  gl_FragColor = vec4(col, 1.0);
+}
+`
+
+function compile(gl: WebGLRenderingContext, type: number, src: string) {
+  const s = gl.createShader(type)
+  if (!s) return null
+  gl.shaderSource(s, src)
+  gl.compileShader(s)
+  return s
+}
+
+/**
+ * Interactive loader — logo + LAUNCH portal. Site opens only after click.
+ */
 export function LoadingScreen() {
-  const [progress, setProgress] = useState(0)
-  const [done, setDone] = useState(false)
-  // `mounted` ensures we only render the actual UI on the client, eliminating
-  // any chance of SSR/client hydration mismatch (the server renders nothing,
-  // the client renders the loader once mounted).
   const [mounted, setMounted] = useState(false)
-  const cleanupRef = useRef<() => void>(() => {})
+  const [done, setDone] = useState(false)
+  const [exiting, setExiting] = useState(false)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const btnRef = useRef<HTMLButtonElement>(null)
+  const stateRef = useRef({
+    warp: 0,
+    warpTarget: 0,
+    flash: 0,
+    z: 0,
+    last: 0,
+    speed: 1,
+    running: true,
+  })
 
   useEffect(() => {
-    // Defer the mount flag + animation setup to next tick so we don't call
-    // setState synchronously inside the effect body (avoids the React 19
-    // "set-state-in-effect" warning while preserving identical behaviour).
-    const kickoff = () => {
-      setMounted(true)
-      let raf = 0
-      let finishTimer: ReturnType<typeof setTimeout> | undefined
-      const start = performance.now()
-      // FAST LOAD — 900ms total (down from 1500ms). Snappy feel without
-      // feeling jarring. The user explicitly asked for "fully smooth and fast".
-      const duration = 900
-      const tick = (now: number) => {
-        const t = Math.min((now - start) / duration, 1)
-        // ease-out cubic
-        const eased = 1 - Math.pow(1 - t, 3)
-        setProgress(Math.round(eased * 100))
-        if (t < 1) {
-          raf = requestAnimationFrame(tick)
-        } else {
-          finishTimer = setTimeout(() => setDone(true), 250)
-        }
-      }
-      raf = requestAnimationFrame(tick)
-      // HARD FALLBACK: ensure the loading screen ALWAYS hides, even if RAF
-      // is throttled (backgrounded tab, low-power mode, slow device) or
-      // the tick loop stalls for any reason. 2s = 0.9s anim + 250ms delay
-      // + generous buffer.
-      const hardFallback = setTimeout(() => setDone(true), 2000)
-      cleanupRef.current = () => {
-        cancelAnimationFrame(raf)
-        if (finishTimer) clearTimeout(finishTimer)
-        clearTimeout(hardFallback)
-      }
-    }
-    const t = setTimeout(kickoff, 0)
-    return () => {
-      clearTimeout(t)
-      cleanupRef.current?.()
-    }
+    const t = setTimeout(() => setMounted(true), 0)
+    return () => clearTimeout(t)
   }, [])
 
-  // Render nothing on the server; mount on client only.
+  // Intro + parallax
+  useEffect(() => {
+    if (!mounted || !containerRef.current) return
+    const el = containerRef.current
+    gsap.fromTo(
+      el,
+      { opacity: 0, scale: 0.6, filter: 'blur(10px)' },
+      {
+        opacity: 1,
+        scale: 1,
+        filter: 'blur(0px)',
+        duration: 1.1,
+        ease: 'back.out(1.7)',
+      },
+    )
+
+    const onMove = (e: MouseEvent) => {
+      const x = (e.clientX / window.innerWidth - 0.5) * 15
+      const y = (e.clientY / window.innerHeight - 0.5) * 15
+      gsap.to(el, { x, y, duration: 2, ease: 'power2.out' })
+    }
+    document.addEventListener('mousemove', onMove)
+    return () => document.removeEventListener('mousemove', onMove)
+  }, [mounted])
+
+  // WebGL portal
+  useEffect(() => {
+    if (!mounted) return
+    const canvas = canvasRef.current
+    const btn = btnRef.current
+    if (!canvas || !btn) return
+
+    const gl = canvas.getContext('webgl', {
+      alpha: false,
+      antialias: false,
+      powerPreference: 'low-power',
+    })
+    if (!gl) return
+
+    const isMobile = window.matchMedia('(max-width: 768px)').matches
+    stateRef.current.speed = isMobile ? 1.45 : 1
+
+    const prog = gl.createProgram()
+    if (!prog) return
+    const vs = compile(gl, gl.VERTEX_SHADER, VS)
+    const fs = compile(gl, gl.FRAGMENT_SHADER, FS)
+    if (!vs || !fs) return
+    gl.attachShader(prog, vs)
+    gl.attachShader(prog, fs)
+    gl.linkProgram(prog)
+    gl.useProgram(prog)
+
+    const buf = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf)
+    gl.bufferData(
+      gl.ARRAY_BUFFER,
+      new Float32Array([-1, -1, 3, -1, -1, 3]),
+      gl.STATIC_DRAW,
+    )
+    const locP = gl.getAttribLocation(prog, 'p')
+    gl.enableVertexAttribArray(locP)
+    gl.vertexAttribPointer(locP, 2, gl.FLOAT, false, 0, 0)
+
+    const uRes = gl.getUniformLocation(prog, 'u_res')
+    const uTime = gl.getUniformLocation(prog, 'u_time')
+    const uWarp = gl.getUniformLocation(prog, 'u_warp')
+    const uFlash = gl.getUniformLocation(prog, 'u_flash')
+    const uSpeed = gl.getUniformLocation(prog, 'u_speed')
+
+    let raf = 0
+    const state = stateRef.current
+    state.running = true
+    state.last = performance.now()
+
+    const frame = (now: number) => {
+      if (!state.running) return
+      const dt = Math.min(0.05, (now - state.last) / 1000)
+      state.last = now
+      state.warp += (state.warpTarget - state.warp) * Math.min(1, dt * 2.6)
+      state.flash *= Math.exp(-4.5 * dt)
+      state.z += dt * (0.05 + state.warp * 1.35) * state.speed
+
+      const dpr = Math.min(window.devicePixelRatio || 1, 2)
+      const w = Math.floor(canvas.clientWidth * dpr)
+      const h = Math.floor(canvas.clientHeight * dpr)
+      if (canvas.width !== w || canvas.height !== h) {
+        canvas.width = w
+        canvas.height = h
+        gl.viewport(0, 0, w, h)
+      }
+      gl.uniform2f(uRes, canvas.width, canvas.height)
+      gl.uniform1f(uTime, state.z)
+      gl.uniform1f(uWarp, state.warp)
+      gl.uniform1f(uFlash, state.flash)
+      gl.uniform1f(uSpeed, state.speed)
+      gl.drawArrays(gl.TRIANGLES, 0, 3)
+      raf = requestAnimationFrame(frame)
+    }
+    raf = requestAnimationFrame(frame)
+
+    return () => {
+      state.running = false
+      cancelAnimationFrame(raf)
+      gl.getExtension('WEBGL_lose_context')?.loseContext()
+    }
+  }, [mounted])
+
+  const launch = useCallback(() => {
+    if (exiting) return
+    stateRef.current.flash = 1
+    stateRef.current.warp = 1
+    setExiting(true)
+
+    const overlay = containerRef.current?.closest('[data-loader-root]')
+    if (overlay) {
+      gsap.to(overlay, {
+        opacity: 0,
+        scale: 1.06,
+        filter: 'blur(12px)',
+        duration: 0.75,
+        ease: 'power2.inOut',
+        onComplete: () => setDone(true),
+      })
+    } else {
+      setTimeout(() => setDone(true), 700)
+    }
+  }, [exiting])
+
   if (!mounted) return null
 
   return (
     <AnimatePresence>
       {!done && (
         <motion.div
+          data-loader-root
           className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0A0A]"
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.3, ease: 'easeInOut' }}
+          transition={{ duration: 0.35 }}
         >
-          {/* Radial glow */}
           <div
-            className="pointer-events-none absolute h-[500px] w-[500px] rounded-full opacity-40 blur-3xl animate-glow-pulse"
-            style={{ background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)' }}
+            className="pointer-events-none absolute h-[500px] w-[500px] rounded-full opacity-40 blur-3xl"
+            style={{
+              background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)',
+            }}
           />
 
-          {/* Logo + wordmark */}
-          <motion.div
-            initial={{ opacity: 0, y: 18 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: 'easeOut' }}
-            className="relative z-10 flex flex-col items-center"
-          >
-            {/* Logo image with intro animation */}
+          <div className="relative z-10 flex flex-col items-center px-4">
             <motion.div
-              initial={{ scale: 0.6, opacity: 0, rotate: -8 }}
-              animate={{ scale: 1, opacity: 1, rotate: 0 }}
-              transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
+              initial={{ scale: 0.7, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
               className="relative"
             >
-              {/* Rotating glow ring behind logo */}
               <motion.div
                 animate={{ rotate: 360 }}
                 transition={{ repeat: Infinity, duration: 8, ease: 'linear' }}
@@ -96,10 +244,11 @@ export function LoadingScreen() {
                   filter: 'blur(14px)',
                 }}
               />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
                 src="/images/trishulhub-logo.png"
                 alt="TrishulHub logo"
-                className="relative h-28 w-28 object-contain sm:h-36 sm:w-36"
+                className="relative h-24 w-24 object-contain sm:h-32 sm:w-32"
                 style={{
                   filter:
                     'drop-shadow(0 0 18px rgba(0,222,255,0.6)) drop-shadow(0 0 36px rgba(0,136,204,0.35))',
@@ -107,48 +256,58 @@ export function LoadingScreen() {
               />
             </motion.div>
 
-            {/* Wordmark */}
-            <motion.div
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.35 }}
-              className="mt-6 flex items-center gap-2"
-            >
-              <span
-                className="text-3xl font-bold tracking-[0.2em] sm:text-5xl"
-                style={{
-                  filter:
-                    'drop-shadow(0 0 16px #00DEFF99) drop-shadow(0 0 32px #0088CC55)',
-                }}
-              >
+            <div className="mt-5 flex items-center gap-2">
+              <span className="font-display text-2xl font-bold tracking-[0.2em] sm:text-4xl">
                 <span className="text-white">TRISHUL</span>
                 <span className="gradient-text">HUB</span>
               </span>
-            </motion.div>
-
-            {/* Percentage */}
-            <div className="mt-8 font-mono text-5xl font-bold tabular-nums text-white sm:text-7xl">
-              {progress}
-              <span className="text-[#00DEFF]">%</span>
             </div>
 
-            {/* Progress bar */}
-            <div className="mt-6 h-[3px] w-56 overflow-hidden rounded-full bg-white/10 sm:w-72">
-              <div
-                className="h-full rounded-full transition-[width] duration-75 ease-out"
-                style={{
-                  width: `${progress}%`,
-                  background:
-                    'linear-gradient(90deg, #00DEFF 0%, #0088CC 100%)',
-                  boxShadow: '0 0 12px rgba(0,222,255,0.6)',
-                }}
-              />
-            </div>
+            <p className="mt-3 font-sans text-xs uppercase tracking-[0.28em] text-white/40">
+              Ready when you are
+            </p>
 
-            <div className="mt-4 text-xs uppercase tracking-[0.3em] text-white/40">
-              Loading
+            {/* LAUNCH portal button */}
+            <div className="relative mt-10 flex items-center justify-center py-4">
+              <div ref={containerRef} className="will-change-transform">
+                <button
+                  ref={btnRef}
+                  id="ignition-btn"
+                  type="button"
+                  onClick={launch}
+                  onMouseEnter={() => {
+                    stateRef.current.warpTarget = 1
+                  }}
+                  onMouseLeave={() => {
+                    stateRef.current.warpTarget = 0
+                  }}
+                  disabled={exiting}
+                  className="group relative block h-[78px] w-[264px] cursor-pointer rounded-[24px] border-0 bg-[linear-gradient(180deg,#2a3a44_0%,#0a1218_55%,#1a2830_100%)] p-[7px] outline-none transition-all duration-300 ease-[cubic-bezier(.34,1.4,.5,1)] hover:-translate-y-[2px] hover:shadow-[0_32px_64px_rgba(0,180,220,.28),0_4px_12px_rgba(0,0,0,.4),inset_0_1px_0_rgba(255,255,255,.16)] focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] active:translate-y-[1px] active:scale-[0.985] disabled:pointer-events-none"
+                  style={{
+                    boxShadow:
+                      '0 26px 52px rgba(4,24,36,.35), 0 3px 10px rgba(0,0,0,.35), inset 0 1px 0 rgba(255,255,255,.14)',
+                  }}
+                >
+                  <span className="relative flex h-full w-full items-center justify-center overflow-hidden rounded-[17px] bg-[#050b11] shadow-[inset_0_2px_8px_rgba(0,0,0,.9)]">
+                    <canvas
+                      ref={canvasRef}
+                      className="absolute inset-0 block h-full w-full"
+                      aria-hidden
+                    />
+                    <span
+                      className="relative z-10 pointer-events-none font-display text-sm font-medium uppercase tracking-[0.34em] text-[#e8fbff]"
+                      style={{
+                        textShadow:
+                          '0 0 14px rgba(0,222,255,.55), 0 1px 6px rgba(0,0,0,.9)',
+                      }}
+                    >
+                      Launch
+                    </span>
+                  </span>
+                </button>
+              </div>
             </div>
-          </motion.div>
+          </div>
         </motion.div>
       )}
     </AnimatePresence>

@@ -514,3 +514,41 @@
 .animate-flow {
   animation: flowDash 1.2s linear infinite;
 }
+
+/* Get-in-touch noodle beams */
+@keyframes noodleFlow {
+  0% {
+    stroke-dasharray: 40 520;
+    stroke-dashoffset: 560;
+  }
+  100% {
+    stroke-dasharray: 40 520;
+    stroke-dashoffset: -560;
+  }
+}
+.animate-noodle {
+  stroke-dasharray: 40 520;
+  animation: noodleFlow 2.8s linear infinite;
+}
+.animate-noodle-delayed {
+  stroke-dasharray: 40 520;
+  animation: noodleFlow 2.8s linear infinite;
+  animation-delay: 0.7s;
+}
+
+@keyframes beamSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.animate-beam-spin {
+  animation: beamSpin 8s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-noodle,
+  .animate-noodle-delayed,
+  .animate-beam-spin {
+    animation: none;
+  }
+}

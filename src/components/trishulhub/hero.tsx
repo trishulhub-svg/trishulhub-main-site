@@ -1,10 +1,14 @@
 'use client'
 
 import Link from 'next/link'
+import { useEffect, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FadeIn } from './motion-primitives'
 import { NexusButton } from './nexus-button'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+
+const HERO_SPLINE =
+  'https://my.spline.design/3dgradient-AcpgG6LxFkpnJSoowRHPfcbO'
 
 const heroStagger = {
   hidden: {},
@@ -22,19 +26,52 @@ const heroItem = {
 
 export function Hero() {
   const reduce = useReducedMotion()
+  const [splineReady, setSplineReady] = useState(false)
+
+  useEffect(() => {
+    let cancelled = false
+    const enable = () => {
+      if (!cancelled) setSplineReady(true)
+    }
+    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
+      const id = window.requestIdleCallback(enable, { timeout: 1600 })
+      return () => {
+        cancelled = true
+        window.cancelIdleCallback(id)
+      }
+    }
+    const t = window.setTimeout(enable, 700)
+    return () => {
+      cancelled = true
+      window.clearTimeout(t)
+    }
+  }, [])
 
   return (
     <section
       id="home"
       className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse 70% 55% at 50% 45%, transparent 0%, rgba(10,10,10,0.25) 70%, rgba(10,10,10,0.55) 100%)',
-        }}
-      />
+      {/* Hero-only Spline 3D gradient background */}
+      <div className="spline-container pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        {splineReady ? (
+          <iframe
+            src={HERO_SPLINE}
+            title="TrishulHub hero background"
+            frameBorder={0}
+            width="100%"
+            height="100%"
+            id="aura-spline"
+            className="absolute inset-0 h-full w-full border-0"
+            loading="lazy"
+            allow="autoplay"
+          />
+        ) : (
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.14),transparent_60%)]" />
+        )}
+        {/* Soft wash so copy stays readable */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/35 via-[#050505]/45 to-[#050505]" />
+      </div>
 
       <motion.div
         variants={heroStagger}
