@@ -45,10 +45,8 @@ void main(){
     + amp * sin(x * 5.1 + t * 4.6)
     + amp * 0.62 * sin(x * 9.7 - t * 6.8 + 1.7);
   float d = surf - uv.y;
-  // Deep TrishulHub navy base
   vec3 col = mix(vec3(0.02, 0.04, 0.07), vec3(0.04, 0.07, 0.12), uv.y);
   float inside = smoothstep(0.0, 0.012, d);
-  // Brand cyan liquid (#00DEFF family)
   vec3 liq = mix(vec3(0.0, 0.87, 1.0), vec3(0.0, 0.22, 0.45), clamp(d/max(u_level,0.001),0.0,1.0));
   liq *= 0.8 + 0.42 * fbm(vec2(x * 4.2, (uv.y + t * 0.14) * 4.2));
   col = mix(col, liq, inside);
@@ -68,8 +66,8 @@ function createShader(gl: WebGLRenderingContext, type: number, src: string) {
 }
 
 /**
- * Primary CTA — liquid WebGL fill in TrishulHub cyan, Space Grotesk label.
- * Falls back to solid cyan if WebGL is unavailable.
+ * Primary CTA — liquid WebGL fill (Valence-style single shell, no outer border frame).
+ * TrishulHub cyan + Space Grotesk. Falls back to solid cyan without WebGL.
  */
 export function NexusButton({
   href,
@@ -200,7 +198,6 @@ export function NexusButton({
       raf = requestAnimationFrame(render)
     }
 
-    // Pause when off-screen to keep scroll light
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -227,42 +224,43 @@ export function NexusButton({
     }
   }, [reactId])
 
-  const shellStyle: CSSProperties = fullWidth ? { display: 'block', width: '100%' } : { display: 'inline-block' }
+  const shellStyle: CSSProperties = fullWidth
+    ? { display: 'block', width: '100%' }
+    : { display: 'inline-block' }
 
   return (
     <div className={`relative group ${className}`} style={shellStyle}>
-      <div className="rounded-[19px] bg-gradient-to-b from-[#00DEFF]/30 via-neutral-800/20 to-cyan-950/40 p-[1px] shadow-2xl">
-        <Link
-          ref={btnRef}
-          href={href}
-          id={`nexus-btn-${reactId}`}
-          onMouseMove={onPointerMove}
-          onMouseLeave={onPointerLeave}
-          onClick={onClick}
-          className={`relative flex h-[58px] items-center justify-center overflow-hidden rounded-[18px] border-0 bg-[#050b11] p-0 transition-all duration-300 ease-out active:translate-y-[1px] active:scale-[0.985] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] ${
-            fullWidth ? 'w-full' : 'min-w-[220px] max-w-full px-7 sm:min-w-[250px]'
-          }`}
-          style={{
-            boxShadow:
-              '0 22px 44px rgba(4,24,36,0.35), 0 3px 9px rgba(5,10,15,0.4), inset 0 0 0 1px rgba(255,255,255,0.05)',
-          }}
+      {/* Single shell only — no outer rectangle / gradient border frame */}
+      <Link
+        ref={btnRef}
+        href={href}
+        id={`nexus-btn-${reactId}`}
+        onMouseMove={onPointerMove}
+        onMouseLeave={onPointerLeave}
+        onClick={onClick}
+        className={`relative flex h-[58px] items-center justify-center overflow-hidden rounded-2xl border-0 bg-[#050b11] p-0 transition-all duration-300 ease-out hover:-translate-y-[1px] active:translate-y-[1px] active:scale-[0.985] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#00DEFF] focus-visible:outline-offset-[5px] ${
+          fullWidth ? 'w-full' : 'min-w-[220px] max-w-full px-7 sm:min-w-[250px]'
+        }`}
+        style={{
+          boxShadow:
+            '0 18px 40px rgba(4,24,36,0.4), 0 2px 8px rgba(5,10,15,0.45), inset 0 1px 0 rgba(255,255,255,0.06)',
+        }}
+      >
+        <canvas
+          ref={canvasRef}
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0 block h-full w-full"
+        />
+        <span
+          className="relative z-10 flex items-center gap-2 whitespace-nowrap font-display text-[13px] font-medium tracking-[0.14em] text-[#e0faff] sm:text-sm sm:tracking-[0.18em]"
+          style={{ textShadow: '0 1px 10px rgba(0,18,25,0.85)' }}
         >
-          <canvas
-            ref={canvasRef}
-            aria-hidden="true"
-            className="pointer-events-none absolute inset-0 block h-full w-full"
-          />
-          <span
-            className="relative z-10 flex items-center gap-2 whitespace-nowrap font-display text-[13px] font-medium tracking-[0.14em] text-[#e0faff] sm:text-sm sm:tracking-[0.18em]"
-            style={{ textShadow: '0 1px 10px rgba(0,18,25,0.85)' }}
-          >
-            {children}
-            {showArrow ? (
-              <ArrowRight size={16} className="opacity-80" strokeWidth={2} />
-            ) : null}
-          </span>
-        </Link>
-      </div>
+          {children}
+          {showArrow ? (
+            <ArrowRight size={16} className="opacity-80" strokeWidth={2} />
+          ) : null}
+        </span>
+      </Link>
     </div>
   )
 }
