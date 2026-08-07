@@ -500,10 +500,10 @@
 }
 
 .orbit-spin {
-  animation: orbit-spin 60s linear infinite;
+  animation: orbit-spin 30s linear infinite;
 }
 .orbit-spin-reverse {
-  animation: orbit-spin 60s linear infinite reverse;
+  animation: orbit-spin 30s linear infinite reverse;
 }
 
 @keyframes flowDash {

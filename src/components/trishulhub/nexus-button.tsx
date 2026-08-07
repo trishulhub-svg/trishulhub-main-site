@@ -253,7 +253,7 @@ export function NexusButton({
             className="pointer-events-none absolute inset-0 block h-full w-full"
           />
           <span
-            className="relative z-10 flex items-center gap-2 font-display text-[12px] font-medium uppercase tracking-[0.18em] text-[#e0faff] sm:text-sm sm:tracking-[0.22em]"
+            className="relative z-10 flex items-center gap-2 whitespace-nowrap font-display text-[13px] font-medium tracking-[0.14em] text-[#e0faff] sm:text-sm sm:tracking-[0.18em]"
             style={{ textShadow: '0 1px 10px rgba(0,18,25,0.85)' }}
           >
             {children}
