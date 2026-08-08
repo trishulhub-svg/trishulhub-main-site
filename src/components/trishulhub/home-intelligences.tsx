@@ -19,7 +19,7 @@ const intelligences = [
 /** Hub box 80×80 centered at (450, 380) → top border y=340 */
 const HUB_TOP = 340
 /** Just under icon labels — close, not overlapping text */
-const LINE_END_Y = 82
+const LINE_END_Y = 90
 
 const paths = intelligences.map((item) => {
   const endX = item.x
@@ -75,9 +75,13 @@ export function HomeIntelligences() {
                   strokeWidth="2.25"
                   strokeLinecap="round"
                   fill="none"
+                  className="intel-line-shake"
                   style={{
                     strokeDasharray: p.len,
                     strokeDashoffset: p.len,
+                    animationDelay: `${i * 0.18}s`,
+                    // CSS var for dash length used by keyframes
+                    ['--intel-dash' as string]: String(p.len),
                   }}
                 >
                   <animate
@@ -108,41 +112,42 @@ export function HomeIntelligences() {
                   top: 0,
                 }}
               >
-                <span className="inline-flex h-11 w-11 items-center justify-center rounded-xl bg-white/5 text-white ring-1 ring-white/15 sm:h-12 sm:w-12">
+                <span
+                  className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-xl bg-white/5 text-white ring-1 ring-white/15 sm:h-20 sm:w-20"
+                  style={{ animationDelay: `${i * 0.22}s` }}
+                >
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img
                     src={item.src}
                     alt=""
-                    width={24}
-                    height={24}
-                    className="h-5 w-5 object-contain brightness-0 invert sm:h-6 sm:w-6"
+                    width={40}
+                    height={40}
+                    className="h-9 w-9 object-contain brightness-0 invert sm:h-11 sm:w-11"
                   />
                 </span>
-                <span className="relative z-20 mt-1.5 hidden bg-transparent font-sans text-[10px] text-neutral-400 sm:block">
+                <span className="relative z-20 mt-1.5 hidden bg-transparent font-sans text-[11px] text-neutral-400 sm:block">
                   {item.name}
                 </span>
               </motion.div>
             ))}
 
-            {/* Same box size — larger centered logo */}
+            {/* Same square border size as icons — big logo, lighter pulsed blue */}
             <div
               className="absolute left-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
               style={{ top: `${(380 / VB_H) * 100}%` }}
             >
-              <span
-                className="flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-[#00DEFF]/15 p-0.5 ring-2 ring-[#00DEFF]/45 sm:h-20 sm:w-20 sm:p-1"
-                style={{
-                  boxShadow:
-                    '0 0 24px rgba(0,222,255,0.55), 0 0 48px rgba(0,222,255,0.28)',
-                }}
-              >
+              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#0a1218] ring-1 ring-[#00DEFF]/50 sm:h-20 sm:w-20 sm:rounded-xl">
+                <span
+                  aria-hidden="true"
+                  className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#00DEFF]/25 blur-md"
+                />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={80}
-                  height={80}
-                  className="h-[92%] w-[92%] object-contain object-center"
+                  width={88}
+                  height={88}
+                  className="relative z-10 h-[94%] w-[94%] object-contain object-center"
                 />
               </span>
             </div>

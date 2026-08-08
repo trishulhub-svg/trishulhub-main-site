@@ -506,6 +506,61 @@
   animation: orbit-spin 30s linear infinite reverse;
 }
 
+@keyframes intel-shake {
+  0%,
+  100% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  20% {
+    transform: translate(0.7px, -0.55px) rotate(-0.7deg);
+  }
+  40% {
+    transform: translate(-0.55px, 0.45px) rotate(0.55deg);
+  }
+  60% {
+    transform: translate(0.45px, 0.55px) rotate(-0.45deg);
+  }
+  80% {
+    transform: translate(-0.5px, -0.4px) rotate(0.5deg);
+  }
+}
+
+@keyframes intel-line-wobble {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+@keyframes intel-hub-pulse {
+  0%,
+  100% {
+    opacity: 0.18;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.38;
+    transform: scale(1.12);
+  }
+}
+
+.intel-icon-shake {
+  animation: intel-shake 2.4s ease-in-out infinite;
+  transform-origin: center;
+}
+
+.intel-line-shake {
+  animation: intel-line-wobble 2.2s ease-in-out infinite;
+}
+
+.intel-hub-pulse {
+  animation: intel-hub-pulse 2.8s ease-in-out infinite;
+  transform-origin: center;
+}
+
 @keyframes flowDash {
   to {
     stroke-dashoffset: -32;

@@ -17,6 +17,16 @@ import {
   LayoutDashboard,
   Workflow,
   Asterisk,
+  Package,
+  ShoppingCart,
+  BarChart3,
+  ShieldCheck,
+  Bell,
+  UserPlus,
+  Handshake,
+  ListChecks,
+  PieChart,
+  type LucideIcon,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
@@ -409,23 +419,23 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
     )
   const label = kind === 'software' ? 'Ops Hub' : 'CRM Hub'
   const badge = kind === 'software' ? 'Admin preview' : 'Pipeline preview'
-  const nodes =
+  const nodes: { label: string; a: number; icon: LucideIcon }[] =
     kind === 'software'
       ? [
-          { label: 'Stock', a: 0 },
-          { label: 'Users', a: 60 },
-          { label: 'Orders', a: 120 },
-          { label: 'Reports', a: 180 },
-          { label: 'Roles', a: 240 },
-          { label: 'Alerts', a: 300 },
+          { label: 'Stock', a: 0, icon: Package },
+          { label: 'Users', a: 60, icon: Users },
+          { label: 'Orders', a: 120, icon: ShoppingCart },
+          { label: 'Reports', a: 180, icon: BarChart3 },
+          { label: 'Roles', a: 240, icon: ShieldCheck },
+          { label: 'Alerts', a: 300, icon: Bell },
         ]
       : [
-          { label: 'Leads', a: 0 },
-          { label: 'Deals', a: 60 },
-          { label: 'Team', a: 120 },
-          { label: 'Chat', a: 180 },
-          { label: 'Tasks', a: 240 },
-          { label: 'Stats', a: 300 },
+          { label: 'Leads', a: 0, icon: UserPlus },
+          { label: 'Deals', a: 60, icon: Handshake },
+          { label: 'Team', a: 120, icon: Users },
+          { label: 'Chat', a: 180, icon: MessageCircle },
+          { label: 'Tasks', a: 240, icon: ListChecks },
+          { label: 'Stats', a: 300, icon: PieChart },
         ]
 
   return (
@@ -455,7 +465,7 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
           {center}
         </div>
 
-        {/* Orbiting modules — whole ring rotates; labels counter-rotate */}
+        {/* Orbiting modules — icons + labels for software / CRM */}
         <div
           className={`absolute h-[236px] w-[236px] ${
             kind === 'software' ? 'orbit-spin' : 'orbit-spin-reverse'
@@ -467,6 +477,7 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
           {nodes.map((n) => {
             const rad = (n.a * Math.PI) / 180
             const r = 118
+            const Icon = n.icon
             return (
               <div
                 key={n.label}
@@ -476,7 +487,7 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
                 }}
               >
                 <div
-                  className={`flex h-11 w-11 items-center justify-center rounded-full border border-white/15 bg-[#0A0A0A] font-sans text-[10px] text-neutral-300 shadow-[0_0_16px_rgba(0,222,255,0.15)] ${
+                  className={`flex h-12 w-12 flex-col items-center justify-center gap-0.5 rounded-full border border-white/15 bg-[#0A0A0A] text-neutral-300 shadow-[0_0_16px_rgba(0,222,255,0.15)] ${
                     kind === 'software'
                       ? 'orbit-spin-reverse'
                       : 'orbit-spin'
@@ -485,7 +496,10 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
                     animationDuration: kind === 'software' ? '28s' : '32s',
                   }}
                 >
-                  {n.label.slice(0, 2)}
+                  <Icon size={14} className="text-[#00DEFF]" strokeWidth={2} />
+                  <span className="font-sans text-[8px] leading-none text-neutral-300">
+                    {n.label}
+                  </span>
                 </div>
               </div>
             )

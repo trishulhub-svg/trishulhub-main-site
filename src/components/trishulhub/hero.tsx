@@ -1,14 +1,10 @@
 'use client'
 
 import Link from 'next/link'
-import { useEffect, useRef, useState } from 'react'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FadeIn } from './motion-primitives'
 import { NexusButton } from './nexus-button'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-
-const HERO_SPLINE =
-  'https://my.spline.design/3dgradient-AcpgG6LxFkpnJSoowRHPfcbO'
 
 const heroStagger = {
   hidden: {},
@@ -24,74 +20,19 @@ const heroItem = {
   },
 }
 
-/**
- * Hero with deferred, opacity-softened Spline. Unloads when off-screen
- * to keep scroll light.
- */
 export function Hero() {
   const reduce = useReducedMotion()
-  const sectionRef = useRef<HTMLElement>(null)
-  const [inView, setInView] = useState(true)
-  const [splineReady, setSplineReady] = useState(false)
-
-  useEffect(() => {
-    const el = sectionRef.current
-    if (!el) return
-    const io = new IntersectionObserver(
-      ([entry]) => setInView(entry.isIntersecting),
-      { rootMargin: '80px', threshold: 0.05 },
-    )
-    io.observe(el)
-    return () => io.disconnect()
-  }, [])
-
-  useEffect(() => {
-    if (!inView || reduce) return
-    let cancelled = false
-    const enable = () => {
-      if (!cancelled) setSplineReady(true)
-    }
-    // Longer defer — keep first paint light
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      const id = window.requestIdleCallback(enable, { timeout: 2800 })
-      return () => {
-        cancelled = true
-        window.cancelIdleCallback(id)
-      }
-    }
-    const t = window.setTimeout(enable, 1400)
-    return () => {
-      cancelled = true
-      window.clearTimeout(t)
-    }
-  }, [inView, reduce])
-
-  // Unload iframe when scrolled away to free GPU
-  const showSpline = splineReady && inView && !reduce
 
   return (
     <section
-      ref={sectionRef}
       id="home"
       className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      <div className="spline-container pointer-events-none absolute inset-0 -z-10 overflow-hidden [contain:strict]">
-        {showSpline ? (
-          <iframe
-            src={HERO_SPLINE}
-            title="TrishulHub hero background"
-            frameBorder={0}
-            width="100%"
-            height="100%"
-            id="aura-spline"
-            className="absolute inset-0 h-full w-full scale-105 border-0 opacity-[0.22] will-change-transform"
-            loading="lazy"
-            allow="autoplay"
-          />
-        ) : (
-          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.08),transparent_55%)]" />
-        )}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/70 via-[#050505]/78 to-[#050505]" />
+      {/* Soft static atmosphere — no Spline / video */}
+      <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-[#050505]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.1),transparent_55%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505]" />
       </div>
 
       <motion.div
