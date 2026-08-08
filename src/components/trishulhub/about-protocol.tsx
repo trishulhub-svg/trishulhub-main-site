@@ -1,10 +1,10 @@
 'use client'
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { WHATSAPP_URL, whatsappWithMessage } from '@/lib/contacts'
 
 type Currency = 'USD' | 'INR'
 
@@ -14,15 +14,15 @@ const BUDGETS_INR = ['₹50k', '₹75k', '₹1L', '₹1.5L', '₹2L'] as const
 const STEPS = [
   {
     id: 1,
-    title: "What's your project budget?",
+    title: "What is your budget?",
     subtitle:
-      "Select the range that matches your scope. We'll fine-tune together.",
+      "Pick a range. We can adjust it later together.",
   },
   {
     id: 2,
-    title: 'Which lane fits best?',
+    title: 'Which service do you need?',
     subtitle:
-      'Custom software, web development, or CRM — pick your primary need.',
+      'Custom software, websites, or mobile apps — pick one to start.',
   },
   {
     id: 3,
@@ -31,13 +31,13 @@ const STEPS = [
   },
   {
     id: 4,
-    title: 'Ready for a flight plan?',
+    title: 'Ready to talk?',
     subtitle:
-      "Share a few details and we'll reply with a tailored plan within 48 hours.",
+      "We will message you on WhatsApp with a simple next step.",
   },
 ] as const
 
-const LANES = ['Custom Software', 'Web Development', 'CRM Solutions'] as const
+const LANES = ['Custom Software', 'Websites', 'Mobile Apps'] as const
 const TIMING = ['ASAP', 'This month', 'Next quarter', 'Flexible'] as const
 
 export function AboutProtocol({
@@ -123,11 +123,11 @@ export function AboutProtocol({
           />
           <div className="relative mx-auto max-w-3xl text-center">
             <h3 className="font-display text-3xl font-medium tracking-tight text-white md:text-4xl">
-              How TrishulHub works with you
+              Let's plan your project
             </h3>
             <p className="mt-3 font-sans text-white/70">
-              Tell us about your mission and we&apos;ll share a tailored flight
-              plan within 48 hours.
+              Tell us a few details and we will reply with a simple plan
+              within 48 hours.
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-4">
@@ -286,7 +286,7 @@ export function AboutProtocol({
                   {step === 4 && (
                     <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left">
                       <p className="font-display text-sm font-semibold text-white">
-                        Your flight plan snapshot
+                        Your project summary
                       </p>
                       <ul className="mt-3 space-y-2 font-sans text-sm text-white/70">
                         <li>
@@ -321,13 +321,17 @@ export function AboutProtocol({
                 <span>Next step</span>
               </button>
             ) : (
-              <Link
-                href={`/contact?currency=${currency}&budget=${encodeURIComponent(budget)}&lane=${encodeURIComponent(lane)}&timing=${encodeURIComponent(timing)}`}
+              <a
+                href={whatsappWithMessage(
+                  `Hi TrishulHub — project plan:\nCurrency: ${currency}\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
+                )}
+                target="_blank"
+                rel="noopener noreferrer"
                 className="group mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold tracking-tight text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition-all duration-300 hover:-translate-y-0.5"
               >
                 <ChevronRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                <span>Talk with TrishulHub</span>
-              </Link>
+                <span>Talk on WhatsApp</span>
+              </a>
             )}
           </div>
         </motion.div>

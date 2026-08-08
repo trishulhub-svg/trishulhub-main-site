@@ -77,12 +77,14 @@ export function Navbar() {
               <Lock size={13} />
               <span className="relative z-10">Login</span>
             </Link>
-            <Link
-              href="/contact"
+            <a
+              href="https://wa.me/919662106793?text=Hi%20TrishulHub%20%E2%80%94%20I%20want%20to%20talk%20about%20a%20project."
+              target="_blank"
+              rel="noopener noreferrer"
               className="btn-cyan btn-shine hidden rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-5 py-2 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:inline-block"
             >
               <span className="relative z-10">Get Started</span>
-            </Link>
+            </a>
 
             <button
               aria-label="Toggle menu"

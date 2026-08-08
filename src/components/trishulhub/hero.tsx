@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FadeIn } from './motion-primitives'
 import { NexusButton } from './nexus-button'
+import { WHATSAPP_URL } from '@/lib/contacts'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const heroStagger = {
@@ -28,7 +29,6 @@ export function Hero() {
       id="home"
       className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Soft static atmosphere — no background video */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-[#050505]" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.1),transparent_55%)]" />
@@ -47,7 +47,7 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00DEFF] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00DEFF]" />
             </span>
-            Custom digital solutions
+            Simple digital tools for your business
           </div>
         </motion.div>
 
@@ -57,7 +57,7 @@ export function Hero() {
             style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
           >
             WEBSITES. SOFTWARE.{' '}
-            <span className="gradient-text-animated">CRM THAT FITS.</span>
+            <span className="gradient-text-animated">MOBILE APPS.</span>
           </h1>
         </motion.div>
 
@@ -66,9 +66,8 @@ export function Hero() {
             className="mx-auto mt-8 max-w-2xl text-base text-white/70 sm:text-lg md:text-xl"
             style={{ textShadow: '0 2px 16px rgba(0,0,0,0.7)' }}
           >
-            TrishulHub builds custom websites, business admin panels, and CRM
-            systems shaped around how you sell, operate, and support customers —
-            not generic templates forced to fit.
+            TrishulHub builds websites, business software, and mobile apps that
+            match how you work — easy to use, built for your goals.
           </p>
         </motion.div>
 
@@ -76,12 +75,12 @@ export function Hero() {
           variants={heroItem}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <NexusButton href="/contact">Let&apos;s build yours</NexusButton>
+          <NexusButton href={WHATSAPP_URL}>Let&apos;s build yours</NexusButton>
           <Link
             href="/services"
             className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition-all hover:text-[#00DEFF] sm:w-auto"
           >
-            <span className="relative z-10">Explore services</span>
+            <span className="relative z-10">See our services</span>
           </Link>
         </motion.div>
       </motion.div>

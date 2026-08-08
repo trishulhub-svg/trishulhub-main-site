@@ -1,7 +1,6 @@
 'use client'
 
 import { useEffect, useRef, useCallback } from 'react'
-import Link from 'next/link'
 import { ArrowRight, ChevronDown } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 
@@ -74,7 +73,7 @@ export function AboutSignals() {
                 03
               </span>
               <span className="font-display text-sm font-medium uppercase tracking-[0.2em] text-neutral-500">
-                Studio signals
+                What we focus on
               </span>
             </div>
             <AnimatedHeading
@@ -82,23 +81,25 @@ export function AboutSignals() {
               variant="rise"
               className="font-display text-4xl font-light tracking-tight text-white md:text-5xl lg:text-6xl"
             >
-              Clarity for modern growth
+              Clear results for your business
             </AnimatedHeading>
             <p className="mt-3 font-display text-2xl font-light tracking-tight text-neutral-600 sm:text-3xl">
-              measured in outcomes, not noise
+              simple goals, real progress
             </p>
             <p className="max-w-xl font-sans text-lg font-light leading-relaxed text-neutral-400">
-              How we think about delivery, engagement, and service mix — the
-              signals that keep TrishulHub builds sharp for founders and teams.
+              A simple view of how we deliver work, keep clients happy, and
+              focus on the services you ask for most.
             </p>
           </div>
-          <Link
-            href="/contact"
+          <a
+            href="https://wa.me/919662106793?text=Hi%20TrishulHub%20%E2%80%94%20I%20want%20to%20talk%20about%20a%20project."
+            target="_blank"
+            rel="noopener noreferrer"
             className="group inline-flex items-center gap-2 whitespace-nowrap rounded-full bg-white px-6 py-3 font-sans text-sm font-medium text-black transition-all duration-200 hover:bg-neutral-200"
           >
-            Start a project
+            Talk on WhatsApp
             <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-          </Link>
+          </a>
         </div>
 
         <div
@@ -106,7 +107,7 @@ export function AboutSignals() {
           id="about-signals-grid"
           className="about-signals-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[400px]"
         >
-          {/* Delivery lift */}
+          {/* On-time delivery */}
           <div className="group relative flex h-[400px] flex-col justify-between overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0C] p-8 transition-colors hover:border-white/[0.15]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.12),transparent_55%)]" />
             <div
@@ -119,11 +120,10 @@ export function AboutSignals() {
             />
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Delivery lift
+                On-time delivery
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                Forecast launch readiness and scope risk before they slow a
-                build.
+We plan well so your project launches on time.
               </p>
             </div>
             <div className="relative z-10 h-36 w-full">
@@ -194,7 +194,7 @@ export function AboutSignals() {
             </div>
           </div>
 
-          {/* Build pulse — tall */}
+          {/* Project pace — tall */}
           <div className="group relative flex h-[400px] flex-col overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0C] p-8 transition-colors hover:border-white/[0.15] lg:row-span-2 lg:h-[824px]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.1),transparent_55%)]" />
             <div
@@ -211,11 +211,10 @@ export function AboutSignals() {
             />
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Build pulse
+                Project pace
               </h3>
               <p className="mt-2 max-w-[26rem] font-sans text-base font-light leading-relaxed text-neutral-400">
-                Scope vs delivery across recent months — spotting spikes and
-                capacity risk early.
+How busy we are and how fast we ship — month by month.
               </p>
             </div>
             <div className="relative z-10 flex flex-1 items-center justify-center pt-6">
@@ -336,10 +335,10 @@ export function AboutSignals() {
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.1),transparent_55%)]" />
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Client engagement
+                Happy clients
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                Predict response rates across discovery and review cycles.
+                We stay in touch so you always know what is next.
               </p>
             </div>
             <div className="relative z-10 flex flex-1 items-center justify-center">
@@ -382,15 +381,15 @@ export function AboutSignals() {
             </div>
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Close confidence
+                Project yes-rate
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                Likelihood a scoped project moves from preview to build.
+                How often a plan turns into a real build.
               </p>
             </div>
           </div>
 
-          {/* Service mix */}
+          {/* What people ask for */}
           <div className="group relative flex h-[400px] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0C] p-8 transition-colors hover:border-white/[0.15]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.1),transparent_55%)]" />
             <div className="relative z-10 mb-8 flex flex-col gap-6">
@@ -413,14 +412,14 @@ export function AboutSignals() {
                     delay: '0.1s',
                   },
                   {
-                    label: 'Web Development',
+                    label: 'Websites',
                     width: '74%',
                     value: '74%',
                     color: '#67E8F9',
                     delay: '0.2s',
                   },
                   {
-                    label: 'CRM Solutions',
+                    label: 'Mobile Apps',
                     width: '62%',
                     value: '62%',
                     color: '#0088CC',
@@ -460,10 +459,10 @@ export function AboutSignals() {
             </div>
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Service mix
+                What people ask for
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                Where demand concentrates across TrishulHub&apos;s three lanes.
+                Which services businesses ask us for most.
               </p>
             </div>
           </div>

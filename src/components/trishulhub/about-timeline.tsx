@@ -11,28 +11,28 @@ const milestones = [
     year: '2023',
     status: 'Origin',
     title: 'Website studio',
-    text: 'TrishulHub launches — brand sites and ecommerce for founders.',
+    text: 'We started by building websites for businesses.',
     icon: Globe2,
   },
   {
     year: '2024',
     status: 'Growth',
     title: 'Custom software',
-    text: 'Expanded into admin panels and ops tools for real teams.',
+    text: 'We began building custom software for teams.',
     icon: Layers3,
   },
   {
     year: '2025',
     status: 'Scale',
-    title: 'CRM + systems',
-    text: 'Pipelines, staff, and customers joined the craft stack.',
+    title: 'Mobile apps',
+    text: 'We started building mobile apps for phones.',
     icon: TrendingUp,
   },
   {
     year: 'Present',
     status: 'Active',
     title: 'Full studio',
-    text: 'Web, software, and CRM — one connected practice.',
+    text: 'Websites, software, and apps — under one roof.',
     icon: Rocket,
   },
 ]
@@ -54,7 +54,7 @@ export function AboutTimeline() {
           </span>
           <span className="inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-neutral-400">
             <CalendarRange className="h-3.5 w-3.5 text-[#00DEFF]" />
-            Chronometric assembly
+            Our story
           </span>
         </div>
         <AnimatedHeading
@@ -62,10 +62,10 @@ export function AboutTimeline() {
           variant="rise"
           className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl"
         >
-          Our timeline, assembled
+          Our journey
         </AnimatedHeading>
         <p className="mt-4 max-w-xl font-sans text-base font-light leading-relaxed text-neutral-400 sm:text-lg">
-          2023 to today — the short path that shaped TrishulHub.
+          A short look at how TrishulHub grew.
         </p>
       </div>
 

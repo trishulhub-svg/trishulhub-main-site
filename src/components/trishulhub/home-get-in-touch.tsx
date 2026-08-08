@@ -12,11 +12,12 @@ import {
 import { type ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
+import { MAILTO_URL, TEL_URL, WHATSAPP_URL } from '@/lib/contacts'
+
 const CONTACTS = {
-  whatsapp:
-    'https://wa.me/?text=' +
-    encodeURIComponent('Hi TrishulHub — I want to discuss a project.'),
-  email: 'mailto:trishulhub@gmail.com',
+  whatsapp: WHATSAPP_URL,
+  call: TEL_URL,
+  email: MAILTO_URL,
   instagram: 'https://www.instagram.com/',
 }
 
@@ -54,7 +55,8 @@ const nodes: NodeSpec[] = [
   {
     id: 'call',
     label: 'Call us',
-    href: '#contact-form',
+    href: CONTACTS.call,
+    external: true,
     color: 'text-[#00DEFF]',
     glow: 'rgba(0,222,255,0.35)',
     x: 165,
@@ -193,14 +195,14 @@ export function HomeGetInTouch() {
                 transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
                 className="font-display text-4xl font-semibold leading-[1.05] text-white md:text-5xl lg:text-6xl"
               >
-                Let&apos;s build something
+                Want to talk?
                 <span className="mt-1 block text-neutral-500">
-                  great together.
+                  We are ready to help.
                 </span>
               </motion.h2>
               <p className="max-w-xl font-sans text-base font-light leading-relaxed text-neutral-400 sm:text-lg">
-                Have a project in mind or need expert guidance? We&apos;re just
-                a message away. Let&apos;s connect and bring your ideas to life.
+                Message us on WhatsApp, call, or email. Tell us what you need
+                and we will reply soon.
               </p>
             </div>
 

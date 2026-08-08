@@ -4,6 +4,7 @@ import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
 import { NexusButton } from './nexus-button'
+import { MAILTO_URL, SITE_EMAIL, WHATSAPP_URL } from '@/lib/contacts'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function CTA() {
@@ -31,20 +32,20 @@ export function CTA() {
               duration={0.65}
               className="text-3xl font-bold tracking-tight text-white sm:text-4xl md:text-5xl"
             >
-              Have a business to run better? Let&apos;s build the system.
+              Ready to build something for your business?
             </AnimatedHeading>
             <p className="mx-auto mt-6 max-w-2xl text-base text-white/60 sm:text-lg">
-              Tell us what you need — a website, custom software, or CRM — and
-              we will shape a solution that fits your customers and your team.
+              Tell us what you need — a website, software, or a mobile app —
+              and we will help you get started.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <NexusButton href="/contact">Contact us</NexusButton>
+              <NexusButton href={WHATSAPP_URL}>Contact us</NexusButton>
               <a
-                href="mailto:trishulhub@gmail.com"
+                href={MAILTO_URL}
                 className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#00DEFF]"
               >
                 <Mail size={16} />
-                trishulhub@gmail.com
+                {SITE_EMAIL}
               </a>
             </div>
           </div>

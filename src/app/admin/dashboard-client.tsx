@@ -71,6 +71,13 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [newPassword, setNewPassword] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadingVideo, setUploadingVideo] = useState(false)
+  const [siteContact, setSiteContact] = useState({
+    phone: '+919662106793',
+    phoneDisplay: '+91 96621 06793',
+    email: 'trishulhub@gmail.com',
+    whatsapp: '919662106793',
+  })
+  const [savingSite, setSavingSite] = useState(false)
 
   // Auto-clear save notice
   useEffect(() => {
@@ -78,6 +85,35 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     const t = setTimeout(() => setSavedAt(null), 3000)
     return () => clearTimeout(t)
   }, [savedAt])
+
+  useEffect(() => {
+    fetch('/admin/api/site-contact')
+      .then((r) => r.json())
+      .then((d) => {
+        if (d?.email) setSiteContact((prev) => ({ ...prev, ...d }))
+      })
+      .catch(() => {
+        /* keep defaults */
+      })
+  }, [])
+
+  async function saveSiteContact() {
+    setSavingSite(true)
+    setError(null)
+    try {
+      const res = await fetch('/admin/api/site-contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(siteContact),
+      })
+      if (!res.ok) throw new Error('Could not save site contact')
+      setSavedAt(Date.now())
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Save failed')
+    } finally {
+      setSavingSite(false)
+    }
+  }
 
   async function handleSave() {
     setSaving(true)
@@ -531,7 +567,61 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           )}
 
           {tab === 'about' && (
-            <Card title="Personal Details" icon={<Mail size={16} />}>
+            <Card title="Site Contact (WhatsApp / Call / Email)" icon={<Phone size={16} />}>
+              <p className="mb-4 text-sm text-white/50">
+                These details power Contact Us, WhatsApp buttons, and call/email links
+                across the website. Any founder can update them.
+              </p>
+              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
+                <Field label="WhatsApp number (digits only)">
+                  <Input
+                    value={siteContact.whatsapp}
+                    onChange={(v) =>
+                      setSiteContact((c) => ({ ...c, whatsapp: v.replace(/\D/g, '') }))
+                    }
+                    placeholder="919662106793"
+                  />
+                </Field>
+                <Field label="Phone (for Call button)">
+                  <Input
+                    value={siteContact.phone}
+                    onChange={(v) => setSiteContact((c) => ({ ...c, phone: v }))}
+                    placeholder="+919662106793"
+                  />
+                </Field>
+                <Field label="Phone display text">
+                  <Input
+                    value={siteContact.phoneDisplay}
+                    onChange={(v) => setSiteContact((c) => ({ ...c, phoneDisplay: v }))}
+                    placeholder="+91 96621 06793"
+                  />
+                </Field>
+                <Field label="Public email">
+                  <Input
+                    value={siteContact.email}
+                    onChange={(v) => setSiteContact((c) => ({ ...c, email: v }))}
+                    placeholder="trishulhub@gmail.com"
+                    type="email"
+                  />
+                </Field>
+              </div>
+              <button
+                type="button"
+                onClick={saveSiteContact}
+                disabled={savingSite}
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-5 py-2.5 text-sm font-semibold text-[#00DEFF] transition hover:bg-[#00DEFF]/20 disabled:opacity-60"
+              >
+                {savingSite ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
+                Save site contact
+              </button>
+            </Card>
+          )}
+
+          {tab === 'about' && (
+            <Card title="Your Portfolio Contact" icon={<Mail size={16} />}>
+              <p className="mb-4 text-sm text-white/50">
+                Shown on your personal founder portfolio page only.
+              </p>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <Field label="Date of Birth">
                   <Input

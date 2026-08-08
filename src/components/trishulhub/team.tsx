@@ -135,7 +135,7 @@ export function Team({ founders }: { founders: Founder[] }) {
   }, [])
 
   return (
-    <section id="about" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+    <section id="founders" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       {/* bg glow */}
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[120px]"
@@ -152,7 +152,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
             className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
           >
-            Our Team
+            Our Founders
           </motion.span>
           <AnimatedHeading
             as="h2"
@@ -162,7 +162,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
-            Meet Our Team
+            Meet Our Founders
           </AnimatedHeading>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -172,8 +172,8 @@ export function Team({ founders }: { founders: Founder[] }) {
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
             style={{ color: '#A0A0A0' }}
           >
-            The minds behind TrishulHub — a team of three passionate experts dedicated
-            to delivering excellence in every project. Click any founder to view their full portfolio.
+            Meet Taroon, Akshat, and Pruthviraj — the people behind TrishulHub.
+            Click anyone to see their full portfolio.
           </motion.p>
         </div>
 
@@ -382,7 +382,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             whileTap={reduce ? undefined : { scale: 0.97 }}
             className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/50 px-7 py-3 text-sm font-semibold text-[#00DEFF] transition-all duration-300 hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
           >
-            <span className="relative z-10">Meet The Team</span>
+            <span className="relative z-10">Meet The Founders</span>
           </motion.a>
         </div>
       </div>

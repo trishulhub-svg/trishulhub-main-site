@@ -2,8 +2,15 @@
 
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Mail, MapPin, Send } from 'lucide-react'
+import { Mail, MapPin, Phone, Send } from 'lucide-react'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
+import {
+  MAILTO_URL,
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  TEL_URL,
+  whatsappWithMessage,
+} from '@/lib/contacts'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function ContactPage() {
@@ -23,17 +30,23 @@ export function ContactPage() {
         className="pointer-events-none absolute right-[-10%] top-24 h-[28rem] w-[28rem] rounded-full bg-[#00DEFF]/15 blur-[130px]"
       />
 
-      {/* Get In Touch sits above the form */}
       <HomeGetInTouch />
 
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-wrap items-center gap-4">
           <a
-            href="mailto:trishulhub@gmail.com"
+            href={MAILTO_URL}
             className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md transition-colors hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
           >
             <Mail className="text-[#00DEFF]" size={16} />
-            trishulhub@gmail.com
+            {SITE_EMAIL}
+          </a>
+          <a
+            href={TEL_URL}
+            className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md transition-colors hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
+          >
+            <Phone className="text-[#00DEFF]" size={16} />
+            {SITE_PHONE_DISPLAY}
           </a>
           <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md">
             <MapPin className="text-[#00DEFF]" size={16} />
@@ -55,13 +68,8 @@ export function ContactPage() {
             const email = String(fd.get('email') || '')
             const service = String(fd.get('service') || '')
             const message = String(fd.get('message') || '')
-            const subject = encodeURIComponent(
-              `TrishulHub inquiry — ${service || 'General'}`,
-            )
-            const body = encodeURIComponent(
-              `Name: ${name}\nEmail: ${email}\nService: ${service}\n\n${message}`,
-            )
-            window.location.href = `mailto:trishulhub@gmail.com?subject=${subject}&body=${body}`
+            const text = `Hi TrishulHub — I'm ${name}.\nEmail: ${email}\nService: ${service}\n\n${message}`
+            window.open(whatsappWithMessage(text), '_blank', 'noopener,noreferrer')
             setSent(true)
           }}
           className="scroll-mt-28 rounded-3xl border border-white/10 bg-white/[0.04] p-6 backdrop-blur-md sm:p-8"
@@ -91,16 +99,16 @@ export function ContactPage() {
           </label>
           <label className="mb-4 block">
             <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/40">
-              Service interest
+              What do you need?
             </span>
             <select
               name="service"
               className="field-input"
-              defaultValue="Website Development"
+              defaultValue="Websites"
             >
-              <option>Website Development</option>
+              <option>Websites</option>
               <option>Custom Software</option>
-              <option>CRM Solutions</option>
+              <option>Mobile Apps</option>
               <option>Not sure yet</option>
             </select>
           </label>
@@ -112,15 +120,15 @@ export function ContactPage() {
               name="message"
               required
               className="field-input min-h-[140px] resize-y"
-              placeholder="What do you want to build?"
+              placeholder="Tell us what you want to build"
             />
           </label>
           <button
             type="submit"
             className="btn-cyan btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-6 py-3.5 text-sm font-semibold text-[#00DEFF]"
           >
-            <Send size={15} />
-            {sent ? 'Opening email…' : 'Send message'}
+            <Send size={16} />
+            {sent ? 'Opening WhatsApp…' : 'Send message'}
           </button>
         </motion.form>
       </div>

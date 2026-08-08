@@ -2,10 +2,11 @@
 
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-import { Globe, LayoutDashboard, Users, Zap } from 'lucide-react'
+import { Globe, LayoutDashboard, Smartphone, Zap } from 'lucide-react'
 import { NexusButton } from './nexus-button'
+import { WHATSAPP_URL } from '@/lib/contacts'
 
-type PlanId = 'website' | 'software' | 'crm'
+type PlanId = 'website' | 'software' | 'mobile'
 
 const plans: {
   id: PlanId
@@ -19,54 +20,54 @@ const plans: {
 }[] = [
   {
     id: 'software',
-    label: 'Custom Software Development',
+    label: 'Custom Software',
     icon: LayoutDashboard,
     price: 'Custom',
     period: '/build',
     description:
-      'Ideal for teams that need an admin panel or app system shaped around real workflows.',
+      'Admin panels and tools that match how your team works every day.',
     features: [
-      'Inventory, health, shop, HR modules',
-      'Role-based access',
-      'Workflow alerts',
-      'Live dashboards',
-      'Process-fit UX',
+      'Stock, health, shop, or HR tools',
+      'Safe login for each role',
+      'Simple alerts',
+      'Clear dashboards',
+      'Easy to use screens',
     ],
     cta: 'Start your software',
   },
   {
     id: 'website',
-    label: 'Web Development',
+    label: 'Websites',
     icon: Globe,
     price: 'Custom',
     period: '/project',
     description:
-      'Ideal for brands that need a clean, conversion-ready website tailored to their offer.',
+      'Clean websites that look good and help customers find you.',
     features: [
-      'Brand-matched landing pages',
-      'Ecommerce or business layouts',
-      'Mobile-first structure',
-      'Contact and lead flows',
-      'Launch support',
+      'Pages that match your brand',
+      'Shop or business layouts',
+      'Works on phones',
+      'Contact forms',
+      'Help launching',
     ],
     cta: 'Start your website',
   },
   {
-    id: 'crm',
-    label: 'CRM Solutions',
-    icon: Users,
+    id: 'mobile',
+    label: 'Mobile Apps',
+    icon: Smartphone,
     price: 'Custom',
-    period: '/system',
+    period: '/app',
     description:
-      'Ideal for teams managing customers, employees, pipelines, and follow-ups in one place.',
+      'Phone apps for Android and iOS that help customers or your staff.',
     features: [
-      'Customers and employees together',
-      'Pipeline visibility',
-      'Follow-up reminders',
-      'Team ownership',
-      'Shared workspace',
+      'Android and iPhone apps',
+      'Easy to use screens',
+      'Push alerts',
+      'Login for users',
+      'Works with your website or software',
     ],
-    cta: 'Start your CRM',
+    cta: 'Start your app',
   },
 ]
 
@@ -86,7 +87,7 @@ export function HomeUnlock() {
   const buttonRefs = useRef<Record<PlanId, HTMLButtonElement | null>>({
     website: null,
     software: null,
-    crm: null,
+    mobile: null,
   })
   const [lines, setLines] = useState<LineGeom[]>([])
   const [bridgeHeight, setBridgeHeight] = useState(240)
@@ -148,7 +149,7 @@ export function HomeUnlock() {
           {/* LEFT — title + plan selectors */}
           <div className="flex flex-col lg:col-span-4">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Unlock custom growth
+              Pick what you need
             </h2>
             <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
               Choose the system you want to unlock — web development, custom
@@ -277,7 +278,7 @@ export function HomeUnlock() {
             </ul>
 
             <div className="mt-8 w-full">
-              <NexusButton href="/contact" fullWidth>
+              <NexusButton href={WHATSAPP_URL} fullWidth>
                 {current.cta}
               </NexusButton>
             </div>

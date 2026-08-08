@@ -31,7 +31,7 @@ export function AboutHeroProtocol() {
           variant="rise"
           className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl"
         >
-          We build the systems behind growing businesses
+          We build tools that help businesses grow
         </AnimatedHeading>
         <motion.p
           initial={{ opacity: 0, y: 24 }}
@@ -39,9 +39,8 @@ export function AboutHeroProtocol() {
           transition={{ delay: 0.15, duration: 0.6, ease: EASE_OUT_EXPO }}
           className="mt-6 max-w-2xl font-sans text-base font-light text-white/60 sm:text-lg"
         >
-          Founded in 2023 as a website studio, TrishulHub grew into custom
-          software and CRM — so founders and teams can manage customers,
-          operations, and growth without fighting their tools.
+          We started in 2023 with websites. Now we also build custom software
+          and mobile apps — simple tools that help your team work better.
         </motion.p>
       </div>
 
@@ -59,10 +58,10 @@ export function AboutHeroProtocol() {
         <div className="relative mb-6 flex flex-wrap items-end justify-between gap-4">
           <div>
             <span className="font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-[#00DEFF]">
-              Unified data protocol
+              How we work
             </span>
             <p className="mt-1 font-sans text-sm text-neutral-400">
-              How your brief becomes a live TrishulHub system
+              From your idea to a finished product
             </p>
           </div>
           <span className="rounded-full border border-[#00DEFF]/25 bg-[#00DEFF]/10 px-3 py-1 font-mono text-[10px] tracking-wider text-[#00DEFF]">
@@ -149,10 +148,10 @@ export function AboutHeroProtocol() {
               Input source
             </p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
-              Your business brief
+              Your idea
             </h3>
             <p className="mt-2 font-sans text-xs font-light leading-relaxed text-neutral-400">
-              How you sell, serve, and operate — the real work we design around.
+              Tell us what you need. We listen first.
             </p>
           </motion.div>
 
@@ -171,10 +170,10 @@ export function AboutHeroProtocol() {
               Execute logic
             </p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
-              Craft the system
+              We design & build
             </h3>
             <p className="mt-2 font-sans text-xs font-light leading-relaxed text-neutral-400">
-              Websites, custom software panels, and CRM modules — built to fit.
+              Websites, software, and mobile apps made for your business.
             </p>
           </motion.div>
 
@@ -193,10 +192,10 @@ export function AboutHeroProtocol() {
               Execute logic
             </p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
-              Three clear lanes
+              Three clear services
             </h3>
             <p className="mt-2 font-sans text-xs font-light leading-relaxed text-neutral-400">
-              Software for ops. Web for presence. CRM for people and pipeline.
+              Software, websites, and mobile apps — pick what you need.
             </p>
           </motion.div>
 
@@ -215,10 +214,10 @@ export function AboutHeroProtocol() {
               Output data
             </p>
             <h3 className="mt-1 font-display text-lg font-semibold text-white">
-              Live & growing
+              Ready to use
             </h3>
             <p className="mt-2 font-sans text-xs font-light leading-relaxed text-neutral-400">
-              Previewable systems your team can run — then iterate as you grow.
+              A clear product your team can use right away.
             </p>
           </motion.div>
         </div>
@@ -227,26 +226,26 @@ export function AboutHeroProtocol() {
           {[
             {
               label: 'Input source',
-              title: 'Your business brief',
-              text: 'How you sell, serve, and operate — the real work we design around.',
+              title: 'Your idea',
+              text: 'Tell us what you need. We listen first.',
               icon: Database,
             },
             {
               label: 'Execute logic',
-              title: 'Craft the system',
-              text: 'Websites, custom software panels, and CRM modules — built to fit.',
+              title: 'We design & build',
+              text: 'Websites, software, and mobile apps made for your business.',
               icon: Cpu,
             },
             {
               label: 'Execute logic',
-              title: 'Three clear lanes',
-              text: 'Software for ops. Web for presence. CRM for people and pipeline.',
+              title: 'Three clear services',
+              text: 'Software, websites, and mobile apps — pick what you need.',
               icon: Layers3,
             },
             {
               label: 'Output data',
-              title: 'Live & growing',
-              text: 'Previewable systems your team can run — then iterate as you grow.',
+              title: 'Ready to use',
+              text: 'A clear product your team can use right away.',
               icon: Send,
             },
           ].map((n) => {

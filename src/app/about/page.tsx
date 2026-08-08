@@ -1,16 +1,53 @@
 import { SiteShell } from '@/components/trishulhub/site-shell'
 import { AboutPage } from '@/components/trishulhub/about-page'
+import { Team } from '@/components/trishulhub/team'
+import { db } from '@/lib/db'
 
 export const metadata = {
   title: 'About | TrishulHub',
   description:
-    'TrishulHub builds custom websites, business software, and CRM systems around how your company actually works.',
+    'TrishulHub builds websites, business software, and mobile apps that help your company work better.',
 }
 
-export default function AboutRoute() {
+export const dynamic = 'force-dynamic'
+
+export default async function AboutRoute() {
+  let founders: {
+    slug: string
+    initial: string
+    name: string
+    role: string
+    projects: string
+    bio: string
+    videoUrl: string | null
+    image: string | null
+  }[] = []
+
+  try {
+    founders = await db.founder.findMany({
+      orderBy: { createdAt: 'asc' },
+      select: {
+        slug: true,
+        initial: true,
+        name: true,
+        role: true,
+        projects: true,
+        bio: true,
+        videoUrl: true,
+        image: true,
+      },
+    })
+  } catch (err) {
+    console.warn(
+      '[about] founders fetch skipped:',
+      err instanceof Error ? err.message : err,
+    )
+  }
+
   return (
     <SiteShell>
       <AboutPage />
+      {founders.length > 0 ? <Team founders={founders} /> : null}
     </SiteShell>
   )
 }

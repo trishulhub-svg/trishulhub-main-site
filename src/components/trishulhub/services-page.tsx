@@ -26,21 +26,23 @@ import {
   ListChecks,
   PieChart,
   Waypoints,
+  Smartphone,
   type LucideIcon,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { WHATSAPP_URL } from '@/lib/contacts'
 import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
-type ServiceId = 'website' | 'software' | 'crm'
+type ServiceId = 'website' | 'software' | 'mobile'
 
 const services = [
   {
     id: 'software' as const,
     num: '01',
-    title: 'Custom Software Development',
-    desc: 'Custom admin panels and app systems for inventory, healthcare, ecommerce ops, HR, and any workflow your team needs day to day.',
-    startLabel: 'Start designing your software',
+    title: 'Custom Software',
+    desc: 'Admin panels and business tools for stock, health, shops, HR, and day-to-day work.',
+    startLabel: 'Start your software',
     actions: [
       { icon: Boxes, label: 'Build Modules' },
       { icon: Workflow, label: 'Map Workflows' },
@@ -72,9 +74,9 @@ const services = [
   {
     id: 'website' as const,
     num: '02',
-    title: 'Web Development',
-    desc: 'TrishulHub designs and builds websites for every kind of customer need — ecommerce, business, portfolio, or local brand — ready to launch and convert.',
-    startLabel: 'Start building your site',
+    title: 'Websites',
+    desc: 'Websites for shops, businesses, portfolios, and local brands — ready to launch and easy to use.',
+    startLabel: 'Start your website',
     actions: [
       { icon: Sparkles, label: 'Design System' },
       { icon: LayoutTemplate, label: 'Page Builder' },
@@ -104,36 +106,36 @@ const services = [
     ],
   },
   {
-    id: 'crm' as const,
+    id: 'mobile' as const,
     num: '03',
-    title: 'CRM Solutions',
-    desc: 'CRM software to manage employees, customers, pipelines, and follow-ups — so your team stays aligned without chaos.',
-    startLabel: 'Start organizing your CRM',
+    title: 'Mobile Apps',
+    desc: 'Phone apps for Android and iPhone that help your customers or your team get work done on the go.',
+    startLabel: 'Start your mobile app',
     actions: [
-      { icon: Users, label: 'Capture Leads' },
-      { icon: MessageCircle, label: 'Follow Up' },
-      { icon: UserCheck, label: 'Close Deals' },
+      { icon: Users, label: 'User Login' },
+      { icon: MessageCircle, label: 'Push Alerts' },
+      { icon: UserCheck, label: 'Easy Screens' },
     ],
     rows: [
-      { topic: '#NewLeads', reach: 'Contacts', velocity: 'Warm', hot: false },
-      { topic: '#Pipeline', reach: 'Open deals', velocity: 'Hot', hot: true },
+      { topic: '#Android', reach: 'Play Store ready', velocity: 'Popular', hot: false },
+      { topic: '#iPhone', reach: 'App Store ready', velocity: 'In demand', hot: true },
     ],
-    tableHeaders: ['Workflow', 'Focus', 'Signal'] as const,
+    tableHeaders: ['Platform', 'Focus', 'Demand'] as const,
     features: [
       {
         icon: Crosshair,
-        title: 'Precision follow-ups',
-        text: 'Know who needs a reply, who is ready to buy, and which employees own each relationship.',
+        title: 'Built for phones',
+        text: 'Screens that feel natural on a phone — fast taps, clear buttons, and simple flows.',
       },
       {
         icon: RefreshCw,
-        title: 'Pipeline automation',
-        text: 'Move deals and tasks forward with reminders and status triggers that keep momentum.',
+        title: 'Stay in sync',
+        text: 'Your app can connect to your website or software so data stays up to date.',
       },
       {
         icon: Shield,
-        title: 'Team alignment',
-        text: 'One shared view of customers and staff — less dropped context, clearer ownership.',
+        title: 'Safe for users',
+        text: 'Secure login and careful permissions so your data and your customers stay protected.',
       },
     ],
   },
@@ -156,11 +158,11 @@ export function ServicesPage() {
             variant="rise"
             className="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
           >
-            Three systems. One craft studio.
+            Three services. One team.
           </AnimatedHeading>
           <p className="mt-5 font-sans text-base text-neutral-400 sm:text-lg">
-            Custom software first, then web development and CRM — each service
-            in its own card with matching dual panels and a clear contact path.
+            Custom software, websites, and mobile apps — each with a clear
+            preview and a simple way to talk to us.
           </p>
         </div>
 
@@ -211,7 +213,7 @@ export function ServicesPage() {
                     </p>
                   </div>
                   <div className="relative z-10 self-start">
-                    <NexusButton href="/contact">{s.startLabel}</NexusButton>
+                    <NexusButton href={WHATSAPP_URL}>{s.startLabel}</NexusButton>
                   </div>
                 </div>
 
@@ -341,12 +343,14 @@ function LeftAnalyticsCard({
       {/* Connect Facebook Ads style bar */}
       <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/50 px-4 py-3">
         <div className="font-sans text-sm text-neutral-300">Contact TrishulHub</div>
-        <Link
-          href="/contact"
+        <a
+          href={WHATSAPP_URL}
+          target="_blank"
+          rel="noopener noreferrer"
           className="rounded-lg border border-white/15 bg-neutral-900 px-3.5 py-1.5 font-sans text-xs font-medium text-white transition hover:border-[#00DEFF]/50 hover:text-[#00DEFF]"
         >
           Contact us
-        </Link>
+        </a>
       </div>
     </div>
   )
@@ -355,7 +359,7 @@ function LeftAnalyticsCard({
 function RightPreviewCard({ id }: { id: ServiceId }) {
   if (id === 'website') return <WebsiteGeneralPreview />
   if (id === 'software') return <OrbitHubPreview kind="software" />
-  return <OrbitHubPreview kind="crm" />
+  return <OrbitHubPreview kind="mobile" />
 }
 
 function WebsiteGeneralPreview() {
@@ -410,15 +414,15 @@ function WebsiteGeneralPreview() {
   )
 }
 
-function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
+function OrbitHubPreview({ kind }: { kind: 'software' | 'mobile' }) {
   const center =
     kind === 'software' ? (
       <Boxes size={22} />
     ) : (
-      <Waypoints size={22} strokeWidth={2.25} />
+      <Smartphone size={22} strokeWidth={2.25} />
     )
-  const label = kind === 'software' ? 'Ops Hub' : 'CRM Hub'
-  const badge = kind === 'software' ? 'Admin preview' : 'Pipeline preview'
+  const label = kind === 'software' ? 'Ops Hub' : 'App Hub'
+  const badge = kind === 'software' ? 'Admin preview' : 'App preview'
   const nodes: { label: string; a: number; icon: LucideIcon }[] =
     kind === 'software'
       ? [
@@ -430,10 +434,10 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
           { label: 'Alerts', a: 300, icon: Bell },
         ]
       : [
-          { label: 'Leads', a: 0, icon: UserPlus },
-          { label: 'Deals', a: 60, icon: Handshake },
-          { label: 'Team', a: 120, icon: Users },
-          { label: 'Chat', a: 180, icon: MessageCircle },
+          { label: 'Home', a: 0, icon: LayoutDashboard },
+          { label: 'Users', a: 60, icon: Users },
+          { label: 'Chat', a: 120, icon: MessageCircle },
+          { label: 'Alerts', a: 180, icon: Bell },
           { label: 'Tasks', a: 240, icon: ListChecks },
           { label: 'Stats', a: 300, icon: PieChart },
         ]
@@ -465,7 +469,7 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
           {center}
         </div>
 
-        {/* Orbiting modules — icons + labels for software / CRM */}
+        {/* Orbiting modules — icons + labels for software / mobile */}
         <div
           className={`absolute h-[236px] w-[236px] ${
             kind === 'software' ? 'orbit-spin' : 'orbit-spin-reverse'

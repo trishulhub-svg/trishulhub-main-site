@@ -2,11 +2,18 @@
 
 import Link from 'next/link'
 import { BrandLogo } from './brand-logo'
+import {
+  MAILTO_URL,
+  SITE_EMAIL,
+  SITE_PHONE_DISPLAY,
+  TEL_URL,
+  WHATSAPP_URL,
+} from '@/lib/contacts'
 
 const services = [
-  { label: 'Website Development', href: '/services#website' },
   { label: 'Custom Software', href: '/services#software' },
-  { label: 'CRM Solutions', href: '/services#crm' },
+  { label: 'Websites', href: '/services#website' },
+  { label: 'Mobile Apps', href: '/services#mobile' },
 ]
 
 const company = [
@@ -26,8 +33,8 @@ export function Footer() {
           <div className="lg:col-span-1">
             <BrandLogo size="lg" />
             <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/50">
-              Custom websites, business software, and CRM systems built around
-              how your company actually works.
+              Websites, business software, and mobile apps — built to help your
+              company work better.
             </p>
           </div>
 
@@ -74,19 +81,28 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm text-white/60">
               <li>
                 <a
-                  href="mailto:trishulhub@gmail.com"
+                  href={MAILTO_URL}
                   className="transition-colors hover:text-[#00DEFF]"
                 >
-                  trishulhub@gmail.com
+                  {SITE_EMAIL}
                 </a>
               </li>
-              <li>India</li>
               <li>
                 <a
-                  href="https://www.trishulhub.in"
+                  href={TEL_URL}
                   className="transition-colors hover:text-[#00DEFF]"
                 >
-                  trishulhub.in
+                  {SITE_PHONE_DISPLAY}
+                </a>
+              </li>
+              <li>
+                <a
+                  href={WHATSAPP_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-[#00DEFF]"
+                >
+                  WhatsApp
                 </a>
               </li>
             </ul>
@@ -97,14 +113,14 @@ export function Footer() {
           <div className="text-xs text-white/40">
             © {new Date().getFullYear()} TrishulHub. All rights reserved.
           </div>
-          <div className="flex items-center gap-6">
-            <Link
-              href="/contact"
-              className="text-xs text-white/40 transition-colors hover:text-[#00DEFF]"
-            >
-              Start a project
-            </Link>
-          </div>
+          <a
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-white/40 transition-colors hover:text-[#00DEFF]"
+          >
+            Start a project
+          </a>
         </div>
       </div>
     </footer>

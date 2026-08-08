@@ -53,12 +53,12 @@ export function HomeIntelligences() {
             variant="rise"
             className="mt-5 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl"
           >
-            Five Intelligences. One Unified System.
+            The tools we use to build for you
           </AnimatedHeading>
 
           <p className="mx-auto mt-5 max-w-2xl font-sans text-base leading-relaxed text-neutral-300 sm:text-lg">
-            TrishulHub systems connect six specialized AI engines into a single,
-            unified workflow.
+            We use trusted modern tools so your website, software, or app is
+            fast, safe, and ready to grow.
           </p>
         </div>
 
@@ -165,14 +165,14 @@ export function HomeIntelligences() {
             <div className="inline-flex items-center gap-2.5">
               <Network className="h-5 w-5 text-[#00DEFF]" />
               <span className="font-display font-medium text-white">
-                Neural Sync
+                Always connected
               </span>
             </div>
             <div className="hidden h-px w-28 border-t border-dashed border-[#00DEFF]/40 sm:block" />
             <div className="inline-flex items-center gap-2.5">
               <BrainCircuit className="h-5 w-5 text-[#00DEFF]" />
               <span className="font-display font-medium text-white">
-                Unified Intelligence
+                Built as one system
               </span>
             </div>
           </div>

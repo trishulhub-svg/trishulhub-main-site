@@ -17,31 +17,31 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "TrishulHub | Websites. Software. CRM That Fits.",
+  title: "TrishulHub | Websites. Software. Mobile Apps.",
   description:
-    "TrishulHub builds custom websites, business admin software, and CRM systems shaped around how you sell, operate, and support customers.",
+    "TrishulHub builds websites, business software, and mobile apps that help your company work better.",
   keywords: [
     "TrishulHub",
     "website development",
     "custom software",
-    "CRM solutions",
+    "mobile apps",
     "admin panel",
     "Next.js",
     "React",
   ],
   authors: [{ name: "TrishulHub" }],
   openGraph: {
-    title: "TrishulHub | Websites. Software. CRM That Fits.",
+    title: "TrishulHub | Websites. Software. Mobile Apps.",
     description:
-      "Custom websites, business software, and CRM systems built around your workflow.",
+      "Websites, business software, and mobile apps built for your business.",
     siteName: "TrishulHub",
     type: "website",
   },
   twitter: {
     card: "summary_large_image",
-    title: "TrishulHub | Websites. Software. CRM That Fits.",
+    title: "TrishulHub | Websites. Software. Mobile Apps.",
     description:
-      "Custom websites, business software, and CRM systems built around your workflow.",
+      "Websites, business software, and mobile apps built for your business.",
   },
 };
 
