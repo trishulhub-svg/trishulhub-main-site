@@ -16,17 +16,20 @@ const intelligences = [
   { name: 'Cursor', src: '/images/logos/cursor.svg', x: 810 },
 ]
 
-/** Hub box 80×80 centered at (450, 380) → top border y=340 */
-const HUB_TOP = 340
+/** Hub sits left of center — previous logo size, same square border as icons */
+const HUB_X = 320
+const HUB_Y = 380
+/** Hub box 80×80 → top border y */
+const HUB_TOP = HUB_Y - 40
 /** Just under icon labels — close, not overlapping text */
 const LINE_END_Y = 90
 
 const paths = intelligences.map((item) => {
   const endX = item.x
-  const midX = 450 + (endX - 450) * 0.35
+  const midX = HUB_X + (endX - HUB_X) * 0.35
   return {
-    d: `M450 ${HUB_TOP} C 450 ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 55}, ${endX} ${LINE_END_Y}`,
-    len: 360 + Math.abs(endX - 450) * 0.3,
+    d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 55}, ${endX} ${LINE_END_Y}`,
+    len: 360 + Math.abs(endX - HUB_X) * 0.3,
   }
 })
 
@@ -131,12 +134,15 @@ export function HomeIntelligences() {
               </motion.div>
             ))}
 
-            {/* Same square border size as icons — big logo, lighter pulsed blue */}
+            {/* Previous logo size; left of center; same square border as icons */}
             <div
-              className="absolute left-1/2 z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
-              style={{ top: `${(380 / VB_H) * 100}%` }}
+              className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+              style={{
+                left: `${(HUB_X / VB_W) * 100}%`,
+                top: `${(HUB_Y / VB_H) * 100}%`,
+              }}
             >
-              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#0a1218] ring-1 ring-[#00DEFF]/50 sm:h-20 sm:w-20 sm:rounded-xl">
+              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-[#0a1218] ring-1 ring-[#00DEFF]/50 sm:h-20 sm:w-20">
                 <span
                   aria-hidden="true"
                   className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#00DEFF]/25 blur-md"
@@ -145,9 +151,9 @@ export function HomeIntelligences() {
                 <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={88}
-                  height={88}
-                  className="relative z-10 h-[94%] w-[94%] object-contain object-center"
+                  width={48}
+                  height={48}
+                  className="relative z-10 h-10 w-10 object-contain object-center sm:h-12 sm:w-12"
                 />
               </span>
             </div>
