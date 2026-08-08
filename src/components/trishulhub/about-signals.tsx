@@ -68,7 +68,7 @@ export function AboutSignals() {
   }, [runCounters])
 
   return (
-    <section className="relative mt-28 sm:mt-36">
+    <section className="relative mt-28 hidden md:mt-36 md:block">
       <div className="flex flex-col gap-16 rounded-3xl border border-white/10 bg-[#0A0A0C] px-6 pb-16 pt-8 sm:px-8">
         <div className="flex w-full flex-col justify-between gap-8 md:flex-row md:items-end">
           <div className="flex max-w-3xl flex-col gap-6">

@@ -21,14 +21,14 @@ const HUB_X = 450
 const HUB_Y = 380
 /** Hub box 80×80 → top border y */
 const HUB_TOP = HUB_Y - 40
-/** Just under icon labels — close, not overlapping text */
-const LINE_END_Y = 90
+/** Ends below icon boxes so strokes never cut through borders */
+const LINE_END_Y = 118
 
 const paths = intelligences.map((item) => {
   const endX = item.x
   const midX = HUB_X + (endX - HUB_X) * 0.35
   return {
-    d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 55}, ${endX} ${LINE_END_Y}`,
+    d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 40}, ${endX} ${LINE_END_Y}`,
     len: 360 + Math.abs(endX - HUB_X) * 0.3,
   }
 })
@@ -62,7 +62,61 @@ export function HomeIntelligences() {
           </p>
         </div>
 
-        <div className="relative mx-auto mt-14 w-full max-w-5xl sm:mt-16">
+        {/* Mobile: clean hub + spaced icon grid — no overlapping strokes */}
+        <div className="mx-auto mt-12 max-w-md md:hidden">
+          <div className="flex justify-center">
+            <motion.span
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-[#0a1218] ring-1 ring-[#00DEFF]/50"
+            >
+              <span
+                aria-hidden="true"
+                className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#00DEFF]/25 blur-md"
+              />
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="/images/trishulhub-logo.png"
+                alt="TrishulHub"
+                width={48}
+                height={48}
+                className="relative z-10 h-12 w-12 object-contain object-center"
+              />
+            </motion.span>
+          </div>
+
+          <div className="relative mx-auto my-3 flex h-10 justify-center" aria-hidden>
+            <svg width="8" height="40" className="overflow-visible">
+              <line
+                x1="4"
+                y1="0"
+                x2="4"
+                y2="40"
+                stroke="#00DEFF"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+            </svg>
+          </div>
+
+          <div className="grid grid-cols-3 gap-3">
+            {intelligences.slice(0, 3).map((item, i) => (
+              <ToolTile key={item.name} item={item} delay={i * 0.06} />
+            ))}
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-3 px-8">
+            {intelligences.slice(3).map((item, i) => (
+              <ToolTile key={item.name} item={item} delay={(i + 3) * 0.06} />
+            ))}
+          </div>
+        </div>
+
+        {/* Tablet/desktop: fan diagram with lines ending under icons */}
+        <div className="relative mx-auto mt-14 hidden w-full max-w-5xl md:mt-16 md:block">
           <div className="relative aspect-[900/420] w-full">
             <svg
               viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -83,7 +137,6 @@ export function HomeIntelligences() {
                     strokeDasharray: p.len,
                     strokeDashoffset: p.len,
                     animationDelay: `${i * 0.18}s`,
-                    // CSS var for dash length used by keyframes
                     ['--intel-dash' as string]: String(p.len),
                   }}
                 >
@@ -128,13 +181,12 @@ export function HomeIntelligences() {
                     className="h-9 w-9 object-contain brightness-0 invert sm:h-11 sm:w-11"
                   />
                 </span>
-                <span className="relative z-20 mt-1.5 hidden bg-transparent font-sans text-[11px] text-neutral-400 sm:block">
+                <span className="relative z-20 mt-1.5 bg-transparent font-sans text-[11px] text-neutral-400">
                   {item.name}
                 </span>
               </motion.div>
             ))}
 
-            {/* Previous logo size; centered; same square border as icons */}
             <div
               className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
               style={{
@@ -179,5 +231,37 @@ export function HomeIntelligences() {
         </div>
       </div>
     </section>
+  )
+}
+
+function ToolTile({
+  item,
+  delay,
+}: {
+  item: (typeof intelligences)[number]
+  delay: number
+}) {
+  return (
+    <motion.div
+      initial={{ opacity: 0, y: 12 }}
+      whileInView={{ opacity: 1, y: 0 }}
+      viewport={{ once: true, amount: 0.3 }}
+      transition={{ duration: 0.4, delay, ease: EASE_OUT_EXPO }}
+      className="flex flex-col items-center rounded-2xl border border-white/10 bg-white/[0.03] px-3 py-4"
+    >
+      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-white/5 ring-1 ring-white/15">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src={item.src}
+          alt=""
+          width={32}
+          height={32}
+          className="h-8 w-8 object-contain brightness-0 invert"
+        />
+      </span>
+      <span className="mt-2 font-sans text-[11px] text-neutral-400">
+        {item.name}
+      </span>
+    </motion.div>
   )
 }
