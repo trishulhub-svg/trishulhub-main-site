@@ -74,7 +74,7 @@ export function HomeServices() {
 
 function AutomationCard() {
   const ref = useRef<HTMLDivElement>(null)
-  const inView = useInView(ref, { once: true, amount: 0.35 })
+  const inView = useInView(ref, { once: false, amount: 0.25 })
 
   return (
     <motion.div
@@ -97,8 +97,13 @@ function AutomationCard() {
       </div>
 
       <div className="relative space-y-5">
-        {pipelines.map((p) => (
-          <PipelineRow key={p.name} {...p} active={inView} />
+        {pipelines.map((p, i) => (
+          <PipelineRow
+            key={p.name}
+            {...p}
+            active={inView}
+            delayMs={i * 180}
+          />
         ))}
       </div>
 
@@ -124,28 +129,76 @@ function PipelineRow({
   tag,
   pct,
   active,
+  delayMs = 0,
 }: {
   name: string
   tag: string
   pct: number
   active: boolean
+  delayMs?: number
 }) {
   const [value, setValue] = useState(0)
+  const reduceMotion =
+    typeof window !== 'undefined' &&
+    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
-    if (!active) return
-    let raf = 0
-    const start = performance.now()
-    const duration = 1200
-    const tick = (now: number) => {
-      const t = Math.min(1, (now - start) / duration)
-      const eased = 1 - Math.pow(1 - t, 3)
-      setValue(Math.round(eased * pct))
-      if (t < 1) raf = requestAnimationFrame(tick)
+    if (!active) {
+      setValue(0)
+      return
     }
-    raf = requestAnimationFrame(tick)
-    return () => cancelAnimationFrame(raf)
-  }, [active, pct])
+    if (reduceMotion) {
+      setValue(pct)
+      return
+    }
+
+    let raf = 0
+    let timeout = 0
+    let cancelled = false
+    const fillMs = 1400
+    const holdMs = 900
+    const resetMs = 450
+
+    const runCycle = () => {
+      if (cancelled) return
+      const start = performance.now()
+      const tick = (now: number) => {
+        if (cancelled) return
+        const t = Math.min(1, (now - start) / fillMs)
+        const eased = 1 - Math.pow(1 - t, 3)
+        setValue(Math.round(eased * pct))
+        if (t < 1) {
+          raf = requestAnimationFrame(tick)
+        } else {
+          timeout = window.setTimeout(() => {
+            if (cancelled) return
+            // Soft reset, then loop
+            const resetStart = performance.now()
+            const resetTick = (rNow: number) => {
+              if (cancelled) return
+              const rt = Math.min(1, (rNow - resetStart) / resetMs)
+              setValue(Math.round(pct * (1 - rt)))
+              if (rt < 1) {
+                raf = requestAnimationFrame(resetTick)
+              } else {
+                timeout = window.setTimeout(runCycle, 120)
+              }
+            }
+            raf = requestAnimationFrame(resetTick)
+          }, holdMs)
+        }
+      }
+      raf = requestAnimationFrame(tick)
+    }
+
+    timeout = window.setTimeout(runCycle, delayMs)
+
+    return () => {
+      cancelled = true
+      cancelAnimationFrame(raf)
+      window.clearTimeout(timeout)
+    }
+  }, [active, pct, delayMs, reduceMotion])
 
   return (
     <div>
@@ -158,11 +211,11 @@ function PipelineRow({
       <div className="flex items-center gap-3">
         <div className="h-2 flex-1 overflow-hidden rounded-full bg-white/10">
           <div
-            className="h-full rounded-full bg-gradient-to-r from-[#00DEFF] to-[#0088CC]"
+            className="h-full rounded-full bg-gradient-to-r from-[#00DEFF] to-[#0088CC] transition-[width] duration-75 ease-out"
             style={{ width: `${value}%` }}
           />
         </div>
-        <div className="w-10 text-right font-display text-sm font-semibold text-[#00DEFF]">
+        <div className="w-10 text-right font-display text-sm font-semibold tabular-nums text-[#00DEFF]">
           {value}%
         </div>
       </div>
