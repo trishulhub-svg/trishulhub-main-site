@@ -1,21 +1,10 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FadeIn } from './motion-primitives'
 import { NexusButton } from './nexus-button'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-
-const HERO_POSTER =
-  'https://framerusercontent.com/images/mzMKLKsYnRpGNC2hdtBEBC5cVMs.png'
-
-/** Cloudinary-optimized delivery — auto format/quality, capped width */
-const HERO_VIDEO_SRC =
-  'https://res.cloudinary.com/dfqlappwo/video/upload/f_auto,q_auto:eco,vc_auto,w_1600,c_limit/Video_2_cn6cwf.mp4'
-
-const HERO_VIDEO_MOBILE =
-  'https://res.cloudinary.com/dfqlappwo/video/upload/f_auto,q_auto:eco,vc_auto,w_900,c_limit/Video_2_cn6cwf.mp4'
 
 const heroStagger = {
   hidden: {},
@@ -33,78 +22,17 @@ const heroItem = {
 
 export function Hero() {
   const reduce = useReducedMotion()
-  const [mounted, setMounted] = useState(false)
-  const [loadVideo, setLoadVideo] = useState(false)
-
-  useEffect(() => {
-    setMounted(true)
-  }, [])
-
-  // Defer video until idle so first paint stays fast
-  useEffect(() => {
-    if (!mounted || reduce) return
-    let idleId: number | undefined
-    let timeoutId: ReturnType<typeof setTimeout> | undefined
-
-    const start = () => setLoadVideo(true)
-
-    if (typeof window !== 'undefined' && 'requestIdleCallback' in window) {
-      idleId = window.requestIdleCallback(start, { timeout: 1800 })
-    } else {
-      timeoutId = setTimeout(start, 400)
-    }
-
-    return () => {
-      if (idleId !== undefined && 'cancelIdleCallback' in window) {
-        window.cancelIdleCallback(idleId)
-      }
-      if (timeoutId) clearTimeout(timeoutId)
-    }
-  }, [mounted, reduce])
 
   return (
     <section
       id="home"
       className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
-      {/* Full-bleed hero video @ 80% opacity + poster fallback */}
+      {/* Soft static atmosphere — no background video */}
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
         <div className="absolute inset-0 bg-[#050505]" />
-
-        {/* Poster always present for LCP / reduced motion */}
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img
-          src={HERO_POSTER}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 h-full w-full object-cover opacity-80"
-          fetchPriority="high"
-        />
-
-        {loadVideo && !reduce ? (
-          <video
-            className="absolute inset-0 h-full w-full object-cover opacity-80"
-            autoPlay
-            muted
-            loop
-            playsInline
-            preload="metadata"
-            poster={HERO_POSTER}
-            aria-hidden
-          >
-            <source
-              src={HERO_VIDEO_MOBILE}
-              type="video/mp4"
-              media="(max-width: 768px)"
-            />
-            <source src={HERO_VIDEO_SRC} type="video/mp4" />
-          </video>
-        ) : null}
-
-        {/* Readability scrims — keep TrishulHub contrast */}
-        <div className="absolute inset-0 bg-[#050505]/35" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.08),transparent_55%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#050505]/50 via-transparent to-[#050505]" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.1),transparent_55%)]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505]" />
       </div>
 
       <motion.div
