@@ -56,7 +56,8 @@ export function AboutSignals() {
           }
         })
       },
-      { threshold: 0.2 },
+      /* Low threshold + margin so tall mobile stacks still trigger animations */
+      { threshold: [0, 0.05, 0.1], rootMargin: '0px 0px -8% 0px' },
     )
 
     observer.observe(root)
@@ -102,7 +103,7 @@ export function AboutSignals() {
           id="about-signals-grid"
           className="about-signals-grid grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3 lg:auto-rows-[400px]"
         >
-          {/* Clear timelines — rising chart */}
+          {/* Weekly progress — rising chart */}
           <div className="group relative flex h-[400px] flex-col justify-between overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0C] p-8 transition-colors hover:border-white/[0.15]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.12),transparent_55%)]" />
             <div
@@ -114,23 +115,21 @@ export function AboutSignals() {
             />
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Clear timelines
+                Weekly progress
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                We plan the path first so your project launches on time — with
-                no surprise delays.
+                You get simple week-by-week updates — what is done, what is next,
+                and when it will be ready.
               </p>
             </div>
             <div className="relative z-10 h-36 w-full">
               <div className="about-animate-scale absolute right-2 top-0 z-20">
                 <div className="rounded-xl border border-[#00DEFF]/35 bg-[#0A0A0C]/95 px-3 py-1.5 shadow-[0_0_20px_rgba(0,222,255,0.25)] backdrop-blur-md">
                   <span className="font-display text-sm font-semibold tracking-tight text-[#00DEFF]">
-                    <span data-counter-target="4" data-counter-prefix="">
-                      0
-                    </span>
+                    Live
                   </span>
                   <span className="ml-1.5 font-sans text-[10px] uppercase tracking-wider text-neutral-500">
-                    stages
+                    updates
                   </span>
                 </div>
               </div>
@@ -376,26 +375,28 @@ export function AboutSignals() {
             </div>
           </div>
 
-          {/* One team — big number */}
+          {/* Customer satisfaction — big number */}
           <div className="group relative flex h-[400px] flex-col justify-end overflow-hidden rounded-[2rem] border border-white/10 bg-[#0A0A0C] p-8 transition-colors hover:border-white/[0.15]">
             <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,rgba(0,222,255,0.1),transparent_55%)]" />
             <div className="absolute inset-0 z-10 flex -translate-y-8 items-center justify-center">
               <div className="about-animate-fade-up relative flex flex-col items-center">
                 <span className="select-none font-display text-[7.5rem] font-light leading-none tracking-tight text-white/[0.12] sm:text-[8rem]">
-                  <span data-counter-target="1">0</span>
+                  <span data-counter-target="95" data-counter-suffix="%">
+                    0%
+                  </span>
                 </span>
                 <span className="mt-1 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/10 px-3 py-1 font-sans text-[10px] font-semibold uppercase tracking-[0.18em] text-[#00DEFF]">
-                  one studio team
+                  satisfaction rate
                 </span>
               </div>
             </div>
             <div className="relative z-10">
               <h3 className="font-display text-3xl font-light tracking-tight text-white sm:text-4xl">
-                Honest work
+                Customer satisfaction rate
               </h3>
               <p className="mt-2 font-sans text-base font-light leading-relaxed text-neutral-400">
-                Plain language, timelines you can trust, and tools shaped around
-                how you already work.
+                Clients stay with us because the work is clear, useful, and built
+                around real business needs.
               </p>
             </div>
           </div>

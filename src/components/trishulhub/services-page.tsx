@@ -32,7 +32,7 @@ import {
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
-import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
+import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type ServiceId = 'website' | 'software' | 'mobile'
 
@@ -168,27 +168,15 @@ export function ServicesPage() {
           </p>
         </div>
 
-        <motion.div
-          initial="hidden"
-          animate="visible"
-          variants={{
-            hidden: {},
-            visible: { transition: { staggerChildren: STAGGER.normal } },
-          }}
-          className="flex flex-col"
-        >
+        <div className="flex flex-col">
           {services.map((s, idx) => (
             <motion.section
               key={s.id}
               id={s.id}
-              variants={{
-                hidden: { opacity: 0, y: 40 },
-                visible: {
-                  opacity: 1,
-                  y: 0,
-                  transition: { duration: 0.55, ease: EASE_OUT_EXPO },
-                },
-              }}
+              initial={{ opacity: 0, y: 36 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.12 }}
+              transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
               className="scroll-mt-28"
             >
               {idx > 0 ? <ServiceConnector from={idx} /> : null}
@@ -245,7 +233,7 @@ export function ServicesPage() {
               </div>
             </motion.section>
           ))}
-        </motion.div>
+        </div>
       </div>
     </div>
   )
@@ -280,6 +268,9 @@ function ServiceConnector({ from }: { from: number }) {
         />
         <circle cx={from === 1 ? 40 : 360} cy={8} r={4} fill="#00DEFF" />
         <circle cx={from === 1 ? 360 : 40} cy={88} r={4} fill="#00DEFF" />
+        <circle r="3.5" fill="#67E8F9">
+          <animateMotion dur="2.2s" repeatCount="indefinite" path={d} />
+        </circle>
       </svg>
     </div>
   )
@@ -478,9 +469,6 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'mobile' }) {
           className={`absolute h-[236px] w-[236px] ${
             kind === 'software' ? 'orbit-spin' : 'orbit-spin-reverse'
           }`}
-          style={{
-            animationDuration: kind === 'software' ? '28s' : '32s',
-          }}
         >
           {nodes.map((n) => {
             const rad = (n.a * Math.PI) / 180
@@ -500,9 +488,6 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'mobile' }) {
                       ? 'orbit-spin-reverse'
                       : 'orbit-spin'
                   }`}
-                  style={{
-                    animationDuration: kind === 'software' ? '28s' : '32s',
-                  }}
                 >
                   <Icon size={14} className="text-[#00DEFF]" strokeWidth={2} />
                   <span className="font-sans text-[8px] leading-none text-neutral-300">

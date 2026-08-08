@@ -195,6 +195,29 @@ export function HomeUnlock() {
             </div>
           </div>
 
+          {/* Mobile/tablet: animated flow into the detail card */}
+          <div className="flex justify-center py-1 lg:hidden" aria-hidden>
+            <svg width="24" height="56" className="overflow-visible">
+              <line
+                x1="12"
+                y1="0"
+                x2="12"
+                y2="56"
+                stroke="#00DEFF"
+                strokeWidth="1.75"
+                strokeDasharray="6 6"
+                className="animate-flow"
+              />
+              <circle r="3.5" fill="#00DEFF">
+                <animateMotion
+                  dur="1.4s"
+                  repeatCount="indefinite"
+                  path="M12,0 L12,56"
+                />
+              </circle>
+            </svg>
+          </div>
+
           {/* MIDDLE — long dashed connectors, measured to button centers */}
           <div
             ref={bridgeRef}

@@ -46,16 +46,16 @@ function NodeFace({ node }: { node: NodeSpec }) {
           background: `radial-gradient(circle, ${node.glow}, transparent 60%)`,
         }}
       />
-      <div className="relative flex h-16 w-16 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] shadow-[0_12px_28px_-14px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-transform duration-300 group-hover:scale-[1.06] md:h-[76px] md:w-[76px]">
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] shadow-[0_12px_28px_-14px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
         <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_55%)]" />
         <span
-          className={`relative ${node.color}`}
+          className={`relative scale-90 sm:scale-100 ${node.color}`}
           style={{ filter: `drop-shadow(0 0 10px ${node.glow})` }}
         >
           {node.icon}
         </span>
       </div>
-      <span className="mt-2 font-sans text-[10px] uppercase tracking-[0.16em] text-neutral-400">
+      <span className="mt-1.5 font-sans text-[9px] uppercase tracking-[0.16em] text-neutral-400 sm:mt-2 sm:text-[10px]">
         {node.label}
       </span>
     </>
@@ -87,28 +87,6 @@ function AbsoluteNode({ node }: { node: NodeSpec }) {
 
   return (
     <Link href={node.href} aria-label={node.label} className={cls} style={style}>
-      <NodeFace node={node} />
-    </Link>
-  )
-}
-
-function MobileNode({ node }: { node: NodeSpec }) {
-  const cls = 'group relative flex flex-col items-center'
-  if (node.external) {
-    return (
-      <a
-        href={node.href}
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label={node.label}
-        className={cls}
-      >
-        <NodeFace node={node} />
-      </a>
-    )
-  }
-  return (
-    <Link href={node.href} aria-label={node.label} className={cls}>
       <NodeFace node={node} />
     </Link>
   )
@@ -182,7 +160,7 @@ export function HomeGetInTouch() {
               <motion.h2
                 initial={{ opacity: 0, y: 24 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.3 }}
+                viewport={{ once: true, amount: 0.15 }}
                 transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
                 className="font-display text-4xl font-semibold leading-[1.05] text-white md:text-5xl lg:text-6xl"
               >
@@ -201,7 +179,8 @@ export function HomeGetInTouch() {
           </div>
         </div>
 
-        <div className="relative mx-auto mt-14 hidden aspect-[1000/560] w-full max-w-5xl md:mt-16 md:block">
+        {/* Same animated wire diagram on mobile, tablet, and desktop */}
+        <div className="relative mx-auto mt-10 aspect-[1000/720] w-full max-w-5xl sm:mt-14 sm:aspect-[1000/560] md:mt-16">
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
             viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -256,18 +235,10 @@ export function HomeGetInTouch() {
             <AbsoluteNode key={n.id} node={n} />
           ))}
 
-          <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+          <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 scale-90 sm:scale-100">
             <div className="pointer-events-none absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(0,222,255,0.22),transparent_70%)] blur-2xl" />
             <NexusButton href="#contact-form">Contact us</NexusButton>
           </div>
-        </div>
-
-        <div className="mt-12 grid grid-cols-2 gap-8 md:hidden">
-          {nodes.map((n) => (
-            <div key={`m-${n.id}`} className="flex justify-center">
-              <MobileNode node={n} />
-            </div>
-          ))}
         </div>
       </div>
     </section>

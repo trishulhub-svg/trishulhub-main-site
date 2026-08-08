@@ -103,7 +103,7 @@ export function HomeIntelligences() {
                 key={item.name}
                 initial={{ opacity: 0, y: -10 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.4 }}
+                viewport={{ once: true, amount: 0.15 }}
                 transition={{
                   duration: 0.5,
                   delay: i * 0.06,
@@ -168,7 +168,7 @@ export function HomeIntelligences() {
                 Always connected
               </span>
             </div>
-            <div className="hidden h-px w-28 border-t border-dashed border-[#00DEFF]/40 sm:block" />
+            <div className="h-px w-16 border-t border-dashed border-[#00DEFF]/40 sm:w-28" />
             <div className="inline-flex items-center gap-2.5">
               <BrainCircuit className="h-5 w-5 text-[#00DEFF]" />
               <span className="font-display font-medium text-white">

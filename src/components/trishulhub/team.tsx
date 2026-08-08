@@ -38,7 +38,7 @@ const FOUNDER_VIDEOS: Record<string, string> = {
 /* ------------------------------------------------------------------ */
 function ProjectsCountUp({ raw }: { raw: string }) {
   const ref = useRef<HTMLSpanElement>(null)
-  const inView = useInView(ref, { once: false, amount: 0.5 })
+  const inView = useInView(ref, { once: false, amount: 0.2 })
   const reduce = useReducedMotion()
 
   // Parse the leading number + suffix (e.g. "50+" → 50 and "+")

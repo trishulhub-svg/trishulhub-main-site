@@ -701,6 +701,46 @@
   animation-play-state: running;
 }
 
+/* Mobile/tablet: run About signal animations as soon as the section mounts,
+   so tall card stacks are not stuck at opacity:0 waiting for a high IO hit. */
+@media (max-width: 1023px) {
+  .about-signals-grid .about-animate-draw,
+  .about-signals-grid .about-animate-width,
+  .about-signals-grid .about-animate-fade-up,
+  .about-signals-grid .about-animate-scale {
+    animation-play-state: running;
+  }
+}
+
+/* Electric cards always pulse slightly on touch devices (no hover) */
+@media (hover: none) {
+  .electric-card {
+    animation: electricCardPulse 3.2s ease-in-out infinite;
+  }
+}
+
+@keyframes electricCardPulse {
+  0%,
+  100% {
+    border-color: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 0 rgba(0, 222, 255, 0);
+  }
+  50% {
+    border-color: rgba(0, 222, 255, 0.32);
+    box-shadow: 0 0 24px rgba(0, 222, 255, 0.22);
+  }
+}
+
+/* Faster orbits on smaller screens so motion is obvious */
+@media (max-width: 1023px) {
+  .orbit-spin {
+    animation-duration: 14s;
+  }
+  .orbit-spin-reverse {
+    animation-duration: 14s;
+  }
+}
+
 .about-timeline-scan {
   animation: about-scan 4.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }

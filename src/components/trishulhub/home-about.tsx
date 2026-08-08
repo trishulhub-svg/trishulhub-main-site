@@ -64,7 +64,7 @@ export function HomeAbout() {
             </div>
           </div>
 
-          <div className="relative mx-auto hidden min-h-[520px] w-full max-w-5xl lg:block">
+          <div className="relative mx-auto hidden min-h-[520px] w-full max-w-5xl md:block">
             <svg
               viewBox="0 0 1000 520"
               className="absolute inset-0 h-full w-full"
@@ -129,7 +129,7 @@ export function HomeAbout() {
             />
           </div>
 
-          <div className="relative grid gap-4 lg:hidden">
+          <div className="relative grid gap-0 md:hidden">
             {[
               {
                 label: 'Start',
@@ -155,8 +155,45 @@ export function HomeAbout() {
                 text: 'You get a clear product your team can use right away.',
                 icon: Send,
               },
-            ].map((n) => (
-              <NodeCard key={n.title} {...n} />
+            ].map((n, i, arr) => (
+              <div key={n.title}>
+                <motion.div
+                  initial={{ opacity: 0, y: 18 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: i * 0.06,
+                    ease: EASE_OUT_EXPO,
+                  }}
+                >
+                  <NodeCard {...n} />
+                </motion.div>
+                {i < arr.length - 1 ? (
+                  <div className="flex justify-center py-1" aria-hidden>
+                    <svg width="10" height="32" className="overflow-visible">
+                      <line
+                        x1="5"
+                        y1="0"
+                        x2="5"
+                        y2="32"
+                        stroke="#00DEFF"
+                        strokeWidth="1.75"
+                        strokeDasharray="5 5"
+                        className="animate-flow"
+                        opacity="0.75"
+                      />
+                      <circle r="3.5" fill="#00DEFF">
+                        <animateMotion
+                          dur="1.5s"
+                          repeatCount="indefinite"
+                          path="M5,0 L5,32"
+                        />
+                      </circle>
+                    </svg>
+                  </div>
+                ) : null}
+              </div>
             ))}
           </div>
         </div>

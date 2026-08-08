@@ -111,7 +111,7 @@ export function AboutProtocol({
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
+          viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
           className="work-wizard-attract relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/70 p-8 backdrop-blur-[18px] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#00DEFF]/35 md:p-12"
         >
