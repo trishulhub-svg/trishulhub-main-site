@@ -16,8 +16,8 @@ const intelligences = [
   { name: 'Cursor', src: '/images/logos/cursor.svg', x: 810 },
 ]
 
-/** Hub sits left of center — previous logo size, same square border as icons */
-const HUB_X = 320
+/** Hub centered — previous logo size, same square border as icons */
+const HUB_X = 450
 const HUB_Y = 380
 /** Hub box 80×80 → top border y */
 const HUB_TOP = HUB_Y - 40
@@ -134,7 +134,7 @@ export function HomeIntelligences() {
               </motion.div>
             ))}
 
-            {/* Previous logo size; left of center; same square border as icons */}
+            {/* Previous logo size; centered; same square border as icons */}
             <div
               className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
               style={{

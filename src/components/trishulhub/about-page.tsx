@@ -5,6 +5,9 @@ import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
+import { AboutTimeline } from '@/components/trishulhub/about-timeline'
+import { AboutProtocol } from '@/components/trishulhub/about-protocol'
+import { AboutSignals } from '@/components/trishulhub/about-signals'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const pillars = [
@@ -14,7 +17,7 @@ const pillars = [
   },
   {
     title: 'Three clear lanes',
-    text: 'Website development for any customer need. Custom software for inventory, healthcare, ecommerce, and more. CRM for employees and customers.',
+    text: 'Custom software for ops. Web development for any customer need. CRM for employees and customers — each lane intentional.',
   },
   {
     title: 'Preview before commit',
@@ -50,19 +53,21 @@ export function AboutPage() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <motion.div style={{ y: heroY, opacity: heroOpacity }} className="max-w-4xl">
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
+          className="max-w-4xl"
+        >
           <motion.span
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+            className="mb-4 inline-block font-display text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
           >
             About TrishulHub
           </motion.span>
           <AnimatedHeading
             as="h1"
             variant="rise"
-            className="text-4xl font-bold leading-[1.05] text-white sm:text-5xl lg:text-7xl"
-            style={{ fontFamily: 'var(--font-space-grotesk)' }}
+            className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-white sm:text-5xl lg:text-7xl"
           >
             We build the systems behind growing businesses
           </AnimatedHeading>
@@ -70,12 +75,11 @@ export function AboutPage() {
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.15, duration: 0.6, ease: EASE_OUT_EXPO }}
-            className="mt-6 max-w-2xl text-base text-white/60 sm:text-lg"
+            className="mt-6 max-w-2xl font-sans text-base font-light text-white/60 sm:text-lg"
           >
-            TrishulHub is a digital solutions company. We craft custom websites,
-            business software panels, and CRM platforms so founders and teams
-            can manage customers, operations, and growth without fighting their
-            tools.
+            Founded in 2023 as a website studio, TrishulHub grew into custom
+            software and CRM — so founders and teams can manage customers,
+            operations, and growth without fighting their tools.
           </motion.p>
         </motion.div>
 
@@ -91,26 +95,24 @@ export function AboutPage() {
                 delay: i * 0.08,
                 ease: EASE_OUT_EXPO,
               }}
-              className="rounded-3xl border border-white/10 bg-white/[0.03] p-8 backdrop-blur-md"
+              className="rounded-[18px] border border-white/10 bg-white/[0.03] p-8 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md"
             >
-              <div
-                className="mb-5 text-sm font-semibold text-[#00DEFF]"
-                style={{ fontFamily: 'var(--font-space-grotesk)' }}
-              >
+              <div className="mb-5 font-display text-sm font-semibold text-[#00DEFF]">
                 0{i + 1}
               </div>
-              <h2
-                className="text-xl font-bold text-white"
-                style={{ fontFamily: 'var(--font-space-grotesk)' }}
-              >
+              <h2 className="font-display text-xl font-bold text-white">
                 {p.title}
               </h2>
-              <p className="mt-3 text-sm leading-relaxed text-white/55">
+              <p className="mt-3 font-sans text-sm font-light leading-relaxed text-white/55">
                 {p.text}
               </p>
             </motion.div>
           ))}
         </div>
+
+        <AboutTimeline />
+        <AboutProtocol />
+        <AboutSignals />
 
         <motion.div
           initial={{ opacity: 0, y: 60 }}
@@ -121,13 +123,10 @@ export function AboutPage() {
         >
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,222,255,0.12),transparent_45%)]" />
           <div className="relative max-w-3xl">
-            <h2
-              className="text-3xl font-bold text-white sm:text-4xl"
-              style={{ fontFamily: 'var(--font-space-grotesk)' }}
-            >
+            <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
               Why teams choose us
             </h2>
-            <p className="mt-4 text-base text-white/60">
+            <p className="mt-4 font-sans text-base font-light text-white/60">
               Because every business is different. Some need a storefront. Some
               need inventory control. Some need a healthcare admin. Some need a
               CRM for staff and customers. We listen first — then build software

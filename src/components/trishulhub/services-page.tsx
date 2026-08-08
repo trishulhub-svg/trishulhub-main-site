@@ -16,7 +16,6 @@ import {
   UserCheck,
   LayoutDashboard,
   Workflow,
-  Asterisk,
   Package,
   ShoppingCart,
   BarChart3,
@@ -26,6 +25,7 @@ import {
   Handshake,
   ListChecks,
   PieChart,
+  Waypoints,
   type LucideIcon,
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
@@ -36,42 +36,8 @@ type ServiceId = 'website' | 'software' | 'crm'
 
 const services = [
   {
-    id: 'website' as const,
-    num: '01',
-    title: 'Web Development',
-    desc: 'TrishulHub designs and builds websites for every kind of customer need — ecommerce, business, portfolio, or local brand — ready to launch and convert.',
-    startLabel: 'Start building your site',
-    actions: [
-      { icon: Sparkles, label: 'Design System' },
-      { icon: LayoutTemplate, label: 'Page Builder' },
-      { icon: TrendingUp, label: 'Convert Faster' },
-    ],
-    rows: [
-      { topic: '#Ecommerce', reach: 'Store + cart', velocity: 'Popular', hot: false },
-      { topic: '#BusinessSite', reach: 'Lead-focused', velocity: 'Most booked', hot: true },
-    ],
-    tableHeaders: ['Project Type', 'Focus', 'Demand'] as const,
-    features: [
-      {
-        icon: Crosshair,
-        title: 'Brand-first layouts',
-        text: 'Every page is shaped around your offer, audience, and conversion goals — not a generic template dump.',
-      },
-      {
-        icon: RefreshCw,
-        title: 'Fast iteration',
-        text: 'Ship a polished first version, then refine sections, CTAs, and flows as your business grows.',
-      },
-      {
-        icon: Shield,
-        title: 'Solid foundations',
-        text: 'Mobile-ready structure, clear navigation, and performance-minded builds from day one.',
-      },
-    ],
-  },
-  {
     id: 'software' as const,
-    num: '02',
+    num: '01',
     title: 'Custom Software Development',
     desc: 'Custom admin panels and app systems for inventory, healthcare, ecommerce ops, HR, and any workflow your team needs day to day.',
     startLabel: 'Start designing your software',
@@ -100,6 +66,40 @@ const services = [
         icon: Shield,
         title: 'Access control',
         text: 'Role-based permissions keep sensitive data safe while giving each user what they need.',
+      },
+    ],
+  },
+  {
+    id: 'website' as const,
+    num: '02',
+    title: 'Web Development',
+    desc: 'TrishulHub designs and builds websites for every kind of customer need — ecommerce, business, portfolio, or local brand — ready to launch and convert.',
+    startLabel: 'Start building your site',
+    actions: [
+      { icon: Sparkles, label: 'Design System' },
+      { icon: LayoutTemplate, label: 'Page Builder' },
+      { icon: TrendingUp, label: 'Convert Faster' },
+    ],
+    rows: [
+      { topic: '#Ecommerce', reach: 'Store + cart', velocity: 'Popular', hot: false },
+      { topic: '#BusinessSite', reach: 'Lead-focused', velocity: 'Most booked', hot: true },
+    ],
+    tableHeaders: ['Project Type', 'Focus', 'Demand'] as const,
+    features: [
+      {
+        icon: Crosshair,
+        title: 'Brand-first layouts',
+        text: 'Every page is shaped around your offer, audience, and conversion goals — not a generic template dump.',
+      },
+      {
+        icon: RefreshCw,
+        title: 'Fast iteration',
+        text: 'Ship a polished first version, then refine sections, CTAs, and flows as your business grows.',
+      },
+      {
+        icon: Shield,
+        title: 'Solid foundations',
+        text: 'Mobile-ready structure, clear navigation, and performance-minded builds from day one.',
       },
     ],
   },
@@ -159,8 +159,8 @@ export function ServicesPage() {
             Three systems. One craft studio.
           </AnimatedHeading>
           <p className="mt-5 font-sans text-base text-neutral-400 sm:text-lg">
-            Web development, custom software, and CRM — each service in its own
-            card with matching dual panels and a clear contact path.
+            Custom software first, then web development and CRM — each service
+            in its own card with matching dual panels and a clear contact path.
           </p>
         </div>
 
@@ -415,7 +415,7 @@ function OrbitHubPreview({ kind }: { kind: 'software' | 'crm' }) {
     kind === 'software' ? (
       <Boxes size={22} />
     ) : (
-      <Asterisk size={22} strokeWidth={2.5} />
+      <Waypoints size={22} strokeWidth={2.25} />
     )
   const label = kind === 'software' ? 'Ops Hub' : 'CRM Hub'
   const badge = kind === 'software' ? 'Admin preview' : 'Pipeline preview'

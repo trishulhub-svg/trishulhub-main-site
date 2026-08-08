@@ -18,23 +18,6 @@ const plans: {
   cta: string
 }[] = [
   {
-    id: 'website',
-    label: 'Web Development',
-    icon: Globe,
-    price: 'Custom',
-    period: '/project',
-    description:
-      'Ideal for brands that need a clean, conversion-ready website tailored to their offer.',
-    features: [
-      'Brand-matched landing pages',
-      'Ecommerce or business layouts',
-      'Mobile-first structure',
-      'Contact and lead flows',
-      'Launch support',
-    ],
-    cta: 'Start your website',
-  },
-  {
     id: 'software',
     label: 'Custom Software Development',
     icon: LayoutDashboard,
@@ -50,6 +33,23 @@ const plans: {
       'Process-fit UX',
     ],
     cta: 'Start your software',
+  },
+  {
+    id: 'website',
+    label: 'Web Development',
+    icon: Globe,
+    price: 'Custom',
+    period: '/project',
+    description:
+      'Ideal for brands that need a clean, conversion-ready website tailored to their offer.',
+    features: [
+      'Brand-matched landing pages',
+      'Ecommerce or business layouts',
+      'Mobile-first structure',
+      'Contact and lead flows',
+      'Launch support',
+    ],
+    cta: 'Start your website',
   },
   {
     id: 'crm',
@@ -76,7 +76,7 @@ type LineGeom = {
 }
 
 export function HomeUnlock() {
-  const [active, setActive] = useState<PlanId>('website')
+  const [active, setActive] = useState<PlanId>('software')
   const current = useMemo(
     () => plans.find((p) => p.id === active) ?? plans[0],
     [active],
