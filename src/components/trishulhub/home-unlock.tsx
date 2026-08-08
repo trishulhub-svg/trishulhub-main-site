@@ -152,8 +152,8 @@ export function HomeUnlock() {
               Pick what you need
             </h2>
             <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
-              Choose the system you want to unlock — web development, custom
-              software, or CRM — then talk to us to make it real.
+              Choose a website, custom software, or a mobile app — then talk to
+              us and we will build it with you.
             </p>
 
             <div className="relative mt-8 flex flex-1 flex-col justify-center gap-3">

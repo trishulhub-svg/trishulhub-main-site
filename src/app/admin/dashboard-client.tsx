@@ -942,7 +942,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                           <Input
                             value={p.name}
                             onChange={(v) => updateProject(i, 'name', v)}
-                            placeholder="TrishulHub CRM"
+                            placeholder="TrishulHub App"
                           />
                         </Field>
                         <Field label="Year">

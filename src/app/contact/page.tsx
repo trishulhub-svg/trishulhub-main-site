@@ -4,7 +4,7 @@ import { ContactPage } from '@/components/trishulhub/contact-page'
 export const metadata = {
   title: 'Contact | TrishulHub',
   description:
-    'Contact TrishulHub to start a website, custom software, or CRM project.',
+    'Contact TrishulHub to start a website, software, or mobile app project.',
 }
 
 export default function ContactRoute() {
