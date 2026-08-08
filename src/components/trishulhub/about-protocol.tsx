@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, Coins, Check } from 'lucide-react'
+import { ChevronRight, Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type Currency = 'USD' | 'INR'
@@ -111,9 +111,17 @@ export function AboutProtocol({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.25 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="rounded-3xl border border-white/10 bg-[#0a0a0a]/70 p-8 backdrop-blur-[18px] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#00DEFF]/25 md:p-12"
+          className="work-wizard-attract relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/70 p-8 backdrop-blur-[18px] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#00DEFF]/35 md:p-12"
         >
-          <div className="mx-auto max-w-3xl text-center">
+          <div
+            aria-hidden
+            className="work-wizard-glow pointer-events-none absolute -inset-px rounded-3xl"
+          />
+          <div
+            aria-hidden
+            className="work-wizard-shine pointer-events-none absolute inset-0 opacity-40"
+          />
+          <div className="relative mx-auto max-w-3xl text-center">
             <h3 className="font-display text-3xl font-medium tracking-tight text-white md:text-4xl">
               How TrishulHub works with you
             </h3>
@@ -217,8 +225,7 @@ export function AboutProtocol({
                           className="absolute -bottom-8 transition-all duration-300"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="inline-flex animate-pulse items-center gap-1 rounded-lg bg-[#00DEFF] px-2.5 py-1 text-[#0A0A0A] shadow-[0_0_16px_rgba(0,222,255,0.4)]">
-                            <Coins className="size-3.5" />
+                          <div className="work-wizard-badge inline-flex items-center rounded-lg bg-[#00DEFF] px-2.5 py-1 text-[#0A0A0A] shadow-[0_0_16px_rgba(0,222,255,0.4)]">
                             <span className="font-sans text-xs font-semibold tracking-tight">
                               {budget}
                             </span>
