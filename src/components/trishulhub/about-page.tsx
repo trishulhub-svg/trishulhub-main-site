@@ -34,7 +34,6 @@ export function AboutPage() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <AboutHeroProtocol />
         <AboutTimeline />
-        <AboutProtocol />
         <AboutSignals />
       </div>
     </div>

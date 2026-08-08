@@ -138,15 +138,16 @@ function PipelineRow({
   delayMs?: number
 }) {
   const [value, setValue] = useState(0)
-  const reduceMotion =
-    typeof window !== 'undefined' &&
-    window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
   useEffect(() => {
     if (!active) {
       setValue(0)
       return
     }
+
+    const reduceMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)',
+    ).matches
     if (reduceMotion) {
       setValue(pct)
       return
@@ -172,7 +173,6 @@ function PipelineRow({
         } else {
           timeout = window.setTimeout(() => {
             if (cancelled) return
-            // Soft reset, then loop
             const resetStart = performance.now()
             const resetTick = (rNow: number) => {
               if (cancelled) return
@@ -198,7 +198,7 @@ function PipelineRow({
       cancelAnimationFrame(raf)
       window.clearTimeout(timeout)
     }
-  }, [active, pct, delayMs, reduceMotion])
+  }, [active, pct, delayMs])
 
   return (
     <div>
