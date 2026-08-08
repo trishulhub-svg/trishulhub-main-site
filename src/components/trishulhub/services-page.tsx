@@ -31,7 +31,7 @@ import {
 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
-import { WHATSAPP_URL } from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO, STAGGER } from '@/lib/animations'
 
 type ServiceId = 'website' | 'software' | 'mobile'
@@ -142,6 +142,8 @@ const services = [
 ]
 
 export function ServicesPage() {
+  const { links } = useSiteContact()
+
   return (
     <div className="relative pb-28 pt-28 sm:pt-32">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -213,7 +215,7 @@ export function ServicesPage() {
                     </p>
                   </div>
                   <div className="relative z-10 self-start">
-                    <NexusButton href={WHATSAPP_URL}>{s.startLabel}</NexusButton>
+                    <NexusButton href={links.whatsapp}>{s.startLabel}</NexusButton>
                   </div>
                 </div>
 
@@ -288,6 +290,8 @@ function LeftAnalyticsCard({
 }: {
   service: (typeof services)[number]
 }) {
+  const { links } = useSiteContact()
+
   return (
     <div className="electric-card flex h-full min-h-[440px] flex-col overflow-hidden rounded-[32px] border border-white/10 bg-[#161616] p-6 sm:p-7">
       <div className="grid grid-cols-3 gap-3">
@@ -344,7 +348,7 @@ function LeftAnalyticsCard({
       <div className="mt-6 flex items-center justify-between gap-3 rounded-2xl border border-white/10 bg-black/50 px-4 py-3">
         <div className="font-sans text-sm text-neutral-300">Contact TrishulHub</div>
         <a
-          href={WHATSAPP_URL}
+          href={links.whatsapp}
           target="_blank"
           rel="noopener noreferrer"
           className="rounded-lg border border-white/15 bg-neutral-900 px-3.5 py-1.5 font-sans text-xs font-medium text-white transition hover:border-[#00DEFF]/50 hover:text-[#00DEFF]"

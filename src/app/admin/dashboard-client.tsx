@@ -76,6 +76,9 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     phoneDisplay: '+91 96621 06793',
     email: 'trishulhub@gmail.com',
     whatsapp: '919662106793',
+    instagram: 'https://www.instagram.com/',
+    location: 'India · Remote-friendly',
+    whatsappPrefill: 'Hi TrishulHub — I want to talk about a project.',
   })
   const [savingSite, setSavingSite] = useState(false)
 
@@ -567,13 +570,14 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           )}
 
           {tab === 'about' && (
-            <Card title="Site Contact (WhatsApp / Call / Email)" icon={<Phone size={16} />}>
+            <Card title="Site Contact (whole website)" icon={<Phone size={16} />}>
               <p className="mb-4 text-sm text-white/50">
-                These details power Contact Us, WhatsApp buttons, and call/email links
-                across the website. Any founder can update them.
+                These details power Contact us, footer, WhatsApp / Call / Email /
+                Instagram buttons, and the location line across the whole site.
+                Save once — every page picks it up.
               </p>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Field label="WhatsApp number (digits only)">
+                <Field label="WhatsApp number (digits only, with country code)">
                   <Input
                     value={siteContact.whatsapp}
                     onChange={(v) =>
@@ -604,6 +608,31 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     type="email"
                   />
                 </Field>
+                <Field label="Instagram profile URL">
+                  <Input
+                    value={siteContact.instagram}
+                    onChange={(v) => setSiteContact((c) => ({ ...c, instagram: v }))}
+                    placeholder="https://www.instagram.com/yourhandle"
+                  />
+                </Field>
+                <Field label="Location / address line">
+                  <Input
+                    value={siteContact.location}
+                    onChange={(v) => setSiteContact((c) => ({ ...c, location: v }))}
+                    placeholder="India · Remote-friendly"
+                  />
+                </Field>
+                <div className="sm:col-span-2">
+                  <Field label="Default WhatsApp message (opens when people tap WhatsApp)">
+                    <Input
+                      value={siteContact.whatsappPrefill}
+                      onChange={(v) =>
+                        setSiteContact((c) => ({ ...c, whatsappPrefill: v }))
+                      }
+                      placeholder="Hi TrishulHub — I want to talk about a project."
+                    />
+                  </Field>
+                </div>
               </div>
               <button
                 type="button"

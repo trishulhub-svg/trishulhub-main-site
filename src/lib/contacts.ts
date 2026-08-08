@@ -1,17 +1,35 @@
-/** Public TrishulHub contact channels — used across CTAs site-wide */
+/**
+ * Public TrishulHub contact helpers.
+ *
+ * Live values are edited in Admin → Site Contact and stored in
+ * `public/site-contact.json`. Prefer `useSiteContact()` in client UI so
+ * admin edits apply across the site. These exports are safe defaults /
+ * fallbacks for SSR and first paint.
+ */
 
-export const SITE_PHONE_E164 = '919662106793'
-export const SITE_PHONE_DISPLAY = '+91 96621 06793'
-export const SITE_EMAIL = 'trishulhub@gmail.com'
+import {
+  DEFAULT_SITE_CONTACT,
+  mailtoUrl,
+  telUrl,
+  whatsappUrl,
+  type SiteContact,
+} from '@/lib/site-contact'
 
-const WA_TEXT = encodeURIComponent(
-  'Hi TrishulHub — I want to talk about a project.',
-)
+export type { SiteContact }
 
-export const WHATSAPP_URL = `https://wa.me/${SITE_PHONE_E164}?text=${WA_TEXT}`
-export const TEL_URL = `tel:+${SITE_PHONE_E164}`
-export const MAILTO_URL = `mailto:${SITE_EMAIL}`
+export const SITE_PHONE_E164 = DEFAULT_SITE_CONTACT.whatsapp
+export const SITE_PHONE_DISPLAY = DEFAULT_SITE_CONTACT.phoneDisplay
+export const SITE_EMAIL = DEFAULT_SITE_CONTACT.email
+export const SITE_INSTAGRAM = DEFAULT_SITE_CONTACT.instagram
+export const SITE_LOCATION = DEFAULT_SITE_CONTACT.location
 
-export function whatsappWithMessage(message: string) {
-  return `https://wa.me/${SITE_PHONE_E164}?text=${encodeURIComponent(message)}`
+export const WHATSAPP_URL = whatsappUrl(DEFAULT_SITE_CONTACT)
+export const TEL_URL = telUrl(DEFAULT_SITE_CONTACT)
+export const MAILTO_URL = mailtoUrl(DEFAULT_SITE_CONTACT)
+
+export function whatsappWithMessage(
+  message: string,
+  contact: SiteContact = DEFAULT_SITE_CONTACT,
+) {
+  return whatsappUrl(contact, message)
 }

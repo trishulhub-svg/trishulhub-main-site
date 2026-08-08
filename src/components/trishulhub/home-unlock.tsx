@@ -4,7 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Globe, LayoutDashboard, Smartphone, Zap } from 'lucide-react'
 import { NexusButton } from './nexus-button'
-import { WHATSAPP_URL } from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type PlanId = 'website' | 'software' | 'mobile'
 
@@ -77,6 +77,7 @@ type LineGeom = {
 }
 
 export function HomeUnlock() {
+  const { links } = useSiteContact()
   const [active, setActive] = useState<PlanId>('software')
   const current = useMemo(
     () => plans.find((p) => p.id === active) ?? plans[0],
@@ -278,7 +279,7 @@ export function HomeUnlock() {
             </ul>
 
             <div className="mt-8 w-full">
-              <NexusButton href={WHATSAPP_URL} fullWidth>
+              <NexusButton href={links.whatsapp} fullWidth>
                 {current.cta}
               </NexusButton>
             </div>

@@ -4,10 +4,12 @@ import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
 import { AnimatedHeading } from './animated-heading'
 import { NexusButton } from './nexus-button'
-import { MAILTO_URL, SITE_EMAIL, WHATSAPP_URL } from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function CTA() {
+  const { email, links } = useSiteContact()
+
   return (
     <section className="relative py-20 sm:py-28">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -39,13 +41,13 @@ export function CTA() {
               and we will help you get started.
             </p>
             <div className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row">
-              <NexusButton href={WHATSAPP_URL}>Contact us</NexusButton>
+              <NexusButton href={links.whatsapp}>Contact us</NexusButton>
               <a
-                href={MAILTO_URL}
+                href={links.mailto}
                 className="inline-flex items-center gap-2 text-sm text-white/60 transition-colors hover:text-[#00DEFF]"
               >
                 <Mail size={16} />
-                {SITE_EMAIL}
+                {email}
               </a>
             </div>
           </div>

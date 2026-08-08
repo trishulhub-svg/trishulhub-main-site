@@ -1,4 +1,4 @@
-import { SiteShell } from '@/components/trishulhub/site-shell'
+import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
 import { ContactPage } from '@/components/trishulhub/contact-page'
 
 export const metadata = {
@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function ContactRoute() {
   return (
-    <SiteShell>
+    <ServerSiteShell>
       <ContactPage />
-    </SiteShell>
+    </ServerSiteShell>
   )
 }

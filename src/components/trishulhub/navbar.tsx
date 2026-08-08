@@ -6,9 +6,10 @@ import { usePathname } from 'next/navigation'
 import { motion, useReducedMotion } from 'framer-motion'
 import { Menu, X, Lock } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const links = [
+const navLinks = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
   { label: 'About us', href: '/about' },
@@ -20,6 +21,7 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const reduce = useReducedMotion()
   const pathname = usePathname()
+  const { links: contactLinks } = useSiteContact()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
@@ -50,7 +52,7 @@ export function Navbar() {
           </motion.div>
 
           <nav className="hidden items-center gap-1 md:flex">
-            {links.map((l) => {
+            {navLinks.map((l) => {
               const active = pathname === l.href
               return (
                 <Link
@@ -78,7 +80,7 @@ export function Navbar() {
               <span className="relative z-10">Login</span>
             </Link>
             <a
-              href="https://wa.me/919662106793?text=Hi%20TrishulHub%20%E2%80%94%20I%20want%20to%20talk%20about%20a%20project."
+              href={contactLinks.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               className="btn-cyan btn-shine hidden rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-5 py-2 text-sm font-semibold text-[#00DEFF] backdrop-blur-md transition-all hover:bg-[#00DEFF]/20 sm:inline-block"
@@ -103,7 +105,7 @@ export function Navbar() {
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
             className="mt-2 flex flex-col gap-1 rounded-2xl border border-white/10 bg-white/5 p-3 backdrop-blur-md md:hidden"
           >
-            {links.map((l) => (
+            {navLinks.map((l) => (
               <Link
                 key={l.label}
                 href={l.href}
@@ -113,13 +115,15 @@ export function Navbar() {
                 {l.label}
               </Link>
             ))}
-            <Link
-              href="/contact"
+            <a
+              href={contactLinks.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setOpen(false)}
               className="mt-1 rounded-lg border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-4 py-3 text-center text-sm font-semibold text-[#00DEFF] backdrop-blur-md"
             >
               Get Started
-            </Link>
+            </a>
           </motion.nav>
         )}
       </div>

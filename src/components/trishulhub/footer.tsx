@@ -2,13 +2,7 @@
 
 import Link from 'next/link'
 import { BrandLogo } from './brand-logo'
-import {
-  MAILTO_URL,
-  SITE_EMAIL,
-  SITE_PHONE_DISPLAY,
-  TEL_URL,
-  WHATSAPP_URL,
-} from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 const services = [
   { label: 'Custom Software', href: '/services#software' },
@@ -24,6 +18,8 @@ const company = [
 ]
 
 export function Footer() {
+  const { email, phoneDisplay, location, links } = useSiteContact()
+
   return (
     <footer className="relative z-10 mt-auto border-t border-white/10 bg-[#0A0A0A]/85 backdrop-blur-md">
       <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00DEFF]/40 to-transparent" />
@@ -81,23 +77,23 @@ export function Footer() {
             <ul className="mt-4 space-y-2.5 text-sm text-white/60">
               <li>
                 <a
-                  href={MAILTO_URL}
+                  href={links.mailto}
                   className="transition-colors hover:text-[#00DEFF]"
                 >
-                  {SITE_EMAIL}
+                  {email}
                 </a>
               </li>
               <li>
                 <a
-                  href={TEL_URL}
+                  href={links.tel}
                   className="transition-colors hover:text-[#00DEFF]"
                 >
-                  {SITE_PHONE_DISPLAY}
+                  {phoneDisplay}
                 </a>
               </li>
               <li>
                 <a
-                  href={WHATSAPP_URL}
+                  href={links.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="transition-colors hover:text-[#00DEFF]"
@@ -105,6 +101,17 @@ export function Footer() {
                   WhatsApp
                 </a>
               </li>
+              <li>
+                <a
+                  href={links.instagram}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="transition-colors hover:text-[#00DEFF]"
+                >
+                  Instagram
+                </a>
+              </li>
+              <li className="text-white/45">{location}</li>
             </ul>
           </div>
         </div>
@@ -114,7 +121,7 @@ export function Footer() {
             © {new Date().getFullYear()} TrishulHub. All rights reserved.
           </div>
           <a
-            href={WHATSAPP_URL}
+            href={links.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
             className="text-xs text-white/40 transition-colors hover:text-[#00DEFF]"

@@ -1,4 +1,4 @@
-import { SiteShell } from '@/components/trishulhub/site-shell'
+import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
 import { ServicesPage } from '@/components/trishulhub/services-page'
 
 export const metadata = {
@@ -9,8 +9,8 @@ export const metadata = {
 
 export default function ServicesRoute() {
   return (
-    <SiteShell>
+    <ServerSiteShell>
       <ServicesPage />
-    </SiteShell>
+    </ServerSiteShell>
   )
 }

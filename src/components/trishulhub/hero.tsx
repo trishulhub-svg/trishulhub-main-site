@@ -4,7 +4,7 @@ import Link from 'next/link'
 import { motion, useReducedMotion } from 'framer-motion'
 import { FadeIn } from './motion-primitives'
 import { NexusButton } from './nexus-button'
-import { WHATSAPP_URL } from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const heroStagger = {
@@ -23,6 +23,7 @@ const heroItem = {
 
 export function Hero() {
   const reduce = useReducedMotion()
+  const { links } = useSiteContact()
 
   return (
     <section
@@ -75,7 +76,7 @@ export function Hero() {
           variants={heroItem}
           className="mt-10 flex flex-col items-center justify-center gap-4 sm:flex-row"
         >
-          <NexusButton href={WHATSAPP_URL}>Let&apos;s build yours</NexusButton>
+          <NexusButton href={links.whatsapp}>Let&apos;s build yours</NexusButton>
           <Link
             href="/services"
             className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition-all hover:text-[#00DEFF] sm:w-auto"

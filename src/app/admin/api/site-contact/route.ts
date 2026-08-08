@@ -1,28 +1,17 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { promises as fs } from 'fs'
-import path from 'path'
 import { getSession } from '@/lib/auth'
-
-const CONTACT_PATH = path.join(process.cwd(), 'public', 'site-contact.json')
-
-const DEFAULTS = {
-  phone: '+919662106793',
-  phoneDisplay: '+91 96621 06793',
-  email: 'trishulhub@gmail.com',
-  whatsapp: '919662106793',
-}
-
-async function readContact() {
-  try {
-    const raw = await fs.readFile(CONTACT_PATH, 'utf8')
-    return { ...DEFAULTS, ...JSON.parse(raw) }
-  } catch {
-    return { ...DEFAULTS }
-  }
-}
+import {
+  DEFAULT_SITE_CONTACT,
+  mergeSiteContact,
+  type SiteContact,
+} from '@/lib/site-contact'
+import {
+  readSiteContactFile,
+  writeSiteContactFile,
+} from '@/lib/site-contact-io'
 
 export async function GET() {
-  const data = await readContact()
+  const data = await readSiteContactFile()
   return NextResponse.json(data)
 }
 
@@ -32,16 +21,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const body = await req.json().catch(() => ({}))
-  const next = {
-    phone: String(body.phone || DEFAULTS.phone).trim(),
-    phoneDisplay: String(body.phoneDisplay || DEFAULTS.phoneDisplay).trim(),
-    email: String(body.email || DEFAULTS.email).trim(),
-    whatsapp: String(body.whatsapp || DEFAULTS.whatsapp)
-      .replace(/\D/g, '')
-      .trim(),
-  }
+  const body = (await req.json().catch(() => ({}))) as Partial<SiteContact>
+  const next = mergeSiteContact({
+    ...DEFAULT_SITE_CONTACT,
+    ...body,
+  })
 
-  await fs.writeFile(CONTACT_PATH, JSON.stringify(next, null, 2) + '\n', 'utf8')
-  return NextResponse.json({ ok: true, contact: next })
+  const saved = await writeSiteContactFile(next)
+  return NextResponse.json({ ok: true, contact: saved })
 }

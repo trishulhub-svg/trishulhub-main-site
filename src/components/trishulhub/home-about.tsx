@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Database, Cpu, Send, Sparkles, Smartphone } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
-import { WHATSAPP_URL } from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const PATH_A =
@@ -13,6 +13,8 @@ const PATH_B =
   'M200,260 C320,260 360,410 520,430 C640,445 720,370 820,260'
 
 export function HomeAbout() {
+  const { links } = useSiteContact()
+
   return (
     <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
       <div className="pointer-events-none absolute left-[10%] top-20 h-64 w-64 rounded-full bg-[#00DEFF]/10 blur-[110px]" />
@@ -46,7 +48,7 @@ export function HomeAbout() {
             better every day.
           </motion.p>
           <div className="mt-8">
-            <NexusButton href={WHATSAPP_URL}>Talk on WhatsApp</NexusButton>
+            <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
           </div>
         </div>
 

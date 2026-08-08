@@ -5,13 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
-import {
-  MAILTO_URL,
-  SITE_EMAIL,
-  SITE_PHONE_DISPLAY,
-  TEL_URL,
-  whatsappWithMessage,
-} from '@/lib/contacts'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function ContactPage() {
@@ -23,6 +17,8 @@ export function ContactPage() {
   const formY = useTransform(scrollYProgress, [0, 1], [24, -24])
   const glowY = useTransform(scrollYProgress, [0, 1], [0, -120])
   const [sent, setSent] = useState(false)
+  const { email, phoneDisplay, location, links, whatsappWithMessage } =
+    useSiteContact()
 
   return (
     <div ref={ref} className="relative overflow-hidden pb-28 pt-28 sm:pt-32">
@@ -36,22 +32,22 @@ export function ContactPage() {
       <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
         <div className="mb-8 flex flex-wrap items-center gap-4">
           <a
-            href={MAILTO_URL}
+            href={links.mailto}
             className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md transition-colors hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
           >
             <Mail className="text-[#00DEFF]" size={16} />
-            {SITE_EMAIL}
+            {email}
           </a>
           <a
-            href={TEL_URL}
+            href={links.tel}
             className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md transition-colors hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
           >
             <Phone className="text-[#00DEFF]" size={16} />
-            {SITE_PHONE_DISPLAY}
+            {phoneDisplay}
           </a>
           <div className="inline-flex items-center gap-2 rounded-2xl border border-white/10 bg-white/[0.03] px-4 py-2.5 text-sm text-white/70 backdrop-blur-md">
             <MapPin className="text-[#00DEFF]" size={16} />
-            India · Remote-friendly
+            {location}
           </div>
         </div>
 
@@ -66,10 +62,10 @@ export function ContactPage() {
             e.preventDefault()
             const fd = new FormData(e.currentTarget)
             const name = String(fd.get('name') || '')
-            const email = String(fd.get('email') || '')
+            const emailValue = String(fd.get('email') || '')
             const service = String(fd.get('service') || '')
             const message = String(fd.get('message') || '')
-            const text = `Hi TrishulHub — I'm ${name}.\nEmail: ${email}\nService: ${service}\n\n${message}`
+            const text = `Hi TrishulHub — I'm ${name}.\nEmail: ${emailValue}\nService: ${service}\n\n${message}`
             window.open(whatsappWithMessage(text), '_blank', 'noopener,noreferrer')
             setSent(true)
           }}
@@ -100,14 +96,10 @@ export function ContactPage() {
           </label>
           <label className="mb-4 block">
             <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-white/40">
-              What do you need?
+              Service
             </span>
-            <select
-              name="service"
-              className="field-input"
-              defaultValue="Websites"
-            >
-              <option>Websites</option>
+            <select name="service" className="field-input" defaultValue="Website">
+              <option>Website</option>
               <option>Custom Software</option>
               <option>Mobile Apps</option>
               <option>Not sure yet</option>

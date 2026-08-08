@@ -6,14 +6,7 @@ import { Phone, Mail, Instagram } from 'lucide-react'
 import { type ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
-import { MAILTO_URL, TEL_URL, WHATSAPP_URL } from '@/lib/contacts'
-
-const CONTACTS = {
-  whatsapp: WHATSAPP_URL,
-  call: TEL_URL,
-  email: MAILTO_URL,
-  instagram: 'https://www.instagram.com/',
-}
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type NodeSpec = {
   id: string
@@ -30,55 +23,11 @@ type NodeSpec = {
 const VB_W = 1000
 const VB_H = 560
 
-const nodes: NodeSpec[] = [
-  {
-    id: 'whatsapp',
-    label: 'WhatsApp',
-    href: CONTACTS.whatsapp,
-    external: true,
-    color: 'text-emerald-400',
-    glow: 'rgba(52,211,153,0.35)',
-    x: 165,
-    y: 130,
-    icon: (
-      <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden>
-        <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
-      </svg>
-    ),
-  },
-  {
-    id: 'call',
-    label: 'Call us',
-    href: CONTACTS.call,
-    external: true,
-    color: 'text-[#00DEFF]',
-    glow: 'rgba(0,222,255,0.35)',
-    x: 165,
-    y: 430,
-    icon: <Phone className="h-6 w-6" strokeWidth={1.5} />,
-  },
-  {
-    id: 'email',
-    label: 'Email',
-    href: CONTACTS.email,
-    color: 'text-[#33E6FF]',
-    glow: 'rgba(0,222,255,0.35)',
-    x: 835,
-    y: 130,
-    icon: <Mail className="h-6 w-6" strokeWidth={1.5} />,
-  },
-  {
-    id: 'instagram',
-    label: 'Instagram',
-    href: CONTACTS.instagram,
-    external: true,
-    color: 'text-pink-400',
-    glow: 'rgba(236,72,153,0.35)',
-    x: 835,
-    y: 430,
-    icon: <Instagram className="h-6 w-6" strokeWidth={1.5} />,
-  },
-]
+const WHATSAPP_ICON = (
+  <svg viewBox="0 0 24 24" className="h-6 w-6 fill-current" aria-hidden>
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.435 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z" />
+  </svg>
+)
 
 const PATHS = [
   'M 165 130 L 290 130 Q 360 130 360 200 V 255 Q 360 280 390 280 L 440 280',
@@ -166,6 +115,54 @@ function MobileNode({ node }: { node: NodeSpec }) {
 }
 
 export function HomeGetInTouch() {
+  const { links } = useSiteContact()
+
+  const nodes: NodeSpec[] = [
+    {
+      id: 'whatsapp',
+      label: 'WhatsApp',
+      href: links.whatsapp,
+      external: true,
+      color: 'text-emerald-400',
+      glow: 'rgba(52,211,153,0.35)',
+      x: 165,
+      y: 130,
+      icon: WHATSAPP_ICON,
+    },
+    {
+      id: 'call',
+      label: 'Call us',
+      href: links.tel,
+      external: true,
+      color: 'text-[#00DEFF]',
+      glow: 'rgba(0,222,255,0.35)',
+      x: 165,
+      y: 430,
+      icon: <Phone className="h-6 w-6" strokeWidth={1.5} />,
+    },
+    {
+      id: 'email',
+      label: 'Email',
+      href: links.mailto,
+      color: 'text-[#33E6FF]',
+      glow: 'rgba(0,222,255,0.35)',
+      x: 835,
+      y: 130,
+      icon: <Mail className="h-6 w-6" strokeWidth={1.5} />,
+    },
+    {
+      id: 'instagram',
+      label: 'Instagram',
+      href: links.instagram,
+      external: true,
+      color: 'text-pink-400',
+      glow: 'rgba(236,72,153,0.35)',
+      x: 835,
+      y: 430,
+      icon: <Instagram className="h-6 w-6" strokeWidth={1.5} />,
+    },
+  ]
+
   return (
     <section className="relative py-10 sm:py-14">
       <div className="relative mx-auto max-w-7xl rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/[0.02] to-white/10 px-5 py-10 sm:px-10">

@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import { whatsappWithMessage } from '@/lib/contacts'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type Currency = 'USD' | 'INR'
 
@@ -46,6 +46,7 @@ export function AboutProtocol({
 }: {
   className?: string
 }) {
+  const { whatsappWithMessage } = useSiteContact()
   const [step, setStep] = useState(1)
   const [currency, setCurrency] = useState<Currency>('USD')
   const [budgetIndex, setBudgetIndex] = useState(1)
