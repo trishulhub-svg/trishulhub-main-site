@@ -4,7 +4,6 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { AboutHeroProtocol } from '@/components/trishulhub/about-hero-protocol'
 import { AboutTimeline } from '@/components/trishulhub/about-timeline'
-import { AboutProtocol } from '@/components/trishulhub/about-protocol'
 import { AboutSignals } from '@/components/trishulhub/about-signals'
 
 export function AboutPage() {
