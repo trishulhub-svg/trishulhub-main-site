@@ -4,7 +4,7 @@ import { Team } from '@/components/trishulhub/team'
 import { db } from '@/lib/db'
 
 export const metadata = {
-  title: 'About | TrishulHub',
+  title: 'About us | TrishulHub',
   description:
     'TrishulHub builds websites, business software, and mobile apps that help your company work better.',
 }

@@ -2,7 +2,6 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { AboutHeroProtocol } from '@/components/trishulhub/about-hero-protocol'
 import { AboutTimeline } from '@/components/trishulhub/about-timeline'
 import { AboutSignals } from '@/components/trishulhub/about-signals'
 
@@ -32,8 +31,18 @@ export function AboutPage() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        {/* Work-with-you wizard lives on Home only — do not remount AboutProtocol here */}
-        <AboutHeroProtocol />
+        <div className="mb-10 max-w-3xl">
+          <p className="font-display text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
+            About us
+          </p>
+          <h1 className="mt-3 font-display text-4xl font-bold tracking-tight text-white sm:text-5xl lg:text-6xl">
+            The team behind TrishulHub
+          </h1>
+          <p className="mt-4 max-w-2xl font-sans text-base font-light leading-relaxed text-white/60 sm:text-lg">
+            We build websites, custom software, and mobile apps that help
+            businesses work with clearer tools and fewer headaches.
+          </p>
+        </div>
         <AboutTimeline />
         <AboutSignals />
       </div>

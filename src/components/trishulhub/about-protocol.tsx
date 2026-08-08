@@ -2,9 +2,10 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ChevronRight, Check } from 'lucide-react'
+import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import { WHATSAPP_URL, whatsappWithMessage } from '@/lib/contacts'
+import { whatsappWithMessage } from '@/lib/contacts'
+import { NexusButton } from '@/components/trishulhub/nexus-button'
 
 type Currency = 'USD' | 'INR'
 
@@ -139,12 +140,12 @@ export function AboutProtocol({
                     key={n}
                     type="button"
                     onClick={() => setStep(n)}
-                    className={`flex size-10 items-center justify-center rounded-full font-sans text-sm font-semibold transition-all duration-500 hover:scale-110 ${
+                    className={`flex size-10 items-center justify-center rounded-lg font-sans text-sm font-semibold transition-all duration-500 hover:scale-105 ${
                       active
-                        ? 'bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.45)]'
+                        ? 'border border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_20px_rgba(0,222,255,0.35)]'
                         : done
-                          ? 'border border-[#00DEFF]/40 bg-[#00DEFF]/15 text-[#00DEFF]'
-                          : 'bg-white/10 text-white/60'
+                          ? 'border border-[#00DEFF]/35 bg-[#00DEFF]/10 text-[#00DEFF]'
+                          : 'border border-white/10 bg-white/5 text-white/60'
                     }`}
                     aria-label={`Step ${n}`}
                   >
@@ -183,10 +184,10 @@ export function AboutProtocol({
                             key={c.id}
                             type="button"
                             onClick={() => setCurrency(c.id)}
-                            className={`rounded-full px-4 py-1.5 font-sans text-xs font-semibold transition-all duration-300 ${
+                            className={`rounded-lg px-4 py-1.5 font-sans text-xs font-semibold transition-all duration-300 ${
                               currency === c.id
-                                ? 'bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_16px_rgba(0,222,255,0.35)]'
-                                : 'text-white/60 hover:text-white'
+                                ? 'border border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.25)]'
+                                : 'border border-transparent text-white/60 hover:text-white'
                             }`}
                           >
                             {c.label}
@@ -252,9 +253,9 @@ export function AboutProtocol({
                           key={l}
                           type="button"
                           onClick={() => setLane(l)}
-                          className={`rounded-full border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
+                          className={`rounded-lg border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
                             lane === l
-                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF]'
+                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.2)]'
                               : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25'
                           }`}
                         >
@@ -271,9 +272,9 @@ export function AboutProtocol({
                           key={t}
                           type="button"
                           onClick={() => setTiming(t)}
-                          className={`rounded-full border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
+                          className={`rounded-lg border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
                             timing === t
-                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF]'
+                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.2)]'
                               : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25'
                           }`}
                         >
@@ -311,28 +312,19 @@ export function AboutProtocol({
               </AnimatePresence>
             </div>
 
-            {step < 4 ? (
-              <button
-                type="button"
-                onClick={next}
-                className="group mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold tracking-tight text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_32px_rgba(0,222,255,0.5)]"
-              >
-                <ChevronRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                <span>Next step</span>
-              </button>
-            ) : (
-              <a
-                href={whatsappWithMessage(
-                  `Hi TrishulHub — project plan:\nCurrency: ${currency}\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
-                )}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold tracking-tight text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition-all duration-300 hover:-translate-y-0.5"
-              >
-                <ChevronRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />
-                <span>Talk on WhatsApp</span>
-              </a>
-            )}
+            <div className="mt-8 flex justify-center">
+              {step < 4 ? (
+                <NexusButton onClick={next}>Next step</NexusButton>
+              ) : (
+                <NexusButton
+                  href={whatsappWithMessage(
+                    `Hi TrishulHub — project plan:\nCurrency: ${currency}\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
+                  )}
+                >
+                  Talk on WhatsApp
+                </NexusButton>
+              )}
+            </div>
           </div>
         </motion.div>
       </div>

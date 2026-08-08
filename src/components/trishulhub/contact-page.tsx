@@ -2,8 +2,9 @@
 
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { Mail, MapPin, Phone, Send } from 'lucide-react'
+import { Mail, MapPin, Phone } from 'lucide-react'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
+import { NexusButton } from '@/components/trishulhub/nexus-button'
 import {
   MAILTO_URL,
   SITE_EMAIL,
@@ -123,13 +124,9 @@ export function ContactPage() {
               placeholder="Tell us what you want to build"
             />
           </label>
-          <button
-            type="submit"
-            className="btn-cyan btn-shine inline-flex w-full items-center justify-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-6 py-3.5 text-sm font-semibold text-[#00DEFF]"
-          >
-            <Send size={16} />
+          <NexusButton type="submit" fullWidth showArrow={!sent}>
             {sent ? 'Opening WhatsApp…' : 'Send message'}
-          </button>
+          </NexusButton>
         </motion.form>
       </div>
     </div>

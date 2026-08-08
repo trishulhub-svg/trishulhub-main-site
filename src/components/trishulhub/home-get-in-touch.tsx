@@ -2,16 +2,10 @@
 
 import Link from 'next/link'
 import { motion } from 'framer-motion'
-import {
-  ArrowRight,
-  Phone,
-  Mail,
-  Instagram,
-  MessageCircle,
-} from 'lucide-react'
+import { Phone, Mail, Instagram } from 'lucide-react'
 import { type ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-
+import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { MAILTO_URL, TEL_URL, WHATSAPP_URL } from '@/lib/contacts'
 
 const CONTACTS = {
@@ -206,13 +200,7 @@ export function HomeGetInTouch() {
               </p>
             </div>
 
-            <a
-              href="#contact-form"
-              className="group inline-flex shrink-0 items-center gap-2 whitespace-nowrap rounded-full border border-white/15 px-6 py-3 font-sans text-sm font-medium text-white transition hover:bg-white/5"
-            >
-              <span>Contact form</span>
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </a>
+            <NexusButton href="#contact-form">Contact form</NexusButton>
           </div>
         </div>
 
@@ -271,34 +259,10 @@ export function HomeGetInTouch() {
             <AbsoluteNode key={n.id} node={n} />
           ))}
 
-          <a
-            href="#contact-form"
-            aria-label="Contact TrishulHub"
-            className="absolute left-1/2 top-1/2 z-10 block -translate-x-1/2 -translate-y-1/2"
-          >
-            <div className="absolute -inset-10 rounded-full bg-[radial-gradient(circle,rgba(0,222,255,0.28),transparent_65%)] blur-3xl" />
-            <div
-              className="animate-beam-spin pointer-events-none absolute -inset-[20%] rounded-full opacity-40"
-              style={{
-                background:
-                  'conic-gradient(from 0deg at 50% 50%, transparent 0deg, transparent 240deg, rgba(0,222,255,0.45) 360deg)',
-                maskImage: 'radial-gradient(transparent 55%, black 60%)',
-                WebkitMaskImage: 'radial-gradient(transparent 55%, black 60%)',
-              }}
-            />
-            <div className="relative flex h-[100px] w-[100px] flex-col items-center justify-center rounded-full border border-white/10 bg-white/[0.04] shadow-[0_40px_100px_-40px_rgba(0,222,255,0.7)] backdrop-blur-2xl md:h-[120px] md:w-[120px]">
-              <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.12),transparent_55%)]" />
-              <div className="absolute inset-[8px] rounded-full border border-white/10" />
-              <MessageCircle
-                className="relative h-9 w-9 text-[#00DEFF] md:h-10 md:w-10"
-                strokeWidth={1.5}
-                style={{ filter: 'drop-shadow(0 0 20px rgba(0,222,255,0.55))' }}
-              />
-              <span className="relative mt-1 font-display text-[9px] uppercase tracking-[0.2em] text-white/70">
-                Contact
-              </span>
-            </div>
-          </a>
+          <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2">
+            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(0,222,255,0.22),transparent_70%)] blur-2xl" />
+            <NexusButton href="#contact-form">Contact us</NexusButton>
+          </div>
         </div>
 
         <div className="mt-12 grid grid-cols-2 gap-8 md:hidden">

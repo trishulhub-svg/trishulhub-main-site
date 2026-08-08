@@ -5,12 +5,14 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 
 type NexusButtonProps = {
-  href: string
+  href?: string
+  onClick?: () => void
   children: ReactNode
   className?: string
   fullWidth?: boolean
   showArrow?: boolean
   external?: boolean
+  type?: 'button' | 'submit'
 }
 
 /**
@@ -19,11 +21,13 @@ type NexusButtonProps = {
  */
 export function NexusButton({
   href,
+  onClick,
   children,
   className = '',
   fullWidth = false,
   showArrow = true,
   external,
+  type = 'button',
 }: NexusButtonProps) {
   const shellStyle: CSSProperties = fullWidth
     ? { display: 'block', width: '100%' }
@@ -31,10 +35,11 @@ export function NexusButton({
 
   const isExternal =
     external ??
-    (href.startsWith('http') ||
-      href.startsWith('mailto:') ||
-      href.startsWith('tel:') ||
-      href.startsWith('https://wa.me'))
+    (!!href &&
+      (href.startsWith('http') ||
+        href.startsWith('mailto:') ||
+        href.startsWith('tel:') ||
+        href.startsWith('https://wa.me')))
 
   const classNames = `th-glow-btn group relative flex h-[50px] min-w-[180px] cursor-pointer items-center justify-center px-6 outline-none transition-transform active:scale-95 ${
     fullWidth ? 'w-full' : 'w-auto'
@@ -105,7 +110,16 @@ export function NexusButton({
 
   return (
     <div className={`relative ${className}`} style={shellStyle}>
-      {isExternal ? (
+      {!href ? (
+        <button
+          type={type}
+          onClick={onClick}
+          className={classNames}
+          style={style}
+        >
+          {inner}
+        </button>
+      ) : isExternal ? (
         <a
           href={href}
           target="_blank"

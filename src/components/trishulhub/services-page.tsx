@@ -40,13 +40,13 @@ const services = [
   {
     id: 'software' as const,
     num: '01',
-    title: 'Custom Software',
+    title: 'Custom Software Development',
     desc: 'Admin panels and business tools for stock, health, shops, HR, and day-to-day work.',
     startLabel: 'Start your software',
     actions: [
-      { icon: Boxes, label: 'Build Modules' },
-      { icon: Workflow, label: 'Map Workflows' },
-      { icon: Gauge, label: 'Track Ops' },
+      { icon: Boxes, label: 'Add Features' },
+      { icon: Workflow, label: 'Plan Steps' },
+      { icon: Gauge, label: 'Track Work' },
     ],
     rows: [
       { topic: '#Inventory', reach: 'Stock + SKUs', velocity: 'Stable', hot: false },
@@ -56,31 +56,31 @@ const services = [
     features: [
       {
         icon: Crosshair,
-        title: 'Process-fit panels',
-        text: 'Screens and roles match how your staff actually works — warehouse, clinic, shop floor, or office.',
+        title: 'Screens that fit your work',
+        text: 'We design screens around how your staff already works — in a shop, clinic, warehouse, or office.',
       },
       {
         icon: RefreshCw,
-        title: 'Automated workflows',
-        text: 'Alerts, approvals, and status updates run in the background so teams stay ahead of the work.',
+        title: 'Automatic updates',
+        text: 'Alerts and status changes happen in the background so your team stays on track.',
       },
       {
         icon: Shield,
-        title: 'Access control',
-        text: 'Role-based permissions keep sensitive data safe while giving each user what they need.',
+        title: 'Safe access',
+        text: 'Each person only sees what they need — your data stays protected.',
       },
     ],
   },
   {
     id: 'website' as const,
     num: '02',
-    title: 'Websites',
+    title: 'Website Development',
     desc: 'Websites for shops, businesses, portfolios, and local brands — ready to launch and easy to use.',
     startLabel: 'Start your website',
     actions: [
-      { icon: Sparkles, label: 'Design System' },
-      { icon: LayoutTemplate, label: 'Page Builder' },
-      { icon: TrendingUp, label: 'Convert Faster' },
+      { icon: Sparkles, label: 'Clean Design' },
+      { icon: LayoutTemplate, label: 'Clear Pages' },
+      { icon: TrendingUp, label: 'More Leads' },
     ],
     rows: [
       { topic: '#Ecommerce', reach: 'Store + cart', velocity: 'Popular', hot: false },
@@ -90,18 +90,18 @@ const services = [
     features: [
       {
         icon: Crosshair,
-        title: 'Brand-first layouts',
-        text: 'Every page is shaped around your offer, audience, and conversion goals — not a generic template dump.',
+        title: 'Design that matches your brand',
+        text: 'Every page is shaped around your offer and your customers — not a generic template.',
       },
       {
         icon: RefreshCw,
-        title: 'Fast iteration',
-        text: 'Ship a polished first version, then refine sections, CTAs, and flows as your business grows.',
+        title: 'Quick improvements',
+        text: 'Launch a strong first version, then improve pages and buttons as your business grows.',
       },
       {
         icon: Shield,
-        title: 'Solid foundations',
-        text: 'Mobile-ready structure, clear navigation, and performance-minded builds from day one.',
+        title: 'Strong basics',
+        text: 'Works well on phones, with clear menus and fast loading from day one.',
       },
     ],
   },
@@ -129,8 +129,8 @@ const services = [
       },
       {
         icon: RefreshCw,
-        title: 'Stay in sync',
-        text: 'Your app can connect to your website or software so data stays up to date.',
+        title: 'Always up to date',
+        text: 'Your app can connect to your website or software so information stays current.',
       },
       {
         icon: Shield,
@@ -158,11 +158,11 @@ export function ServicesPage() {
             variant="rise"
             className="font-display text-4xl font-bold text-white sm:text-5xl lg:text-6xl"
           >
-            Three services. One team.
+            Solutions built around your business
           </AnimatedHeading>
           <p className="mt-5 font-sans text-base text-neutral-400 sm:text-lg">
-            Custom software, websites, and mobile apps — each with a clear
-            preview and a simple way to talk to us.
+            Custom software, website development, and mobile apps — each with a
+            clear preview and an easy way to reach us.
           </p>
         </div>
 
@@ -205,7 +205,7 @@ export function ServicesPage() {
                     <p className="relative mb-2 font-display text-sm font-semibold tracking-[0.2em] text-[#00DEFF]">
                       {s.num}
                     </p>
-                    <h2 className="relative font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+                    <h2 className="relative font-display text-3xl font-bold tracking-tight text-white sm:text-4xl lg:text-5xl">
                       {s.title}
                     </h2>
                     <p className="relative mt-3 max-w-xl font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">

@@ -46,7 +46,7 @@ export function AboutTimeline() {
   const fillHeight = useTransform(scrollYProgress, [0, 1], ['8%', '100%'])
 
   return (
-    <section className="relative mt-28 sm:mt-36">
+    <section className="relative mt-4 sm:mt-8">
       <div className="mb-14 max-w-3xl">
         <div className="mb-5 inline-flex items-center gap-3">
           <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#00DEFF]/25 bg-[#00DEFF]/10 font-display text-[11px] font-medium text-[#00DEFF] shadow-[0_0_12px_rgba(0,222,255,0.2)]">

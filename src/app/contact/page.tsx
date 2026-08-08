@@ -2,7 +2,7 @@ import { SiteShell } from '@/components/trishulhub/site-shell'
 import { ContactPage } from '@/components/trishulhub/contact-page'
 
 export const metadata = {
-  title: 'Contact | TrishulHub',
+  title: 'Contact us | TrishulHub',
   description:
     'Contact TrishulHub to start a website, software, or mobile app project.',
 }

@@ -20,7 +20,7 @@ const plans: {
 }[] = [
   {
     id: 'software',
-    label: 'Custom Software',
+    label: 'Custom Software Development',
     icon: LayoutDashboard,
     price: 'Custom',
     period: '/build',
@@ -37,7 +37,7 @@ const plans: {
   },
   {
     id: 'website',
-    label: 'Websites',
+    label: 'Website Development',
     icon: Globe,
     price: 'Custom',
     period: '/project',
@@ -149,11 +149,11 @@ export function HomeUnlock() {
           {/* LEFT — title + plan selectors */}
           <div className="flex flex-col lg:col-span-4">
             <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
-              Pick what you need
+              Unlock custom growth
             </h2>
             <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
-              Choose a website, custom software, or a mobile app — then talk to
-              us and we will build it with you.
+              Choose the solution that fits your business — then talk with us
+              and we will build it with you.
             </p>
 
             <div className="relative mt-8 flex flex-1 flex-col justify-center gap-3">

@@ -47,7 +47,7 @@ export function Hero() {
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00DEFF] opacity-75" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00DEFF]" />
             </span>
-            Simple digital tools for your business
+            Built for growing businesses
           </div>
         </motion.div>
 
@@ -56,8 +56,8 @@ export function Hero() {
             className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]"
             style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
           >
-            WEBSITES. SOFTWARE.{' '}
-            <span className="gradient-text-animated">MOBILE APPS.</span>
+            DIGITAL PRODUCTS THAT{' '}
+            <span className="gradient-text-animated">WORK FOR YOU.</span>
           </h1>
         </motion.div>
 
@@ -66,8 +66,8 @@ export function Hero() {
             className="mx-auto mt-8 max-w-2xl text-base text-white/70 sm:text-lg md:text-xl"
             style={{ textShadow: '0 2px 16px rgba(0,0,0,0.7)' }}
           >
-            TrishulHub builds websites, business software, and mobile apps that
-            match how you work — easy to use, built for your goals.
+            TrishulHub helps businesses run smoother with clear, reliable digital
+            products — designed around your goals, not complicated tech talk.
           </p>
         </motion.div>
 

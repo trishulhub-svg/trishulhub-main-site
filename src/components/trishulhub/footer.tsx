@@ -19,8 +19,8 @@ const services = [
 const company = [
   { label: 'Home', href: '/' },
   { label: 'Services', href: '/services' },
-  { label: 'About', href: '/about' },
-  { label: 'Contact', href: '/contact' },
+  { label: 'About us', href: '/about' },
+  { label: 'Contact us', href: '/contact' },
 ]
 
 export function Footer() {
