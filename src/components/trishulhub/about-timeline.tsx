@@ -2,7 +2,7 @@
 
 import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { CalendarRange, Globe2, Rocket, Layers3 } from 'lucide-react'
+import { CalendarRange, Globe2, Rocket, Layers3, TrendingUp } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -10,26 +10,30 @@ const milestones = [
   {
     year: '2023',
     status: 'Origin',
-    title: 'Company founded',
-    text: 'TrishulHub started as a website development studio — brand sites, ecommerce, and launch-ready pages for founders who needed a sharp digital presence.',
+    title: 'Website studio',
+    text: 'TrishulHub launches — brand sites and ecommerce for founders.',
     icon: Globe2,
-    meta: 'WEB · LAUNCH',
   },
   {
     year: '2024',
-    status: 'Expansion',
-    title: 'Systems that scale work',
-    text: 'We grew beyond marketing sites into custom admin panels and operational software — inventory, healthcare ops, and internal tools shaped around real teams.',
+    status: 'Growth',
+    title: 'Custom software',
+    text: 'Expanded into admin panels and ops tools for real teams.',
     icon: Layers3,
-    meta: 'SOFTWARE · OPS',
+  },
+  {
+    year: '2025',
+    status: 'Scale',
+    title: 'CRM + systems',
+    text: 'Pipelines, staff, and customers joined the craft stack.',
+    icon: TrendingUp,
   },
   {
     year: 'Present',
     status: 'Active',
-    title: 'Full craft studio',
-    text: 'Today we ship websites, custom software, and CRM platforms as one connected practice — previewable systems built to fit how your business actually runs.',
+    title: 'Full studio',
+    text: 'Web, software, and CRM — one connected practice.',
     icon: Rocket,
-    meta: 'WEB · SOFTWARE · CRM',
   },
 ]
 
@@ -61,8 +65,7 @@ export function AboutTimeline() {
           Our timeline, assembled
         </AnimatedHeading>
         <p className="mt-4 max-w-xl font-sans text-base font-light leading-relaxed text-neutral-400 sm:text-lg">
-          From a 2023 website practice to a present-day systems studio — the
-          path that shaped how TrishulHub builds.
+          2023 to today — the short path that shaped TrishulHub.
         </p>
       </div>
 
@@ -70,7 +73,6 @@ export function AboutTimeline() {
         ref={railRef}
         className="relative mx-auto max-w-3xl rounded-[1.5rem] border border-white/[0.06] bg-[#0a0a0a]/80 p-6 backdrop-blur-[18px] sm:p-10"
       >
-        {/* Central rail */}
         <div className="pointer-events-none absolute bottom-10 left-8 top-10 w-px bg-white/[0.06] sm:left-1/2 sm:-translate-x-1/2" />
         <motion.div
           style={{ height: fillHeight }}
@@ -78,7 +80,7 @@ export function AboutTimeline() {
         />
         <div className="about-timeline-scan pointer-events-none absolute left-8 h-16 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#00DEFF] to-transparent shadow-[0_0_18px_rgba(0,222,255,0.65)] sm:left-1/2" />
 
-        <div className="relative space-y-10 sm:space-y-14">
+        <div className="relative space-y-10 sm:space-y-12">
           {milestones.map((m, i) => {
             const Icon = m.icon
             const left = i % 2 === 0
@@ -93,7 +95,7 @@ export function AboutTimeline() {
                   delay: i * 0.08,
                   ease: EASE_OUT_EXPO,
                 }}
-                className={`relative flex flex-col gap-4 sm:flex-row sm:items-center ${
+                className={`relative flex flex-col gap-3 sm:flex-row sm:items-center ${
                   left ? 'sm:flex-row' : 'sm:flex-row-reverse'
                 }`}
               >
@@ -104,20 +106,19 @@ export function AboutTimeline() {
                 >
                   <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition-colors hover:border-[#00DEFF]/30">
                     <div
-                      className={`mb-3 flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#00DEFF] ${
+                      className={`mb-2 flex items-center gap-2 ${
                         left ? 'sm:justify-end' : 'sm:justify-start'
                       }`}
                     >
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#00DEFF]/25 bg-[#00DEFF]/10 px-2.5 py-0.5">
+                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#00DEFF]/25 bg-[#00DEFF]/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#00DEFF]">
                         <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#00DEFF]" />
                         {m.status}
                       </span>
-                      <span className="text-neutral-500">{m.meta}</span>
                     </div>
                     <h3 className="font-display text-xl font-semibold tracking-tight text-white">
                       {m.title}
                     </h3>
-                    <p className="mt-2 font-sans text-sm font-light leading-relaxed text-neutral-400">
+                    <p className="mt-1.5 font-sans text-sm font-light leading-relaxed text-neutral-400">
                       {m.text}
                     </p>
                   </div>
@@ -130,11 +131,11 @@ export function AboutTimeline() {
                 </div>
 
                 <div
-                  className={`ml-14 w-full sm:ml-0 sm:w-[calc(50%-2rem)] ${
-                    left ? 'sm:pl-4 sm:text-left' : 'sm:pr-4 sm:text-right'
+                  className={`ml-14 flex w-full items-center sm:ml-0 sm:w-[calc(50%-2rem)] ${
+                    left ? 'sm:justify-start sm:pl-4' : 'sm:justify-end sm:pr-4'
                   }`}
                 >
-                  <span className="font-display text-4xl font-bold tracking-tight text-white/15 sm:text-5xl">
+                  <span className="font-display text-4xl font-bold tracking-tight text-[#00DEFF] sm:text-5xl">
                     {m.year}
                   </span>
                 </div>

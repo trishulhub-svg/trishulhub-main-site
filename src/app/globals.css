@@ -705,6 +705,27 @@
   animation: about-scan 4.5s cubic-bezier(0.22, 1, 0.36, 1) infinite;
 }
 
+@keyframes about-udp-beam {
+  0% {
+    stroke-dashoffset: 1000;
+    opacity: 0.35;
+  }
+  45% {
+    stroke-dashoffset: 0;
+    opacity: 1;
+  }
+  100% {
+    stroke-dashoffset: 0;
+    opacity: 0.55;
+  }
+}
+
+.about-udp-beam {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: about-udp-beam 3.2s cubic-bezier(0.22, 1, 0.36, 1) infinite;
+}
+
 @keyframes flowDash {
   to {
     stroke-dashoffset: -32;
