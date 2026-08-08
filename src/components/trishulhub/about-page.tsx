@@ -32,6 +32,7 @@ export function AboutPage() {
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        {/* Work-with-you wizard lives on Home only — do not remount AboutProtocol here */}
         <AboutHeroProtocol />
         <AboutTimeline />
         <AboutSignals />
