@@ -1,14 +1,11 @@
 'use client'
 
 import { useRef } from 'react'
-import Link from 'next/link'
 import { motion, useScroll, useTransform } from 'framer-motion'
-import { ArrowRight } from 'lucide-react'
 import { AboutHeroProtocol } from '@/components/trishulhub/about-hero-protocol'
 import { AboutTimeline } from '@/components/trishulhub/about-timeline'
 import { AboutProtocol } from '@/components/trishulhub/about-protocol'
 import { AboutSignals } from '@/components/trishulhub/about-signals'
-import { EASE_OUT_EXPO } from '@/lib/animations'
 
 export function AboutPage() {
   const ref = useRef<HTMLDivElement>(null)
@@ -40,34 +37,6 @@ export function AboutPage() {
         <AboutTimeline />
         <AboutProtocol />
         <AboutSignals />
-
-        <motion.div
-          initial={{ opacity: 0, y: 60 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.25 }}
-          transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-          className="relative mt-24 overflow-hidden rounded-[2rem] border border-white/10 bg-gradient-to-br from-[#00DEFF]/10 via-transparent to-[#0088CC]/10 p-8 sm:p-14"
-        >
-          <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(0,222,255,0.12),transparent_45%)]" />
-          <div className="relative max-w-3xl">
-            <h2 className="font-display text-3xl font-bold text-white sm:text-4xl">
-              Why teams choose us
-            </h2>
-            <p className="mt-4 font-sans text-base font-light text-white/60">
-              Because every business is different. Some need a storefront. Some
-              need inventory control. Some need a healthcare admin. Some need a
-              CRM for staff and customers. We listen first — then build software
-              that matches the work, not the other way around.
-            </p>
-            <Link
-              href="/contact"
-              className="btn-cyan btn-shine mt-8 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-6 py-3 text-sm font-semibold text-[#00DEFF]"
-            >
-              Talk with TrishulHub
-              <ArrowRight size={15} />
-            </Link>
-          </div>
-        </motion.div>
       </div>
     </div>
   )

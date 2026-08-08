@@ -1,23 +1,28 @@
 'use client'
 
-import { useCallback, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ChevronRight, Coins, Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const BUDGETS = ['$5k', '$25k', '$50k', '$75k', '$100k+'] as const
+type Currency = 'USD' | 'INR'
+
+const BUDGETS_USD = ['$500', '$750', '$1,000', '$1,500', '$2,000'] as const
+const BUDGETS_INR = ['₹50k', '₹75k', '₹1L', '₹1.5L', '₹2L'] as const
 
 const STEPS = [
   {
     id: 1,
     title: "What's your project budget?",
-    subtitle: "Select the range that matches your scope. We'll fine-tune together.",
+    subtitle:
+      "Select the range that matches your scope. We'll fine-tune together.",
   },
   {
     id: 2,
     title: 'Which lane fits best?',
-    subtitle: 'Custom software, web development, or CRM — pick your primary need.',
+    subtitle:
+      'Custom software, web development, or CRM — pick your primary need.',
   },
   {
     id: 3,
@@ -27,35 +32,49 @@ const STEPS = [
   {
     id: 4,
     title: 'Ready for a flight plan?',
-    subtitle: "Share a few details and we'll reply with a tailored plan within 48 hours.",
+    subtitle:
+      "Share a few details and we'll reply with a tailored plan within 48 hours.",
   },
 ] as const
 
 const LANES = ['Custom Software', 'Web Development', 'CRM Solutions'] as const
 const TIMING = ['ASAP', 'This month', 'Next quarter', 'Flexible'] as const
 
-export function AboutProtocol() {
+export function AboutProtocol({
+  className = 'mt-28 sm:mt-36',
+}: {
+  className?: string
+}) {
   const [step, setStep] = useState(1)
+  const [currency, setCurrency] = useState<Currency>('USD')
   const [budgetIndex, setBudgetIndex] = useState(1)
   const [lane, setLane] = useState<string>(LANES[0])
   const [timing, setTiming] = useState<string>(TIMING[1])
   const [dragging, setDragging] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
 
+  const budgets = currency === 'USD' ? BUDGETS_USD : BUDGETS_INR
   const current = STEPS[step - 1]
-  const budget = BUDGETS[budgetIndex]
+  const budget = budgets[budgetIndex]
 
-  const handlePct = useCallback((clientX: number) => {
-    const el = trackRef.current
-    if (!el) return
-    const rect = el.getBoundingClientRect()
-    const pad = 16
-    const usable = rect.width - pad * 2
-    const x = Math.min(Math.max(clientX - rect.left - pad, 0), usable)
-    const pct = usable <= 0 ? 0 : x / usable
-    const idx = Math.round(pct * (BUDGETS.length - 1))
-    setBudgetIndex(idx)
-  }, [])
+  useEffect(() => {
+    setBudgetIndex((i) => Math.min(i, budgets.length - 1))
+  }, [currency, budgets.length])
+
+  const handlePct = useCallback(
+    (clientX: number) => {
+      const el = trackRef.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const pad = 16
+      const usable = rect.width - pad * 2
+      const x = Math.min(Math.max(clientX - rect.left - pad, 0), usable)
+      const pct = usable <= 0 ? 0 : x / usable
+      const idx = Math.round(pct * (budgets.length - 1))
+      setBudgetIndex(idx)
+    },
+    [budgets.length],
+  )
 
   const onPointerDown = (e: React.PointerEvent) => {
     setDragging(true)
@@ -71,22 +90,22 @@ export function AboutProtocol() {
   const onPointerUp = () => setDragging(false)
 
   const handleLeft = useMemo(() => {
-    const pct = budgetIndex / (BUDGETS.length - 1)
+    const pct = budgetIndex / (budgets.length - 1)
     return `calc(1rem + (100% - 2rem) * ${pct} - 12px)`
-  }, [budgetIndex])
+  }, [budgetIndex, budgets.length])
 
   const badgeLeft = useMemo(() => {
-    const pct = budgetIndex / (BUDGETS.length - 1)
+    const pct = budgetIndex / (budgets.length - 1)
     return `calc(1rem + (100% - 2rem) * ${pct} - 28px)`
-  }, [budgetIndex])
+  }, [budgetIndex, budgets.length])
 
   const next = () => {
     if (step < 4) setStep((s) => s + 1)
   }
 
   return (
-    <section className="relative z-10 mt-28 sm:mt-36">
-      <div className="mx-auto max-w-7xl py-4 md:py-8">
+    <section className={`relative z-10 ${className}`}>
+      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 md:py-8 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -127,10 +146,10 @@ export function AboutProtocol() {
               })}
             </div>
 
-            <div className="mt-10 min-h-[220px]">
+            <div className="mt-10 min-h-[240px]">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={step}
+                  key={`${step}-${currency}`}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
@@ -145,6 +164,28 @@ export function AboutProtocol() {
 
                   {step === 1 && (
                     <div className="mt-6">
+                      <div className="mb-5 inline-flex rounded-full border border-white/10 bg-white/[0.04] p-1">
+                        {(
+                          [
+                            { id: 'USD' as const, label: 'Dollars ($)' },
+                            { id: 'INR' as const, label: 'Rupees (₹)' },
+                          ] as const
+                        ).map((c) => (
+                          <button
+                            key={c.id}
+                            type="button"
+                            onClick={() => setCurrency(c.id)}
+                            className={`rounded-full px-4 py-1.5 font-sans text-xs font-semibold transition-all duration-300 ${
+                              currency === c.id
+                                ? 'bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_16px_rgba(0,222,255,0.35)]'
+                                : 'text-white/60 hover:text-white'
+                            }`}
+                          >
+                            {c.label}
+                          </button>
+                        ))}
+                      </div>
+
                       <div
                         ref={trackRef}
                         onPointerDown={onPointerDown}
@@ -155,14 +196,14 @@ export function AboutProtocol() {
                       >
                         <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/10" />
                         <div className="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 justify-between">
-                          {BUDGETS.map((b) => (
+                          {budgets.map((b) => (
                             <div key={b} className="h-3 w-px bg-white/20" />
                           ))}
                         </div>
                         <div
                           className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-[#00DEFF] to-[#0088CC]"
                           style={{
-                            width: `calc((100% - 2rem) * ${budgetIndex / (BUDGETS.length - 1)})`,
+                            width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
                         />
                         <button
@@ -185,7 +226,7 @@ export function AboutProtocol() {
                         </div>
                       </div>
                       <div className="mt-10 flex justify-between font-sans text-xs text-white/50">
-                        {BUDGETS.map((b) => (
+                        {budgets.map((b) => (
                           <span
                             key={b}
                             className="transition-colors duration-300 hover:text-white/80"
@@ -242,12 +283,15 @@ export function AboutProtocol() {
                       </p>
                       <ul className="mt-3 space-y-2 font-sans text-sm text-white/70">
                         <li>
+                          Currency:{' '}
+                          <span className="text-[#00DEFF]">{currency}</span>
+                        </li>
+                        <li>
                           Budget:{' '}
                           <span className="text-[#00DEFF]">{budget}</span>
                         </li>
                         <li>
-                          Lane:{' '}
-                          <span className="text-[#00DEFF]">{lane}</span>
+                          Lane: <span className="text-[#00DEFF]">{lane}</span>
                         </li>
                         <li>
                           Timing:{' '}
@@ -271,7 +315,7 @@ export function AboutProtocol() {
               </button>
             ) : (
               <Link
-                href={`/contact?budget=${encodeURIComponent(budget)}&lane=${encodeURIComponent(lane)}&timing=${encodeURIComponent(timing)}`}
+                href={`/contact?currency=${currency}&budget=${encodeURIComponent(budget)}&lane=${encodeURIComponent(lane)}&timing=${encodeURIComponent(timing)}`}
                 className="group mt-8 inline-flex items-center gap-2 rounded-full bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] px-5 py-3 font-sans text-sm font-semibold tracking-tight text-[#0A0A0A] shadow-[0_0_24px_rgba(0,222,255,0.35)] transition-all duration-300 hover:-translate-y-0.5"
               >
                 <ChevronRight className="size-4 transition-transform duration-300 group-hover:translate-x-1" />

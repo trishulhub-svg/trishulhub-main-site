@@ -80,10 +80,9 @@ export function AboutTimeline() {
         />
         <div className="about-timeline-scan pointer-events-none absolute left-8 h-16 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#00DEFF] to-transparent shadow-[0_0_18px_rgba(0,222,255,0.65)] sm:left-1/2" />
 
-        <div className="relative space-y-10 sm:space-y-12">
+        <div className="relative space-y-8 sm:space-y-10">
           {milestones.map((m, i) => {
             const Icon = m.icon
-            const left = i % 2 === 0
             return (
               <motion.div
                 key={m.year}
@@ -95,49 +94,49 @@ export function AboutTimeline() {
                   delay: i * 0.08,
                   ease: EASE_OUT_EXPO,
                 }}
-                className={`relative flex flex-col gap-3 sm:flex-row sm:items-center ${
-                  left ? 'sm:flex-row' : 'sm:flex-row-reverse'
-                }`}
+                className="relative pl-14 sm:pl-0"
               >
-                <div
-                  className={`w-full sm:w-[calc(50%-2rem)] ${
-                    left ? 'sm:pr-4 sm:text-right' : 'sm:pl-4 sm:text-left'
-                  }`}
-                >
-                  <div className="rounded-[18px] border border-white/10 bg-white/[0.03] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition-colors hover:border-[#00DEFF]/30">
-                    <div
-                      className={`mb-2 flex items-center gap-2 ${
-                        left ? 'sm:justify-end' : 'sm:justify-start'
-                      }`}
-                    >
-                      <span className="inline-flex items-center gap-1.5 rounded-full border border-[#00DEFF]/25 bg-[#00DEFF]/10 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#00DEFF]">
-                        <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#00DEFF]" />
-                        {m.status}
-                      </span>
-                    </div>
-                    <h3 className="font-display text-xl font-semibold tracking-tight text-white">
-                      {m.title}
-                    </h3>
-                    <p className="mt-1.5 font-sans text-sm font-light leading-relaxed text-neutral-400">
-                      {m.text}
-                    </p>
-                  </div>
-                </div>
-
-                <div className="absolute left-8 top-6 z-10 flex -translate-x-1/2 items-center justify-center sm:left-1/2 sm:top-1/2 sm:-translate-y-1/2">
+                {/* Rail node */}
+                <div className="absolute left-8 top-8 z-10 flex -translate-x-1/2 items-center justify-center sm:left-1/2 sm:top-1/2 sm:-translate-y-1/2">
                   <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#00DEFF]/40 bg-[#050505] text-[#00DEFF] shadow-[0_0_24px_rgba(0,222,255,0.35)]">
                     <Icon size={18} />
                   </span>
                 </div>
 
                 <div
-                  className={`ml-14 flex w-full items-center sm:ml-0 sm:w-[calc(50%-2rem)] ${
-                    left ? 'sm:justify-start sm:pl-4' : 'sm:justify-end sm:pr-4'
+                  className={`sm:w-[calc(50%-2.25rem)] ${
+                    i % 2 === 0
+                      ? 'sm:mr-auto sm:pr-2'
+                      : 'sm:ml-auto sm:pl-2'
                   }`}
                 >
-                  <span className="font-display text-4xl font-bold tracking-tight text-[#00DEFF] sm:text-5xl">
-                    {m.year}
-                  </span>
+                  <div className="relative overflow-hidden rounded-[18px] border border-white/10 bg-white/[0.03] p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-md transition-colors hover:border-[#00DEFF]/30">
+                    {/* Transparent year watermark — still readable */}
+                    <span
+                      aria-hidden
+                      className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-6xl font-bold leading-none tracking-tight text-[#00DEFF]/25 sm:text-7xl"
+                    >
+                      {m.year}
+                    </span>
+
+                    <div className="relative z-10">
+                      <div className="mb-2 flex flex-wrap items-center gap-2">
+                        <span className="inline-flex items-center rounded-lg border border-[#00DEFF]/35 bg-[#00DEFF]/15 px-2.5 py-1 font-display text-sm font-bold tracking-tight text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.2)]">
+                          {m.year}
+                        </span>
+                        <span className="inline-flex items-center gap-1.5 rounded-full border border-white/10 bg-white/5 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-neutral-300">
+                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#00DEFF]" />
+                          {m.status}
+                        </span>
+                      </div>
+                      <h3 className="font-display text-xl font-semibold tracking-tight text-white">
+                        {m.title}
+                      </h3>
+                      <p className="mt-1.5 font-sans text-sm font-light leading-relaxed text-neutral-400">
+                        {m.text}
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </motion.div>
             )

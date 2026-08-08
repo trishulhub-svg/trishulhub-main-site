@@ -1,12 +1,18 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { Database, Cpu, Send, Sparkles } from 'lucide-react'
+import { Database, Cpu, Send, Sparkles, Layers3 } from 'lucide-react'
 import { AnimatedHeading } from '@/components/trishulhub/animated-heading'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const PATH_A = 'M210,260 C380,260 420,170 560,170 C680,170 735,170 820,170'
-const PATH_B = 'M210,260 C380,260 420,350 560,350 C680,350 735,350 820,350'
+/**
+ * One trunk from Input → fork to two Execute nodes → merge into Output.
+ * Top path + bottom path share start (200,260) and end (820,260).
+ */
+const PATH_A =
+  'M200,260 C320,260 360,110 520,90 C640,75 720,150 820,260'
+const PATH_B =
+  'M200,260 C320,260 360,410 520,430 C640,445 720,370 820,260'
 
 export function AboutHeroProtocol() {
   return (
@@ -39,7 +45,6 @@ export function AboutHeroProtocol() {
         </motion.p>
       </div>
 
-      {/* UNIFIED DATA PROTOCOL layout — TrishulHub info */}
       <div className="relative mt-16 overflow-hidden rounded-[24px] border border-white/[0.06] bg-[#0a0a0a]/80 p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.05)] backdrop-blur-[20px] sm:mt-20 sm:p-8">
         <div
           className="pointer-events-none absolute inset-0 opacity-[0.35]"
@@ -65,7 +70,7 @@ export function AboutHeroProtocol() {
           </span>
         </div>
 
-        <div className="relative mx-auto hidden min-h-[420px] w-full max-w-5xl lg:block">
+        <div className="relative mx-auto hidden min-h-[560px] w-full max-w-5xl lg:block">
           <svg
             viewBox="0 0 1000 520"
             className="absolute inset-0 h-full w-full"
@@ -74,9 +79,9 @@ export function AboutHeroProtocol() {
           >
             <defs>
               <linearGradient id="udp-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00DEFF" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#00DEFF" stopOpacity="0.85" />
-                <stop offset="100%" stopColor="#0088CC" stopOpacity="0.25" />
+                <stop offset="0%" stopColor="#00DEFF" stopOpacity="0.2" />
+                <stop offset="50%" stopColor="#00DEFF" stopOpacity="0.9" />
+                <stop offset="100%" stopColor="#0088CC" stopOpacity="0.35" />
               </linearGradient>
               <filter id="udp-glow" x="-20%" y="-20%" width="140%" height="140%">
                 <feGaussianBlur stdDeviation="3" result="b" />
@@ -87,10 +92,26 @@ export function AboutHeroProtocol() {
               </filter>
             </defs>
 
+            {/* Shared trunk marker */}
+            <circle
+              cx="200"
+              cy="260"
+              r="5"
+              fill="#00DEFF"
+              filter="url(#udp-glow)"
+            />
+            <circle
+              cx="820"
+              cy="260"
+              r="5"
+              fill="#00DEFF"
+              filter="url(#udp-glow)"
+            />
+
             <path
               d={PATH_A}
               stroke="url(#udp-beam)"
-              strokeWidth="2"
+              strokeWidth="2.25"
               strokeLinecap="round"
               className="about-udp-beam"
               filter="url(#udp-glow)"
@@ -98,10 +119,10 @@ export function AboutHeroProtocol() {
             <path
               d={PATH_B}
               stroke="url(#udp-beam)"
-              strokeWidth="2"
+              strokeWidth="2.25"
               strokeLinecap="round"
               className="about-udp-beam"
-              style={{ animationDelay: '0.6s' }}
+              style={{ animationDelay: '0.55s' }}
               filter="url(#udp-glow)"
             />
 
@@ -113,13 +134,13 @@ export function AboutHeroProtocol() {
             </circle>
           </svg>
 
-          {/* Input Source */}
+          {/* Input Source — left */}
           <motion.div
             initial={{ opacity: 0, x: -20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-            className="absolute left-[4%] top-[42%] w-[220px] -translate-y-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/90 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
+            className="absolute left-[2%] top-1/2 z-10 w-[210px] -translate-y-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
           >
             <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
               <Database size={16} />
@@ -135,13 +156,13 @@ export function AboutHeroProtocol() {
             </p>
           </motion.div>
 
-          {/* Execute Logic (top) */}
+          {/* Execute top — spaced up */}
           <motion.div
             initial={{ opacity: 0, y: -16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.1, ease: EASE_OUT_EXPO }}
-            className="absolute left-[48%] top-[8%] w-[240px] -translate-x-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/90 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
+            className="absolute left-1/2 top-0 z-10 w-[230px] -translate-x-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
           >
             <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
               <Cpu size={16} />
@@ -157,16 +178,16 @@ export function AboutHeroProtocol() {
             </p>
           </motion.div>
 
-          {/* Execute Logic alt / middle note (bottom path) */}
+          {/* Execute bottom — spaced down */}
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.15, ease: EASE_OUT_EXPO }}
-            className="absolute bottom-[10%] left-[48%] w-[240px] -translate-x-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/90 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
+            className="absolute bottom-0 left-1/2 z-10 w-[230px] -translate-x-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
           >
             <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
-              <Cpu size={16} />
+              <Layers3 size={16} />
             </div>
             <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#00DEFF]">
               Execute logic
@@ -179,13 +200,13 @@ export function AboutHeroProtocol() {
             </p>
           </motion.div>
 
-          {/* Output Data */}
+          {/* Output — right, where paths merge */}
           <motion.div
             initial={{ opacity: 0, x: 20 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.55, delay: 0.2, ease: EASE_OUT_EXPO }}
-            className="absolute right-[3%] top-[42%] w-[220px] -translate-y-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/90 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
+            className="absolute right-[2%] top-1/2 z-10 w-[210px] -translate-y-1/2 rounded-[18px] border border-white/10 bg-[#0A0A0C]/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px]"
           >
             <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
               <Send size={16} />
@@ -202,7 +223,6 @@ export function AboutHeroProtocol() {
           </motion.div>
         </div>
 
-        {/* Mobile stack */}
         <div className="relative grid gap-4 lg:hidden">
           {[
             {
@@ -221,7 +241,7 @@ export function AboutHeroProtocol() {
               label: 'Execute logic',
               title: 'Three clear lanes',
               text: 'Software for ops. Web for presence. CRM for people and pipeline.',
-              icon: Cpu,
+              icon: Layers3,
             },
             {
               label: 'Output data',
