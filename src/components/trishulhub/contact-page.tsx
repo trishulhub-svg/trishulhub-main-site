@@ -3,11 +3,11 @@
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mail, MapPin, Phone } from 'lucide-react'
-import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 import { PageHero } from '@/components/trishulhub/page-hero'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 
 export function ContactPage() {
   const ref = useRef<HTMLDivElement>(null)
@@ -15,7 +15,7 @@ export function ContactPage() {
     target: ref,
     offset: ['start start', 'end end'],
   })
-  const formY = useTransform(scrollYProgress, [0, 1], [24, -24])
+  const formY = useTransform(scrollYProgress, [0, 1], [16, -16])
   const [sent, setSent] = useState(false)
   const { email, phoneDisplay, location, links, whatsappWithMessage } =
     useSiteContact()
@@ -24,43 +24,58 @@ export function ContactPage() {
     <div ref={ref} className="relative overflow-hidden pb-28">
       <PageHero
         label="Contact us"
-        title="Get in touch"
+        title="Let's work together"
         subtitle="Message us on WhatsApp, call, or fill in the form below. We reply as soon as we can."
       />
 
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="lt-container">
         <HomeGetInTouch />
       </div>
 
-      <div className="relative mx-auto max-w-3xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-8 flex flex-wrap items-center gap-3">
+      <div className="lt-container mt-4 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
+        <div className="space-y-4">
           <a
             href={links.mailto}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-[#75B4B1]/30 hover:text-[#75B4B1]"
+            className="surface-card flex items-center gap-4 p-5 transition hover:-translate-y-0.5"
           >
-            <Mail className="text-[#75B4B1]" size={16} />
-            {email}
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+              <Mail size={20} />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-[#0a0a0a]">Email</p>
+              <p className="text-sm text-[#6b7280]">{email}</p>
+            </div>
           </a>
           <a
             href={links.tel}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-[#75B4B1]/30 hover:text-[#75B4B1]"
+            className="surface-card flex items-center gap-4 p-5 transition hover:-translate-y-0.5"
           >
-            <Phone className="text-[#75B4B1]" size={16} />
-            {phoneDisplay}
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+              <Phone size={20} />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-[#0a0a0a]">Phone</p>
+              <p className="text-sm text-[#6b7280]">{phoneDisplay}</p>
+            </div>
           </a>
-          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
-            <MapPin className="text-[#75B4B1]" size={16} />
-            {location}
+          <div className="surface-card flex items-center gap-4 p-5">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+              <MapPin size={20} />
+            </span>
+            <div>
+              <p className="text-sm font-semibold text-[#0a0a0a]">Location</p>
+              <p className="text-sm text-[#6b7280]">{location}</p>
+            </div>
           </div>
         </div>
 
         <motion.form
           id="contact-form"
           style={{ y: formY }}
-          initial={{ opacity: 0, y: 32 }}
+          initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, amount: 0.2 }}
-          transition={{ duration: 0.65, ease: EASE_OUT_EXPO }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
           onSubmit={(e) => {
             e.preventDefault()
             const fd = new FormData(e.currentTarget)
@@ -72,24 +87,19 @@ export function ContactPage() {
             window.open(whatsappWithMessage(text), '_blank', 'noopener,noreferrer')
             setSent(true)
           }}
-          className="scroll-mt-28 surface-card rounded-[2rem] p-6 sm:p-8"
+          className="surface-card scroll-mt-28 p-6 sm:p-8"
         >
-          <h2 className="mb-6 font-display text-2xl font-medium text-foreground">
+          <h2 className="mb-6 text-2xl font-bold text-[#0a0a0a]">
             Send us a message
           </h2>
           <label className="mb-4 block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
               Name
             </span>
-            <input
-              name="name"
-              required
-              className="field-input"
-              placeholder="Your name"
-            />
+            <input name="name" required className="field-input" placeholder="Your name" />
           </label>
           <label className="mb-4 block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
               Email
             </span>
             <input
@@ -101,7 +111,7 @@ export function ContactPage() {
             />
           </label>
           <label className="mb-4 block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
               Service
             </span>
             <select name="service" className="field-input" defaultValue="Website">
@@ -112,13 +122,13 @@ export function ContactPage() {
             </select>
           </label>
           <label className="mb-6 block">
-            <span className="mb-2 block text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
               Message
             </span>
             <textarea
               name="message"
               required
-              className="field-input min-h-[140px] resize-y"
+              className="field-input min-h-[120px] resize-y"
               placeholder="Tell us what you want to build"
             />
           </label>

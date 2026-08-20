@@ -19,7 +19,7 @@ export function SiteShell({
   return (
     <SmoothScrollProvider>
       <SiteContactProvider initial={initialContact}>
-        <div className="relative flex min-h-screen flex-col bg-[#f9f9f9]">
+        <div className="relative flex min-h-screen flex-col bg-[#fafafa]">
           {showLoader ? <LoadingScreen /> : null}
           <Navbar />
           <main className="relative z-10 flex min-h-screen flex-1 flex-col">

@@ -12,9 +12,9 @@ type BrandLogoProps = {
 }
 
 const sizes = {
-  sm: { box: 32, img: 28 },
-  md: { box: 36, img: 32 },
-  lg: { box: 44, img: 40 },
+  sm: { box: 28, img: 24 },
+  md: { box: 32, img: 28 },
+  lg: { box: 40, img: 36 },
 }
 
 export function BrandLogo({
@@ -34,7 +34,7 @@ export function BrandLogo({
       aria-label="TrishulHub home"
     >
       <span
-        className="relative flex shrink-0 items-center justify-center overflow-visible"
+        className="relative flex shrink-0 items-center justify-center"
         style={{ width: s.box, height: s.box }}
       >
         <Image
@@ -48,8 +48,8 @@ export function BrandLogo({
       </span>
       {showWordmark && (
         <span
-          className={`text-[17px] font-bold tracking-[-0.02em] sm:text-lg ${
-            onDark ? 'text-white' : 'text-[#111111]'
+          className={`text-lg font-bold tracking-[-0.02em] ${
+            onDark ? 'text-white' : 'text-[#0a0a0a]'
           }`}
         >
           TrishulHub

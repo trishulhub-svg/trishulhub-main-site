@@ -45,20 +45,20 @@ const paths = pillars.map((item) => {
 
 export function HomeIntelligences() {
   return (
-    <section className="relative overflow-hidden bg-[#f0f0f0]/60 py-28 sm:py-36">
+    <section className="relative overflow-hidden lt-section bg-[#fafafa]">
       <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-50" />
 
-      <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <div className="relative mx-auto lt-container">
         <div className="mx-auto max-w-3xl text-center">
           <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6b7280]">
-            <HeartHandshake className="h-3.5 w-3.5 text-[#75B4B1]" />
-            Our promise
+            <HeartHandshake className="h-3.5 w-3.5 text-[#0d9488]" />
+            The TrishulHub promise
           </span>
 
           <AnimatedHeading
             as="h2"
             variant="rise"
-            className="mt-5 text-4xl font-bold tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl"
+            className="mt-5 text-4xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl"
           >
             What you can expect from us
           </AnimatedHeading>
@@ -76,11 +76,11 @@ export function HomeIntelligences() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white shadow-[0_12px_40px_rgba(11,18,32,0.08)] ring-1 ring-[#75B4B1]/20"
+              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-[0_12px_40px_rgba(11,18,32,0.08)] ring-1 ring-[#0d9488]/20"
             >
               <span
                 aria-hidden
-                className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#75B4B1]/25 blur-md"
+                className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#0d9488]/25 blur-md"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
@@ -100,7 +100,7 @@ export function HomeIntelligences() {
                 y1="0"
                 x2="4"
                 y2="40"
-                stroke="#75B4B1"
+                stroke="#0d9488"
                 strokeWidth="2"
                 strokeDasharray="5 5"
                 className="animate-flow"
@@ -133,7 +133,7 @@ export function HomeIntelligences() {
                 <path
                   key={p.d}
                   d={p.d}
-                  stroke="#75B4B1"
+                  stroke="#0d9488"
                   strokeWidth="2.25"
                   strokeLinecap="round"
                   fill="none"
@@ -176,7 +176,7 @@ export function HomeIntelligences() {
                   }}
                 >
                   <span
-                    className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#75B4B1] shadow-[0_10px_30px_rgba(11,18,32,0.08)] ring-1 ring-border sm:h-20 sm:w-20"
+                    className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-[#0d9488] shadow-[0_10px_30px_rgba(11,18,32,0.08)] ring-1 ring-border sm:h-20 sm:w-20"
                     style={{ animationDelay: `${i * 0.22}s` }}
                   >
                     <Icon size={28} strokeWidth={1.75} />
@@ -195,10 +195,10 @@ export function HomeIntelligences() {
                 top: `${(HUB_Y / VB_H) * 100}%`,
               }}
             >
-              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-[#75B4B1]/25 sm:h-20 sm:w-20">
+              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-[#0d9488]/25 sm:h-20 sm:w-20">
                 <span
                   aria-hidden
-                  className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#75B4B1]/25 blur-md"
+                  className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#0d9488]/25 blur-md"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
@@ -216,14 +216,14 @@ export function HomeIntelligences() {
         <div className="mx-auto mt-14 max-w-3xl sm:mt-16">
           <div className="flex flex-wrap items-center justify-center gap-4 text-sm sm:gap-5 sm:text-base">
             <div className="inline-flex items-center gap-2.5">
-              <MessageCircle className="h-5 w-5 text-[#75B4B1]" />
+              <MessageCircle className="h-5 w-5 text-[#0d9488]" />
               <span className="font-display font-medium text-foreground">
                 Plain English updates
               </span>
             </div>
-            <div className="h-px w-16 border-t border-dashed border-[#75B4B1]/30 sm:w-28" />
+            <div className="h-px w-16 border-t border-dashed border-[#0d9488]/30 sm:w-28" />
             <div className="inline-flex items-center gap-2.5">
-              <ShieldCheck className="h-5 w-5 text-[#75B4B1]" />
+              <ShieldCheck className="h-5 w-5 text-[#0d9488]" />
               <span className="font-display font-medium text-foreground">
                 Work you can trust
               </span>
@@ -245,7 +245,7 @@ function PillarTile({ item, delay }: { item: Pillar; delay: number }) {
       transition={{ duration: 0.4, delay, ease: EASE_OUT_EXPO }}
       className="flex flex-col items-center rounded-2xl border border-border/70 bg-white/90 px-3 py-4 shadow-sm"
     >
-      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-[#e8f4f3] text-[#75B4B1]">
+      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-[#e8f4f3] text-[#0d9488]">
         <Icon size={24} strokeWidth={1.75} />
       </span>
       <span className="mt-2 text-center font-sans text-[11px] text-muted-foreground">

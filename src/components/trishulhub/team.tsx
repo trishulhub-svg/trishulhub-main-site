@@ -133,10 +133,10 @@ export function Team({ founders }: { founders: Founder[] }) {
   }, [])
 
   return (
-    <section id="founders" ref={sectionRef} className="relative overflow-hidden bg-[#75B4B1]/20 py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+    <section id="founders" ref={sectionRef} className="relative overflow-hidden bg-[#0d9488]/20 py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       <div
         className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]"
-        style={{ background: 'radial-gradient(circle, #75B4B1 0%, transparent 70%)' }}
+        style={{ background: 'radial-gradient(circle, #0d9488 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 mx-auto max-w-4xl">
@@ -147,7 +147,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#75B4B1]"
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#0d9488]"
           >
             Our Founders
           </motion.span>
@@ -217,7 +217,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                 style={{
                   boxShadow:
-                    '0 0 0 1px #75B4B1, 0 0 32px rgba(2,132,199,0.15)',
+                    '0 0 0 1px #0d9488, 0 0 32px rgba(2,132,199,0.15)',
                 }}
               />
 
@@ -263,7 +263,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                     <span
                       className="select-none text-[120px] font-bold leading-none sm:text-[140px]"
                       style={{
-                        color: '#75B4B1',
+                        color: '#0d9488',
                         fontFamily: 'var(--font-inter)',
                         textShadow: 'rgba(0,222,255,0.357) 0px 0px 24.74px',
                       }}
@@ -274,7 +274,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 )}
 
                 {/* Top-right "View Portfolio" arrow icon */}
-                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/90 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-[#75B4B1]/40 group-hover:bg-[#e8f4f3] group-hover:text-[#75B4B1]">
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/90 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-[#0d9488]/40 group-hover:bg-[#e8f4f3] group-hover:text-[#0d9488]">
                   <ArrowUpRight size={16} />
                 </div>
 
@@ -291,25 +291,25 @@ export function Team({ founders }: { founders: Founder[] }) {
                   <div className="flex items-center justify-center gap-3 py-4">
                     <span
                       aria-label={`${m.name} on GitHub`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#75B4B1] hover:bg-[#111111] hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#0d9488] hover:bg-[#000000] hover:text-white"
                     >
                       <Github size={16} />
                     </span>
                     <span
                       aria-label={`${m.name} on LinkedIn`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#75B4B1] hover:bg-[#111111] hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#0d9488] hover:bg-[#000000] hover:text-white"
                     >
                       <Linkedin size={16} />
                     </span>
                     <span
                       aria-label={`${m.name} on Twitter`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#75B4B1] hover:bg-[#111111] hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#0d9488] hover:bg-[#000000] hover:text-white"
                     >
                       <Twitter size={16} />
                     </span>
                     <span
                       aria-label={`Email ${m.name}`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#75B4B1] hover:bg-[#111111] hover:text-white"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-[#0d9488] hover:bg-[#000000] hover:text-white"
                     >
                       <Mail size={16} />
                     </span>
@@ -320,7 +320,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 <div className="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm"
                   style={{
                     backgroundColor: 'rgba(2,132,199,0.1)',
-                    color: '#75B4B1',
+                    color: '#0d9488',
                     border: '1px solid rgba(2,132,199,0.25)',
                   }}
                 >
@@ -344,7 +344,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 </p>
 
                 {/* "View Portfolio" link */}
-                <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-[#75B4B1] opacity-80 transition-all duration-300 group-hover:gap-2.5 group-hover:opacity-100">
+                <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-[#0d9488] opacity-80 transition-all duration-300 group-hover:gap-2.5 group-hover:opacity-100">
                   View Full Portfolio
                   <ArrowUpRight size={12} />
                 </div>
@@ -354,7 +354,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   className="mt-4 h-px w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
                   style={{
                     background:
-                      'linear-gradient(to right, #75B4B1 0%, #0369a1 100%)',
+                      'linear-gradient(to right, #0d9488 0%, #0369a1 100%)',
                   }}
                 />
               </div>
@@ -373,7 +373,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
             whileHover={reduce ? undefined : { scale: 1.04 }}
             whileTap={reduce ? undefined : { scale: 0.97 }}
-            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-lg border border-[#75B4B1]/40 bg-white px-7 py-3 text-sm font-semibold text-[#75B4B1] shadow-sm transition-all duration-300 hover:bg-[#111111] hover:text-white"
+            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-lg border border-[#0d9488]/40 bg-white px-7 py-3 text-sm font-semibold text-[#0d9488] shadow-sm transition-all duration-300 hover:bg-[#000000] hover:text-white"
           >
             <span className="relative z-10">Meet The Founders</span>
           </motion.a>

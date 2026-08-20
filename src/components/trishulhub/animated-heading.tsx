@@ -46,7 +46,7 @@ export function AnimatedHeading({
   className = '',
   style,
   as = 'h2',
-  highlightColor = '#75B4B1',
+  highlightColor = '#0d9488',
   whenInView = true,
 }: AnimatedHeadingProps) {
   const Tag = as

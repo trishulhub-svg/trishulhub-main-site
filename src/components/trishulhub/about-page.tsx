@@ -4,6 +4,31 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { AboutTimeline } from '@/components/trishulhub/about-timeline'
 import { PageHero } from '@/components/trishulhub/page-hero'
+import { Shield, HeartHandshake, Target, Sparkles } from 'lucide-react'
+import { EASE_OUT_EXPO } from '@/lib/animations'
+
+const values = [
+  {
+    icon: Target,
+    title: 'Clarity first',
+    text: 'Plain English plans, honest timelines, and no hidden jargon.',
+  },
+  {
+    icon: Shield,
+    title: 'Reliable builds',
+    text: 'Products your team can trust every day — stable and secure.',
+  },
+  {
+    icon: HeartHandshake,
+    title: 'Close partnership',
+    text: 'We stay near your business from kickoff through launch.',
+  },
+  {
+    icon: Sparkles,
+    title: 'Room to grow',
+    text: 'Start simple, then improve as your customers and ops grow.',
+  },
+]
 
 export function AboutPage() {
   const ref = useRef<HTMLDivElement>(null)
@@ -11,11 +36,10 @@ export function AboutPage() {
     target: ref,
     offset: ['start start', 'end end'],
   })
-  const layerA = useTransform(scrollYProgress, [0, 1], [0, -200])
-  const layerB = useTransform(scrollYProgress, [0, 1], [0, 160])
+  const layerA = useTransform(scrollYProgress, [0, 1], [0, -120])
 
   return (
-    <div ref={ref} className="relative pb-28">
+    <div ref={ref} className="relative pb-16">
       <PageHero
         label="About us"
         title="The team behind TrishulHub"
@@ -24,14 +48,50 @@ export function AboutPage() {
 
       <motion.div
         style={{ y: layerA }}
-        className="pointer-events-none absolute left-[8%] top-40 h-64 w-64 rounded-full bg-[#75B4B1]/20 blur-[110px]"
-      />
-      <motion.div
-        style={{ y: layerB }}
-        className="pointer-events-none absolute right-[5%] top-[40%] h-80 w-80 rounded-full bg-[#75B4B1]/20 blur-[120px]"
+        className="lt-glow pointer-events-none absolute left-[8%] top-40 h-64 w-64 opacity-50"
       />
 
-      <div className="relative mx-auto max-w-7xl px-4 pt-8 sm:px-6 sm:pt-12 lg:px-8">
+      <section className="lt-section bg-white">
+        <div className="lt-container">
+          <div className="mx-auto max-w-2xl text-center">
+            <h2 className="text-3xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-4xl">
+              Our values
+            </h2>
+            <p className="mt-3 text-[#6b7280]">
+              How we show up for every client project.
+            </p>
+          </div>
+          <div className="mt-12 grid gap-6 sm:grid-cols-2">
+            {values.map((v, i) => {
+              const Icon = v.icon
+              return (
+                <motion.div
+                  key={v.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{
+                    delay: i * 0.06,
+                    duration: 0.45,
+                    ease: EASE_OUT_EXPO,
+                  }}
+                  className="surface-card p-8"
+                >
+                  <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0f7fa] to-[#c8e6c9] text-[#0d9488]">
+                    <Icon size={22} />
+                  </div>
+                  <h3 className="text-lg font-bold text-[#0a0a0a]">{v.title}</h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
+                    {v.text}
+                  </p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      <div className="lt-container">
         <AboutTimeline />
       </div>
     </div>

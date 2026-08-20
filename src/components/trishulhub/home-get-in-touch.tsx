@@ -108,7 +108,7 @@ export function HomeGetInTouch() {
       label: 'Call us',
       href: links.tel,
       external: true,
-      color: 'text-[#75B4B1]',
+      color: 'text-[#0d9488]',
       glow: 'rgba(15,118,110,0.25)',
       x: 165,
       y: 430,
@@ -118,7 +118,7 @@ export function HomeGetInTouch() {
       id: 'email',
       label: 'Email',
       href: links.mailto,
-      color: 'text-[#75B4B1]',
+      color: 'text-[#0d9488]',
       glow: 'rgba(15,118,110,0.25)',
       x: 835,
       y: 130,
@@ -139,10 +139,10 @@ export function HomeGetInTouch() {
 
   return (
     <section className="relative py-8 sm:py-12">
-      <div className="surface-card relative overflow-hidden rounded-[2rem] px-5 py-10 sm:px-10">
+      <div className="surface-card relative overflow-hidden rounded-2xl px-5 py-10 sm:px-10">
         <div
           aria-hidden
-          className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-[#75B4B1]/20 blur-[90px]"
+          className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-[#0d9488]/20 blur-[90px]"
         />
         <div className="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex max-w-3xl flex-col gap-4">
@@ -177,16 +177,16 @@ export function HomeGetInTouch() {
           >
             <defs>
               <linearGradient id="wireContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#75B4B1" stopOpacity="0" />
-                <stop offset="25%" stopColor="#75B4B1" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#75B4B1" stopOpacity="0.45" />
-                <stop offset="75%" stopColor="#75B4B1" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#75B4B1" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0d9488" stopOpacity="0" />
+                <stop offset="25%" stopColor="#0d9488" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#0d9488" stopOpacity="0.45" />
+                <stop offset="75%" stopColor="#0d9488" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="noodleContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#75B4B1" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0d9488" stopOpacity="0" />
                 <stop offset="50%" stopColor="#9eccc9" stopOpacity="1" />
-                <stop offset="100%" stopColor="#75B4B1" stopOpacity="0" />
+                <stop offset="100%" stopColor="#0d9488" stopOpacity="0" />
               </linearGradient>
             </defs>
 
@@ -215,7 +215,7 @@ export function HomeGetInTouch() {
           ))}
 
           <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 scale-90 sm:scale-100">
-            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[#75B4B1]/20 blur-2xl" />
+            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[#0d9488]/20 blur-2xl" />
             <NexusButton href="#contact-form">Contact us</NexusButton>
           </div>
         </div>

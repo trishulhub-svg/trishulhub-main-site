@@ -45,41 +45,46 @@
 }
 
 :root {
-  --radius: 1.75rem;
-  /* Lawtrades-matched light theme */
-  --background: #f9f9f9;
-  --foreground: #111111;
+  --radius: 1rem; /* 16px cards */
+  /* Lawtrades exact design system */
+  --background: #fafafa;
+  --foreground: #0a0a0a;
   --card: #ffffff;
-  --card-foreground: #111111;
+  --card-foreground: #0a0a0a;
   --popover: #ffffff;
-  --popover-foreground: #111111;
-  --primary: #111111;
+  --popover-foreground: #0a0a0a;
+  --primary: #000000;
   --primary-foreground: #ffffff;
-  --secondary: #f0f0f0;
-  --secondary-foreground: #111111;
-  --muted: #f0f0f0;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #0a0a0a;
+  --muted: #f3f4f6;
   --muted-foreground: #6b7280;
-  --accent: #e8f4f3;
-  --accent-foreground: #3d6e6c;
+  --accent: #e0f7fa;
+  --accent-foreground: #0d9488;
   --destructive: #ef4444;
   --border: #e5e7eb;
   --input: #e5e7eb;
-  --ring: #75b4b1;
-  --brand: #75b4b1;
-  --brand-light: #e8f4f3;
-  --chart-1: #75b4b1;
-  --chart-2: #5a9a97;
-  --chart-3: #9eccc9;
-  --chart-4: #c5e0de;
-  --chart-5: #e8f4f3;
+  --ring: #0d9488;
+  --brand: #0d9488;
+  --brand-light: #e0f7fa;
+  --mint: #c8e6c9;
+  --chart-1: #0d9488;
+  --chart-2: #14b8a6;
+  --chart-3: #75b4b1;
+  --chart-4: #c8e6c9;
+  --chart-5: #e0f7fa;
   --sidebar: #ffffff;
-  --sidebar-foreground: #111111;
-  --sidebar-primary: #111111;
+  --sidebar-foreground: #0a0a0a;
+  --sidebar-primary: #000000;
   --sidebar-primary-foreground: #ffffff;
-  --sidebar-accent: #f0f0f0;
-  --sidebar-accent-foreground: #111111;
+  --sidebar-accent: #f3f4f6;
+  --sidebar-accent-foreground: #0a0a0a;
   --sidebar-border: #e5e7eb;
-  --sidebar-ring: #75b4b1;
+  --sidebar-ring: #0d9488;
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.06);
+  --shadow-hover: 0 8px 32px rgba(0, 0, 0, 0.1);
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.04);
+  --container: 1200px;
 }
 
 @layer base {
@@ -173,22 +178,30 @@
   }
 }
 
-/* Gradient text utility — soft teal accent */
+/* Gradient / accent text — Lawtrades teal */
 .gradient-text {
-  color: #75b4b1;
+  color: #0d9488;
   background: none;
-  -webkit-text-fill-color: #75b4b1;
+  -webkit-text-fill-color: #0d9488;
 }
 
-/* Highlight accent (Lawtrades-style teal word) */
 .accent-text {
-  color: #75b4b1;
+  color: #0d9488;
+  position: relative;
+  display: inline;
+}
+
+.accent-underline {
+  background-image: linear-gradient(90deg, #e0f7fa, #c8e6c9);
+  background-repeat: no-repeat;
+  background-size: 100% 38%;
+  background-position: 0 88%;
 }
 
 .gradient-text-animated {
-  color: #75b4b1;
+  color: #0d9488;
   background: none;
-  -webkit-text-fill-color: #75b4b1;
+  -webkit-text-fill-color: #0d9488;
   animation: none;
 }
 @keyframes gradientShift {
@@ -198,8 +211,8 @@
 @media (prefers-reduced-motion: reduce) {
   .gradient-text-animated {
     animation: none;
-    color: #75b4b1;
-    -webkit-text-fill-color: #75b4b1;
+    color: #0d9488;
+    -webkit-text-fill-color: #0d9488;
   }
 }
 
@@ -209,15 +222,15 @@
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #f0f0f0;
+  background: #f3f4f6;
 }
 ::-webkit-scrollbar-thumb {
-  background: #c5c5c5;
+  background: #d1d5db;
   border-radius: 10px;
-  border: 2px solid #f0f0f0;
+  border: 2px solid #f3f4f6;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #75b4b1;
+  background: #0d9488;
 }
 
 /* Marquee animation */
@@ -312,45 +325,43 @@
   transition: transform 0.08s ease-out;
 }
 
-/* Primary button — Lawtrades solid black */
+/* Primary button — Lawtrades solid black, 8px radius */
 .btn-cyan {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  background: #111111 !important;
+  background: #000000 !important;
   color: #ffffff !important;
   border-color: transparent !important;
   box-shadow: none;
+  border-radius: 8px !important;
 }
 .btn-cyan:hover {
   animation: none;
-  background: #000000 !important;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  transform: translateY(-1px);
+  background: #0a0a0a !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  transform: scale(1.02);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
               box-shadow 0.25s ease-out, background 0.2s ease;
 }
 .btn-cyan:active {
-  transform: translateY(0) scale(0.97);
+  transform: scale(0.98);
   transition: transform 0.08s ease-out;
 }
 
-/* Ghost / outline button — border glows on hover, subtle inner fill breathes */
+/* Ghost / outline button */
 .btn-ghost {
   position: relative;
   overflow: hidden;
   isolation: isolate;
+  border-radius: 8px !important;
   transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 .btn-ghost::after {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(
-    circle at var(--mx, 50%) var(--my, 50%),
-    rgba(0, 222, 255, 0.18) 0%,
-    transparent 50%
-  );
+  background: transparent;
   opacity: 0;
   transition: opacity 0.3s ease;
   z-index: 0;
@@ -360,15 +371,14 @@
   opacity: 1;
 }
 .btn-ghost:hover {
-  border-color: rgba(17, 17, 17, 0.25) !important;
-  box-shadow: none;
-  transform: translateY(-1px);
+  border-color: #000000 !important;
+  box-shadow: var(--shadow-subtle);
+  transform: scale(1.02);
 }
 .btn-ghost:active {
-  transform: translateY(0) scale(0.97);
+  transform: scale(0.98);
   transition: transform 0.08s ease-out;
 }
-/* Make sure inner content sits above the ::after glow */
 .btn-ghost > * {
   position: relative;
   z-index: 1;
@@ -438,36 +448,46 @@
   }
 }
 
-/* Shared form controls for preview + contact */
+/* Shared form controls */
 .field-input {
   width: 100%;
-  border-radius: 0.75rem;
-  border: 1px solid var(--border);
+  height: 48px;
+  border-radius: 8px;
+  border: 1px solid #e5e7eb;
   background: #ffffff;
-  padding: 0.75rem 1rem;
-  font-size: 0.875rem;
-  color: var(--foreground);
+  padding: 0 16px;
+  font-size: 16px;
+  color: #0a0a0a;
   outline: none;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .field-input::placeholder {
-  color: #94a3b8;
+  color: #9ca3af;
 }
 .field-input:focus {
-  border-color: rgba(117, 180, 177, 0.7);
-  box-shadow: 0 0 0 3px rgba(117, 180, 177, 0.18);
+  border-color: #0d9488;
+  box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.15);
 }
 .field-input option {
   background: #ffffff;
-  color: var(--foreground);
+  color: #0a0a0a;
+}
+textarea.field-input {
+  height: auto;
+  min-height: 120px;
+  padding: 16px;
 }
 
-/* Soft white card — Lawtrades rounded panel */
+/* Lawtrades standard card */
 .surface-card {
-  border-radius: 1.75rem;
-  border: 1px solid #e8e8e8;
+  border-radius: 16px;
+  border: 1px solid #e5e7eb;
   background: #ffffff;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.3s ease, transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.surface-card:hover {
+  box-shadow: var(--shadow-hover);
 }
 
 .electric-card {
@@ -477,25 +497,34 @@
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .electric-card:hover {
-  border-color: rgba(117, 180, 177, 0.45);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.06);
-  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+  transform: translateY(-4px);
 }
 
 .stars-bg {
   background-image: radial-gradient(
-    rgba(117, 180, 177, 0.18) 1px,
+    rgba(13, 148, 136, 0.12) 1px,
     transparent 1px
   );
   background-size: 180px 180px;
 }
 
-/* Soft teal glow field like Lawtrades hero */
+/* Soft mint/cyan gradient blob */
+.atelier-mesh,
+.lt-glow {
+  background: radial-gradient(
+    circle,
+    rgba(224, 247, 250, 0.9) 0%,
+    rgba(200, 230, 201, 0.55) 42%,
+    transparent 70%
+  );
+}
+
 .atelier-mesh {
   background:
-    radial-gradient(ellipse 70% 55% at 78% 42%, rgba(117, 180, 177, 0.28), transparent 58%),
-    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(117, 180, 177, 0.1), transparent 55%),
-    #f9f9f9;
+    radial-gradient(ellipse 70% 55% at 78% 42%, rgba(224, 247, 250, 0.85), transparent 58%),
+    radial-gradient(ellipse 50% 40% at 20% 80%, rgba(200, 230, 201, 0.45), transparent 55%),
+    #fafafa;
 }
 
 .atelier-grain {
@@ -515,29 +544,55 @@
 }
 
 .section-label {
-  font-family: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.04em;
-  text-transform: none;
+  font-size: 14px;
+  font-weight: 500;
   color: #6b7280;
 }
 
+.lt-container {
+  width: 100%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+@media (min-width: 640px) {
+  .lt-container {
+    padding-left: 1.5rem;
+    padding-right: 1.5rem;
+  }
+}
+
+.lt-section {
+  padding-top: 80px;
+  padding-bottom: 80px;
+}
+@media (min-width: 1024px) {
+  .lt-section {
+    padding-top: 120px;
+    padding-bottom: 120px;
+  }
+}
+
 .lt-pill {
-  border-radius: 9999px;
+  border-radius: 20px;
   border: 1px solid #e5e7eb;
-  background: #ffffff;
-  color: #111111;
+  background: #f3f4f6;
+  color: #0a0a0a;
   transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
 .lt-pill-active {
-  border-color: #111111;
-  background: #111111;
+  border-color: #000000;
+  background: #000000;
   color: #ffffff;
 }
 
-.lt-glow {
-  background: radial-gradient(circle, rgba(117, 180, 177, 0.35) 0%, transparent 68%);
+.lt-dotted {
+  stroke: #d1d5db;
+  stroke-width: 2;
+  stroke-dasharray: 4 6;
+  fill: none;
 }
 
 @keyframes orbit-spin {

@@ -96,14 +96,14 @@ export function AboutProtocol({
   }
 
   return (
-    <section className={`relative z-10 ${className}`}>
-      <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 md:py-8 lg:px-8">
+    <section className={`lt-section relative z-10 ${className}`}>
+      <div className="lt-container">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-[2rem] border border-[#e8e8e8] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:p-12"
+          className="relative overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:p-12"
         >
           <div className="lt-glow pointer-events-none absolute -right-24 -top-24 h-72 w-72 opacity-60" />
 
@@ -111,7 +111,7 @@ export function AboutProtocol({
             <p className="mb-3 text-sm font-medium text-[#6b7280]">
               Project planner
             </p>
-            <h3 className="text-3xl font-bold tracking-[-0.03em] text-[#111111] md:text-4xl">
+            <h3 className="text-3xl font-bold tracking-[-0.03em] text-[#000000] md:text-4xl">
               Let&apos;s plan your{' '}
               <span className="accent-text">project</span>
             </h3>
@@ -131,9 +131,9 @@ export function AboutProtocol({
                     onClick={() => setStep(n)}
                     className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       active
-                        ? 'bg-[#111111] text-white'
+                        ? 'bg-[#000000] text-white'
                         : done
-                          ? 'bg-[#e8f4f3] text-[#75B4B1]'
+                          ? 'bg-[#e8f4f3] text-[#0d9488]'
                           : 'border border-[#e5e7eb] bg-white text-[#6b7280]'
                     }`}
                     aria-label={`Step ${n}`}
@@ -153,7 +153,7 @@ export function AboutProtocol({
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
                 >
-                  <p className="text-lg font-bold tracking-tight text-[#111111]">
+                  <p className="text-lg font-bold tracking-tight text-[#000000]">
                     {current.title}
                   </p>
                   <p className="mt-1 text-sm text-[#6b7280]">
@@ -177,7 +177,7 @@ export function AboutProtocol({
                           ))}
                         </div>
                         <div
-                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#75B4B1]"
+                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#0d9488]"
                           style={{
                             width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
@@ -185,7 +185,7 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#111111] shadow-md transition-transform hover:scale-110"
+                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#000000] shadow-md transition-transform hover:scale-110"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
@@ -193,7 +193,7 @@ export function AboutProtocol({
                           className="absolute -bottom-8 transition-all"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="inline-flex items-center rounded-full bg-[#111111] px-3 py-1 text-white">
+                          <div className="inline-flex items-center rounded-lg bg-black px-3 py-1 text-white">
                             <span className="text-xs font-bold">{budget}</span>
                           </div>
                         </div>
@@ -241,26 +241,26 @@ export function AboutProtocol({
                   )}
 
                   {step === 4 && (
-                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#e8e8e8] bg-[#f9f9f9] p-5 text-left">
-                      <p className="text-sm font-bold text-[#111111]">
+                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#e8e8e8] bg-[#fafafa] p-5 text-left">
+                      <p className="text-sm font-bold text-[#000000]">
                         Your project summary
                       </p>
                       <ul className="mt-3 space-y-2 text-sm text-[#6b7280]">
                         <li>
                           Budget:{' '}
-                          <span className="font-semibold text-[#75B4B1]">
+                          <span className="font-semibold text-[#0d9488]">
                             {budget}
                           </span>
                         </li>
                         <li>
                           Service:{' '}
-                          <span className="font-semibold text-[#111111]">
+                          <span className="font-semibold text-[#000000]">
                             {lane}
                           </span>
                         </li>
                         <li>
                           Timing:{' '}
-                          <span className="font-semibold text-[#111111]">
+                          <span className="font-semibold text-[#000000]">
                             {timing}
                           </span>
                         </li>
