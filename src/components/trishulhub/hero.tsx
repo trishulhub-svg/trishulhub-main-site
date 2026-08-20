@@ -31,9 +31,8 @@ export function Hero() {
       className="relative z-10 flex min-h-screen flex-col items-center justify-center overflow-hidden px-4 pt-28 pb-16 sm:px-6"
     >
       <div className="pointer-events-none absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute inset-0 bg-[#050505]" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_40%,rgba(0,222,255,0.1),transparent_55%)]" />
-        <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#050505]" />
+        <div className="absolute inset-0 bg-gradient-to-b from-sky-50/80 via-background to-background" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_50%_30%,rgba(2,132,199,0.12),transparent_55%)]" />
       </div>
 
       <motion.div
@@ -43,30 +42,24 @@ export function Hero() {
         className="relative z-10 mx-auto max-w-5xl text-center"
       >
         <motion.div variants={heroItem}>
-          <div className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-[#00DEFF]">
+          <div className="mx-auto mb-8 inline-flex items-center gap-2 rounded-full border border-primary/25 bg-sky-50 px-4 py-1.5 text-xs font-medium uppercase tracking-[0.2em] text-primary">
             <span className="relative flex h-2 w-2">
-              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-[#00DEFF] opacity-75" />
-              <span className="relative inline-flex h-2 w-2 rounded-full bg-[#00DEFF]" />
+              <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary opacity-75" />
+              <span className="relative inline-flex h-2 w-2 rounded-full bg-primary" />
             </span>
             Built for growing businesses
           </div>
         </motion.div>
 
         <motion.div variants={heroItem}>
-          <h1
-            className="font-display text-4xl font-bold leading-[1.05] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]"
-            style={{ textShadow: '0 4px 30px rgba(0,0,0,0.6)' }}
-          >
+          <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-foreground sm:text-6xl md:text-7xl lg:text-[5.25rem]">
             DIGITAL PRODUCTS THAT{' '}
             <span className="gradient-text-animated">WORK FOR YOU.</span>
           </h1>
         </motion.div>
 
         <motion.div variants={heroItem}>
-          <p
-            className="mx-auto mt-8 max-w-2xl text-base text-white/70 sm:text-lg md:text-xl"
-            style={{ textShadow: '0 2px 16px rgba(0,0,0,0.7)' }}
-          >
+          <p className="mx-auto mt-8 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
             TrishulHub helps businesses run smoother with clear, reliable digital
             products — designed around your goals, not complicated tech talk.
           </p>
@@ -79,7 +72,7 @@ export function Hero() {
           <NexusButton href={links.whatsapp}>Let&apos;s build yours</NexusButton>
           <Link
             href="/services"
-            className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-full border border-white/15 bg-white/5 px-7 py-3.5 text-sm font-semibold text-white backdrop-blur-md transition-all hover:text-[#00DEFF] sm:w-auto"
+            className="btn-ghost btn-shine group inline-flex w-full items-center justify-center gap-2 rounded-lg border border-border bg-white px-7 py-3.5 text-sm font-semibold text-foreground shadow-sm transition-all hover:text-primary sm:w-auto"
           >
             <span className="relative z-10">See our services</span>
           </Link>
@@ -88,11 +81,11 @@ export function Hero() {
 
       <FadeIn delay={1.1} whenInView={false}>
         <div className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">
-          <div className="flex h-10 w-6 items-start justify-center rounded-full border border-white/20 p-1.5">
+          <div className="flex h-10 w-6 items-start justify-center rounded-full border border-border p-1.5">
             <motion.div
               animate={reduce ? undefined : { y: [0, 10, 0] }}
               transition={{ repeat: Infinity, duration: 1.6, ease: 'easeInOut' }}
-              className="h-2 w-1 rounded-full bg-[#00DEFF]"
+              className="h-2 w-1 rounded-full bg-primary"
             />
           </div>
         </div>

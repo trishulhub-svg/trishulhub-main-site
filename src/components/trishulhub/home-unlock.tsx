@@ -130,7 +130,6 @@ export function HomeUnlock() {
       const el = buttonRefs.current[plan.id]
       if (el) ro?.observe(el)
     }
-    // Re-measure after fonts/layout settle
     const t1 = window.setTimeout(measure, 50)
     const t2 = window.setTimeout(measure, 250)
     return () => {
@@ -142,17 +141,14 @@ export function HomeUnlock() {
   }, [])
 
   return (
-    <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 opacity-[0.1] stars-bg" />
-
+    <section className="relative overflow-hidden bg-secondary/40 py-24 sm:py-32">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 items-stretch gap-8 lg:grid-cols-12 lg:gap-0">
-          {/* LEFT — title + plan selectors */}
           <div className="flex flex-col lg:col-span-4">
-            <h2 className="font-display text-3xl font-semibold tracking-tight text-white sm:text-4xl">
+            <h2 className="font-display text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">
               Unlock custom growth
             </h2>
-            <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-neutral-400 sm:text-base">
+            <p className="mt-4 max-w-md font-sans text-sm leading-relaxed text-muted-foreground sm:text-base">
               Choose the solution that fits your business — then talk with us
               and we will build it with you.
             </p>
@@ -171,15 +167,15 @@ export function HomeUnlock() {
                     onClick={() => setActive(plan.id)}
                     className={`relative flex min-h-[64px] w-full items-center justify-between rounded-2xl px-5 py-4 text-left transition-all ${
                       isActive
-                        ? 'bg-[#00DEFF] text-[#0A0A0A] shadow-[0_0_30px_rgba(0,222,255,0.35)]'
-                        : 'border border-white/10 bg-white/[0.04] text-neutral-300 hover:border-white/20'
+                        ? 'bg-primary text-primary-foreground shadow-md'
+                        : 'border border-border bg-white text-muted-foreground hover:border-primary/25'
                     }`}
                   >
                     <div className="flex min-w-0 items-center gap-3">
                       <Icon
                         size={18}
                         className={`shrink-0 ${
-                          isActive ? 'text-[#0A0A0A]' : 'text-neutral-400'
+                          isActive ? 'text-primary-foreground' : 'text-muted-foreground'
                         }`}
                       />
                       <span className="truncate font-display text-sm font-semibold sm:text-base">
@@ -187,7 +183,7 @@ export function HomeUnlock() {
                       </span>
                     </div>
                     {isActive ? (
-                      <Zap size={16} className="shrink-0 text-[#0A0A0A]" />
+                      <Zap size={16} className="shrink-0 text-primary-foreground" />
                     ) : null}
                   </button>
                 )
@@ -195,7 +191,6 @@ export function HomeUnlock() {
             </div>
           </div>
 
-          {/* Mobile/tablet: animated flow into the detail card */}
           <div className="flex justify-center py-1 lg:hidden" aria-hidden>
             <svg width="24" height="56" className="overflow-visible">
               <line
@@ -203,12 +198,12 @@ export function HomeUnlock() {
                 y1="0"
                 x2="12"
                 y2="56"
-                stroke="#00DEFF"
+                stroke="#0284c7"
                 strokeWidth="1.75"
                 strokeDasharray="6 6"
                 className="animate-flow"
               />
-              <circle r="3.5" fill="#00DEFF">
+              <circle r="3.5" fill="#0284c7">
                 <animateMotion
                   dur="1.4s"
                   repeatCount="indefinite"
@@ -218,7 +213,6 @@ export function HomeUnlock() {
             </svg>
           </div>
 
-          {/* MIDDLE — long dashed connectors, measured to button centers */}
           <div
             ref={bridgeRef}
             className="relative hidden lg:col-span-3 lg:block"
@@ -238,8 +232,8 @@ export function HomeUnlock() {
                   <path
                     key={line.id}
                     d={`M0 ${y} C 90 ${y}, 120 ${end}, 180 ${end} L 240 ${end}`}
-                    stroke={isActive ? '#00DEFF' : '#525252'}
-                    strokeOpacity={isActive ? 1 : 0.45}
+                    stroke={isActive ? '#0284c7' : '#cbd5e1'}
+                    strokeOpacity={isActive ? 1 : 0.7}
                     strokeWidth="1.75"
                     strokeDasharray="8 8"
                     className={isActive ? 'animate-flow' : undefined}
@@ -249,48 +243,44 @@ export function HomeUnlock() {
             </svg>
           </div>
 
-          {/* RIGHT — narrower detail card */}
           <motion.div
             key={current.id}
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[28px] border border-white/10 bg-[#121212] p-6 shadow-[0_0_0_1px_rgba(0,222,255,0.1),0_0_40px_rgba(0,222,255,0.12)] sm:p-8 lg:col-span-5"
+            className="surface-card relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[28px] p-6 sm:p-8 lg:col-span-5"
           >
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-[#00DEFF]/55 to-transparent" />
-            <div className="pointer-events-none absolute inset-y-0 right-0 w-px bg-gradient-to-b from-[#00DEFF]/45 via-transparent to-transparent" />
-
             <div className="flex flex-wrap items-start justify-between gap-4">
-              <h3 className="max-w-[16rem] font-display text-2xl font-semibold text-white sm:max-w-none sm:text-3xl lg:text-4xl">
+              <h3 className="max-w-[16rem] font-display text-2xl font-semibold text-foreground sm:max-w-none sm:text-3xl lg:text-4xl">
                 {current.label}
               </h3>
               <div className="text-right">
-                <span className="font-display text-2xl font-semibold text-white sm:text-3xl">
+                <span className="font-display text-2xl font-semibold text-foreground sm:text-3xl">
                   {current.price}
                 </span>
-                <span className="ml-1 font-sans text-sm text-[#00DEFF]">
+                <span className="ml-1 font-sans text-sm text-primary">
                   {current.period}
                 </span>
               </div>
             </div>
 
-            <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-neutral-400">
+            <p className="mt-4 max-w-xl font-sans text-sm leading-relaxed text-muted-foreground">
               {current.description}
             </p>
 
-            <div className="my-6 h-px w-full bg-white/10" />
+            <div className="my-6 h-px w-full bg-border" />
 
             <ul className="flex-1 space-y-3">
               {current.features.map((f) => (
                 <li
                   key={f}
-                  className="flex items-start gap-3 font-sans text-sm text-neutral-200"
+                  className="flex items-start gap-3 font-sans text-sm text-foreground"
                 >
                   <svg
                     width="16"
                     height="16"
                     viewBox="0 0 24 24"
-                    className="mt-0.5 shrink-0 text-[#00DEFF]"
+                    className="mt-0.5 shrink-0 text-primary"
                     fill="currentColor"
                     aria-hidden="true"
                   >

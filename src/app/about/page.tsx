@@ -24,7 +24,7 @@ export default async function AboutRoute() {
   }[] = []
 
   try {
-    founders = await db.founder.findMany({
+    const all = await db.founder.findMany({
       orderBy: { createdAt: 'asc' },
       select: {
         slug: true,
@@ -37,6 +37,7 @@ export default async function AboutRoute() {
         image: true,
       },
     })
+    founders = all.filter((f) => f.slug !== 'akshat')
   } catch (err) {
     console.warn(
       '[about] founders fetch skipped:',

@@ -46,16 +46,15 @@ function NodeFace({ node }: { node: NodeSpec }) {
           background: `radial-gradient(circle, ${node.glow}, transparent 60%)`,
         }}
       />
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-white/[0.1] bg-white/[0.04] shadow-[0_12px_28px_-14px_rgba(0,0,0,0.85)] backdrop-blur-xl transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
-        <div className="absolute inset-0 rounded-full bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.08),transparent_55%)]" />
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white shadow-md transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
         <span
           className={`relative scale-90 sm:scale-100 ${node.color}`}
-          style={{ filter: `drop-shadow(0 0 10px ${node.glow})` }}
+          style={{ filter: `drop-shadow(0 0 6px ${node.glow})` }}
         >
           {node.icon}
         </span>
       </div>
-      <span className="mt-1.5 font-sans text-[9px] uppercase tracking-[0.16em] text-neutral-400 sm:mt-2 sm:text-[10px]">
+      <span className="mt-1.5 font-sans text-[9px] uppercase tracking-[0.16em] text-muted-foreground sm:mt-2 sm:text-[10px]">
         {node.label}
       </span>
     </>
@@ -101,8 +100,8 @@ export function HomeGetInTouch() {
       label: 'WhatsApp',
       href: links.whatsapp,
       external: true,
-      color: 'text-emerald-400',
-      glow: 'rgba(52,211,153,0.35)',
+      color: 'text-emerald-600',
+      glow: 'rgba(16,185,129,0.25)',
       x: 165,
       y: 130,
       icon: WHATSAPP_ICON,
@@ -112,8 +111,8 @@ export function HomeGetInTouch() {
       label: 'Call us',
       href: links.tel,
       external: true,
-      color: 'text-[#00DEFF]',
-      glow: 'rgba(0,222,255,0.35)',
+      color: 'text-primary',
+      glow: 'rgba(2,132,199,0.25)',
       x: 165,
       y: 430,
       icon: <Phone className="h-6 w-6" strokeWidth={1.5} />,
@@ -122,8 +121,8 @@ export function HomeGetInTouch() {
       id: 'email',
       label: 'Email',
       href: links.mailto,
-      color: 'text-[#33E6FF]',
-      glow: 'rgba(0,222,255,0.35)',
+      color: 'text-sky-600',
+      glow: 'rgba(2,132,199,0.25)',
       x: 835,
       y: 130,
       icon: <Mail className="h-6 w-6" strokeWidth={1.5} />,
@@ -133,8 +132,8 @@ export function HomeGetInTouch() {
       label: 'Instagram',
       href: links.instagram,
       external: true,
-      color: 'text-pink-400',
-      glow: 'rgba(236,72,153,0.35)',
+      color: 'text-pink-600',
+      glow: 'rgba(236,72,153,0.25)',
       x: 835,
       y: 430,
       icon: <Instagram className="h-6 w-6" strokeWidth={1.5} />,
@@ -142,45 +141,32 @@ export function HomeGetInTouch() {
   ]
 
   return (
-    <section className="relative py-10 sm:py-14">
-      <div className="relative mx-auto max-w-7xl rounded-3xl border border-white/10 bg-gradient-to-br from-white/10 via-white/[0.02] to-white/10 px-5 py-10 sm:px-10">
-        <div className="flex flex-col gap-10">
-          <div className="flex items-center gap-6">
-            <span className="font-display text-xs tracking-widest text-[#00DEFF]">
-              01
-            </span>
-            <div className="h-px flex-1 bg-white/10" />
-            <span className="font-display text-xs uppercase tracking-widest text-neutral-500">
-              Get in touch
-            </span>
+    <section className="relative py-8 sm:py-12">
+      <div className="surface-card relative overflow-hidden rounded-3xl px-5 py-10 sm:px-10">
+        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+          <div className="flex max-w-3xl flex-col gap-4">
+            <motion.h2
+              initial={{ opacity: 0, y: 24 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.15 }}
+              transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+              className="font-display text-3xl font-semibold leading-[1.1] text-foreground sm:text-4xl"
+            >
+              Want to talk?
+              <span className="mt-1 block text-muted-foreground">
+                We are ready to help.
+              </span>
+            </motion.h2>
+            <p className="max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
+              Tap a channel below or use the contact form. Tell us what you
+              need and we will reply soon.
+            </p>
           </div>
 
-          <div className="flex flex-col gap-10 md:flex-row md:items-end md:justify-between">
-            <div className="flex max-w-3xl flex-col gap-6">
-              <motion.h2
-                initial={{ opacity: 0, y: 24 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.15 }}
-                transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-                className="font-display text-4xl font-semibold leading-[1.05] text-white md:text-5xl lg:text-6xl"
-              >
-                Want to talk?
-                <span className="mt-1 block text-neutral-500">
-                  We are ready to help.
-                </span>
-              </motion.h2>
-              <p className="max-w-xl font-sans text-base font-light leading-relaxed text-neutral-400 sm:text-lg">
-                Message us on WhatsApp, call, or email. Tell us what you need
-                and we will reply soon.
-              </p>
-            </div>
-
-            <NexusButton href="#contact-form">Contact form</NexusButton>
-          </div>
+          <NexusButton href="#contact-form">Contact form</NexusButton>
         </div>
 
-        {/* Same animated wire diagram on mobile, tablet, and desktop */}
-        <div className="relative mx-auto mt-10 aspect-[1000/720] w-full max-w-5xl sm:mt-14 sm:aspect-[1000/560] md:mt-16">
+        <div className="relative mx-auto mt-10 aspect-[1000/720] w-full max-w-5xl sm:mt-14 sm:aspect-[1000/560]">
           <svg
             className="pointer-events-none absolute inset-0 h-full w-full"
             viewBox={`0 0 ${VB_W} ${VB_H}`}
@@ -189,24 +175,17 @@ export function HomeGetInTouch() {
           >
             <defs>
               <linearGradient id="wireContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#ffffff" stopOpacity="0" />
-                <stop offset="25%" stopColor="#ffffff" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#00DEFF" stopOpacity="0.4" />
-                <stop offset="75%" stopColor="#ffffff" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0284c7" stopOpacity="0" />
+                <stop offset="25%" stopColor="#0284c7" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#0284c7" stopOpacity="0.4" />
+                <stop offset="75%" stopColor="#0284c7" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="noodleContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#00DEFF" stopOpacity="0" />
-                <stop offset="50%" stopColor="#7af0ff" stopOpacity="1" />
-                <stop offset="100%" stopColor="#00DEFF" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0284c7" stopOpacity="0" />
+                <stop offset="50%" stopColor="#38bdf8" stopOpacity="1" />
+                <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
               </linearGradient>
-              <filter id="wireGlowContact" x="-30%" y="-30%" width="160%" height="160%">
-                <feGaussianBlur stdDeviation="2" result="blur" />
-                <feMerge>
-                  <feMergeNode in="blur" />
-                  <feMergeNode in="SourceGraphic" />
-                </feMerge>
-              </filter>
             </defs>
 
             {PATHS.map((d, i) => (
@@ -216,7 +195,6 @@ export function HomeGetInTouch() {
                   stroke="url(#wireContact)"
                   strokeWidth="1.5"
                   fill="none"
-                  filter="url(#wireGlowContact)"
                   opacity="0.55"
                 />
                 <path
@@ -224,7 +202,6 @@ export function HomeGetInTouch() {
                   stroke="url(#noodleContact)"
                   strokeWidth="2"
                   fill="none"
-                  filter="url(#wireGlowContact)"
                   className={i === 4 ? 'animate-noodle-delayed' : 'animate-noodle'}
                 />
               </g>
@@ -236,7 +213,7 @@ export function HomeGetInTouch() {
           ))}
 
           <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 scale-90 sm:scale-100">
-            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[radial-gradient(circle,rgba(0,222,255,0.22),transparent_70%)] blur-2xl" />
+            <div className="pointer-events-none absolute -inset-12 rounded-full bg-primary/10 blur-2xl" />
             <NexusButton href="#contact-form">Contact us</NexusButton>
           </div>
         </div>

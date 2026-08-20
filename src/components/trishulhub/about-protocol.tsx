@@ -1,23 +1,19 @@
 'use client'
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
-type Currency = 'USD' | 'INR'
-
-const BUDGETS_USD = ['$500', '$750', '$1,000', '$1,500', '$2,000'] as const
-const BUDGETS_INR = ['₹50k', '₹75k', '₹1L', '₹1.5L', '₹2L'] as const
+const BUDGETS_GBP = ['£400', '£600', '£900', '£1,200', '£1,500'] as const
 
 const STEPS = [
   {
     id: 1,
-    title: "What is your budget?",
-    subtitle:
-      "Pick a range. We can adjust it later together.",
+    title: 'What is your budget?',
+    subtitle: 'Pick a range in pounds. We can adjust it later together.',
   },
   {
     id: 2,
@@ -33,8 +29,7 @@ const STEPS = [
   {
     id: 4,
     title: 'Ready to talk?',
-    subtitle:
-      "We will message you on WhatsApp with a simple next step.",
+    subtitle: 'We will message you on WhatsApp with a simple next step.',
   },
 ] as const
 
@@ -48,20 +43,15 @@ export function AboutProtocol({
 }) {
   const { whatsappWithMessage } = useSiteContact()
   const [step, setStep] = useState(1)
-  const [currency, setCurrency] = useState<Currency>('USD')
-  const [budgetIndex, setBudgetIndex] = useState(1)
+  const [budgetIndex, setBudgetIndex] = useState(0)
   const [lane, setLane] = useState<string>(LANES[0])
   const [timing, setTiming] = useState<string>(TIMING[1])
   const [dragging, setDragging] = useState(false)
   const trackRef = useRef<HTMLDivElement>(null)
 
-  const budgets = currency === 'USD' ? BUDGETS_USD : BUDGETS_INR
+  const budgets = BUDGETS_GBP
   const current = STEPS[step - 1]
   const budget = budgets[budgetIndex]
-
-  useEffect(() => {
-    setBudgetIndex((i) => Math.min(i, budgets.length - 1))
-  }, [currency, budgets.length])
 
   const handlePct = useCallback(
     (clientX: number) => {
@@ -113,23 +103,15 @@ export function AboutProtocol({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="work-wizard-attract relative overflow-hidden rounded-3xl border border-white/10 bg-[#0a0a0a]/70 p-8 backdrop-blur-[18px] transition-all duration-500 hover:-translate-y-0.5 hover:border-[#00DEFF]/35 md:p-12"
+          className="surface-card relative overflow-hidden rounded-3xl p-8 md:p-12"
         >
-          <div
-            aria-hidden
-            className="work-wizard-glow pointer-events-none absolute -inset-px rounded-3xl"
-          />
-          <div
-            aria-hidden
-            className="work-wizard-shine pointer-events-none absolute inset-0 opacity-40"
-          />
           <div className="relative mx-auto max-w-3xl text-center">
-            <h3 className="font-display text-3xl font-medium tracking-tight text-white md:text-4xl">
-              Let's plan your project
+            <h3 className="font-display text-3xl font-medium tracking-tight text-foreground md:text-4xl">
+              Let&apos;s plan your project
             </h3>
-            <p className="mt-3 font-sans text-white/70">
-              Tell us a few details and we will reply with a simple plan
-              within 48 hours.
+            <p className="mt-3 font-sans text-muted-foreground">
+              Tell us a few details and we will reply with a simple plan within
+              48 hours.
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-4">
@@ -141,12 +123,12 @@ export function AboutProtocol({
                     key={n}
                     type="button"
                     onClick={() => setStep(n)}
-                    className={`flex size-10 items-center justify-center rounded-lg font-sans text-sm font-semibold transition-all duration-500 hover:scale-105 ${
+                    className={`flex size-10 items-center justify-center rounded-lg font-sans text-sm font-semibold transition-all duration-300 hover:scale-105 ${
                       active
-                        ? 'border border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_20px_rgba(0,222,255,0.35)]'
+                        ? 'border border-primary/40 bg-sky-100 text-primary shadow-sm'
                         : done
-                          ? 'border border-[#00DEFF]/35 bg-[#00DEFF]/10 text-[#00DEFF]'
-                          : 'border border-white/10 bg-white/5 text-white/60'
+                          ? 'border border-primary/25 bg-sky-50 text-primary'
+                          : 'border border-border bg-secondary text-muted-foreground'
                     }`}
                     aria-label={`Step ${n}`}
                   >
@@ -159,59 +141,37 @@ export function AboutProtocol({
             <div className="mt-10 min-h-[240px]">
               <AnimatePresence mode="wait">
                 <motion.div
-                  key={`${step}-${currency}`}
+                  key={step}
                   initial={{ opacity: 0, y: 12 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
                 >
-                  <p className="font-display text-lg font-semibold tracking-tight text-white">
+                  <p className="font-display text-lg font-semibold tracking-tight text-foreground">
                     {current.title}
                   </p>
-                  <p className="mt-1 font-sans text-sm text-white/60">
+                  <p className="mt-1 font-sans text-sm text-muted-foreground">
                     {current.subtitle}
                   </p>
 
                   {step === 1 && (
                     <div className="mt-6">
-                      <div className="mb-5 inline-flex rounded-full border border-white/10 bg-white/[0.04] p-1">
-                        {(
-                          [
-                            { id: 'USD' as const, label: 'Dollars ($)' },
-                            { id: 'INR' as const, label: 'Rupees (₹)' },
-                          ] as const
-                        ).map((c) => (
-                          <button
-                            key={c.id}
-                            type="button"
-                            onClick={() => setCurrency(c.id)}
-                            className={`rounded-lg px-4 py-1.5 font-sans text-xs font-semibold transition-all duration-300 ${
-                              currency === c.id
-                                ? 'border border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.25)]'
-                                : 'border border-transparent text-white/60 hover:text-white'
-                            }`}
-                          >
-                            {c.label}
-                          </button>
-                        ))}
-                      </div>
-
                       <div
                         ref={trackRef}
                         onPointerDown={onPointerDown}
                         onPointerMove={onPointerMove}
                         onPointerUp={onPointerUp}
                         onPointerCancel={onPointerUp}
-                        className="relative h-14 cursor-pointer select-none rounded-2xl border border-white/10 transition-all duration-300 hover:border-white/20"
+                        className="relative h-14 cursor-pointer select-none rounded-2xl border border-border bg-secondary transition-all duration-300 hover:border-primary/30"
                       >
-                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/10" />
+                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-border" />
                         <div className="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 justify-between">
                           {budgets.map((b) => (
-                            <div key={b} className="h-3 w-px bg-white/20" />
+                            <div key={b} className="h-3 w-px bg-slate-300" />
                           ))}
                         </div>
                         <div
-                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-[#00DEFF] to-[#0088CC]"
+                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-primary to-sky-400"
                           style={{
                             width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
@@ -219,7 +179,7 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border border-white/10 bg-gradient-to-tr from-[#00DEFF] to-[#0088CC] shadow-[0_0_18px_rgba(0,222,255,0.45)] transition-transform duration-300 hover:scale-125"
+                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border border-white bg-primary shadow-md transition-transform duration-300 hover:scale-125"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
@@ -227,18 +187,18 @@ export function AboutProtocol({
                           className="absolute -bottom-8 transition-all duration-300"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="work-wizard-badge inline-flex items-center rounded-lg bg-[#00DEFF] px-2.5 py-1 text-[#0A0A0A] shadow-[0_0_16px_rgba(0,222,255,0.4)]">
+                          <div className="inline-flex items-center rounded-lg bg-primary px-2.5 py-1 text-primary-foreground shadow-md">
                             <span className="font-sans text-xs font-semibold tracking-tight">
                               {budget}
                             </span>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-10 flex justify-between font-sans text-xs text-white/50">
+                      <div className="mt-10 flex justify-between font-sans text-xs text-muted-foreground">
                         {budgets.map((b) => (
                           <span
                             key={b}
-                            className="transition-colors duration-300 hover:text-white/80"
+                            className="transition-colors duration-300 hover:text-foreground"
                           >
                             {b}
                           </span>
@@ -256,8 +216,8 @@ export function AboutProtocol({
                           onClick={() => setLane(l)}
                           className={`rounded-lg border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
                             lane === l
-                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.2)]'
-                              : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25'
+                              ? 'border-primary/40 bg-sky-100 text-primary shadow-sm'
+                              : 'border-border bg-white text-muted-foreground hover:border-primary/25'
                           }`}
                         >
                           {l}
@@ -275,8 +235,8 @@ export function AboutProtocol({
                           onClick={() => setTiming(t)}
                           className={`rounded-lg border px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
                             timing === t
-                              ? 'border-[#00DEFF]/50 bg-[#00DEFF]/15 text-[#00DEFF] shadow-[0_0_16px_rgba(0,222,255,0.2)]'
-                              : 'border-white/10 bg-white/5 text-white/70 hover:border-white/25'
+                              ? 'border-primary/40 bg-sky-100 text-primary shadow-sm'
+                              : 'border-border bg-white text-muted-foreground hover:border-primary/25'
                           }`}
                         >
                           {t}
@@ -286,25 +246,28 @@ export function AboutProtocol({
                   )}
 
                   {step === 4 && (
-                    <div className="mx-auto mt-6 max-w-md rounded-2xl border border-white/10 bg-white/[0.03] p-5 text-left">
-                      <p className="font-display text-sm font-semibold text-white">
+                    <div className="mx-auto mt-6 max-w-md rounded-2xl border border-border bg-secondary p-5 text-left">
+                      <p className="font-display text-sm font-semibold text-foreground">
                         Your project summary
                       </p>
-                      <ul className="mt-3 space-y-2 font-sans text-sm text-white/70">
-                        <li>
-                          Currency:{' '}
-                          <span className="text-[#00DEFF]">{currency}</span>
-                        </li>
+                      <ul className="mt-3 space-y-2 font-sans text-sm text-muted-foreground">
                         <li>
                           Budget:{' '}
-                          <span className="text-[#00DEFF]">{budget}</span>
+                          <span className="font-medium text-primary">
+                            {budget}
+                          </span>
                         </li>
                         <li>
-                          Lane: <span className="text-[#00DEFF]">{lane}</span>
+                          Service:{' '}
+                          <span className="font-medium text-primary">
+                            {lane}
+                          </span>
                         </li>
                         <li>
                           Timing:{' '}
-                          <span className="text-[#00DEFF]">{timing}</span>
+                          <span className="font-medium text-primary">
+                            {timing}
+                          </span>
                         </li>
                       </ul>
                     </div>
@@ -319,7 +282,7 @@ export function AboutProtocol({
               ) : (
                 <NexusButton
                   href={whatsappWithMessage(
-                    `Hi TrishulHub — project plan:\nCurrency: ${currency}\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
+                    `Hi TrishulHub — project plan:\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
                   )}
                 >
                   Talk on WhatsApp

@@ -17,14 +17,14 @@ export function HomeAbout() {
 
   return (
     <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute left-[10%] top-20 h-64 w-64 rounded-full bg-[#00DEFF]/10 blur-[110px]" />
+      <div className="pointer-events-none absolute left-[10%] top-20 h-64 w-64 rounded-full bg-primary/10 blur-[110px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="max-w-4xl">
           <motion.span
             initial={{ opacity: 0, y: 12 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="mb-4 inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+            className="mb-4 inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.3em] text-primary"
           >
             <Sparkles className="h-3.5 w-3.5" />
             About TrishulHub
@@ -32,7 +32,7 @@ export function HomeAbout() {
           <AnimatedHeading
             as="h2"
             variant="rise"
-            className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-white sm:text-4xl lg:text-6xl"
+            className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-6xl"
           >
             We build the systems behind growing businesses
           </AnimatedHeading>
@@ -41,7 +41,7 @@ export function HomeAbout() {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.55, ease: EASE_OUT_EXPO }}
-            className="mt-5 max-w-2xl font-sans text-base text-white/65 sm:text-lg"
+            className="mt-5 max-w-2xl font-sans text-base text-muted-foreground sm:text-lg"
           >
             We started in 2023 making websites. Today we also build custom
             software and mobile apps — simple tools that help your business run
@@ -52,13 +52,13 @@ export function HomeAbout() {
           </div>
         </div>
 
-        <div className="relative mt-14 overflow-hidden rounded-[24px] border border-white/[0.06] bg-[#0a0a0a]/80 p-4 backdrop-blur-[20px] sm:p-8">
+        <div className="surface-card relative mt-14 overflow-hidden rounded-[24px] p-4 sm:p-8">
           <div className="relative mb-6 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-[#00DEFF]">
+              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
                 How we work
               </span>
-              <p className="mt-1 font-sans text-sm text-neutral-400">
+              <p className="mt-1 font-sans text-sm text-muted-foreground">
                 From your idea to a live product
               </p>
             </div>
@@ -73,9 +73,9 @@ export function HomeAbout() {
             >
               <defs>
                 <linearGradient id="home-udp-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#00DEFF" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#00DEFF" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#0088CC" stopOpacity="0.35" />
+                  <stop offset="0%" stopColor="#0284c7" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#0284c7" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#0369a1" stopOpacity="0.35" />
                 </linearGradient>
               </defs>
               <path
@@ -91,10 +91,10 @@ export function HomeAbout() {
                 className="about-udp-beam"
                 style={{ animationDelay: '0.55s' }}
               />
-              <circle r="4" fill="#00DEFF">
+              <circle r="4" fill="#0284c7">
                 <animateMotion dur="2.5s" repeatCount="indefinite" path={PATH_A} />
               </circle>
-              <circle r="4" fill="#67E8F9">
+              <circle r="4" fill="#38bdf8">
                 <animateMotion dur="3s" repeatCount="indefinite" path={PATH_B} />
               </circle>
             </svg>
@@ -177,13 +177,13 @@ export function HomeAbout() {
                         y1="0"
                         x2="5"
                         y2="32"
-                        stroke="#00DEFF"
+                        stroke="#0284c7"
                         strokeWidth="1.75"
                         strokeDasharray="5 5"
                         className="animate-flow"
                         opacity="0.75"
                       />
-                      <circle r="3.5" fill="#00DEFF">
+                      <circle r="3.5" fill="#0284c7">
                         <animateMotion
                           dur="1.5s"
                           repeatCount="indefinite"
@@ -217,18 +217,18 @@ function NodeCard({
 }) {
   return (
     <div
-      className={`rounded-[18px] border border-white/10 bg-[#0A0A0C]/95 p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] backdrop-blur-[20px] ${className}`}
+      className={`rounded-[18px] border border-border bg-white p-5 shadow-sm ${className}`}
     >
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/10 text-[#00DEFF]">
+      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-primary/20 bg-sky-50 text-primary">
         <Icon size={16} />
       </div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-[#00DEFF]">
+      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
         {label}
       </p>
-      <h3 className="mt-1 font-display text-lg font-semibold text-white">
+      <h3 className="mt-1 font-display text-lg font-semibold text-foreground">
         {title}
       </h3>
-      <p className="mt-2 font-sans text-xs font-light leading-relaxed text-neutral-400">
+      <p className="mt-2 font-sans text-xs font-light leading-relaxed text-muted-foreground">
         {text}
       </p>
     </div>

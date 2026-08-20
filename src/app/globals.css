@@ -46,37 +46,39 @@
 
 :root {
   --radius: 0.625rem;
-  --background: #0a0a0a;
-  --foreground: #ffffff;
-  --card: #0a0a0a;
-  --card-foreground: #ffffff;
-  --popover: #0a0a0a;
-  --popover-foreground: #ffffff;
-  --primary: #00deff;
-  --primary-foreground: #0a0a0a;
-  --secondary: #111111;
-  --secondary-foreground: #ffffff;
-  --muted: #141414;
-  --muted-foreground: #a0a0a0;
-  --accent: #00deff;
-  --accent-foreground: #0a0a0a;
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --card: #ffffff;
+  --card-foreground: #0f172a;
+  --popover: #ffffff;
+  --popover-foreground: #0f172a;
+  --primary: #0284c7;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f5f9;
+  --secondary-foreground: #0f172a;
+  --muted: #f1f5f9;
+  --muted-foreground: #64748b;
+  --accent: #e0f2fe;
+  --accent-foreground: #0369a1;
   --destructive: #ef4444;
-  --border: rgba(255, 255, 255, 0.1);
-  --input: rgba(255, 255, 255, 0.1);
-  --ring: #00deff;
-  --chart-1: #00deff;
-  --chart-2: #0088cc;
-  --chart-3: #00deff;
-  --chart-4: #0088cc;
-  --chart-5: #00deff;
-  --sidebar: #0a0a0a;
-  --sidebar-foreground: #ffffff;
-  --sidebar-primary: #00deff;
-  --sidebar-primary-foreground: #0a0a0a;
-  --sidebar-accent: #111111;
-  --sidebar-accent-foreground: #ffffff;
-  --sidebar-border: rgba(255, 255, 255, 0.1);
-  --sidebar-ring: #00deff;
+  --border: #e2e8f0;
+  --input: #e2e8f0;
+  --ring: #0284c7;
+  --brand: #0284c7;
+  --brand-light: #e0f2fe;
+  --chart-1: #0284c7;
+  --chart-2: #0369a1;
+  --chart-3: #0ea5e9;
+  --chart-4: #38bdf8;
+  --chart-5: #7dd3fc;
+  --sidebar: #ffffff;
+  --sidebar-foreground: #0f172a;
+  --sidebar-primary: #0284c7;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #f1f5f9;
+  --sidebar-accent-foreground: #0f172a;
+  --sidebar-border: #e2e8f0;
+  --sidebar-ring: #0284c7;
 }
 
 @layer base {
@@ -94,7 +96,6 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
-    background-color: #0a0a0a;
     overflow-anchor: none;
     overscroll-behavior-y: contain;
   }
@@ -172,7 +173,7 @@
 
 /* Gradient text utility */
 .gradient-text {
-  background: linear-gradient(135deg, #00deff 0%, #0088cc 100%);
+  background: linear-gradient(135deg, #0284c7 0%, #0ea5e9 100%);
   -webkit-background-clip: text;
   background-clip: text;
   -webkit-text-fill-color: transparent;
@@ -182,7 +183,7 @@
 /* Animated gradient text — used on highlighted words in section headings.
  * Slowly shifts the gradient angle for a subtle "shimmer" effect. */
 .gradient-text-animated {
-  background: linear-gradient(120deg, #00deff 0%, #0088cc 25%, #00deff 50%, #0088cc 75%, #00deff 100%);
+  background: linear-gradient(120deg, #0284c7 0%, #0ea5e9 25%, #0284c7 50%, #0369a1 75%, #0284c7 100%);
   background-size: 300% 100%;
   -webkit-background-clip: text;
   background-clip: text;
@@ -210,15 +211,15 @@
   height: 10px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #f1f5f9;
 }
 ::-webkit-scrollbar-thumb {
-  background: linear-gradient(180deg, #00deff 0%, #0088cc 100%);
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
   border-radius: 10px;
-  border: 2px solid #0a0a0a;
+  border: 2px solid #f1f5f9;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #00deff;
+  background: #0284c7;
 }
 
 /* Marquee animation */
@@ -255,8 +256,8 @@
 /* Grid background */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(0, 222, 255, 0.04) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 222, 255, 0.04) 1px, transparent 1px);
+    linear-gradient(rgba(2, 132, 199, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(2, 132, 199, 0.06) 1px, transparent 1px);
   background-size: 50px 50px;
 }
 
@@ -313,33 +314,23 @@
   transition: transform 0.08s ease-out;
 }
 
-/* Primary cyan button — pulsing cyan glow on idle, intensifies on hover */
+/* Primary cyan button — subtle shadow on light theme */
 .btn-cyan {
   position: relative;
   overflow: hidden;
   isolation: isolate;
-  animation: btnCyanPulse 3s ease-in-out infinite;
-}
-@keyframes btnCyanPulse {
-  0%, 100% {
-    box-shadow:
-      0 0 0 0 rgba(0, 222, 255, 0),
-      0 0 16px rgba(0, 222, 255, 0.25);
-  }
-  50% {
-    box-shadow:
-      0 0 0 4px rgba(0, 222, 255, 0.06),
-      0 0 28px rgba(0, 222, 255, 0.45);
-  }
+  background: var(--primary) !important;
+  color: var(--primary-foreground) !important;
+  border-color: transparent !important;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(2, 132, 199, 0.25);
 }
 .btn-cyan:hover {
   animation: none;
-  box-shadow:
-    0 0 0 6px rgba(0, 222, 255, 0.1),
-    0 0 36px rgba(0, 222, 255, 0.65);
-  transform: translateY(-2px);
+  background: #0369a1 !important;
+  box-shadow: 0 4px 16px rgba(2, 132, 199, 0.35);
+  transform: translateY(-1px);
   transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1),
-              box-shadow 0.25s ease-out;
+              box-shadow 0.25s ease-out, background 0.2s ease;
 }
 .btn-cyan:active {
   transform: translateY(0) scale(0.97);
@@ -371,9 +362,9 @@
   opacity: 1;
 }
 .btn-ghost:hover {
-  border-color: rgba(0, 222, 255, 0.6) !important;
-  box-shadow: 0 0 24px rgba(0, 222, 255, 0.25);
-  transform: translateY(-2px);
+  border-color: rgba(2, 132, 199, 0.45) !important;
+  box-shadow: 0 2px 12px rgba(2, 132, 199, 0.12);
+  transform: translateY(-1px);
 }
 .btn-ghost:active {
   transform: translateY(0) scale(0.97);
@@ -452,24 +443,33 @@
 /* Shared form controls for preview + contact */
 .field-input {
   width: 100%;
-  border-radius: 0.9rem;
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  background: rgba(255, 255, 255, 0.04);
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  background: #ffffff;
   padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: #fff;
+  color: var(--foreground);
   outline: none;
-  transition: border-color 0.2s ease;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .field-input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+  color: #94a3b8;
 }
 .field-input:focus {
-  border-color: rgba(0, 222, 255, 0.5);
+  border-color: rgba(2, 132, 199, 0.55);
+  box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.12);
 }
 .field-input option {
-  background: #0a0a0a;
-  color: #fff;
+  background: #ffffff;
+  color: var(--foreground);
+}
+
+/* Light surface card */
+.surface-card {
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--card);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.03);
 }
 
 /* Electric card glow — cyan theme (prompt shadow adapted) */
@@ -480,14 +480,14 @@
     transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
 }
 .electric-card:hover {
-  border-color: rgba(0, 222, 255, 0.35);
-  box-shadow: 0 0 30px rgba(0, 222, 255, 0.3);
+  border-color: rgba(2, 132, 199, 0.35);
+  box-shadow: 0 4px 20px rgba(2, 132, 199, 0.12);
 }
 
 /* Subtle star field — 200x200 radial pattern, opacity controlled by utility */
 .stars-bg {
   background-image: radial-gradient(
-    rgba(255, 255, 255, 0.55) 1px,
+    rgba(2, 132, 199, 0.15) 1px,
     transparent 1px
   );
   background-size: 200px 200px;

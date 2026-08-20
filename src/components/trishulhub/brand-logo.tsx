@@ -45,7 +45,7 @@ export function BrandLogo({
       </span>
       {showWordmark && (
         <span className="font-display text-lg font-bold tracking-[0.12em] sm:text-xl">
-          <span className="text-white">TRISHUL</span>
+          <span className="text-foreground">TRISHUL</span>
           <span className="gradient-text">HUB</span>
         </span>
       )}

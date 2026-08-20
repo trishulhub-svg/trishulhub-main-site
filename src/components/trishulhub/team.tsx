@@ -19,8 +19,7 @@ type Founder = {
 
 /*
  * Founder intro videos — looping clips for the founder cards.
- * ALL 3 founders (Taroon, Akshat, Pruthvi) have intro videos.
- * Kiran was removed from the team.
+ * Taroon and Pruthviraj have intro videos.
  *
  * If a founder's DB record has a `videoUrl` set (uploaded via the admin
  * panel), that takes priority. Otherwise we fall back to the hardcoded
@@ -28,7 +27,6 @@ type Founder = {
  */
 const FOUNDER_VIDEOS: Record<string, string> = {
   taroon: '/videos/founder-taroon.mp4',
-  akshat: '/videos/founder-akshat.mp4',
   pruthvi: '/videos/founder-pruthvi.mp4',
 }
 
@@ -135,14 +133,13 @@ export function Team({ founders }: { founders: Founder[] }) {
   }, [])
 
   return (
-    <section id="founders" ref={sectionRef} className="relative overflow-hidden py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
-      {/* bg glow */}
+    <section id="founders" ref={sectionRef} className="relative overflow-hidden bg-sky-50/50 py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-10 blur-[120px]"
-        style={{ background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)' }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, #0284c7 0%, transparent 70%)' }}
       />
 
-      <div className="relative z-10 mx-auto max-w-5xl">
+      <div className="relative z-10 mx-auto max-w-4xl">
         {/* Heading */}
         <div className="mb-14 text-center">
           <motion.span
@@ -150,7 +147,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-[#00DEFF]"
+            className="mb-4 inline-block text-xs font-semibold uppercase tracking-[0.3em] text-primary"
           >
             Our Founders
           </motion.span>
@@ -159,7 +156,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             variant="rise"
             stagger={0.1}
             duration={0.6}
-            className="text-3xl font-bold leading-tight text-white sm:text-4xl lg:text-5xl"
+            className="text-3xl font-bold leading-tight text-foreground sm:text-4xl lg:text-5xl"
             style={{ fontFamily: 'var(--font-space-grotesk)' }}
           >
             Meet Our Founders
@@ -169,10 +166,9 @@ export function Team({ founders }: { founders: Founder[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.6, delay: 0.1, ease: EASE_OUT_EXPO }}
-            className="mx-auto mt-4 max-w-2xl text-base leading-relaxed sm:text-lg"
-            style={{ color: '#A0A0A0' }}
+            className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg"
           >
-            Meet Taroon, Akshat, and Pruthviraj — the people behind TrishulHub.
+            Meet Taroon and Pruthviraj — the people behind TrishulHub.
             Click anyone to see their full portfolio.
           </motion.p>
         </div>
@@ -186,7 +182,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             hidden: {},
             visible: { transition: { staggerChildren: 0.15 } },
           }}
-          className="grid grid-cols-1 gap-5 sm:gap-6 lg:grid-cols-3"
+          className="grid grid-cols-1 gap-5 sm:gap-6 sm:grid-cols-2"
         >
           {founders.map((m) => {
             const founderVideo = m.videoUrl || FOUNDER_VIDEOS[m.slug] || null
@@ -213,7 +209,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                     }
               }
               transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-              className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 cursor-pointer"
+              className="group relative flex flex-col overflow-hidden rounded-xl border border-border bg-white shadow-sm cursor-pointer"
             >
               {/* Hover glow border layer */}
               <div
@@ -221,7 +217,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                 style={{
                   boxShadow:
-                    '0 0 0 1px #00DEFF, 0 0 32px rgba(0,222,255,0.25)',
+                    '0 0 0 1px #0284c7, 0 0 32px rgba(2,132,199,0.15)',
                 }}
               />
 
@@ -232,7 +228,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   className="absolute inset-0 transition-transform duration-700 ease-out group-hover:scale-105"
                   style={{
                     background:
-                      'linear-gradient(135deg, #141414 0%, #0A0A0A 100%)',
+                      'linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%)',
                   }}
                 />
 
@@ -278,7 +274,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 )}
 
                 {/* Top-right "View Portfolio" arrow icon */}
-                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-white/10 bg-black/30 text-white/40 backdrop-blur-sm transition-all duration-300 group-hover:border-[#00DEFF]/60 group-hover:bg-[#00DEFF]/10 group-hover:text-[#00DEFF]">
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/90 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-primary/40 group-hover:bg-sky-50 group-hover:text-primary">
                   <ArrowUpRight size={16} />
                 </div>
 
@@ -287,7 +283,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   className="absolute inset-x-0 bottom-0 translate-y-full transition-transform duration-500 ease-out group-hover:translate-y-0"
                   style={{
                     background:
-                      'linear-gradient(to top, rgba(0,222,255,0.18) 0%, rgba(0,222,255,0.08) 60%, transparent 100%)',
+                      'linear-gradient(to top, rgba(2,132,199,0.12) 0%, rgba(2,132,199,0.04) 60%, transparent 100%)',
                     backdropFilter: 'blur(4px)',
                     WebkitBackdropFilter: 'blur(4px)',
                   }}
@@ -295,25 +291,25 @@ export function Team({ founders }: { founders: Founder[] }) {
                   <div className="flex items-center justify-center gap-3 py-4">
                     <span
                       aria-label={`${m.name} on GitHub`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
                     >
                       <Github size={16} />
                     </span>
                     <span
                       aria-label={`${m.name} on LinkedIn`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
                     >
                       <Linkedin size={16} />
                     </span>
                     <span
                       aria-label={`${m.name} on Twitter`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
                     >
                       <Twitter size={16} />
                     </span>
                     <span
                       aria-label={`Email ${m.name}`}
-                      className="flex h-9 w-9 items-center justify-center rounded-full border border-white/20 text-white/80 transition-all duration-300 hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                      className="flex h-9 w-9 items-center justify-center rounded-full border border-border text-muted-foreground transition-all duration-300 hover:border-primary hover:bg-primary hover:text-primary-foreground"
                     >
                       <Mail size={16} />
                     </span>
@@ -323,9 +319,9 @@ export function Team({ founders }: { founders: Founder[] }) {
                 {/* Projects badge (top-left) — animated count-up */}
                 <div className="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm"
                   style={{
-                    backgroundColor: 'rgba(0,222,255,0.12)',
-                    color: '#00DEFF',
-                    border: '1px solid rgba(0,222,255,0.3)',
+                    backgroundColor: 'rgba(2,132,199,0.1)',
+                    color: '#0284c7',
+                    border: '1px solid rgba(2,132,199,0.25)',
                   }}
                 >
                   <ProjectsCountUp raw={m.projects} /> Projects Delivered
@@ -335,23 +331,20 @@ export function Team({ founders }: { founders: Founder[] }) {
               {/* Bottom text area */}
               <div className="relative flex flex-1 flex-col gap-2 p-5">
                 <h3
-                  className="text-xl font-bold text-white"
+                  className="text-xl font-bold text-foreground"
                   style={{ fontFamily: 'var(--font-space-grotesk)' }}
                 >
                   {m.name}
                 </h3>
-                <span className="text-sm font-medium text-white/60">
+                <span className="text-sm font-medium text-muted-foreground">
                   {m.role}
                 </span>
-                <p
-                  className="mt-2 text-sm leading-relaxed"
-                  style={{ color: '#A0A0A0' }}
-                >
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
                   {m.bio}
                 </p>
 
                 {/* "View Portfolio" link */}
-                <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-[#00DEFF] opacity-80 transition-all duration-300 group-hover:gap-2.5 group-hover:opacity-100">
+                <div className="mt-3 flex items-center gap-1.5 text-xs font-medium text-primary opacity-80 transition-all duration-300 group-hover:gap-2.5 group-hover:opacity-100">
                   View Full Portfolio
                   <ArrowUpRight size={12} />
                 </div>
@@ -361,7 +354,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   className="mt-4 h-px w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
                   style={{
                     background:
-                      'linear-gradient(to right, #00DEFF 0%, #0088CC 100%)',
+                      'linear-gradient(to right, #0284c7 0%, #0369a1 100%)',
                   }}
                 />
               </div>
@@ -380,7 +373,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
             whileHover={reduce ? undefined : { scale: 1.04 }}
             whileTap={reduce ? undefined : { scale: 0.97 }}
-            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/50 px-7 py-3 text-sm font-semibold text-[#00DEFF] transition-all duration-300 hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+            className="btn-ghost btn-shine group inline-flex items-center gap-2 rounded-lg border border-primary/40 bg-white px-7 py-3 text-sm font-semibold text-primary shadow-sm transition-all duration-300 hover:bg-primary hover:text-primary-foreground"
           >
             <span className="relative z-10">Meet The Founders</span>
           </motion.a>

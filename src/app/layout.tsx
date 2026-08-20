@@ -60,9 +60,9 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" suppressHydrationWarning className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-[#0A0A0A] text-white selection:bg-[#00DEFF]/30 selection:text-white`}
+        className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-background text-foreground selection:bg-sky-200 selection:text-sky-950`}
       >
         {children}
         <Toaster />

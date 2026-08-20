@@ -223,7 +223,7 @@ export function LoadingScreen() {
     <AnimatePresence>
       <motion.div
         data-loader-root
-        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#0A0A0A]"
+        className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-background"
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
       >
