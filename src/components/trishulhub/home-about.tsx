@@ -16,8 +16,7 @@ export function HomeAbout() {
   const { links } = useSiteContact()
 
   return (
-    <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute right-[5%] top-10 h-72 w-72 rounded-full bg-[#0d9488]/20 blur-[100px]" />
+    <section id="about-home" className="relative overflow-hidden bg-[#fafafa] py-24 sm:py-32">
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
           <div className="lg:col-span-7">
@@ -47,8 +46,10 @@ export function HomeAbout() {
               className="font-sans text-base leading-relaxed text-muted-foreground sm:text-lg"
             >
               We started in 2023 making websites. Today we also build custom
-              software and mobile apps — simple tools that help your business run
-              better every day.
+              software and mobile apps —{' '}
+              <span className="font-instrument text-[#0d9488]">
+                simple tools that help your business run better every day.
+              </span>
             </motion.p>
             <div className="mt-7">
               <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
@@ -56,11 +57,21 @@ export function HomeAbout() {
           </div>
         </div>
 
-        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] p-5 sm:p-8 lg:p-10">
+        {/* Dark cinematic “how we work” block */}
+        <div className="relative mt-14 overflow-hidden rounded-[2rem] bg-black p-5 font-almarai sm:p-8 lg:p-10">
+          <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.18] mix-blend-overlay" />
           <div className="relative mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="section-label">How we work</span>
-              <p className="mt-2 text-2xl font-bold tracking-tight text-[#111111] sm:text-3xl">
+              <span
+                className="text-[10px] font-semibold uppercase tracking-[0.22em]"
+                style={{ color: 'rgba(225, 224, 204, 0.55)' }}
+              >
+                How we work
+              </span>
+              <p
+                className="mt-2 text-2xl font-bold tracking-tight sm:text-3xl"
+                style={{ color: '#E1E0CC' }}
+              >
                 From your idea to a live product
               </p>
             </div>
@@ -75,9 +86,9 @@ export function HomeAbout() {
             >
               <defs>
                 <linearGradient id="home-udp-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0d9488" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#0d9488" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#0f766e" stopOpacity="0.35" />
+                  <stop offset="0%" stopColor="#DEDBC8" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#DEDBC8" stopOpacity="0.85" />
+                  <stop offset="100%" stopColor="#DEDBC8" stopOpacity="0.25" />
                 </linearGradient>
               </defs>
               <path
@@ -93,10 +104,10 @@ export function HomeAbout() {
                 className="about-udp-beam"
                 style={{ animationDelay: '0.55s' }}
               />
-              <circle r="4" fill="#0d9488">
+              <circle r="4" fill="#DEDBC8">
                 <animateMotion dur="2.5s" repeatCount="indefinite" path={PATH_A} />
               </circle>
-              <circle r="4" fill="#9eccc9">
+              <circle r="4" fill="#E1E0CC">
                 <animateMotion dur="3s" repeatCount="indefinite" path={PATH_B} />
               </circle>
             </svg>
@@ -179,13 +190,13 @@ export function HomeAbout() {
                         y1="0"
                         x2="5"
                         y2="32"
-                        stroke="#0d9488"
+                        stroke="#DEDBC8"
                         strokeWidth="1.75"
                         strokeDasharray="5 5"
                         className="animate-flow"
                         opacity="0.75"
                       />
-                      <circle r="3.5" fill="#0d9488">
+                      <circle r="3.5" fill="#DEDBC8">
                         <animateMotion
                           dur="1.5s"
                           repeatCount="indefinite"
@@ -219,20 +230,24 @@ function NodeCard({
 }) {
   return (
     <div
-      className={`rounded-[1.35rem] border border-border/80 bg-white/90 p-5 shadow-[0_8px_30px_rgba(11,18,32,0.05)] backdrop-blur-md ${className}`}
+      className={`rounded-[1.35rem] border border-white/10 bg-[#101010] p-5 shadow-[0_16px_40px_rgba(0,0,0,0.45)] ${className}`}
     >
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+      <div
+        className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl"
+        style={{ background: 'rgba(222, 219, 200, 0.12)', color: '#DEDBC8' }}
+      >
         <Icon size={16} />
       </div>
-      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0d9488]">
+      <p
+        className="text-[10px] font-semibold uppercase tracking-[0.2em]"
+        style={{ color: '#DEDBC8' }}
+      >
         {label}
       </p>
-      <h3 className="mt-1 font-display text-lg font-medium text-foreground">
+      <h3 className="mt-1 text-lg font-medium" style={{ color: '#E1E0CC' }}>
         {title}
       </h3>
-      <p className="mt-2 font-sans text-xs leading-relaxed text-muted-foreground">
-        {text}
-      </p>
+      <p className="mt-2 text-xs leading-relaxed text-gray-400">{text}</p>
     </div>
   )
 }

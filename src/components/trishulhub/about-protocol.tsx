@@ -4,7 +4,6 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 const BUDGETS_GBP = ['£400', '£600', '£900', '£1,200', '£1,500'] as const
@@ -96,26 +95,34 @@ export function AboutProtocol({
   }
 
   return (
-    <section className={`lt-section relative z-10 ${className}`}>
+    <section id="planner" className={`lt-section relative z-10 ${className}`}>
       <div className="lt-container">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-2xl border border-[#e8e8e8] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:p-12"
+          className="relative overflow-hidden rounded-2xl border border-white/10 bg-[#101010] p-8 font-almarai shadow-[0_24px_60px_rgba(0,0,0,0.35)] md:p-12"
         >
-          <div className="lt-glow pointer-events-none absolute -right-24 -top-24 h-72 w-72 opacity-60" />
+          <div className="bg-noise pointer-events-none absolute inset-0 opacity-[0.14] mix-blend-overlay" />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <p className="mb-3 text-sm font-medium text-[#6b7280]">
+            <p
+              className="mb-3 text-sm font-medium"
+              style={{ color: 'rgba(225, 224, 204, 0.55)' }}
+            >
               Project planner
             </p>
-            <h3 className="text-3xl font-bold tracking-[-0.03em] text-[#000000] md:text-4xl">
+            <h3
+              className="text-3xl font-bold tracking-[-0.03em] md:text-4xl"
+              style={{ color: '#E1E0CC' }}
+            >
               Let&apos;s plan your{' '}
-              <span className="accent-text">project</span>
+              <span className="font-instrument" style={{ color: '#DEDBC8' }}>
+                project
+              </span>
             </h3>
-            <p className="mt-3 text-[#6b7280]">
+            <p className="mt-3 text-gray-400">
               Tell us a few details and we will reply with a simple plan within
               48 hours.
             </p>
@@ -131,10 +138,10 @@ export function AboutProtocol({
                     onClick={() => setStep(n)}
                     className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       active
-                        ? 'bg-[#000000] text-white'
+                        ? 'bg-cream text-black'
                         : done
-                          ? 'bg-[#e8f4f3] text-[#0d9488]'
-                          : 'border border-[#e5e7eb] bg-white text-[#6b7280]'
+                          ? 'bg-[#212121] text-cream'
+                          : 'border border-white/15 bg-[#212121] text-gray-500'
                     }`}
                     aria-label={`Step ${n}`}
                   >
@@ -153,12 +160,13 @@ export function AboutProtocol({
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
                 >
-                  <p className="text-lg font-bold tracking-tight text-[#000000]">
+                  <p
+                    className="text-lg font-bold tracking-tight"
+                    style={{ color: '#E1E0CC' }}
+                  >
                     {current.title}
                   </p>
-                  <p className="mt-1 text-sm text-[#6b7280]">
-                    {current.subtitle}
-                  </p>
+                  <p className="mt-1 text-sm text-gray-400">{current.subtitle}</p>
 
                   {step === 1 && (
                     <div className="mt-6">
@@ -168,16 +176,16 @@ export function AboutProtocol({
                         onPointerMove={onPointerMove}
                         onPointerUp={onPointerUp}
                         onPointerCancel={onPointerUp}
-                        className="relative h-14 cursor-pointer select-none rounded-2xl bg-[#f0f0f0]"
+                        className="relative h-14 cursor-pointer select-none rounded-2xl bg-[#212121]"
                       >
-                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#e5e7eb]" />
+                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/10" />
                         <div className="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 justify-between">
                           {budgets.map((b) => (
-                            <div key={b} className="h-3 w-px bg-[#d1d5db]" />
+                            <div key={b} className="h-3 w-px bg-white/20" />
                           ))}
                         </div>
                         <div
-                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#0d9488]"
+                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-cream"
                           style={{
                             width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
@@ -185,7 +193,7 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#000000] shadow-md transition-transform hover:scale-110"
+                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-[#101010] bg-cream shadow-md transition-transform hover:scale-110"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
@@ -193,12 +201,12 @@ export function AboutProtocol({
                           className="absolute -bottom-8 transition-all"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="inline-flex items-center rounded-lg bg-black px-3 py-1 text-white">
+                          <div className="inline-flex items-center rounded-lg bg-cream px-3 py-1 text-black">
                             <span className="text-xs font-bold">{budget}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-10 flex justify-between text-xs text-[#6b7280]">
+                      <div className="mt-10 flex justify-between text-xs text-gray-500">
                         {budgets.map((b) => (
                           <span key={b}>{b}</span>
                         ))}
@@ -214,7 +222,9 @@ export function AboutProtocol({
                           type="button"
                           onClick={() => setLane(l)}
                           className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                            lane === l ? 'lt-pill-active' : 'lt-pill'
+                            lane === l
+                              ? 'bg-cream text-black'
+                              : 'border border-white/15 bg-[#212121] text-gray-400 hover:text-cream'
                           }`}
                         >
                           {l}
@@ -231,7 +241,9 @@ export function AboutProtocol({
                           type="button"
                           onClick={() => setTiming(t)}
                           className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
-                            timing === t ? 'lt-pill-active' : 'lt-pill'
+                            timing === t
+                              ? 'bg-cream text-black'
+                              : 'border border-white/15 bg-[#212121] text-gray-400 hover:text-cream'
                           }`}
                         >
                           {t}
@@ -241,26 +253,29 @@ export function AboutProtocol({
                   )}
 
                   {step === 4 && (
-                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#e8e8e8] bg-[#fafafa] p-5 text-left">
-                      <p className="text-sm font-bold text-[#000000]">
+                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-white/10 bg-[#212121] p-5 text-left">
+                      <p
+                        className="text-sm font-bold"
+                        style={{ color: '#E1E0CC' }}
+                      >
                         Your project summary
                       </p>
-                      <ul className="mt-3 space-y-2 text-sm text-[#6b7280]">
+                      <ul className="mt-3 space-y-2 text-sm text-gray-400">
                         <li>
                           Budget:{' '}
-                          <span className="font-semibold text-[#0d9488]">
+                          <span className="font-semibold text-cream">
                             {budget}
                           </span>
                         </li>
                         <li>
                           Service:{' '}
-                          <span className="font-semibold text-[#000000]">
+                          <span className="font-semibold" style={{ color: '#E1E0CC' }}>
                             {lane}
                           </span>
                         </li>
                         <li>
                           Timing:{' '}
-                          <span className="font-semibold text-[#000000]">
+                          <span className="font-semibold" style={{ color: '#E1E0CC' }}>
                             {timing}
                           </span>
                         </li>
@@ -273,15 +288,24 @@ export function AboutProtocol({
 
             <div className="mt-8 flex justify-center">
               {step < 4 ? (
-                <NexusButton onClick={next}>Next step</NexusButton>
+                <button
+                  type="button"
+                  onClick={next}
+                  className="inline-flex h-12 items-center justify-center rounded-lg bg-cream px-7 text-[15px] font-medium text-black transition hover:scale-[1.02]"
+                >
+                  Next step
+                </button>
               ) : (
-                <NexusButton
+                <a
                   href={whatsappWithMessage(
                     `Hi TrishulHub — project plan:\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
                   )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-12 items-center justify-center rounded-lg bg-cream px-7 text-[15px] font-medium text-black transition hover:scale-[1.02]"
                 >
                   Talk on WhatsApp
-                </NexusButton>
+                </a>
               )}
             </div>
           </div>
