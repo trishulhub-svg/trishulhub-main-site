@@ -299,42 +299,42 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   ]
 
   return (
-    <div className="min-h-screen bg-[#0A0A0A] text-white">
+    <div className="min-h-screen bg-[#fafafa] text-[#111111]">
       {/* Top bar */}
-      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl">
+      <header className="sticky top-0 z-50 border-b border-[#111111]/10 bg-white/90 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3">
             <a
               href={`/founders/${founder.slug}`}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium text-white/70 transition-all hover:border-[#00DEFF]/40 hover:text-[#00DEFF]"
+              className="flex items-center gap-2 rounded-full border border-[#111111]/15 px-3 py-1.5 text-xs font-medium text-[#6b7280] transition-all hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]"
               title="View my public portfolio"
             >
               <Eye size={13} />
               <span className="hidden sm:inline">View Portfolio</span>
             </a>
-            <span className="hidden text-xs text-white/40 sm:inline">·</span>
-            <span className="hidden text-xs text-white/60 sm:inline">
-              Signed in as <span className="font-semibold text-[#00DEFF]">{founder.username}</span>
+            <span className="hidden text-xs text-[#9ca3af] sm:inline">·</span>
+            <span className="hidden text-xs text-[#6b7280] sm:inline">
+              Signed in as <span className="font-semibold text-[#0D3C1F]">{founder.username}</span>
             </span>
           </div>
 
           {/* Top-right TrishulHub logo → links to main site */}
           <a
             href="/"
-            className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.03] px-4 py-1.5 backdrop-blur-md transition-all hover:border-[#00DEFF]/40 hover:bg-[#00DEFF]/5"
+            className="flex items-center gap-2 rounded-full border border-[#111111]/15 bg-white px-4 py-1.5 backdrop-blur-md transition-all hover:border-[#0D3C1F]/40 hover:bg-[#0D3C1F]/5"
             title="Back to TrishulHub"
           >
             <span className="text-sm font-bold tracking-[0.15em] sm:text-base">
-              <span className="text-white">TRISHUL</span>
-              <span className="gradient-text">HUB</span>
+              <span className="text-[#111111]">TRISHUL</span>
+              <span className="text-[#0D3C1F]">HUB</span>
             </span>
           </a>
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 rounded-full border border-white/10 px-3 py-1.5 text-xs font-medium text-white/70 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+            className="flex items-center gap-2 rounded-full border border-[#111111]/15 px-3 py-1.5 text-xs font-medium text-[#6b7280] transition-all hover:border-red-500/40 hover:bg-red-50 hover:text-red-600"
           >
             <LogOut size={13} />
             <span className="hidden sm:inline">Sign Out</span>
@@ -350,16 +350,16 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               className="text-3xl font-bold sm:text-4xl"
               style={{ fontFamily: 'var(--font-space-grotesk)' }}
             >
-              <span className="text-white">Edit </span>
-              <span className="gradient-text">{founder.name}&apos;s Portfolio</span>
+              <span className="text-[#111111]">Edit </span>
+              <span className="text-[#0D3C1F]">{founder.name}&apos;s Portfolio</span>
             </h1>
-            <p className="mt-2 text-sm text-white/60">
+            <p className="mt-2 text-sm text-[#6b7280]">
               Changes save instantly to your public portfolio page at{' '}
               <a
                 href={`/founders/${founder.slug}`}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="font-medium text-[#00DEFF] hover:underline"
+                className="font-medium text-[#0D3C1F] hover:underline"
               >
                 /founders/{founder.slug}
                 <ExternalLink size={11} className="ml-1 inline" />
@@ -375,7 +375,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0 }}
-                  className="flex items-center gap-1.5 text-sm font-medium text-green-400"
+                  className="flex items-center gap-1.5 text-sm font-medium text-emerald-700"
                 >
                   <CheckCircle2 size={15} />
                   Saved
@@ -385,7 +385,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                 <motion.span
                   initial={{ opacity: 0, y: -5 }}
                   animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-1.5 text-sm font-medium text-red-400"
+                  className="flex items-center gap-1.5 text-sm font-medium text-red-600"
                 >
                   <AlertCircle size={15} />
                   {error}
@@ -395,7 +395,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
             <button
               onClick={handleSave}
               disabled={saving}
-              className="flex items-center gap-2 rounded-full bg-[#00DEFF] px-5 py-2.5 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_20px_rgba(0,222,255,0.5)] disabled:cursor-not-allowed disabled:opacity-60"
+              className="flex items-center gap-2 rounded-full bg-[#0D3C1F] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#164a28] disabled:cursor-not-allowed disabled:opacity-60"
             >
               {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
               {saving ? 'Saving...' : 'Save Changes'}
@@ -404,15 +404,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         </div>
 
         {/* Tabs */}
-        <div className="mb-8 flex flex-wrap gap-1.5 border-b border-white/10 pb-3">
+        <div className="mb-8 flex flex-wrap gap-1.5 border-b border-[#111111]/15 pb-3">
           {tabs.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`flex items-center gap-2 rounded-full px-4 py-2 text-sm font-medium transition-all ${
                 tab === t.id
-                  ? 'bg-[#00DEFF] text-[#0A0A0A]'
-                  : 'border border-white/10 text-white/70 hover:border-[#00DEFF]/40 hover:text-[#00DEFF]'
+                  ? 'bg-[#0D3C1F] text-white'
+                  : 'border border-[#111111]/15 text-[#6b7280] hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
               }`}
             >
               {t.icon}
@@ -427,15 +427,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
             <Card title="Profile Photo" icon={<UserIcon size={16} />}>
               <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
                 {/* Preview */}
-                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#00DEFF]/30 bg-[#0A0A0A]">
+                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
                   {founder.image ? (
                      
                     <img src={founder.image} alt={founder.name} className="h-full w-full object-cover" />
                   ) : (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#0a2a35] to-[#0A0A0A]">
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]">
                       <span
                         className="text-5xl font-bold"
-                        style={{ color: '#00DEFF', fontFamily: 'var(--font-space-grotesk)' }}
+                        style={{ color: '#0D3C1F', fontFamily: 'var(--font-space-grotesk)' }}
                       >
                         {founder.initial}
                       </span>
@@ -443,7 +443,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   )}
                 </div>
                 <div className="flex-1">
-                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#00DEFF]/40 px-4 py-2 text-sm font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]">
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#0D3C1F]/40 px-4 py-2 text-sm font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white">
                     {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                     {uploading ? 'Uploading...' : 'Upload Photo'}
                     <input
@@ -458,10 +458,10 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       }}
                     />
                   </label>
-                  <p className="mt-2 text-xs text-white/40">
+                  <p className="mt-2 text-xs text-[#9ca3af]">
                     PNG, JPEG, WebP, or GIF · Max 5MB · Square aspect recommended
                   </p>
-                  <p className="mt-1 text-xs text-white/40">
+                  <p className="mt-1 text-xs text-[#9ca3af]">
                     Used as a fallback if no intro video is set, and as the photo in the About Me section of your portfolio page.
                   </p>
                   {founder.image && (
@@ -481,7 +481,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
             <Card title="Intro Video" icon={<Video size={16} />}>
               <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
                 {/* Preview */}
-                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#00DEFF]/30 bg-[#0A0A0A]">
+                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
                   {founder.videoUrl ? (
                     <video
                       src={founder.videoUrl}
@@ -493,14 +493,14 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       style={{ objectPosition: 'center top' }}
                     />
                   ) : (
-                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#0a2a35] to-[#0A0A0A]">
-                      <Video size={28} style={{ color: '#00DEFF' }} />
-                      <span className="mt-1 text-[10px] text-white/40">No video</span>
+                    <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]">
+                      <Video size={28} style={{ color: '#0D3C1F' }} />
+                      <span className="mt-1 text-[10px] text-[#9ca3af]">No video</span>
                     </div>
                   )}
                 </div>
                 <div className="flex-1">
-                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#00DEFF]/40 px-4 py-2 text-sm font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]">
+                  <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#0D3C1F]/40 px-4 py-2 text-sm font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white">
                     {uploadingVideo ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                     {uploadingVideo ? 'Uploading...' : 'Upload Video'}
                     <input
@@ -515,11 +515,11 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       }}
                     />
                   </label>
-                  <p className="mt-2 text-xs text-white/40">
+                  <p className="mt-2 text-xs text-[#9ca3af]">
                     MP4, WebM, MOV · Max 30MB · 4:5 portrait aspect recommended (e.g. 858×1072)
                   </p>
-                  <p className="mt-1 text-xs text-white/40">
-                    This video plays on a loop on your <span className="text-[#00DEFF]">Meet The Founders</span> team card AND on your <span className="text-[#00DEFF]">portfolio page hero</span>. It takes priority over the photo. Click <span className="text-[#00DEFF]">Save Changes</span> below to apply.
+                  <p className="mt-1 text-xs text-[#9ca3af]">
+                    This video plays on a loop on your <span className="text-[#0D3C1F]">Meet The Founders</span> team card AND on your <span className="text-[#0D3C1F]">portfolio page hero</span>. It takes priority over the photo. Click <span className="text-[#0D3C1F]">Save Changes</span> below to apply.
                   </p>
                   {founder.videoUrl && (
                     <button
@@ -572,7 +572,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
           {tab === 'about' && (
             <Card title="Site Contact (whole website)" icon={<Phone size={16} />}>
-              <p className="mb-4 text-sm text-white/50">
+              <p className="mb-4 text-sm text-[#9ca3af]">
                 These details power Contact us, footer, WhatsApp / Call / Email /
                 Instagram buttons, and the location line across the whole site.
                 Save once — every page picks it up.
@@ -639,7 +639,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                 type="button"
                 onClick={saveSiteContact}
                 disabled={savingSite}
-                className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 bg-[#00DEFF]/10 px-5 py-2.5 text-sm font-semibold text-[#00DEFF] transition hover:bg-[#00DEFF]/20 disabled:opacity-60"
+                className="mt-5 inline-flex items-center gap-2 rounded-full border border-[#0D3C1F]/40 bg-[#0D3C1F]/10 px-5 py-2.5 text-sm font-semibold text-[#0D3C1F] transition hover:bg-[#0D3C1F]/20 disabled:opacity-60"
               >
                 {savingSite ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
                 Save site contact
@@ -649,7 +649,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
           {tab === 'about' && (
             <Card title="Your Portfolio Contact" icon={<Mail size={16} />}>
-              <p className="mb-4 text-sm text-white/50">
+              <p className="mb-4 text-sm text-[#9ca3af]">
                 Shown on your personal founder portfolio page only.
               </p>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
@@ -742,7 +742,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               action={
                 <button
                   onClick={addSkill}
-                  className="flex items-center gap-1.5 rounded-full border border-[#00DEFF]/40 px-3 py-1.5 text-xs font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
                 >
                   <Plus size={13} />
                   Add Skill
@@ -756,7 +756,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   {founder.skills.map((s, i) => (
                     <div
                       key={i}
-                      className="flex flex-col gap-3 rounded-xl border border-white/10 bg-white/[0.02] p-3 sm:flex-row sm:items-center"
+                      className="flex flex-col gap-3 rounded-xl border border-[#111111] bg-white p-3 sm:flex-row sm:items-center"
                     >
                       <Input
                         value={s.name}
@@ -771,15 +771,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                           max={100}
                           value={s.level}
                           onChange={(e) => updateSkill(i, 'level', Number(e.target.value))}
-                          className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-white/10 accent-[#00DEFF] sm:w-40"
+                          className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-[#e5e7eb] accent-[#0D3C1F] sm:w-40"
                         />
-                        <span className="w-12 text-right text-sm font-semibold text-[#00DEFF]">
+                        <span className="w-12 text-right text-sm font-semibold text-[#0D3C1F]">
                           {s.level}%
                         </span>
                         <button
                           onClick={() => removeSkill(i)}
                           aria-label="Remove skill"
-                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -798,7 +798,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               action={
                 <button
                   onClick={addEducation}
-                  className="flex items-center gap-1.5 rounded-full border border-[#00DEFF]/40 px-3 py-1.5 text-xs font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
                 >
                   <Plus size={13} />
                   Add Education
@@ -810,15 +810,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               ) : (
                 <div className="space-y-4">
                   {founder.education.map((e, i) => (
-                    <div key={i} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#00DEFF]">
+                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
                           Entry {i + 1}
                         </span>
                         <button
                           onClick={() => removeEducation(i)}
                           aria-label="Remove education"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -870,7 +870,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               action={
                 <button
                   onClick={addExperience}
-                  className="flex items-center gap-1.5 rounded-full border border-[#00DEFF]/40 px-3 py-1.5 text-xs font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
                 >
                   <Plus size={13} />
                   Add Experience
@@ -882,15 +882,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               ) : (
                 <div className="space-y-4">
                   {founder.experience.map((e, i) => (
-                    <div key={i} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#00DEFF]">
+                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
                           Entry {i + 1}
                         </span>
                         <button
                           onClick={() => removeExperience(i)}
                           aria-label="Remove experience"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -942,7 +942,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               action={
                 <button
                   onClick={addProject}
-                  className="flex items-center gap-1.5 rounded-full border border-[#00DEFF]/40 px-3 py-1.5 text-xs font-medium text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
                 >
                   <Plus size={13} />
                   Add Project
@@ -954,15 +954,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
               ) : (
                 <div className="space-y-4">
                   {founder.projectsList.map((p, i) => (
-                    <div key={i} className="rounded-xl border border-white/10 bg-white/[0.02] p-4">
+                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
                       <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#00DEFF]">
+                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
                           Project {i + 1}
                         </span>
                         <button
                           onClick={() => removeProject(i)}
                           aria-label="Remove project"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 text-white/50 transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
+                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
                         >
                           <Trash2 size={14} />
                         </button>
@@ -1010,8 +1010,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           {tab === 'security' && (
             <Card title="Change Password" icon={<Lock size={16} />}>
               <div className="max-w-md space-y-4">
-                <p className="text-sm text-white/60">
-                  Set a new password for your account (<span className="font-mono text-[#00DEFF]">{founder.username}</span>).
+                <p className="text-sm text-[#6b7280]">
+                  Set a new password for your account (<span className="font-mono text-[#0D3C1F]">{founder.username}</span>).
                   Leave blank to keep current password. Min 4 characters.
                 </p>
                 <Field label="New Password">
@@ -1022,8 +1022,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     placeholder="Enter new password"
                   />
                 </Field>
-                <p className="text-xs text-white/40">
-                  Click <span className="font-semibold text-[#00DEFF]">Save Changes</span> at the top right to apply.
+                <p className="text-xs text-[#9ca3af]">
+                  Click <span className="font-semibold text-[#0D3C1F]">Save Changes</span> at the top right to apply.
                 </p>
               </div>
             </Card>
@@ -1031,7 +1031,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         </div>
 
         {/* Bottom save bar (mobile-friendly) */}
-        <div className="mt-10 flex items-center justify-end gap-3 border-t border-white/10 pt-6">
+        <div className="mt-10 flex items-center justify-end gap-3 border-t border-[#111111]/15 pt-6">
           <AnimatePresence mode="wait">
             {savedAt && (
               <motion.span
@@ -1049,7 +1049,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           <button
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 rounded-full bg-[#00DEFF] px-6 py-3 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_30px_rgba(0,222,255,0.5)] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex items-center gap-2 rounded-full bg-[#0D3C1F] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#164a28] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
             {saving ? 'Saving...' : 'Save All Changes'}
@@ -1074,10 +1074,10 @@ function Card({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-2xl border border-white/10 bg-white/[0.02] p-6 sm:p-7">
+    <div className="rounded-xl border border-[#111111] bg-white p-6 shadow-[0_4px_24px_rgba(0,0,0,0.03)] sm:p-7">
       <div className="mb-5 flex items-center justify-between gap-3">
-        <h3 className="flex items-center gap-2 text-lg font-bold" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg border border-[#00DEFF]/30 bg-[#00DEFF]/5 text-[#00DEFF]">
+        <h3 className="flex items-center gap-2 text-lg font-bold text-[#111111]">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#e8f5ef] text-[#0D3C1F]">
             {icon}
           </span>
           {title}
@@ -1092,7 +1092,7 @@ function Card({
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <div>
-      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-white/50">
+      <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-[#9ca3af]">
         {label}
       </label>
       {children}
@@ -1119,7 +1119,7 @@ function Input({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
-      className={`w-full rounded-lg border border-white/10 bg-[#0A0A0A]/60 px-3 py-2.5 text-sm text-white placeholder-white/30 transition-colors focus:border-[#00DEFF]/60 focus:outline-none focus:ring-1 focus:ring-[#00DEFF]/30 ${className}`}
+      className={`w-full rounded-lg border border-[#111111]/15 bg-white px-3 py-2.5 text-sm text-[#111111] placeholder-[#9ca3af] transition-colors focus:border-[#0D3C1F]/60 focus:outline-none focus:ring-1 focus:ring-[#0D3C1F]/30 ${className}`}
     />
   )
 }
@@ -1141,14 +1141,14 @@ function Textarea({
       onChange={(e) => onChange(e.target.value)}
       placeholder={placeholder}
       rows={rows}
-      className="w-full resize-y rounded-lg border border-white/10 bg-[#0A0A0A]/60 px-3 py-2.5 text-sm text-white placeholder-white/30 transition-colors focus:border-[#00DEFF]/60 focus:outline-none focus:ring-1 focus:ring-[#00DEFF]/30"
+      className="w-full resize-y rounded-lg border border-[#111111]/15 bg-white px-3 py-2.5 text-sm text-[#111111] placeholder-[#9ca3af] transition-colors focus:border-[#0D3C1F]/60 focus:outline-none focus:ring-1 focus:ring-[#0D3C1F]/30"
     />
   )
 }
 
 function EmptyState({ text }: { text: string }) {
   return (
-    <div className="rounded-lg border border-dashed border-white/10 bg-white/[0.01] py-10 text-center text-sm text-white/40">
+    <div className="rounded-lg border border-dashed border-[#111111]/15 bg-[#fafafa] py-10 text-center text-sm text-[#9ca3af]">
       {text}
     </div>
   )
