@@ -5,7 +5,7 @@ import Link from 'next/link'
 
 type BrandLogoProps = {
   href?: string
-  size?: 'sm' | 'md' | 'lg'
+  size?: 'sm' | 'md' | 'mdPlus' | 'lg'
   showWordmark?: boolean
   className?: string
   variant?: 'default' | 'onDark'
@@ -14,6 +14,8 @@ type BrandLogoProps = {
 const sizes = {
   sm: { box: 28, img: 24 },
   md: { box: 32, img: 28 },
+  /** ~20% larger than md — used for mobile navbar icon */
+  mdPlus: { box: 38, img: 34 },
   lg: { box: 40, img: 36 },
 }
 

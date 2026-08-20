@@ -39,14 +39,28 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
+          className={`relative mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
             scrolled ? 'border-[#111111]/25 shadow-md' : ''
           }`}
         >
-          {/* Logo left on all breakpoints */}
-          <div className="min-w-0 shrink">
-            <BrandLogo size="md" />
+          {/* Mobile: logo left (larger) · Desktop: logo + wordmark */}
+          <div className="relative z-10 shrink-0">
+            <span className="md:hidden">
+              <BrandLogo size="mdPlus" showWordmark={false} />
+            </span>
+            <span className="hidden md:inline-flex">
+              <BrandLogo size="md" />
+            </span>
           </div>
+
+          {/* Mobile: brand name centered */}
+          <Link
+            href="/"
+            className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] text-[#0a0a0a] md:hidden"
+            aria-label="TrishulHub home"
+          >
+            TrishulHub
+          </Link>
 
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
@@ -68,7 +82,7 @@ export function Navbar() {
             })}
           </nav>
 
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="relative z-10 flex shrink-0 items-center gap-2">
             <a
               href={contactLinks.whatsapp}
               target="_blank"
