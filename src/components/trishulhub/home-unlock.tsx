@@ -150,7 +150,7 @@ export function HomeUnlock() {
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-2xl">
           <p className="mb-4 text-sm font-medium text-[#6b7280]">Solutions</p>
-          <h2 className="text-4xl font-bold tracking-[-0.03em] text-[#111111] sm:text-5xl">
+          <h2 className="text-4xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-5xl">
             Unlock custom <span className="accent-text">growth</span>
           </h2>
           <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">

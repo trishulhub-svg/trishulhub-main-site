@@ -27,7 +27,7 @@ export function CTA() {
             stagger={0.09}
             duration={0.65}
             highlightColor="#0d9488"
-            className="text-3xl font-bold tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl"
+            className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl"
           >
             Ready to build something for your *business?*
           </AnimatedHeading>

@@ -18,35 +18,27 @@ const navLinks = [
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [pastHero, setPastHero] = useState(false)
   const [open, setOpen] = useState(false)
   const reduce = useReducedMotion()
   const pathname = usePathname()
   const { links: contactLinks } = useSiteContact()
-  const isHome = pathname === '/'
 
   useEffect(() => {
-    const onScroll = () => {
-      setScrolled(window.scrollY > 8)
-      setPastHero(window.scrollY > window.innerHeight * 0.75)
-    }
+    const onScroll = () => setScrolled(window.scrollY > 8)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
-
-  // On home, cinematic hero owns the top nav until the user scrolls past it.
-  if (isHome && !pastHero) return null
 
   return (
     <motion.header
       initial={reduce ? { opacity: 0 } : { y: -24, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
       transition={{ duration: 0.45, ease: 'easeOut' }}
-      className={`fixed inset-x-0 top-0 z-50 h-[72px] transition-colors ${
-        scrolled || isHome
-          ? 'border-b border-[#e5e7eb] bg-white/95 backdrop-blur-md'
-          : 'bg-transparent'
+      className={`fixed inset-x-0 top-0 z-50 h-[72px] border-b border-[#e5e7eb] transition-colors ${
+        scrolled
+          ? 'bg-white/95 backdrop-blur-md'
+          : 'bg-white/90 backdrop-blur-sm'
       }`}
     >
       <div className="lt-container flex h-full items-center justify-between">
