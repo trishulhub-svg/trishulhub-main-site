@@ -438,7 +438,7 @@ function SectionHeading({ lead, accent }: { lead: string; accent: string }) {
       transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
       className="text-center text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl"
     >
-      {lead} <HeroAccentWord words={accent} />
+      {lead} <span className="text-[#0D3C1F]">{accent}</span>
     </motion.h2>
   )
 }
