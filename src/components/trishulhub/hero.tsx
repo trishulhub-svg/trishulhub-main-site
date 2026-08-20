@@ -6,7 +6,9 @@ import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 const HERO_BG_DESKTOP =
   'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/169cdb38-2656-4555-bec1-d1acc64bb6fa_3840w.png'
-const HERO_BG_MOBILE = 'https://kommodo.ai/i/zbrOcVBf36egW9FwROxf'
+/** Mobile hero background (Kommodo export of the scenic hero art) */
+const HERO_BG_MOBILE =
+  'https://plain-apac-prod-public.komododecks.com/202608/20/RoEREkz1A5ZTNx3cwro5/image.png'
 
 const CAROUSEL_WORDS = [
   'productive.',
