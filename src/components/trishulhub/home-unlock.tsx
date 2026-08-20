@@ -142,7 +142,7 @@ export function HomeUnlock() {
 
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-[#f0f0f0]/50" />
+      <div className="pointer-events-none absolute inset-0 bg-[#fafafa]/50" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-2xl">
@@ -179,7 +179,7 @@ export function HomeUnlock() {
                     <Icon
                       size={18}
                       className={`shrink-0 ${
-                        isActive ? 'text-[#75B4B1]' : 'text-[#6b7280]'
+                        isActive ? 'text-[#0d9488]' : 'text-[#6b7280]'
                       }`}
                     />
                     <span className="truncate text-sm font-semibold sm:text-base">
@@ -187,7 +187,7 @@ export function HomeUnlock() {
                     </span>
                   </div>
                   {isActive ? (
-                    <Zap size={16} className="shrink-0 text-[#75B4B1]" />
+                    <Zap size={16} className="shrink-0 text-[#0d9488]" />
                   ) : null}
                 </button>
               )
@@ -201,12 +201,12 @@ export function HomeUnlock() {
                 y1="0"
                 x2="12"
                 y2="56"
-                stroke="#75B4B1"
+                stroke="#0d9488"
                 strokeWidth="1.75"
                 strokeDasharray="6 6"
                 className="animate-flow"
               />
-              <circle r="3.5" fill="#75B4B1">
+              <circle r="3.5" fill="#0d9488">
                 <animateMotion
                   dur="1.4s"
                   repeatCount="indefinite"
@@ -235,7 +235,7 @@ export function HomeUnlock() {
                   <path
                     key={line.id}
                     d={`M0 ${y} C 90 ${y}, 120 ${end}, 180 ${end} L 240 ${end}`}
-                    stroke={isActive ? '#75B4B1' : '#cbd5e1'}
+                    stroke={isActive ? '#0d9488' : '#cbd5e1'}
                     strokeOpacity={isActive ? 1 : 0.7}
                     strokeWidth="1.75"
                     strokeDasharray="8 8"
@@ -253,7 +253,7 @@ export function HomeUnlock() {
             transition={{ duration: 0.3 }}
             className="surface-card relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:col-span-5"
           >
-            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#75B4B1]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#0d9488]/20 blur-3xl" />
             <div className="flex flex-wrap items-start justify-between gap-4">
               <h3 className="max-w-[16rem] font-display text-2xl font-medium text-foreground sm:max-w-none sm:text-3xl lg:text-4xl">
                 {current.label}
@@ -262,7 +262,7 @@ export function HomeUnlock() {
                 <span className="font-display text-2xl font-medium text-foreground sm:text-3xl">
                   {current.price}
                 </span>
-                <span className="ml-1 font-sans text-sm text-[#75B4B1]">
+                <span className="ml-1 font-sans text-sm text-[#0d9488]">
                   {current.period}
                 </span>
               </div>

@@ -17,7 +17,7 @@ export function HomeAbout() {
 
   return (
     <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute right-[5%] top-10 h-72 w-72 rounded-full bg-[#75B4B1]/20 blur-[100px]" />
+      <div className="pointer-events-none absolute right-[5%] top-10 h-72 w-72 rounded-full bg-[#0d9488]/20 blur-[100px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
           <div className="lg:col-span-7">
@@ -75,9 +75,9 @@ export function HomeAbout() {
             >
               <defs>
                 <linearGradient id="home-udp-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#75B4B1" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#75B4B1" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#5a9a97" stopOpacity="0.35" />
+                  <stop offset="0%" stopColor="#0d9488" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#0d9488" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#0f766e" stopOpacity="0.35" />
                 </linearGradient>
               </defs>
               <path
@@ -93,7 +93,7 @@ export function HomeAbout() {
                 className="about-udp-beam"
                 style={{ animationDelay: '0.55s' }}
               />
-              <circle r="4" fill="#75B4B1">
+              <circle r="4" fill="#0d9488">
                 <animateMotion dur="2.5s" repeatCount="indefinite" path={PATH_A} />
               </circle>
               <circle r="4" fill="#9eccc9">
@@ -179,13 +179,13 @@ export function HomeAbout() {
                         y1="0"
                         x2="5"
                         y2="32"
-                        stroke="#75B4B1"
+                        stroke="#0d9488"
                         strokeWidth="1.75"
                         strokeDasharray="5 5"
                         className="animate-flow"
                         opacity="0.75"
                       />
-                      <circle r="3.5" fill="#75B4B1">
+                      <circle r="3.5" fill="#0d9488">
                         <animateMotion
                           dur="1.5s"
                           repeatCount="indefinite"
@@ -221,10 +221,10 @@ function NodeCard({
     <div
       className={`rounded-[1.35rem] border border-border/80 bg-white/90 p-5 shadow-[0_8px_30px_rgba(11,18,32,0.05)] backdrop-blur-md ${className}`}
     >
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-[#e8f4f3] text-[#75B4B1]">
+      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
         <Icon size={16} />
       </div>
-      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#75B4B1]">
+      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0d9488]">
         {label}
       </p>
       <h3 className="mt-1 font-display text-lg font-medium text-foreground">
