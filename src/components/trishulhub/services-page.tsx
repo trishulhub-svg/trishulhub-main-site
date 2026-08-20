@@ -87,20 +87,20 @@ export function ServicesPage() {
               >
                 <div
                   aria-hidden
-                  className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl transition-opacity group-hover:opacity-100"
+                  className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-[#75B4B1]/20 blur-3xl transition-opacity group-hover:opacity-100"
                 />
                 <div className="relative flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
                   <div className="max-w-2xl">
-                    <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-primary">
+                    <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-[#e8f4f3] text-[#75B4B1]">
                       <Icon size={24} strokeWidth={1.75} />
                     </div>
-                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-[#75B4B1]">
                       0{idx + 1}
                     </p>
-                    <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
+                    <h2 className="mt-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl">
                       {s.title}
                     </h2>
-                    <p className="mt-2 font-sans text-base font-medium text-primary/90">
+                    <p className="mt-2 font-sans text-base font-medium text-[#75B4B1]">
                       {s.tagline}
                     </p>
                     <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground">
@@ -127,14 +127,14 @@ export function ServicesPage() {
                         >
                           <CheckCircle2
                             size={16}
-                            className="mt-0.5 shrink-0 text-primary"
+                            className="mt-0.5 shrink-0 text-[#75B4B1]"
                           />
                           {item}
                         </li>
                       ))}
                     </ul>
                   </div>
-                  <div className="rounded-[1.35rem] bg-accent/60 p-5">
+                  <div className="rounded-[1.35rem] bg-[#e8f4f3]/60 p-5">
                     <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
                       Good for
                     </h3>
@@ -153,16 +153,13 @@ export function ServicesPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          className="relative mt-12 overflow-hidden rounded-[2rem] bg-foreground p-8 text-center text-white sm:p-12"
+          className="relative mt-12 overflow-hidden rounded-[2rem] border border-[#111111] bg-white p-8 text-center sm:p-12"
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(45,212,191,0.25),transparent_50%)]"
-          />
-          <h3 className="relative font-display text-2xl font-medium sm:text-4xl">
+          <div className="lt-glow pointer-events-none absolute -right-16 -top-16 h-56 w-56 opacity-70" />
+          <h3 className="relative text-2xl font-bold tracking-[-0.03em] text-[#111111] sm:text-4xl">
             Not sure which one you need?
           </h3>
-          <p className="relative mx-auto mt-3 max-w-lg font-sans text-white/60">
+          <p className="relative mx-auto mt-3 max-w-lg text-[#6b7280]">
             Tell us about your business on WhatsApp — we will suggest the best
             option and give you a clear quote.
           </p>

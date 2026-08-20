@@ -12,9 +12,9 @@ type BrandLogoProps = {
 }
 
 const sizes = {
-  sm: { box: 36, img: 32 },
-  md: { box: 44, img: 40 },
-  lg: { box: 56, img: 50 },
+  sm: { box: 32, img: 28 },
+  md: { box: 36, img: 32 },
+  lg: { box: 44, img: 40 },
 }
 
 export function BrandLogo({
@@ -30,7 +30,7 @@ export function BrandLogo({
   return (
     <Link
       href={href}
-      className={`inline-flex items-center gap-2.5 ${className}`}
+      className={`inline-flex items-center gap-2 ${className}`}
       aria-label="TrishulHub home"
     >
       <span
@@ -47,9 +47,12 @@ export function BrandLogo({
         />
       </span>
       {showWordmark && (
-        <span className="font-display text-lg font-medium tracking-[-0.01em] sm:text-xl">
-          <span className={onDark ? 'text-white' : 'text-foreground'}>Trishul</span>
-          <span className={onDark ? 'text-teal-300' : 'gradient-text'}>Hub</span>
+        <span
+          className={`text-[17px] font-bold tracking-[-0.02em] sm:text-lg ${
+            onDark ? 'text-white' : 'text-[#111111]'
+          }`}
+        >
+          TrishulHub
         </span>
       )}
     </Link>

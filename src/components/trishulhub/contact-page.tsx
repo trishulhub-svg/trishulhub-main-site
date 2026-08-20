@@ -36,20 +36,20 @@ export function ContactPage() {
         <div className="mb-8 flex flex-wrap items-center gap-3">
           <a
             href={links.mailto}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-primary/30 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-[#75B4B1]/30 hover:text-[#75B4B1]"
           >
-            <Mail className="text-primary" size={16} />
+            <Mail className="text-[#75B4B1]" size={16} />
             {email}
           </a>
           <a
             href={links.tel}
-            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-primary/30 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-[#75B4B1]/30 hover:text-[#75B4B1]"
           >
-            <Phone className="text-primary" size={16} />
+            <Phone className="text-[#75B4B1]" size={16} />
             {phoneDisplay}
           </a>
           <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
-            <MapPin className="text-primary" size={16} />
+            <MapPin className="text-[#75B4B1]" size={16} />
             {location}
           </div>
         </div>

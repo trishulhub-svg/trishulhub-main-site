@@ -1,17 +1,11 @@
 import type { Metadata } from "next";
-import { Fraunces, Outfit } from "next/font/google";
+import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
 
-const fraunces = Fraunces({
-  variable: "--font-fraunces",
-  subsets: ["latin"],
-  display: "swap",
-});
-
-const outfit = Outfit({
-  variable: "--font-outfit",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
@@ -62,7 +56,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${fraunces.variable} ${outfit.variable} font-sans antialiased bg-background text-foreground selection:bg-teal-200/70 selection:text-teal-950`}
+        className={`${inter.variable} font-sans antialiased bg-background text-foreground selection:bg-[#75B4B1]/35 selection:text-[#111111]`}
       >
         {children}
         <Toaster />

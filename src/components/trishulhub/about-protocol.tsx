@@ -103,25 +103,19 @@ export function AboutProtocol({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-[2rem] border border-white/50 bg-foreground p-8 text-white shadow-[0_30px_80px_rgba(11,18,32,0.22)] md:p-12"
+          className="relative overflow-hidden rounded-[2rem] border border-[#e8e8e8] bg-white p-8 shadow-[0_1px_2px_rgba(0,0,0,0.03)] md:p-12"
         >
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -left-20 top-0 h-64 w-64 rounded-full bg-teal-400/25 blur-[90px]"
-          />
-          <div
-            aria-hidden
-            className="pointer-events-none absolute -right-16 bottom-0 h-56 w-56 rounded-full bg-teal-500/20 blur-[80px]"
-          />
+          <div className="lt-glow pointer-events-none absolute -right-24 -top-24 h-72 w-72 opacity-60" />
 
           <div className="relative mx-auto max-w-3xl text-center">
-            <p className="mb-3 text-[11px] font-semibold uppercase tracking-[0.28em] text-teal-300">
+            <p className="mb-3 text-sm font-medium text-[#6b7280]">
               Project planner
             </p>
-            <h3 className="font-display text-3xl font-medium tracking-tight md:text-5xl">
-              Let&apos;s plan your project
+            <h3 className="text-3xl font-bold tracking-[-0.03em] text-[#111111] md:text-4xl">
+              Let&apos;s plan your{' '}
+              <span className="accent-text">project</span>
             </h3>
-            <p className="mt-3 font-sans text-white/65">
+            <p className="mt-3 text-[#6b7280]">
               Tell us a few details and we will reply with a simple plan within
               48 hours.
             </p>
@@ -135,12 +129,12 @@ export function AboutProtocol({
                     key={n}
                     type="button"
                     onClick={() => setStep(n)}
-                    className={`flex size-10 items-center justify-center rounded-full font-sans text-sm font-semibold transition-all duration-300 ${
+                    className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       active
-                        ? 'bg-teal-400 text-foreground shadow-[0_0_24px_rgba(45,212,191,0.35)]'
+                        ? 'bg-[#111111] text-white'
                         : done
-                          ? 'bg-white/15 text-teal-200'
-                          : 'bg-white/5 text-white/45 ring-1 ring-white/10'
+                          ? 'bg-[#e8f4f3] text-[#75B4B1]'
+                          : 'border border-[#e5e7eb] bg-white text-[#6b7280]'
                     }`}
                     aria-label={`Step ${n}`}
                   >
@@ -159,10 +153,10 @@ export function AboutProtocol({
                   exit={{ opacity: 0, y: -8 }}
                   transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
                 >
-                  <p className="font-display text-xl font-medium tracking-tight">
+                  <p className="text-lg font-bold tracking-tight text-[#111111]">
                     {current.title}
                   </p>
-                  <p className="mt-1 font-sans text-sm text-white/55">
+                  <p className="mt-1 text-sm text-[#6b7280]">
                     {current.subtitle}
                   </p>
 
@@ -174,16 +168,16 @@ export function AboutProtocol({
                         onPointerMove={onPointerMove}
                         onPointerUp={onPointerUp}
                         onPointerCancel={onPointerUp}
-                        className="relative h-14 cursor-pointer select-none rounded-2xl bg-white/5 ring-1 ring-white/10 transition-all duration-300 hover:ring-white/20"
+                        className="relative h-14 cursor-pointer select-none rounded-2xl bg-[#f0f0f0]"
                       >
-                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-white/10" />
+                        <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#e5e7eb]" />
                         <div className="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 justify-between">
                           {budgets.map((b) => (
-                            <div key={b} className="h-3 w-px bg-white/25" />
+                            <div key={b} className="h-3 w-px bg-[#d1d5db]" />
                           ))}
                         </div>
                         <div
-                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-gradient-to-r from-teal-400 to-teal-200"
+                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#75B4B1]"
                           style={{
                             width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
@@ -191,22 +185,20 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-foreground bg-teal-300 shadow-lg transition-transform duration-300 hover:scale-125"
+                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#111111] shadow-md transition-transform hover:scale-110"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
                         <div
-                          className="absolute -bottom-8 transition-all duration-300"
+                          className="absolute -bottom-8 transition-all"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="inline-flex items-center rounded-full bg-teal-300 px-3 py-1 text-foreground shadow-md">
-                            <span className="font-sans text-xs font-bold tracking-tight">
-                              {budget}
-                            </span>
+                          <div className="inline-flex items-center rounded-full bg-[#111111] px-3 py-1 text-white">
+                            <span className="text-xs font-bold">{budget}</span>
                           </div>
                         </div>
                       </div>
-                      <div className="mt-10 flex justify-between font-sans text-xs text-white/45">
+                      <div className="mt-10 flex justify-between text-xs text-[#6b7280]">
                         {budgets.map((b) => (
                           <span key={b}>{b}</span>
                         ))}
@@ -221,10 +213,8 @@ export function AboutProtocol({
                           key={l}
                           type="button"
                           onClick={() => setLane(l)}
-                          className={`rounded-full px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
-                            lane === l
-                              ? 'bg-teal-400 text-foreground'
-                              : 'bg-white/5 text-white/65 ring-1 ring-white/10 hover:bg-white/10'
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                            lane === l ? 'lt-pill-active' : 'lt-pill'
                           }`}
                         >
                           {l}
@@ -240,10 +230,8 @@ export function AboutProtocol({
                           key={t}
                           type="button"
                           onClick={() => setTiming(t)}
-                          className={`rounded-full px-4 py-2 font-sans text-sm font-medium transition-all duration-300 ${
-                            timing === t
-                              ? 'bg-teal-400 text-foreground'
-                              : 'bg-white/5 text-white/65 ring-1 ring-white/10 hover:bg-white/10'
+                          className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
+                            timing === t ? 'lt-pill-active' : 'lt-pill'
                           }`}
                         >
                           {t}
@@ -253,26 +241,26 @@ export function AboutProtocol({
                   )}
 
                   {step === 4 && (
-                    <div className="mx-auto mt-6 max-w-md rounded-2xl bg-white/5 p-5 text-left ring-1 ring-white/10">
-                      <p className="font-display text-sm font-medium">
+                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#e8e8e8] bg-[#f9f9f9] p-5 text-left">
+                      <p className="text-sm font-bold text-[#111111]">
                         Your project summary
                       </p>
-                      <ul className="mt-3 space-y-2 font-sans text-sm text-white/65">
+                      <ul className="mt-3 space-y-2 text-sm text-[#6b7280]">
                         <li>
                           Budget:{' '}
-                          <span className="font-semibold text-teal-300">
+                          <span className="font-semibold text-[#75B4B1]">
                             {budget}
                           </span>
                         </li>
                         <li>
                           Service:{' '}
-                          <span className="font-semibold text-teal-300">
+                          <span className="font-semibold text-[#111111]">
                             {lane}
                           </span>
                         </li>
                         <li>
                           Timing:{' '}
-                          <span className="font-semibold text-teal-300">
+                          <span className="font-semibold text-[#111111]">
                             {timing}
                           </span>
                         </li>

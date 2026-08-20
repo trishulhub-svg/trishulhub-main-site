@@ -49,18 +49,18 @@ export function AboutTimeline() {
     <section className="relative mt-4 sm:mt-8">
       <div className="mb-14 max-w-3xl">
         <div className="mb-5 inline-flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/25 bg-teal-100 font-display text-[11px] font-medium text-primary">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-[#75B4B1]/25 bg-[#e8f4f3] font-display text-[11px] font-medium text-[#75B4B1]">
             01
           </span>
           <span className="inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
-            <CalendarRange className="h-3.5 w-3.5 text-primary" />
+            <CalendarRange className="h-3.5 w-3.5 text-[#75B4B1]" />
             Our story
           </span>
         </div>
         <AnimatedHeading
           as="h2"
           variant="rise"
-          className="font-display text-3xl font-medium tracking-[-0.02em] text-foreground sm:text-4xl lg:text-5xl"
+          className="font-display text-3xl font-bold tracking-[-0.03em] text-foreground sm:text-4xl lg:text-5xl"
         >
           Our journey
         </AnimatedHeading>
@@ -76,9 +76,9 @@ export function AboutTimeline() {
         <div className="pointer-events-none absolute bottom-10 left-8 top-10 w-px bg-border sm:left-1/2 sm:-translate-x-1/2" />
         <motion.div
           style={{ height: fillHeight }}
-          className="pointer-events-none absolute left-8 top-10 w-px bg-gradient-to-b from-primary via-primary/70 to-transparent sm:left-1/2 sm:-translate-x-1/2"
+          className="pointer-events-none absolute left-8 top-10 w-px bg-gradient-to-b from-[#75B4B1] via-[#75B4B1]/70 to-transparent sm:left-1/2 sm:-translate-x-1/2"
         />
-        <div className="about-timeline-scan pointer-events-none absolute left-8 h-16 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-primary to-transparent sm:left-1/2" />
+        <div className="about-timeline-scan pointer-events-none absolute left-8 h-16 w-px -translate-x-1/2 bg-gradient-to-b from-transparent via-[#75B4B1] to-transparent sm:left-1/2" />
 
         <div className="relative space-y-8 sm:space-y-10">
           {milestones.map((m, i) => {
@@ -97,7 +97,7 @@ export function AboutTimeline() {
                 className="relative pl-14 sm:pl-0"
               >
                 <div className="absolute left-8 top-8 z-10 flex -translate-x-1/2 items-center justify-center sm:left-1/2 sm:top-1/2 sm:-translate-y-1/2">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-primary/30 bg-white text-primary shadow-sm">
+                  <span className="flex h-11 w-11 items-center justify-center rounded-full border border-[#75B4B1]/30 bg-white text-[#75B4B1] shadow-sm">
                     <Icon size={18} />
                   </span>
                 </div>
@@ -109,21 +109,21 @@ export function AboutTimeline() {
                       : 'sm:ml-auto sm:pl-2'
                   }`}
                 >
-                  <div className="relative overflow-hidden rounded-[18px] border border-border bg-white p-5 shadow-sm transition-colors hover:border-primary/25">
+                  <div className="relative overflow-hidden rounded-[18px] border border-border bg-white p-5 shadow-sm transition-colors hover:border-[#75B4B1]/25">
                     <span
                       aria-hidden
-                      className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-6xl font-bold leading-none tracking-tight text-primary/15 sm:text-7xl"
+                      className="pointer-events-none absolute -right-1 -top-2 select-none font-display text-6xl font-bold leading-none tracking-tight text-[#75B4B1]/15 sm:text-7xl"
                     >
                       {m.year}
                     </span>
 
                     <div className="relative z-10">
                       <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center rounded-lg border border-primary/25 bg-teal-50 px-2.5 py-1 font-display text-sm font-bold tracking-tight text-primary">
+                        <span className="inline-flex items-center rounded-lg border border-[#75B4B1]/25 bg-[#e8f4f3] px-2.5 py-1 font-display text-sm font-bold tracking-tight text-[#75B4B1]">
                           {m.year}
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
-                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-primary" />
+                          <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-[#111111]" />
                           {m.status}
                         </span>
                       </div>

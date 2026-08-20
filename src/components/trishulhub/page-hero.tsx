@@ -11,28 +11,26 @@ type PageHeroProps = {
 
 export function PageHero({ title, subtitle, label }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden pt-28 pb-12 sm:pt-32 sm:pb-16">
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div className="atelier-mesh absolute inset-0" />
-        <div className="atelier-grain absolute inset-0" />
-      </div>
+    <section className="relative overflow-hidden bg-[#f9f9f9] pt-28 pb-12 sm:pt-32 sm:pb-16">
+      <div className="lt-glow pointer-events-none absolute right-0 top-0 h-72 w-72 opacity-50" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 20 }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-          className="max-w-3xl"
+          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+          className="max-w-2xl"
         >
-          {label ? <p className="section-label mb-4">{label}</p> : null}
-          <h1 className="font-display text-4xl font-medium tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl">
+          {label ? (
+            <p className="mb-3 text-sm font-medium text-[#6b7280]">{label}</p>
+          ) : null}
+          <h1 className="text-4xl font-bold tracking-[-0.03em] text-[#111111] sm:text-5xl">
             {title}
           </h1>
           {subtitle ? (
-            <p className="mt-4 max-w-xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-xl text-base leading-relaxed text-[#6b7280] sm:text-lg">
               {subtitle}
             </p>
           ) : null}
-          <div className="mt-8 h-px w-24 bg-gradient-to-r from-primary to-transparent" />
         </motion.div>
       </div>
     </section>

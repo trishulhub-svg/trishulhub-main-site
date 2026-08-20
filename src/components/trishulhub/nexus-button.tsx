@@ -2,7 +2,7 @@
 
 import type { CSSProperties, ReactNode } from 'react'
 import Link from 'next/link'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 
 type NexusButtonProps = {
   href?: string
@@ -15,7 +15,7 @@ type NexusButtonProps = {
   type?: 'button' | 'submit'
 }
 
-/** Primary CTA — soft atelier pill with refined motion. */
+/** Lawtrades-style primary CTA — solid black pill */
 export function NexusButton({
   href,
   onClick,
@@ -38,19 +38,17 @@ export function NexusButton({
         href.startsWith('tel:') ||
         href.startsWith('https://wa.me')))
 
-  const classNames = `btn-cyan group relative flex h-[52px] min-w-[176px] cursor-pointer items-center justify-center rounded-full px-7 text-sm font-semibold outline-none transition-transform active:scale-[0.98] ${
+  const classNames = `group relative flex h-[52px] min-w-[160px] cursor-pointer items-center justify-center rounded-full bg-[#111111] px-7 text-sm font-semibold text-white outline-none transition hover:bg-black active:scale-[0.98] ${
     fullWidth ? 'w-full' : 'w-auto'
   }`
 
   const inner = (
     <span className="relative z-10 flex items-center justify-center gap-2">
-      <span className="font-sans text-[15px] font-semibold tracking-wide">
-        {children}
-      </span>
+      <span>{children}</span>
       {showArrow ? (
-        <ArrowUpRight
+        <ArrowRight
           size={16}
-          className="transition-transform duration-300 group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+          className="transition-transform duration-300 group-hover:translate-x-0.5"
         />
       ) : null}
     </span>

@@ -142,13 +142,13 @@ export function HomeUnlock() {
 
   return (
     <section className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-transparent via-teal-50/40 to-transparent" />
+      <div className="pointer-events-none absolute inset-0 bg-[#f0f0f0]/50" />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-2xl">
-          <p className="section-label mb-4">Solutions</p>
-          <h2 className="font-display text-4xl font-medium tracking-[-0.02em] text-foreground sm:text-5xl">
-            Unlock custom growth
+          <p className="mb-4 text-sm font-medium text-[#6b7280]">Solutions</p>
+          <h2 className="text-4xl font-bold tracking-[-0.03em] text-[#111111] sm:text-5xl">
+            Unlock custom <span className="accent-text">growth</span>
           </h2>
           <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
             Choose the solution that fits your business — then talk with us and
@@ -169,25 +169,25 @@ export function HomeUnlock() {
                   }}
                   type="button"
                   onClick={() => setActive(plan.id)}
-                  className={`relative flex min-h-[68px] w-full items-center justify-between rounded-[1.25rem] px-5 py-4 text-left transition-all duration-300 ${
+                  className={`relative flex min-h-[68px] w-full items-center justify-between rounded-[1.75rem] px-5 py-4 text-left transition-all duration-300 ${
                     isActive
-                      ? 'bg-foreground text-white shadow-[0_16px_40px_rgba(11,18,32,0.18)]'
-                      : 'border border-border/80 bg-white/80 text-muted-foreground backdrop-blur-sm hover:border-primary/25 hover:text-foreground'
+                      ? 'bg-[#111111] text-white shadow-[0_12px_32px_rgba(0,0,0,0.12)]'
+                      : 'border border-[#e5e7eb] bg-white text-[#6b7280] hover:border-[#111111]/20 hover:text-[#111111]'
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-3">
                     <Icon
                       size={18}
                       className={`shrink-0 ${
-                        isActive ? 'text-teal-300' : 'text-muted-foreground'
+                        isActive ? 'text-[#75B4B1]' : 'text-[#6b7280]'
                       }`}
                     />
-                    <span className="truncate font-sans text-sm font-semibold sm:text-base">
+                    <span className="truncate text-sm font-semibold sm:text-base">
                       {plan.label}
                     </span>
                   </div>
                   {isActive ? (
-                    <Zap size={16} className="shrink-0 text-teal-300" />
+                    <Zap size={16} className="shrink-0 text-[#75B4B1]" />
                   ) : null}
                 </button>
               )
@@ -201,12 +201,12 @@ export function HomeUnlock() {
                 y1="0"
                 x2="12"
                 y2="56"
-                stroke="#0f766e"
+                stroke="#75B4B1"
                 strokeWidth="1.75"
                 strokeDasharray="6 6"
                 className="animate-flow"
               />
-              <circle r="3.5" fill="#0f766e">
+              <circle r="3.5" fill="#75B4B1">
                 <animateMotion
                   dur="1.4s"
                   repeatCount="indefinite"
@@ -235,7 +235,7 @@ export function HomeUnlock() {
                   <path
                     key={line.id}
                     d={`M0 ${y} C 90 ${y}, 120 ${end}, 180 ${end} L 240 ${end}`}
-                    stroke={isActive ? '#0f766e' : '#cbd5e1'}
+                    stroke={isActive ? '#75B4B1' : '#cbd5e1'}
                     strokeOpacity={isActive ? 1 : 0.7}
                     strokeWidth="1.75"
                     strokeDasharray="8 8"
@@ -253,7 +253,7 @@ export function HomeUnlock() {
             transition={{ duration: 0.3 }}
             className="surface-card relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[2rem] p-6 sm:p-8 lg:col-span-5"
           >
-            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-teal-400/20 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#75B4B1]/20 blur-3xl" />
             <div className="flex flex-wrap items-start justify-between gap-4">
               <h3 className="max-w-[16rem] font-display text-2xl font-medium text-foreground sm:max-w-none sm:text-3xl lg:text-4xl">
                 {current.label}
@@ -262,7 +262,7 @@ export function HomeUnlock() {
                 <span className="font-display text-2xl font-medium text-foreground sm:text-3xl">
                   {current.price}
                 </span>
-                <span className="ml-1 font-sans text-sm text-primary">
+                <span className="ml-1 font-sans text-sm text-[#75B4B1]">
                   {current.period}
                 </span>
               </div>
@@ -280,7 +280,7 @@ export function HomeUnlock() {
                   key={f}
                   className="flex items-start gap-3 font-sans text-sm text-foreground"
                 >
-                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-primary" />
+                  <span className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-[#111111]" />
                   {f}
                 </li>
               ))}

@@ -21,12 +21,8 @@ export function Footer() {
   const { email, phoneDisplay, location, links } = useSiteContact()
 
   return (
-    <footer className="relative z-10 mt-auto overflow-hidden border-t border-border/70 bg-[#0b1220] text-white">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-20 top-0 h-64 w-64 rounded-full bg-teal-500/20 blur-[100px]"
-      />
-      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+    <footer className="relative z-10 mt-auto bg-[#111111] text-white">
+      <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
             <BrandLogo size="lg" variant="onDark" />
@@ -37,15 +33,13 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
-              Company
-            </div>
+            <div className="text-sm font-semibold text-white">Company</div>
             <ul className="mt-5 space-y-3">
               {company.map((c) => (
                 <li key={c.label}>
                   <Link
                     href={c.href}
-                    className="text-sm text-white/65 transition-colors hover:text-teal-300"
+                    className="text-sm text-white/55 transition-colors hover:text-white"
                   >
                     {c.label}
                   </Link>
@@ -55,15 +49,13 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
-              Services
-            </div>
+            <div className="text-sm font-semibold text-white">Services</div>
             <ul className="mt-5 space-y-3">
               {services.map((s) => (
                 <li key={s.label}>
                   <Link
                     href={s.href}
-                    className="text-sm text-white/65 transition-colors hover:text-teal-300"
+                    className="text-sm text-white/55 transition-colors hover:text-white"
                   >
                     {s.label}
                   </Link>
@@ -73,17 +65,15 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
-              Get in Touch
-            </div>
-            <ul className="mt-5 space-y-3 text-sm text-white/65">
+            <div className="text-sm font-semibold text-white">Get in Touch</div>
+            <ul className="mt-5 space-y-3 text-sm text-white/55">
               <li>
-                <a href={links.mailto} className="transition-colors hover:text-teal-300">
+                <a href={links.mailto} className="transition-colors hover:text-white">
                   {email}
                 </a>
               </li>
               <li>
-                <a href={links.tel} className="transition-colors hover:text-teal-300">
+                <a href={links.tel} className="transition-colors hover:text-white">
                   {phoneDisplay}
                 </a>
               </li>
@@ -92,7 +82,7 @@ export function Footer() {
                   href={links.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-teal-300"
+                  className="transition-colors hover:text-white"
                 >
                   WhatsApp
                 </a>
@@ -102,12 +92,12 @@ export function Footer() {
                   href={links.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-teal-300"
+                  className="transition-colors hover:text-white"
                 >
                   Instagram
                 </a>
               </li>
-              <li className="text-white/45">{location}</li>
+              <li className="text-white/40">{location}</li>
             </ul>
           </div>
         </div>
@@ -120,7 +110,7 @@ export function Footer() {
             href={links.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-white/40 transition-colors hover:text-teal-300"
+            className="text-xs text-white/40 transition-colors hover:text-white"
           >
             Start a project
           </a>

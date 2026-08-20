@@ -46,7 +46,7 @@ export function AnimatedHeading({
   className = '',
   style,
   as = 'h2',
-  highlightColor = '#00DEFF',
+  highlightColor = '#75B4B1',
   whenInView = true,
 }: AnimatedHeadingProps) {
   const Tag = as
@@ -114,7 +114,7 @@ export function AnimatedHeading({
                 }}
               >
                 {isHighlight ? (
-                  <span className="gradient-text-animated">
+                  <span className="accent-text" style={{ color: highlightColor }}>
                     {coreWord}
                     {trailingPunct && (
                       <span style={{ color: 'inherit' }}>{trailingPunct}</span>
