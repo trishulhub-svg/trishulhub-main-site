@@ -49,9 +49,8 @@ const services: ServiceCard[] = [
       'Secure login for users and staff',
       'Connects to your website or software',
     ],
-    embedUrl:
-      'https://www.canva.com/design/DAHS16euWg8/SioYRL4f4ITfmCOMkUHhWA/watch?embed',
-    embedAspectPct: 90,
+    videoSrc:
+      'https://videotourl.com/videos/1787245173747-a2d523b8-abc8-499e-a55e-c746f4011a13.mp4',
   },
   {
     id: 'website',
@@ -65,7 +64,8 @@ const services: ServiceCard[] = [
       'Shop or brochure layouts as needed',
       'Launch support and simple handoff',
     ],
-    // Video embed coming next
+    videoSrc:
+      'https://videotourl.com/videos/1787247239567-7ce4f36c-c7d1-4823-92ae-02a36884da79.mp4',
   },
   {
     id: 'software',
@@ -79,7 +79,8 @@ const services: ServiceCard[] = [
       'Alerts, workflows, and daily ops screens',
       'Training so your team can run it',
     ],
-    // Video embed coming next
+    videoSrc:
+      'https://videotourl.com/videos/1787247148510-55835ce0-2d21-4fbe-874a-23cac01637ce.mp4',
   },
 ]
 
@@ -143,7 +144,7 @@ function ServiceMedia({
 }) {
   if (videoSrc) {
     return (
-      <div className="relative w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
+      <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)] lg:max-w-[50%]">
         <video
           className="aspect-[10/9] w-full object-cover"
           src={videoSrc}
@@ -151,6 +152,9 @@ function ServiceMedia({
           muted
           loop
           playsInline
+          controls={false}
+          disablePictureInPicture
+          disableRemotePlayback
           aria-label={`${title} preview`}
         />
       </div>

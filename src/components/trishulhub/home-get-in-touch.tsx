@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { Phone, Mail, Instagram } from 'lucide-react'
 import { type ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type NodeSpec = {
@@ -210,6 +211,11 @@ export function HomeGetInTouch() {
           {nodes.map((n) => (
             <AbsoluteNode key={n.id} node={n} />
           ))}
+
+          <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 scale-90 sm:scale-100">
+            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[#0d9488]/20 blur-2xl" />
+            <NexusButton href="#contact-form">Contact us</NexusButton>
+          </div>
         </div>
       </div>
     </section>
