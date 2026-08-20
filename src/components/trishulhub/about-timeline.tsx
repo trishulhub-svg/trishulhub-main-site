@@ -49,7 +49,7 @@ export function AboutTimeline() {
     <section className="relative mt-4 sm:mt-8">
       <div className="mb-14 max-w-3xl">
         <div className="mb-5 inline-flex items-center gap-3">
-          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/25 bg-sky-100 font-display text-[11px] font-medium text-primary">
+          <span className="flex h-7 w-7 items-center justify-center rounded-lg border border-primary/25 bg-teal-100 font-display text-[11px] font-medium text-primary">
             01
           </span>
           <span className="inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.2em] text-muted-foreground">
@@ -60,7 +60,7 @@ export function AboutTimeline() {
         <AnimatedHeading
           as="h2"
           variant="rise"
-          className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl"
+          className="font-display text-3xl font-medium tracking-[-0.02em] text-foreground sm:text-4xl lg:text-5xl"
         >
           Our journey
         </AnimatedHeading>
@@ -119,7 +119,7 @@ export function AboutTimeline() {
 
                     <div className="relative z-10">
                       <div className="mb-2 flex flex-wrap items-center gap-2">
-                        <span className="inline-flex items-center rounded-lg border border-primary/25 bg-sky-50 px-2.5 py-1 font-display text-sm font-bold tracking-tight text-primary">
+                        <span className="inline-flex items-center rounded-lg border border-primary/25 bg-teal-50 px-2.5 py-1 font-display text-sm font-bold tracking-tight text-primary">
                           {m.year}
                         </span>
                         <span className="inline-flex items-center gap-1.5 rounded-full border border-border bg-secondary px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">

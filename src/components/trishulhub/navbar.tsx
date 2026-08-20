@@ -34,24 +34,26 @@ export function Navbar() {
     <motion.header
       initial={reduce ? { opacity: 0 } : { y: -80, opacity: 0 }}
       animate={{ y: 0, opacity: 1 }}
-      transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
+      transition={{ duration: 0.6, delay: 0.1, ease: 'easeOut' }}
       className="fixed inset-x-0 top-0 z-50"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`mt-3 flex items-center justify-between rounded-2xl border border-border bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
-            scrolled ? 'shadow-md' : ''
+          className={`mt-3 flex items-center justify-between rounded-full border border-white/60 bg-white/70 px-4 py-2 backdrop-blur-xl transition-all duration-300 sm:px-5 ${
+            scrolled
+              ? 'shadow-[0_12px_40px_rgba(11,18,32,0.08)]'
+              : 'shadow-[0_4px_24px_rgba(11,18,32,0.04)]'
           }`}
         >
           <motion.div
-            initial={reduce ? { opacity: 0 } : { scale: 0.9, opacity: 0 }}
+            initial={reduce ? { opacity: 0 } : { scale: 0.92, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.8, delay: 0.3, ease: EASE_OUT_EXPO }}
+            transition={{ duration: 0.7, delay: 0.25, ease: EASE_OUT_EXPO }}
           >
             <BrandLogo size="md" />
           </motion.div>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="hidden items-center gap-0.5 md:flex">
             {navLinks.map((l) => {
               const active = pathname === l.href
               return (
@@ -61,8 +63,8 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     active
-                      ? 'bg-sky-100 text-primary'
-                      : 'text-muted-foreground hover:text-primary'
+                      ? 'bg-primary/10 text-primary'
+                      : 'text-muted-foreground hover:text-foreground'
                   }`}
                 >
                   {l.label}
@@ -74,24 +76,24 @@ export function Navbar() {
           <div className="flex items-center gap-2">
             <Link
               href="/admin/login"
-              className="btn-ghost hidden items-center gap-1.5 rounded-full border border-border bg-white px-4 py-2 text-sm font-medium text-muted-foreground transition-all hover:text-primary sm:inline-flex"
+              className="hidden items-center gap-1.5 rounded-full px-3.5 py-2 text-sm font-medium text-muted-foreground transition-colors hover:text-primary sm:inline-flex"
             >
               <Lock size={13} />
-              <span className="relative z-10">Login</span>
+              Login
             </Link>
             <a
               href={contactLinks.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="btn-cyan btn-shine hidden rounded-full px-5 py-2 text-sm font-semibold sm:inline-block"
+              className="btn-cyan hidden rounded-full px-5 py-2 text-sm font-semibold sm:inline-block"
             >
-              <span className="relative z-10">Get Started</span>
+              Get Started
             </a>
 
             <button
               aria-label="Toggle menu"
               onClick={() => setOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border text-foreground md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-border/80 bg-white text-foreground md:hidden"
             >
               {open ? <X size={18} /> : <Menu size={18} />}
             </button>
@@ -103,14 +105,14 @@ export function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="mt-2 flex flex-col gap-1 rounded-2xl border border-border bg-white p-3 shadow-lg md:hidden"
+            className="mt-2 flex flex-col gap-1 rounded-3xl border border-white/70 bg-white/95 p-3 shadow-xl backdrop-blur-xl md:hidden"
           >
             {navLinks.map((l) => (
               <Link
                 key={l.label}
                 href={l.href}
                 onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-sky-50 hover:text-primary"
+                className="rounded-2xl px-4 py-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-primary"
               >
                 {l.label}
               </Link>
@@ -120,7 +122,7 @@ export function Navbar() {
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="btn-cyan mt-1 rounded-lg px-4 py-3 text-center text-sm font-semibold"
+              className="btn-cyan mt-1 rounded-2xl px-4 py-3 text-center text-sm font-semibold"
             >
               Get Started
             </a>

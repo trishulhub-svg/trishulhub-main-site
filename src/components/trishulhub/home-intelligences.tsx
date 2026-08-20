@@ -45,15 +45,16 @@ const paths = pillars.map((item) => {
 
 export function HomeIntelligences() {
   return (
-    <section className="relative overflow-hidden bg-sky-50/50 py-28 sm:py-36">
+    <section className="relative overflow-hidden py-28 sm:py-36">
+      <div className="pointer-events-none absolute inset-0 atelier-mesh opacity-70" />
       <div
-        aria-hidden="true"
-        className="pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-primary/10 blur-[120px]"
+        aria-hidden
+        className="pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 rounded-full bg-teal-400/15 blur-[120px]"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-sky-100 px-3 py-1.5 font-display text-[11px] font-semibold uppercase tracking-[0.18em] text-primary ring-1 ring-primary/20">
+          <span className="section-label inline-flex items-center gap-1.5">
             <HeartHandshake className="h-3.5 w-3.5" />
             Our promise
           </span>
@@ -61,7 +62,7 @@ export function HomeIntelligences() {
           <AnimatedHeading
             as="h2"
             variant="rise"
-            className="mt-5 font-display text-4xl font-bold tracking-tight text-foreground sm:text-5xl lg:text-6xl"
+            className="mt-5 font-display text-4xl font-medium tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl"
           >
             What you can expect from us
           </AnimatedHeading>
@@ -79,10 +80,10 @@ export function HomeIntelligences() {
               whileInView={{ opacity: 1, scale: 1 }}
               viewport={{ once: true, amount: 0.3 }}
               transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl bg-white ring-1 ring-primary/30 shadow-sm"
+              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-[1.35rem] bg-white shadow-[0_12px_40px_rgba(11,18,32,0.08)] ring-1 ring-primary/20"
             >
               <span
-                aria-hidden="true"
+                aria-hidden
                 className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-primary/20 blur-md"
               />
               {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -103,7 +104,7 @@ export function HomeIntelligences() {
                 y1="0"
                 x2="4"
                 y2="40"
-                stroke="#0284c7"
+                stroke="#0f766e"
                 strokeWidth="2"
                 strokeDasharray="5 5"
                 className="animate-flow"
@@ -136,7 +137,7 @@ export function HomeIntelligences() {
                 <path
                   key={p.d}
                   d={p.d}
-                  stroke="#0284c7"
+                  stroke="#0f766e"
                   strokeWidth="2.25"
                   strokeLinecap="round"
                   fill="none"
@@ -179,12 +180,12 @@ export function HomeIntelligences() {
                   }}
                 >
                   <span
-                    className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-xl bg-white text-primary ring-1 ring-border shadow-sm sm:h-20 sm:w-20"
+                    className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-2xl bg-white text-primary shadow-[0_10px_30px_rgba(11,18,32,0.08)] ring-1 ring-border sm:h-20 sm:w-20"
                     style={{ animationDelay: `${i * 0.22}s` }}
                   >
                     <Icon size={28} strokeWidth={1.75} />
                   </span>
-                  <span className="relative z-20 mt-1.5 bg-transparent font-sans text-[11px] text-muted-foreground">
+                  <span className="relative z-20 mt-1.5 font-sans text-[11px] text-muted-foreground">
                     {item.name}
                   </span>
                 </motion.div>
@@ -198,9 +199,9 @@ export function HomeIntelligences() {
                 top: `${(HUB_Y / VB_H) * 100}%`,
               }}
             >
-              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-xl bg-white ring-1 ring-primary/30 shadow-sm sm:h-20 sm:w-20">
+              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl bg-white shadow-md ring-1 ring-primary/25 sm:h-20 sm:w-20">
                 <span
-                  aria-hidden="true"
+                  aria-hidden
                   className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-primary/20 blur-md"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -246,9 +247,9 @@ function PillarTile({ item, delay }: { item: Pillar; delay: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.4, delay, ease: EASE_OUT_EXPO }}
-      className="flex flex-col items-center rounded-2xl border border-border bg-white px-3 py-4 shadow-sm"
+      className="flex flex-col items-center rounded-2xl border border-border/70 bg-white/90 px-3 py-4 shadow-sm"
     >
-      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-sky-50 text-primary ring-1 ring-primary/15">
+      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-accent text-primary">
         <Icon size={24} strokeWidth={1.75} />
       </span>
       <span className="mt-2 text-center font-sans text-[11px] text-muted-foreground">

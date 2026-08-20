@@ -46,11 +46,8 @@ function NodeFace({ node }: { node: NodeSpec }) {
           background: `radial-gradient(circle, ${node.glow}, transparent 60%)`,
         }}
       />
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-border bg-white shadow-md transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
-        <span
-          className={`relative scale-90 sm:scale-100 ${node.color}`}
-          style={{ filter: `drop-shadow(0 0 6px ${node.glow})` }}
-        >
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-white shadow-[0_10px_28px_rgba(11,18,32,0.1)] transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
+        <span className={`relative scale-90 sm:scale-100 ${node.color}`}>
           {node.icon}
         </span>
       </div>
@@ -112,7 +109,7 @@ export function HomeGetInTouch() {
       href: links.tel,
       external: true,
       color: 'text-primary',
-      glow: 'rgba(2,132,199,0.25)',
+      glow: 'rgba(15,118,110,0.25)',
       x: 165,
       y: 430,
       icon: <Phone className="h-6 w-6" strokeWidth={1.5} />,
@@ -121,8 +118,8 @@ export function HomeGetInTouch() {
       id: 'email',
       label: 'Email',
       href: links.mailto,
-      color: 'text-sky-600',
-      glow: 'rgba(2,132,199,0.25)',
+      color: 'text-teal-700',
+      glow: 'rgba(15,118,110,0.25)',
       x: 835,
       y: 130,
       icon: <Mail className="h-6 w-6" strokeWidth={1.5} />,
@@ -132,8 +129,8 @@ export function HomeGetInTouch() {
       label: 'Instagram',
       href: links.instagram,
       external: true,
-      color: 'text-pink-600',
-      glow: 'rgba(236,72,153,0.25)',
+      color: 'text-rose-500',
+      glow: 'rgba(244,63,94,0.2)',
       x: 835,
       y: 430,
       icon: <Instagram className="h-6 w-6" strokeWidth={1.5} />,
@@ -142,15 +139,20 @@ export function HomeGetInTouch() {
 
   return (
     <section className="relative py-8 sm:py-12">
-      <div className="surface-card relative overflow-hidden rounded-3xl px-5 py-10 sm:px-10">
-        <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
+      <div className="surface-card relative overflow-hidden rounded-[2rem] px-5 py-10 sm:px-10">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-teal-300/20 blur-[90px]"
+        />
+        <div className="relative flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div className="flex max-w-3xl flex-col gap-4">
+            <p className="section-label">Channels</p>
             <motion.h2
               initial={{ opacity: 0, y: 24 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, amount: 0.15 }}
               transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-              className="font-display text-3xl font-semibold leading-[1.1] text-foreground sm:text-4xl"
+              className="font-display text-3xl font-medium leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-5xl"
             >
               Want to talk?
               <span className="mt-1 block text-muted-foreground">
@@ -158,8 +160,8 @@ export function HomeGetInTouch() {
               </span>
             </motion.h2>
             <p className="max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
-              Tap a channel below or use the contact form. Tell us what you
-              need and we will reply soon.
+              Tap a channel below or use the contact form. Tell us what you need
+              and we will reply soon.
             </p>
           </div>
 
@@ -175,16 +177,16 @@ export function HomeGetInTouch() {
           >
             <defs>
               <linearGradient id="wireContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0284c7" stopOpacity="0" />
-                <stop offset="25%" stopColor="#0284c7" stopOpacity="0.15" />
-                <stop offset="50%" stopColor="#0284c7" stopOpacity="0.4" />
-                <stop offset="75%" stopColor="#0284c7" stopOpacity="0.15" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0f766e" stopOpacity="0" />
+                <stop offset="25%" stopColor="#0f766e" stopOpacity="0.15" />
+                <stop offset="50%" stopColor="#14b8a6" stopOpacity="0.45" />
+                <stop offset="75%" stopColor="#0f766e" stopOpacity="0.15" />
+                <stop offset="100%" stopColor="#0f766e" stopOpacity="0" />
               </linearGradient>
               <linearGradient id="noodleContact" x1="0%" y1="0%" x2="100%" y2="0%">
-                <stop offset="0%" stopColor="#0284c7" stopOpacity="0" />
-                <stop offset="50%" stopColor="#38bdf8" stopOpacity="1" />
-                <stop offset="100%" stopColor="#0284c7" stopOpacity="0" />
+                <stop offset="0%" stopColor="#0f766e" stopOpacity="0" />
+                <stop offset="50%" stopColor="#5eead4" stopOpacity="1" />
+                <stop offset="100%" stopColor="#0f766e" stopOpacity="0" />
               </linearGradient>
             </defs>
 

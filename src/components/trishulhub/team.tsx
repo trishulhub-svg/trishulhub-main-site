@@ -133,10 +133,10 @@ export function Team({ founders }: { founders: Founder[] }) {
   }, [])
 
   return (
-    <section id="founders" ref={sectionRef} className="relative overflow-hidden bg-sky-50/50 py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
+    <section id="founders" ref={sectionRef} className="relative overflow-hidden bg-teal-50/40 py-24 sm:py-32 px-4 sm:px-6 lg:px-8">
       <div
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-20 blur-[120px]"
-        style={{ background: 'radial-gradient(circle, #0284c7 0%, transparent 70%)' }}
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[500px] w-[500px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-30 blur-[120px]"
+        style={{ background: 'radial-gradient(circle, #14b8a6 0%, transparent 70%)' }}
       />
 
       <div className="relative z-10 mx-auto max-w-4xl">
@@ -156,8 +156,8 @@ export function Team({ founders }: { founders: Founder[] }) {
             variant="rise"
             stagger={0.1}
             duration={0.6}
-            className="text-3xl font-bold leading-tight text-foreground sm:text-4xl lg:text-5xl"
-            style={{ fontFamily: 'var(--font-space-grotesk)' }}
+            className="text-3xl font-medium leading-tight tracking-[-0.02em] text-foreground sm:text-4xl lg:text-5xl"
+            style={{ fontFamily: 'var(--font-fraunces)' }}
           >
             Meet Our Founders
           </AnimatedHeading>
@@ -217,7 +217,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
                 style={{
                   boxShadow:
-                    '0 0 0 1px #0284c7, 0 0 32px rgba(2,132,199,0.15)',
+                    '0 0 0 1px #0f766e, 0 0 32px rgba(2,132,199,0.15)',
                 }}
               />
 
@@ -263,8 +263,8 @@ export function Team({ founders }: { founders: Founder[] }) {
                     <span
                       className="select-none text-[120px] font-bold leading-none sm:text-[140px]"
                       style={{
-                        color: '#00DEFF',
-                        fontFamily: 'var(--font-space-grotesk)',
+                        color: '#0f766e',
+                        fontFamily: 'var(--font-fraunces)',
                         textShadow: 'rgba(0,222,255,0.357) 0px 0px 24.74px',
                       }}
                     >
@@ -274,7 +274,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 )}
 
                 {/* Top-right "View Portfolio" arrow icon */}
-                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/90 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-primary/40 group-hover:bg-sky-50 group-hover:text-primary">
+                <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-border bg-white/90 text-muted-foreground backdrop-blur-sm transition-all duration-300 group-hover:border-primary/40 group-hover:bg-teal-50 group-hover:text-primary">
                   <ArrowUpRight size={16} />
                 </div>
 
@@ -320,7 +320,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 <div className="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium backdrop-blur-sm"
                   style={{
                     backgroundColor: 'rgba(2,132,199,0.1)',
-                    color: '#0284c7',
+                    color: '#0f766e',
                     border: '1px solid rgba(2,132,199,0.25)',
                   }}
                 >
@@ -332,7 +332,7 @@ export function Team({ founders }: { founders: Founder[] }) {
               <div className="relative flex flex-1 flex-col gap-2 p-5">
                 <h3
                   className="text-xl font-bold text-foreground"
-                  style={{ fontFamily: 'var(--font-space-grotesk)' }}
+                  style={{ fontFamily: 'var(--font-fraunces)' }}
                 >
                   {m.name}
                 </h3>
@@ -354,7 +354,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   className="mt-4 h-px w-full origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
                   style={{
                     background:
-                      'linear-gradient(to right, #0284c7 0%, #0369a1 100%)',
+                      'linear-gradient(to right, #0f766e 0%, #0369a1 100%)',
                   }}
                 />
               </div>

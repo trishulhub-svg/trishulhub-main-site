@@ -21,29 +21,31 @@ export function Footer() {
   const { email, phoneDisplay, location, links } = useSiteContact()
 
   return (
-    <footer className="relative z-10 mt-auto border-t border-border bg-white">
-      <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
-
-      <div className="mx-auto max-w-7xl px-4 py-14 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 gap-10 sm:grid-cols-2 lg:grid-cols-4">
+    <footer className="relative z-10 mt-auto overflow-hidden border-t border-border/70 bg-[#0b1220] text-white">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-20 top-0 h-64 w-64 rounded-full bg-teal-500/20 blur-[100px]"
+      />
+      <div className="relative mx-auto max-w-7xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 gap-12 sm:grid-cols-2 lg:grid-cols-4">
           <div className="lg:col-span-1">
-            <BrandLogo size="lg" />
-            <p className="mt-4 max-w-xs text-sm leading-relaxed text-muted-foreground">
+            <BrandLogo size="lg" variant="onDark" />
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/55">
               Websites, business software, and mobile apps — built to help your
               company work better.
             </p>
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
               Company
             </div>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-5 space-y-3">
               {company.map((c) => (
                 <li key={c.label}>
                   <Link
                     href={c.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                    className="text-sm text-white/65 transition-colors hover:text-teal-300"
                   >
                     {c.label}
                   </Link>
@@ -53,15 +55,15 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
               Services
             </div>
-            <ul className="mt-4 space-y-2.5">
+            <ul className="mt-5 space-y-3">
               {services.map((s) => (
                 <li key={s.label}>
                   <Link
                     href={s.href}
-                    className="text-sm text-muted-foreground transition-colors hover:text-primary"
+                    className="text-sm text-white/65 transition-colors hover:text-teal-300"
                   >
                     {s.label}
                   </Link>
@@ -71,23 +73,17 @@ export function Footer() {
           </div>
 
           <div>
-            <div className="text-xs uppercase tracking-[0.2em] text-muted-foreground">
+            <div className="text-[11px] uppercase tracking-[0.28em] text-white/40">
               Get in Touch
             </div>
-            <ul className="mt-4 space-y-2.5 text-sm text-muted-foreground">
+            <ul className="mt-5 space-y-3 text-sm text-white/65">
               <li>
-                <a
-                  href={links.mailto}
-                  className="transition-colors hover:text-primary"
-                >
+                <a href={links.mailto} className="transition-colors hover:text-teal-300">
                   {email}
                 </a>
               </li>
               <li>
-                <a
-                  href={links.tel}
-                  className="transition-colors hover:text-primary"
-                >
+                <a href={links.tel} className="transition-colors hover:text-teal-300">
                   {phoneDisplay}
                 </a>
               </li>
@@ -96,7 +92,7 @@ export function Footer() {
                   href={links.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-primary"
+                  className="transition-colors hover:text-teal-300"
                 >
                   WhatsApp
                 </a>
@@ -106,25 +102,25 @@ export function Footer() {
                   href={links.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="transition-colors hover:text-primary"
+                  className="transition-colors hover:text-teal-300"
                 >
                   Instagram
                 </a>
               </li>
-              <li>{location}</li>
+              <li className="text-white/45">{location}</li>
             </ul>
           </div>
         </div>
 
-        <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-border pt-6 sm:flex-row">
-          <div className="text-xs text-muted-foreground">
+        <div className="mt-14 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-7 sm:flex-row">
+          <div className="text-xs text-white/40">
             © {new Date().getFullYear()} TrishulHub. All rights reserved.
           </div>
           <a
             href={links.whatsapp}
             target="_blank"
             rel="noopener noreferrer"
-            className="text-xs text-muted-foreground transition-colors hover:text-primary"
+            className="text-xs text-white/40 transition-colors hover:text-teal-300"
           >
             Start a project
           </a>

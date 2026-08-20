@@ -18,25 +18,29 @@ export function CTA() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-3xl border border-primary/20 bg-sky-50 p-8 sm:p-14"
+          className="relative overflow-hidden rounded-[2rem] bg-foreground px-8 py-14 text-white sm:px-14 sm:py-16"
         >
           <div
-            className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full opacity-40 blur-[100px]"
-            style={{
-              background: 'radial-gradient(circle, #0284c7 0%, transparent 70%)',
-            }}
+            aria-hidden
+            className="pointer-events-none absolute -left-20 -top-20 h-72 w-72 rounded-full bg-teal-400/30 blur-[100px]"
           />
+          <div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-24 -right-16 h-80 w-80 rounded-full bg-teal-500/20 blur-[110px]"
+          />
+          <div className="atelier-grain absolute inset-0 opacity-[0.08]" />
+
           <div className="relative mx-auto max-w-3xl text-center">
             <AnimatedHeading
               as="h2"
               variant="rise"
               stagger={0.09}
               duration={0.65}
-              className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl md:text-5xl"
+              className="font-display text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl"
             >
               Ready to build something for your business?
             </AnimatedHeading>
-            <p className="mx-auto mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg">
+            <p className="mx-auto mt-6 max-w-2xl text-base text-white/60 sm:text-lg">
               Tell us what you need — a website, software, or a mobile app —
               and we will help you get started.
             </p>
@@ -44,7 +48,7 @@ export function CTA() {
               <NexusButton href={links.whatsapp}>Contact us</NexusButton>
               <a
                 href={links.mailto}
-                className="inline-flex items-center gap-2 text-sm text-muted-foreground transition-colors hover:text-primary"
+                className="inline-flex items-center gap-2 text-sm text-white/55 transition-colors hover:text-teal-300"
               >
                 <Mail size={16} />
                 {email}

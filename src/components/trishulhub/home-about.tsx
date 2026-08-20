@@ -17,48 +17,50 @@ export function HomeAbout() {
 
   return (
     <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
-      <div className="pointer-events-none absolute left-[10%] top-20 h-64 w-64 rounded-full bg-primary/10 blur-[110px]" />
+      <div className="pointer-events-none absolute right-[5%] top-10 h-72 w-72 rounded-full bg-teal-400/15 blur-[100px]" />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="max-w-4xl">
-          <motion.span
-            initial={{ opacity: 0, y: 12 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mb-4 inline-flex items-center gap-2 font-display text-xs font-semibold uppercase tracking-[0.3em] text-primary"
-          >
-            <Sparkles className="h-3.5 w-3.5" />
-            About TrishulHub
-          </motion.span>
-          <AnimatedHeading
-            as="h2"
-            variant="rise"
-            className="font-display text-3xl font-bold leading-[1.1] tracking-tight text-foreground sm:text-4xl lg:text-6xl"
-          >
-            We build the systems behind growing businesses
-          </AnimatedHeading>
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: 0.1, duration: 0.55, ease: EASE_OUT_EXPO }}
-            className="mt-5 max-w-2xl font-sans text-base text-muted-foreground sm:text-lg"
-          >
-            We started in 2023 making websites. Today we also build custom
-            software and mobile apps — simple tools that help your business run
-            better every day.
-          </motion.p>
-          <div className="mt-8">
-            <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
+        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+          <div className="lg:col-span-7">
+            <motion.span
+              initial={{ opacity: 0, y: 12 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="section-label mb-5 inline-flex items-center gap-2"
+            >
+              <Sparkles className="h-3.5 w-3.5" />
+              About TrishulHub
+            </motion.span>
+            <AnimatedHeading
+              as="h2"
+              variant="rise"
+              className="font-display text-4xl font-medium leading-[1.08] tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl"
+            >
+              We build the systems behind growing businesses
+            </AnimatedHeading>
+          </div>
+          <div className="lg:col-span-5">
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1, duration: 0.55, ease: EASE_OUT_EXPO }}
+              className="font-sans text-base leading-relaxed text-muted-foreground sm:text-lg"
+            >
+              We started in 2023 making websites. Today we also build custom
+              software and mobile apps — simple tools that help your business run
+              better every day.
+            </motion.p>
+            <div className="mt-7">
+              <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
+            </div>
           </div>
         </div>
 
-        <div className="surface-card relative mt-14 overflow-hidden rounded-[24px] p-4 sm:p-8">
-          <div className="relative mb-6 flex flex-wrap items-end justify-between gap-4">
+        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] p-5 sm:p-8 lg:p-10">
+          <div className="relative mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="font-display text-[11px] font-semibold uppercase tracking-[0.2em] text-primary">
-                How we work
-              </span>
-              <p className="mt-1 font-sans text-sm text-muted-foreground">
+              <span className="section-label">How we work</span>
+              <p className="mt-2 font-display text-2xl font-medium tracking-tight text-foreground sm:text-3xl">
                 From your idea to a live product
               </p>
             </div>
@@ -73,9 +75,9 @@ export function HomeAbout() {
             >
               <defs>
                 <linearGradient id="home-udp-beam" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#0284c7" stopOpacity="0.2" />
-                  <stop offset="50%" stopColor="#0284c7" stopOpacity="0.9" />
-                  <stop offset="100%" stopColor="#0369a1" stopOpacity="0.35" />
+                  <stop offset="0%" stopColor="#0f766e" stopOpacity="0.2" />
+                  <stop offset="50%" stopColor="#14b8a6" stopOpacity="0.9" />
+                  <stop offset="100%" stopColor="#115e59" stopOpacity="0.35" />
                 </linearGradient>
               </defs>
               <path
@@ -91,10 +93,10 @@ export function HomeAbout() {
                 className="about-udp-beam"
                 style={{ animationDelay: '0.55s' }}
               />
-              <circle r="4" fill="#0284c7">
+              <circle r="4" fill="#0f766e">
                 <animateMotion dur="2.5s" repeatCount="indefinite" path={PATH_A} />
               </circle>
-              <circle r="4" fill="#38bdf8">
+              <circle r="4" fill="#5eead4">
                 <animateMotion dur="3s" repeatCount="indefinite" path={PATH_B} />
               </circle>
             </svg>
@@ -177,13 +179,13 @@ export function HomeAbout() {
                         y1="0"
                         x2="5"
                         y2="32"
-                        stroke="#0284c7"
+                        stroke="#0f766e"
                         strokeWidth="1.75"
                         strokeDasharray="5 5"
                         className="animate-flow"
                         opacity="0.75"
                       />
-                      <circle r="3.5" fill="#0284c7">
+                      <circle r="3.5" fill="#0f766e">
                         <animateMotion
                           dur="1.5s"
                           repeatCount="indefinite"
@@ -217,18 +219,18 @@ function NodeCard({
 }) {
   return (
     <div
-      className={`rounded-[18px] border border-border bg-white p-5 shadow-sm ${className}`}
+      className={`rounded-[1.35rem] border border-border/80 bg-white/90 p-5 shadow-[0_8px_30px_rgba(11,18,32,0.05)] backdrop-blur-md ${className}`}
     >
-      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl border border-primary/20 bg-sky-50 text-primary">
+      <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-accent text-primary">
         <Icon size={16} />
       </div>
-      <p className="font-mono text-[10px] uppercase tracking-[0.18em] text-primary">
+      <p className="font-sans text-[10px] font-semibold uppercase tracking-[0.2em] text-primary">
         {label}
       </p>
-      <h3 className="mt-1 font-display text-lg font-semibold text-foreground">
+      <h3 className="mt-1 font-display text-lg font-medium text-foreground">
         {title}
       </h3>
-      <p className="mt-2 font-sans text-xs font-light leading-relaxed text-muted-foreground">
+      <p className="mt-2 font-sans text-xs leading-relaxed text-muted-foreground">
         {text}
       </p>
     </div>

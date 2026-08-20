@@ -71,29 +71,36 @@ export function ServicesPage() {
         subtitle="Three simple options — websites, custom software, and mobile apps. Pick what fits your business and we will guide you from there."
       />
 
-      <div className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8 lg:py-16">
-        <div className="flex flex-col gap-10 lg:gap-14">
+      <div className="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8 lg:py-14">
+        <div className="flex flex-col gap-8 lg:gap-10">
           {services.map((s, idx) => {
             const Icon = s.icon
             return (
               <motion.article
                 key={s.id}
                 id={s.id}
-                initial={{ opacity: 0, y: 24 }}
+                initial={{ opacity: 0, y: 28 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.12 }}
-                transition={{ duration: 0.5, delay: idx * 0.05, ease: EASE_OUT_EXPO }}
-                className="scroll-mt-28 surface-card overflow-hidden rounded-3xl p-6 sm:p-8 lg:p-10"
+                transition={{ duration: 0.55, delay: idx * 0.05, ease: EASE_OUT_EXPO }}
+                className="scroll-mt-28 group relative overflow-hidden rounded-[2rem] border border-border/60 bg-white/80 p-6 shadow-[0_16px_50px_rgba(11,18,32,0.05)] backdrop-blur-sm sm:p-8 lg:p-10"
               >
-                <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
+                <div
+                  aria-hidden
+                  className="pointer-events-none absolute -right-20 -top-20 h-56 w-56 rounded-full bg-teal-400/10 blur-3xl transition-opacity group-hover:opacity-100"
+                />
+                <div className="relative flex flex-col gap-8 lg:flex-row lg:items-start lg:justify-between">
                   <div className="max-w-2xl">
-                    <div className="mb-4 inline-flex h-12 w-12 items-center justify-center rounded-xl bg-sky-100 text-primary">
+                    <div className="mb-5 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-accent text-primary">
                       <Icon size={24} strokeWidth={1.75} />
                     </div>
-                    <h2 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+                    <p className="font-sans text-xs font-semibold uppercase tracking-[0.22em] text-primary">
+                      0{idx + 1}
+                    </p>
+                    <h2 className="mt-2 font-display text-3xl font-medium tracking-tight text-foreground sm:text-4xl">
                       {s.title}
                     </h2>
-                    <p className="mt-1 font-display text-base font-medium text-primary">
+                    <p className="mt-2 font-sans text-base font-medium text-primary/90">
                       {s.tagline}
                     </p>
                     <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground">
@@ -107,9 +114,9 @@ export function ServicesPage() {
                   </div>
                 </div>
 
-                <div className="mt-8 grid gap-6 sm:grid-cols-2">
-                  <div className="rounded-2xl border border-border bg-secondary/60 p-5">
-                    <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">
+                <div className="relative mt-8 grid gap-4 sm:grid-cols-2">
+                  <div className="rounded-[1.35rem] bg-secondary/70 p-5">
+                    <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
                       What you get
                     </h3>
                     <ul className="mt-4 space-y-3">
@@ -127,11 +134,11 @@ export function ServicesPage() {
                       ))}
                     </ul>
                   </div>
-                  <div className="rounded-2xl border border-border bg-sky-50/80 p-5">
-                    <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-foreground">
+                  <div className="rounded-[1.35rem] bg-accent/60 p-5">
+                    <h3 className="font-sans text-xs font-semibold uppercase tracking-[0.18em] text-foreground">
                       Good for
                     </h3>
-                    <p className="mt-4 font-sans text-sm leading-relaxed text-muted-foreground">
+                    <p className="mt-4 font-display text-lg font-medium leading-snug text-foreground/90">
                       {s.goodFor}
                     </p>
                   </div>
@@ -146,16 +153,20 @@ export function ServicesPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          className="mt-14 rounded-3xl border border-primary/20 bg-sky-50 p-8 text-center sm:p-10"
+          className="relative mt-12 overflow-hidden rounded-[2rem] bg-foreground p-8 text-center text-white sm:p-12"
         >
-          <h3 className="font-display text-2xl font-bold text-foreground sm:text-3xl">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_70%_20%,rgba(45,212,191,0.25),transparent_50%)]"
+          />
+          <h3 className="relative font-display text-2xl font-medium sm:text-4xl">
             Not sure which one you need?
           </h3>
-          <p className="mx-auto mt-3 max-w-lg font-sans text-muted-foreground">
+          <p className="relative mx-auto mt-3 max-w-lg font-sans text-white/60">
             Tell us about your business on WhatsApp — we will suggest the best
             option and give you a clear quote.
           </p>
-          <div className="mt-6 flex justify-center">
+          <div className="relative mt-7 flex justify-center">
             <NexusButton href={links.whatsapp}>Chat with us</NexusButton>
           </div>
         </motion.div>

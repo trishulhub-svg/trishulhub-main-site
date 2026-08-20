@@ -8,6 +8,7 @@ type BrandLogoProps = {
   size?: 'sm' | 'md' | 'lg'
   showWordmark?: boolean
   className?: string
+  variant?: 'default' | 'onDark'
 }
 
 const sizes = {
@@ -21,8 +22,10 @@ export function BrandLogo({
   size = 'md',
   showWordmark = true,
   className = '',
+  variant = 'default',
 }: BrandLogoProps) {
   const s = sizes[size]
+  const onDark = variant === 'onDark'
 
   return (
     <Link
@@ -44,9 +47,9 @@ export function BrandLogo({
         />
       </span>
       {showWordmark && (
-        <span className="font-display text-lg font-bold tracking-[0.12em] sm:text-xl">
-          <span className="text-foreground">TRISHUL</span>
-          <span className="gradient-text">HUB</span>
+        <span className="font-display text-lg font-medium tracking-[-0.01em] sm:text-xl">
+          <span className={onDark ? 'text-white' : 'text-foreground'}>Trishul</span>
+          <span className={onDark ? 'text-teal-300' : 'gradient-text'}>Hub</span>
         </span>
       )}
     </Link>

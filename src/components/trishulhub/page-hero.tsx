@@ -11,31 +11,28 @@ type PageHeroProps = {
 
 export function PageHero({ title, subtitle, label }: PageHeroProps) {
   return (
-    <section className="relative border-b border-border bg-gradient-to-b from-sky-50/80 to-background pt-24 pb-10 sm:pt-28 sm:pb-12">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_0%,rgba(2,132,199,0.08),transparent_60%)]"
-      />
+    <section className="relative overflow-hidden pt-28 pb-12 sm:pt-32 sm:pb-16">
+      <div className="pointer-events-none absolute inset-0 -z-10">
+        <div className="atelier-mesh absolute inset-0" />
+        <div className="atelier-grain absolute inset-0" />
+      </div>
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <motion.div
-          initial={{ opacity: 0, y: 16 }}
+          initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-          className="max-w-2xl"
+          transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+          className="max-w-3xl"
         >
-          {label ? (
-            <p className="mb-2 font-display text-xs font-semibold uppercase tracking-[0.25em] text-primary">
-              {label}
-            </p>
-          ) : null}
-          <h1 className="font-display text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          {label ? <p className="section-label mb-4">{label}</p> : null}
+          <h1 className="font-display text-4xl font-medium tracking-[-0.02em] text-foreground sm:text-5xl lg:text-6xl">
             {title}
           </h1>
           {subtitle ? (
-            <p className="mt-3 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
+            <p className="mt-4 max-w-xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
               {subtitle}
             </p>
           ) : null}
+          <div className="mt-8 h-px w-24 bg-gradient-to-r from-primary to-transparent" />
         </motion.div>
       </div>
     </section>

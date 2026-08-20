@@ -36,19 +36,19 @@ export function ContactPage() {
         <div className="mb-8 flex flex-wrap items-center gap-3">
           <a
             href={links.mailto}
-            className="inline-flex items-center gap-2 rounded-2xl border border-border bg-white px-4 py-2.5 text-sm text-muted-foreground shadow-sm transition-colors hover:border-primary/30 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-primary/30 hover:text-primary"
           >
             <Mail className="text-primary" size={16} />
             {email}
           </a>
           <a
             href={links.tel}
-            className="inline-flex items-center gap-2 rounded-2xl border border-border bg-white px-4 py-2.5 text-sm text-muted-foreground shadow-sm transition-colors hover:border-primary/30 hover:text-primary"
+            className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm transition-colors hover:border-primary/30 hover:text-primary"
           >
             <Phone className="text-primary" size={16} />
             {phoneDisplay}
           </a>
-          <div className="inline-flex items-center gap-2 rounded-2xl border border-border bg-white px-4 py-2.5 text-sm text-muted-foreground shadow-sm">
+          <div className="inline-flex items-center gap-2 rounded-full border border-border/70 bg-white/80 px-4 py-2.5 text-sm text-muted-foreground shadow-sm backdrop-blur-sm">
             <MapPin className="text-primary" size={16} />
             {location}
           </div>
@@ -72,9 +72,9 @@ export function ContactPage() {
             window.open(whatsappWithMessage(text), '_blank', 'noopener,noreferrer')
             setSent(true)
           }}
-          className="scroll-mt-28 surface-card p-6 sm:p-8"
+          className="scroll-mt-28 surface-card rounded-[2rem] p-6 sm:p-8"
         >
-          <h2 className="mb-6 font-display text-xl font-semibold text-foreground">
+          <h2 className="mb-6 font-display text-2xl font-medium text-foreground">
             Send us a message
           </h2>
           <label className="mb-4 block">

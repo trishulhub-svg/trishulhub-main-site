@@ -28,7 +28,7 @@ export function AboutPage() {
       />
       <motion.div
         style={{ y: layerB }}
-        className="pointer-events-none absolute right-[5%] top-[40%] h-80 w-80 rounded-full bg-sky-200/40 blur-[120px]"
+        className="pointer-events-none absolute right-[5%] top-[40%] h-80 w-80 rounded-full bg-teal-200/40 blur-[120px]"
       />
 
       <div className="relative mx-auto max-w-7xl px-4 pt-8 sm:px-6 sm:pt-12 lg:px-8">

@@ -1,17 +1,17 @@
 import type { Metadata } from "next";
-import { Space_Grotesk, Inter } from "next/font/google";
+import { Fraunces, Outfit } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const fraunces = Fraunces({
+  variable: "--font-fraunces",
   subsets: ["latin"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-inter",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
   display: "swap",
 });
@@ -62,7 +62,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${spaceGrotesk.variable} ${inter.variable} font-sans antialiased bg-background text-foreground selection:bg-sky-200 selection:text-sky-950`}
+        className={`${fraunces.variable} ${outfit.variable} font-sans antialiased bg-background text-foreground selection:bg-teal-200/70 selection:text-teal-950`}
       >
         {children}
         <Toaster />
