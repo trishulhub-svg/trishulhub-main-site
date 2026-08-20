@@ -30,6 +30,9 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
+  // Home uses the Sondero-style in-hero header — skip the global bar there.
+  if (pathname === '/') return null
+
   return (
     <motion.header
       initial={reduce ? { opacity: 0 } : { y: -24, opacity: 0 }}

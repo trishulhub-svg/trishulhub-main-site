@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Almarai, Instrument_Serif, Inter } from "next/font/google";
+import { Almarai, Instrument_Serif, Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
@@ -22,6 +22,13 @@ const instrumentSerif = Instrument_Serif({
   subsets: ["latin"],
   weight: "400",
   style: "italic",
+  display: "swap",
+});
+
+const playfair = Playfair_Display({
+  variable: "--font-playfair",
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -71,7 +78,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${almarai.variable} ${instrumentSerif.variable} font-sans antialiased bg-background text-foreground selection:bg-[#75B4B1]/35 selection:text-[#111111]`}
+        className={`${inter.variable} ${almarai.variable} ${instrumentSerif.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground selection:bg-[#75B4B1]/35 selection:text-[#111111]`}
       >
         {children}
         <Toaster />
