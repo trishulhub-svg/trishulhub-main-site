@@ -145,9 +145,9 @@ function ServiceMedia({
 }) {
   if (videoSrc) {
     return (
-      <div className="relative w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
+      <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
         <video
-          className="aspect-[10/9] w-full object-cover lg:aspect-[4/5] lg:min-h-[22rem] xl:min-h-[26rem]"
+          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[10/9] lg:min-h-[20rem]"
           src={videoSrc}
           autoPlay
           muted
@@ -254,56 +254,53 @@ export function ServicesPage() {
                     delay: i * 0.04,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="scroll-mt-28 mx-auto flex w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                  className="scroll-mt-28 mx-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] lg:max-w-4xl"
                 >
-                  {/* Mobile: stacked · Desktop: video left, copy right */}
-                  <div className="flex flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:p-6 lg:pb-0">
-                    <div className="p-3 pb-0 sm:p-4 sm:pb-0 lg:p-0">
-                      <ServiceMedia
-                        title={s.title}
-                        embedUrl={s.embedUrl}
-                        embedAspectPct={s.embedAspectPct}
-                        videoSrc={s.videoSrc}
-                        icon={Icon}
-                      />
-                    </div>
-
-                    <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-0 lg:pr-2">
-                      <div className="mb-3 flex items-center gap-2">
-                        <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
-                          {s.num}
-                        </span>
-                        <span className="text-xs font-medium text-[#6b7280]">
-                          {s.tagline}
-                        </span>
-                      </div>
-                      <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-3xl">
-                        {s.title}
-                      </h3>
-
-                      <ul className="mt-4 space-y-2.5">
-                        {s.outcomes.map((o) => (
-                          <li
-                            key={o}
-                            className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px]"
-                          >
-                            <CheckCircle2
-                              size={16}
-                              strokeWidth={1.5}
-                              className="mt-0.5 shrink-0 text-[#0D3C1F]"
-                            />
-                            {o}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
+                  {/* Video on top (centered) → text → button */}
+                  <div className="p-3 pb-0 sm:p-5 sm:pb-0 lg:px-8 lg:pt-8">
+                    <ServiceMedia
+                      title={s.title}
+                      embedUrl={s.embedUrl}
+                      embedAspectPct={s.embedAspectPct}
+                      videoSrc={s.videoSrc}
+                      icon={Icon}
+                    />
                   </div>
 
-                  {/* CTA under video + copy on desktop */}
-                  <div className="p-5 pt-0 sm:p-6 sm:pt-0 lg:px-6 lg:pb-6 lg:pt-6">
-                    <NexusButton href={links.whatsapp} fullWidth showArrow>
-                      Talk about this
-                    </NexusButton>
+                  <div className="flex flex-1 flex-col p-5 sm:p-6 lg:px-8 lg:pb-8 lg:pt-6">
+                    <div className="mb-3 flex items-center gap-2">
+                      <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
+                        {s.num}
+                      </span>
+                      <span className="text-xs font-medium text-[#6b7280]">
+                        {s.tagline}
+                      </span>
+                    </div>
+                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-3xl">
+                      {s.title}
+                    </h3>
+
+                    <ul className="mt-4 space-y-2.5">
+                      {s.outcomes.map((o) => (
+                        <li
+                          key={o}
+                          className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px]"
+                        >
+                          <CheckCircle2
+                            size={16}
+                            strokeWidth={1.5}
+                            className="mt-0.5 shrink-0 text-[#0D3C1F]"
+                          />
+                          {o}
+                        </li>
+                      ))}
+                    </ul>
+
+                    <div className="mt-6">
+                      <NexusButton href={links.whatsapp} fullWidth showArrow>
+                        Talk about this
+                      </NexusButton>
+                    </div>
                   </div>
                 </motion.article>
               )
