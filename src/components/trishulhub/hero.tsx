@@ -6,9 +6,9 @@ import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 const HERO_BG_DESKTOP =
   'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/169cdb38-2656-4555-bec1-d1acc64bb6fa_3840w.png'
-/** Mobile hero background (Kommodo export of the scenic hero art) */
+/** Mobile hero background */
 const HERO_BG_MOBILE =
-  'https://plain-apac-prod-public.komododecks.com/202608/20/RoEREkz1A5ZTNx3cwro5/image.png'
+  'https://plain-apac-prod-public.komododecks.com/202608/20/SsGFNBJYZesoLmEAxZcU/image.png'
 
 const CAROUSEL_WORDS = [
   'productive.',
@@ -82,11 +82,12 @@ export function Hero() {
         style={{
           backgroundImage: `url(${HERO_BG_MOBILE})`,
           backgroundPosition: 'center center',
+          backgroundSize: 'cover',
         }}
       />
 
-      <div ref={revealRef} className="relative z-10 flex h-full flex-col">
-        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-6 pb-16 pt-24 text-center sm:pb-20 sm:pt-28">
+      <div ref={revealRef} className="relative z-10 flex h-full min-h-screen flex-col">
+        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-6 sm:py-28">
           <h1 className="reveal-up text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#0D3C1F] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
             <span className="font-sans">
               Digital products that make your business{' '}
@@ -100,12 +101,12 @@ export function Hero() {
             </span>
           </h1>
 
-          <p className="reveal-up mt-6 max-w-xl text-base font-normal leading-relaxed text-gray-500 sm:text-lg">
+          <p className="reveal-up mt-5 max-w-xl text-sm font-normal leading-relaxed text-gray-500 sm:mt-6 sm:text-base md:text-lg">
             TrishulHub builds websites, custom software, and mobile apps for
             growing businesses — clear products your team can use every day.
           </p>
 
-          <div className="reveal-up mt-10">
+          <div className="reveal-up mt-8 sm:mt-10">
             <a
               href={links.whatsapp}
               target="_blank"
@@ -116,7 +117,7 @@ export function Hero() {
             </a>
           </div>
 
-          <div className="reveal-up mt-8">
+          <div className="reveal-up mt-6 sm:mt-8">
             <Link
               href="/services"
               className="text-sm font-medium text-[#0D3C1F]/80 underline-offset-4 transition hover:text-[#0D3C1F] hover:underline"
