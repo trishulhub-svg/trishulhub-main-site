@@ -51,7 +51,7 @@ export function HomeAbout() {
           </div>
         </div>
 
-        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] border border-[#e5e7eb] bg-white p-5 sm:p-8 lg:p-10">
+        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] border border-[#111111] bg-white p-5 sm:p-8 lg:p-10">
           <div className="relative mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
               <span className="text-sm font-medium text-[#6b7280]">
@@ -217,7 +217,7 @@ function NodeCard({
 }) {
   return (
     <div
-      className={`rounded-[1.35rem] border border-[#e5e7eb] bg-white p-5 shadow-[0_8px_30px_rgba(11,18,32,0.06)] ${className}`}
+      className={`rounded-[1.35rem] border border-[#111111] bg-white p-5 shadow-[0_8px_30px_rgba(11,18,32,0.06)] ${className}`}
     >
       <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
         <Icon size={16} />

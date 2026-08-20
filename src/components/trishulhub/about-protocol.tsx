@@ -103,7 +103,7 @@ export function AboutProtocol({
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.12 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
-          className="relative overflow-hidden rounded-2xl border border-[#e5e7eb] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] md:p-12"
+          className="relative overflow-hidden rounded-2xl border border-[#111111] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] md:p-12"
         >
           <div className="lt-glow pointer-events-none absolute -right-24 -top-24 h-72 w-72 opacity-50" />
 
@@ -131,10 +131,10 @@ export function AboutProtocol({
                     onClick={() => setStep(n)}
                     className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       active
-                        ? 'bg-[#0d9488] text-white'
+                        ? 'bg-[#0D3C1F] text-white'
                         : done
                           ? 'bg-[#e0f7fa] text-[#0d9488]'
-                          : 'border border-[#e5e7eb] bg-white text-[#6b7280]'
+                          : 'border border-[#111111] bg-white text-[#6b7280]'
                     }`}
                     aria-label={`Step ${n}`}
                   >
@@ -177,7 +177,7 @@ export function AboutProtocol({
                           ))}
                         </div>
                         <div
-                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#0d9488]"
+                          className="pointer-events-none absolute left-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#0D3C1F]"
                           style={{
                             width: `calc((100% - 2rem) * ${budgetIndex / (budgets.length - 1)})`,
                           }}
@@ -185,7 +185,7 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#0d9488] shadow-md transition-transform hover:scale-110"
+                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#0D3C1F] shadow-md transition-transform hover:scale-110"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
@@ -193,7 +193,7 @@ export function AboutProtocol({
                           className="absolute -bottom-8 transition-all"
                           style={{ left: badgeLeft }}
                         >
-                          <div className="inline-flex items-center rounded-lg bg-[#0d9488] px-3 py-1 text-white">
+                          <div className="inline-flex items-center rounded-lg bg-[#0D3C1F] px-3 py-1 text-white">
                             <span className="text-xs font-bold">{budget}</span>
                           </div>
                         </div>
@@ -215,8 +215,8 @@ export function AboutProtocol({
                           onClick={() => setLane(l)}
                           className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                             lane === l
-                              ? 'bg-[#0d9488] text-white'
-                              : 'border border-[#e5e7eb] bg-white text-[#6b7280] hover:border-[#0d9488]/40 hover:text-[#111111]'
+                              ? 'bg-[#0D3C1F] text-white'
+                              : 'border border-[#111111] bg-white text-[#6b7280] hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
                           }`}
                         >
                           {l}
@@ -234,8 +234,8 @@ export function AboutProtocol({
                           onClick={() => setTiming(t)}
                           className={`rounded-full px-4 py-2 text-sm font-medium transition-all ${
                             timing === t
-                              ? 'bg-[#0d9488] text-white'
-                              : 'border border-[#e5e7eb] bg-white text-[#6b7280] hover:border-[#0d9488]/40 hover:text-[#111111]'
+                              ? 'bg-[#0D3C1F] text-white'
+                              : 'border border-[#111111] bg-white text-[#6b7280] hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
                           }`}
                         >
                           {t}
@@ -245,7 +245,7 @@ export function AboutProtocol({
                   )}
 
                   {step === 4 && (
-                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#e5e7eb] bg-[#fafafa] p-5 text-left">
+                    <div className="mx-auto mt-6 max-w-md rounded-[1.5rem] border border-[#111111] bg-[#fafafa] p-5 text-left">
                       <p className="text-sm font-bold text-[#111111]">
                         Your project summary
                       </p>

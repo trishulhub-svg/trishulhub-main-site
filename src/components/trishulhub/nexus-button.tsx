@@ -43,9 +43,9 @@ export function NexusButton({
   const base =
     'group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none transition-all duration-200 active:scale-[0.98]'
   const primary =
-    'bg-black text-white hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(0,0,0,0.12)]'
+    'bg-[#0D3C1F] text-white hover:scale-[1.02] hover:bg-[#164a28] hover:shadow-[0_8px_24px_rgba(13,60,31,0.2)]'
   const secondary =
-    'border border-black bg-white text-black hover:scale-[1.02] hover:shadow-[0_2px_8px_rgba(0,0,0,0.04)]'
+    'border border-[#0D3C1F] bg-white text-[#0D3C1F] hover:scale-[1.02] hover:shadow-[0_2px_8px_rgba(13,60,31,0.08)]'
 
   const classNames = `${base} ${variant === 'secondary' ? secondary : primary} ${
     fullWidth ? 'w-full' : ''

@@ -159,7 +159,7 @@ export function HomeUnlock() {
           </p>
         </div>
 
-        <div className="rounded-[2rem] border-2 border-[#111111]/10 bg-white p-4 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-6 lg:border lg:border-[#e5e7eb] lg:p-8">
+        <div className="rounded-[2rem] border border-[#111111] bg-white p-4 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-6 lg:p-8">
           <div className="mb-5 flex items-center gap-3">
             <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#111111]/20 to-transparent" />
             <span className="rounded-full border border-[#111111]/15 bg-[#fafafa] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6b7280]">
@@ -183,8 +183,8 @@ export function HomeUnlock() {
                   onClick={() => setActive(plan.id)}
                   className={`relative flex min-h-[68px] w-full items-center justify-between rounded-[1.75rem] px-5 py-4 text-left transition-all duration-300 ${
                     isActive
-                      ? 'bg-[#111111] text-white shadow-[0_12px_32px_rgba(0,0,0,0.12)]'
-                      : 'border border-[#e5e7eb] bg-white text-[#6b7280] hover:border-[#111111]/20 hover:text-[#111111]'
+                      ? 'bg-[#0D3C1F] text-white shadow-[0_12px_32px_rgba(13,60,31,0.2)]'
+                      : 'border border-[#111111] bg-white text-[#6b7280] hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
                   }`}
                 >
                   <div className="flex min-w-0 items-center gap-3">
@@ -263,7 +263,7 @@ export function HomeUnlock() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] border border-[#111111]/12 bg-[#fafafa] p-6 shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] sm:p-8 lg:col-span-5"
+            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] border border-[#111111] bg-[#fafafa] p-6 sm:p-8 lg:col-span-5"
           >
             <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#0d9488]/20 blur-3xl" />
             <div className="flex flex-wrap items-start justify-between gap-4">

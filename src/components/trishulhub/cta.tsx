@@ -26,7 +26,7 @@ export function CTA() {
             variant="rise"
             stagger={0.09}
             duration={0.65}
-            highlightColor="#0d9488"
+            highlightColor="#0D3C1F"
             className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl"
           >
             Ready to build something for your *business?*
