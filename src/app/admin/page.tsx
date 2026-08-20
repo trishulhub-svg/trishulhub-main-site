@@ -1,16 +1,17 @@
-import { redirect } from 'next/navigation'
 import { getCurrentFounder } from '@/lib/auth'
 import { AdminDashboardClient } from './dashboard-client'
+import { LoginClient } from './login/login-client'
 
 export const dynamic = 'force-dynamic'
 
-export default async function AdminDashboardPage() {
+export default async function AdminPage() {
   const founder = await getCurrentFounder()
+
+  // Not signed in → portfolio login at /admin (trishulhub.com/admin)
   if (!founder) {
-    redirect('/admin/login')
+    return <LoginClient />
   }
 
-  // Pass safe subset to client
   const safeFounder = {
     id: founder.id,
     slug: founder.slug,

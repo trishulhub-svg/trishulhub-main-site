@@ -167,7 +167,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
   async function handleLogout() {
     await fetch('/admin/api/logout', { method: 'POST' })
-    router.push('/admin/login')
+    router.push('/admin')
+    router.refresh()
     router.refresh()
   }
 

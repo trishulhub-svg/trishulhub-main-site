@@ -64,12 +64,6 @@ export function Navbar() {
         </nav>
 
         <div className="flex items-center gap-3">
-          <Link
-            href="/admin/login"
-            className="hidden text-[15px] font-medium text-[#6b7280] transition hover:text-[#0a0a0a] sm:inline"
-          >
-            Log In
-          </Link>
           <a
             href={contactLinks.whatsapp}
             target="_blank"
