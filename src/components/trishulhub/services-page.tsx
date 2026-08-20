@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { CTA } from '@/components/trishulhub/cta'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -144,9 +145,9 @@ function ServiceMedia({
 }) {
   if (videoSrc) {
     return (
-      <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)] lg:max-w-[50%]">
+      <div className="relative w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
         <video
-          className="aspect-[10/9] w-full object-cover"
+          className="aspect-[10/9] w-full object-cover lg:aspect-video"
           src={videoSrc}
           autoPlay
           muted
@@ -231,15 +232,14 @@ export function ServicesPage() {
         <div className="lt-container">
           <div className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
             <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl">
-              What we build{' '}
-              <span className="accent-text">for you</span>
+              What we build <HeroAccentWord words="for you" />
             </h2>
             <p className="mt-4 text-base text-[#6b7280]">
               Watch a preview, then pick the service that fits.
             </p>
           </div>
 
-          <div className="flex flex-col gap-8 xl:snap-y xl:snap-mandatory xl:gap-0">
+          <div className="flex flex-col gap-10 lg:gap-14">
             {services.map((s, i) => {
               const Icon = s.icon
               return (
@@ -254,52 +254,56 @@ export function ServicesPage() {
                     delay: i * 0.04,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="scroll-mt-28 flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] mx-auto xl:min-h-[calc(100vh-7rem)] xl:max-w-4xl xl:snap-start xl:snap-always xl:justify-center xl:py-8"
+                  className="scroll-mt-28 mx-auto flex w-full max-w-6xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
                 >
-                  <div className="p-3 pb-0 sm:p-4 sm:pb-0">
-                    <ServiceMedia
-                      title={s.title}
-                      embedUrl={s.embedUrl}
-                      embedAspectPct={s.embedAspectPct}
-                      videoSrc={s.videoSrc}
-                      icon={Icon}
-                    />
+                  {/* Mobile: stacked · Desktop: video left, copy right */}
+                  <div className="flex flex-col lg:grid lg:grid-cols-2 lg:items-center lg:gap-8 lg:p-6 lg:pb-0">
+                    <div className="p-3 pb-0 sm:p-4 sm:pb-0 lg:p-0">
+                      <ServiceMedia
+                        title={s.title}
+                        embedUrl={s.embedUrl}
+                        embedAspectPct={s.embedAspectPct}
+                        videoSrc={s.videoSrc}
+                        icon={Icon}
+                      />
+                    </div>
+
+                    <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-0 lg:pr-2">
+                      <div className="mb-3 flex items-center gap-2">
+                        <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
+                          {s.num}
+                        </span>
+                        <span className="text-xs font-medium text-[#6b7280]">
+                          {s.tagline}
+                        </span>
+                      </div>
+                      <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-3xl">
+                        {s.title}
+                      </h3>
+
+                      <ul className="mt-4 space-y-2.5">
+                        {s.outcomes.map((o) => (
+                          <li
+                            key={o}
+                            className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px]"
+                          >
+                            <CheckCircle2
+                              size={16}
+                              strokeWidth={1.5}
+                              className="mt-0.5 shrink-0 text-[#0D3C1F]"
+                            />
+                            {o}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col p-5 sm:p-6">
-                    <div className="mb-3 flex items-center gap-2">
-                      <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
-                        {s.num}
-                      </span>
-                      <span className="text-xs font-medium text-[#6b7280]">
-                        {s.tagline}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl">
-                      {s.title}
-                    </h3>
-
-                    <ul className="mt-4 flex-1 space-y-2.5">
-                      {s.outcomes.map((o) => (
-                        <li
-                          key={o}
-                          className="flex items-start gap-2.5 text-sm text-[#111111]"
-                        >
-                          <CheckCircle2
-                            size={16}
-                            strokeWidth={1.5}
-                            className="mt-0.5 shrink-0 text-[#0D3C1F]"
-                          />
-                          {o}
-                        </li>
-                      ))}
-                    </ul>
-
-                    <div className="mt-6">
-                      <NexusButton href={links.whatsapp} fullWidth showArrow>
-                        Talk about this
-                      </NexusButton>
-                    </div>
+                  {/* CTA under video + copy on desktop */}
+                  <div className="p-5 pt-0 sm:p-6 sm:pt-0 lg:px-6 lg:pb-6 lg:pt-6">
+                    <NexusButton href={links.whatsapp} fullWidth showArrow>
+                      Talk about this
+                    </NexusButton>
                   </div>
                 </motion.article>
               )
@@ -312,7 +316,7 @@ export function ServicesPage() {
         <div className="lt-container">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
-              How we <span className="accent-text">work</span>
+              How we <HeroAccentWord words="work" />
             </h2>
             <p className="mt-4 text-base text-[#6b7280]">
               A clear four-step path from first conversation to launch.
@@ -358,8 +362,7 @@ export function ServicesPage() {
           <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
-                Why teams choose{' '}
-                <span className="accent-text">TrishulHub</span>
+                Why teams choose <HeroAccentWord words="TrishulHub" />
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[#6b7280]">
                 We keep projects understandable. You get a partner who explains

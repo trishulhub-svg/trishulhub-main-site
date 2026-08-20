@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 const BUDGETS_GBP = ['£400', '£600', '£900', '£1,200', '£1,500'] as const
@@ -112,8 +113,7 @@ export function AboutProtocol({
               Project planner
             </p>
             <h3 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] md:text-4xl">
-              Let&apos;s plan your{' '}
-              <span className="accent-text">project</span>
+              Let&apos;s plan your <HeroAccentWord words="project" />
             </h3>
             <p className="mt-3 text-[#6b7280]">
               Tell us a few details and we will reply with a simple plan within

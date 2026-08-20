@@ -4,6 +4,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { Globe, LayoutDashboard, Smartphone, Zap } from 'lucide-react'
 import { NexusButton } from './nexus-button'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type PlanId = 'website' | 'software' | 'mobile'
@@ -151,7 +152,7 @@ export function HomeUnlock() {
         <div className="mb-10 max-w-2xl">
           <p className="mb-4 text-sm font-medium text-[#6b7280]">Solutions</p>
           <h2 className="text-4xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-5xl">
-            Unlock custom <span className="accent-text">growth</span>
+            Unlock custom <HeroAccentWord words="growth" />
           </h2>
           <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
             Choose the solution that fits your business — then talk with us and

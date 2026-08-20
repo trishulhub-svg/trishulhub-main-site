@@ -39,17 +39,14 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`relative mt-3 flex items-center justify-between rounded-2xl border border-[#111111]/15 bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
+          className={`mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
             scrolled ? 'border-[#111111]/25 shadow-md' : ''
           }`}
         >
-          {/* Mobile: brand centered · Desktop: brand left */}
-          <div className="absolute left-1/2 z-10 -translate-x-1/2 md:static md:translate-x-0">
+          {/* Logo left on all breakpoints */}
+          <div className="min-w-0 shrink">
             <BrandLogo size="md" />
           </div>
-
-          {/* Spacer so mobile menu stays right while logo is centered */}
-          <div className="h-10 w-10 shrink-0 md:hidden" aria-hidden />
 
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
@@ -71,7 +68,7 @@ export function Navbar() {
             })}
           </nav>
 
-          <div className="relative z-10 flex items-center gap-2">
+          <div className="flex shrink-0 items-center gap-2">
             <a
               href={contactLinks.whatsapp}
               target="_blank"
@@ -82,7 +79,9 @@ export function Navbar() {
             </a>
 
             <button
+              type="button"
               aria-label="Toggle menu"
+              aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
               className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] md:hidden"
             >
@@ -96,24 +95,34 @@ export function Navbar() {
             initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="mt-2 flex flex-col gap-1 rounded-2xl border border-[#111111]/15 bg-white p-3 shadow-lg md:hidden"
+            className="mt-2 flex flex-col rounded-2xl border border-[#111111]/15 bg-white p-4 shadow-lg md:hidden"
           >
-            {navLinks.map((l) => (
-              <Link
-                key={l.label}
-                href={l.href}
-                onClick={() => setOpen(false)}
-                className="rounded-lg px-4 py-3 text-sm font-medium text-[#6b7280] transition-colors hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]"
-              >
-                {l.label}
-              </Link>
-            ))}
+            <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#0D3C1F]">
+              Menu
+            </p>
+            {navLinks.map((l) => {
+              const active = pathname === l.href
+              return (
+                <Link
+                  key={l.label}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className={`rounded-xl px-4 py-3.5 text-base font-semibold leading-snug tracking-tight transition-colors ${
+                    active
+                      ? 'bg-[#0D3C1F]/8 text-[#0D3C1F]'
+                      : 'text-[#111111] hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]'
+                  }`}
+                >
+                  {l.label}
+                </Link>
+              )
+            })}
             <a
               href={contactLinks.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
               onClick={() => setOpen(false)}
-              className="mt-1 flex h-11 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
+              className="mt-3 flex h-12 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
             >
               Get Started
             </a>

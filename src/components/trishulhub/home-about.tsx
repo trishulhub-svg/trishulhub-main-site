@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Database, Cpu, Send, Sparkles, Smartphone } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -30,7 +31,7 @@ export function HomeAbout() {
             </motion.span>
             <h2 className="text-4xl font-bold uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl">
               We build the systems behind{' '}
-              <span className="accent-text">growing businesses</span>
+              <HeroAccentWord words="growing businesses" />
             </h2>
           </div>
           <div className="lg:col-span-5">

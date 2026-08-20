@@ -1,5 +1,5 @@
 import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
-import { AboutPage } from '@/components/trishulhub/about-page'
+import { AboutPage, AboutValues } from '@/components/trishulhub/about-page'
 import { Team } from '@/components/trishulhub/team'
 import { db } from '@/lib/db'
 
@@ -49,6 +49,7 @@ export default async function AboutRoute() {
     <ServerSiteShell>
       <AboutPage />
       {founders.length > 0 ? <Team founders={founders} /> : null}
+      <AboutValues />
     </ServerSiteShell>
   )
 }

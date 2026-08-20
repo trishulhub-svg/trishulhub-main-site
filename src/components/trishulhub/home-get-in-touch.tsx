@@ -41,12 +41,12 @@ function NodeFace({ node }: { node: NodeSpec }) {
   return (
     <>
       <div
-        className="absolute inset-0 scale-150 rounded-full opacity-0 blur-xl transition-opacity group-hover:opacity-100"
+        className="absolute inset-0 scale-[2] rounded-full opacity-70 blur-2xl transition-opacity sm:scale-150 sm:opacity-0 sm:blur-xl sm:group-hover:opacity-100"
         style={{
           background: `radial-gradient(circle, ${node.glow}, transparent 60%)`,
         }}
       />
-      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-border/70 bg-white shadow-[0_10px_28px_rgba(11,18,32,0.1)] transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 md:h-[76px] md:w-[76px]">
+      <div className="relative flex h-12 w-12 items-center justify-center rounded-full border border-border/40 bg-white/90 shadow-[0_10px_28px_rgba(11,18,32,0.1)] ring-1 ring-white/60 backdrop-blur-md transition-transform duration-300 group-hover:scale-[1.06] sm:h-16 sm:w-16 sm:border-border/70 sm:bg-white sm:backdrop-blur-none md:h-[76px] md:w-[76px]">
         <span className={`relative scale-90 sm:scale-100 ${node.color}`}>
           {node.icon}
         </span>

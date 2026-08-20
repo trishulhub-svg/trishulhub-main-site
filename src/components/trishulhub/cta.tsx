@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Mail } from 'lucide-react'
-import { AnimatedHeading } from './animated-heading'
+import { HeroAccentWord } from './hero-accent-word'
 import { NexusButton } from './nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
@@ -21,16 +21,9 @@ export function CTA() {
           transition={{ duration: 0.65, ease: EASE_OUT_EXPO }}
           className="relative mx-auto max-w-3xl rounded-[2rem] border border-[#111111] bg-white px-8 py-14 text-center sm:px-14 sm:py-16"
         >
-          <AnimatedHeading
-            as="h2"
-            variant="rise"
-            stagger={0.09}
-            duration={0.65}
-            highlightColor="#0D3C1F"
-            className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl"
-          >
-            Ready to build something for your *business?*
-          </AnimatedHeading>
+          <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl">
+            Let&apos;s work <HeroAccentWord words="together" />
+          </h2>
           <p className="mx-auto mt-6 max-w-xl text-base text-[#6b7280] sm:text-lg">
             Tell us what you need — a website, software, or a mobile app — and
             we will help you get started.

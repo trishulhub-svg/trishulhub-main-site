@@ -48,7 +48,7 @@ export function BrandLogo({
       </span>
       {showWordmark && (
         <span
-          className={`text-base font-bold uppercase tracking-[0.06em] sm:text-lg ${
+          className={`truncate whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] sm:text-base md:text-lg ${
             onDark ? 'text-white' : 'text-[#0a0a0a]'
           }`}
         >

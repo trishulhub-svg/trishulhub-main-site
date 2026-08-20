@@ -9,7 +9,7 @@ import {
   TrendingUp,
   type LucideIcon,
 } from 'lucide-react'
-import { AnimatedHeading } from './animated-heading'
+import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const VB_W = 900
@@ -55,13 +55,9 @@ export function HomeIntelligences() {
             The TrishulHub promise
           </span>
 
-          <AnimatedHeading
-            as="h2"
-            variant="rise"
-            className="mt-5 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl"
-          >
-            What you can expect from us
-          </AnimatedHeading>
+          <h2 className="mt-5 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl">
+            What you can <HeroAccentWord words="expect from us" />
+          </h2>
 
           <p className="mx-auto mt-5 max-w-2xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
             No jargon, no hidden steps — just a clear, friendly way of working
