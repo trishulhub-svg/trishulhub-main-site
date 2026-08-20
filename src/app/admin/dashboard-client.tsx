@@ -74,7 +74,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [siteContact, setSiteContact] = useState({
     phone: '+919662106793',
     phoneDisplay: '+91 96621 06793',
-    email: 'trishulhub@gmail.com',
+    email: 'info@trishulhub.in',
     whatsapp: '919662106793',
     instagram: 'https://www.instagram.com/',
     location: 'India · Remote-friendly',
@@ -605,7 +605,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   <Input
                     value={siteContact.email}
                     onChange={(v) => setSiteContact((c) => ({ ...c, email: v }))}
-                    placeholder="trishulhub@gmail.com"
+                    placeholder="info@trishulhub.in"
                     type="email"
                   />
                 </Field>

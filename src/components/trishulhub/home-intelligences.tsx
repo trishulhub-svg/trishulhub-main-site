@@ -86,9 +86,9 @@ export function HomeIntelligences() {
               <img
                 src="/images/trishulhub-logo.png"
                 alt="TrishulHub"
-                width={48}
-                height={48}
-                className="relative z-10 h-12 w-12 object-contain object-center"
+                width={80}
+                height={80}
+                className="relative z-10 h-[72%] w-[72%] object-contain object-center"
               />
             </motion.span>
           </div>
@@ -204,9 +204,9 @@ export function HomeIntelligences() {
                 <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={48}
-                  height={48}
-                  className="relative z-10 h-10 w-10 object-contain object-center sm:h-12 sm:w-12"
+                  width={80}
+                  height={80}
+                  className="relative z-10 h-[72%] w-[72%] object-contain object-center"
                 />
               </span>
             </div>

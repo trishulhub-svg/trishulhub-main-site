@@ -24,8 +24,13 @@ export function ContactPage() {
     <div ref={ref} className="relative overflow-hidden pb-28">
       <PageHero
         label="Contact us"
-        title="Let's work together"
-        subtitle="Message us on WhatsApp, call, or fill in the form below. We reply as soon as we can."
+        title={
+          <>
+            Let&apos;s work{' '}
+            <span className="uppercase text-[#0D3C1F]">together</span>
+          </>
+        }
+        subtitle="Message us on WhatsApp, call, or email. We reply as soon as we can."
       />
 
       <div className="lt-container">
@@ -36,9 +41,9 @@ export function ContactPage() {
         <div className="space-y-4">
           <a
             href={links.mailto}
-            className="surface-card flex items-center gap-4 p-5 transition hover:-translate-y-0.5"
+            className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5 transition hover:-translate-y-0.5"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
               <Mail size={20} />
             </span>
             <div>
@@ -48,9 +53,9 @@ export function ContactPage() {
           </a>
           <a
             href={links.tel}
-            className="surface-card flex items-center gap-4 p-5 transition hover:-translate-y-0.5"
+            className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5 transition hover:-translate-y-0.5"
           >
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
               <Phone size={20} />
             </span>
             <div>
@@ -58,8 +63,8 @@ export function ContactPage() {
               <p className="text-sm text-[#6b7280]">{phoneDisplay}</p>
             </div>
           </a>
-          <div className="surface-card flex items-center gap-4 p-5">
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
+          <div className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5">
+            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
               <MapPin size={20} />
             </span>
             <div>
@@ -87,7 +92,7 @@ export function ContactPage() {
             window.open(whatsappWithMessage(text), '_blank', 'noopener,noreferrer')
             setSent(true)
           }}
-          className="surface-card scroll-mt-28 p-6 sm:p-8"
+          className="scroll-mt-28 rounded-xl border border-[#111111] bg-white p-6 sm:p-8"
         >
           <h2 className="mb-6 text-2xl font-bold text-[#0a0a0a]">
             Send us a message
@@ -132,8 +137,9 @@ export function ContactPage() {
               placeholder="Tell us what you want to build"
             />
           </label>
+          {/* Native form fields + WhatsApp submit */}
           <NexusButton type="submit" fullWidth showArrow={!sent}>
-            {sent ? 'Opening WhatsApp…' : 'Send message'}
+            {sent ? 'Opening WhatsApp…' : 'Send on WhatsApp'}
           </NexusButton>
         </motion.form>
       </div>

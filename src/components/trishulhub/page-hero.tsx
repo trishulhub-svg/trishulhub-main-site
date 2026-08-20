@@ -1,10 +1,11 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import type { ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type PageHeroProps = {
-  title: string
+  title: ReactNode
   subtitle?: string
   label?: string
 }

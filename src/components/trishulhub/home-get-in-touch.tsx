@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Phone, Mail, Instagram } from 'lucide-react'
 import { type ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
 type NodeSpec = {
@@ -139,7 +138,7 @@ export function HomeGetInTouch() {
 
   return (
     <section className="relative py-8 sm:py-12">
-      <div className="surface-card relative overflow-hidden rounded-2xl px-5 py-10 sm:px-10">
+      <div className="relative overflow-hidden rounded-xl border border-[#111111] bg-white px-5 py-10 sm:px-10">
         <div
           aria-hidden
           className="pointer-events-none absolute -right-20 top-0 h-56 w-56 rounded-full bg-[#0d9488]/20 blur-[90px]"
@@ -160,12 +159,10 @@ export function HomeGetInTouch() {
               </span>
             </motion.h2>
             <p className="max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
-              Tap a channel below or use the contact form. Tell us what you need
-              and we will reply soon.
+              Tap a channel below — WhatsApp, email, phone, or Instagram — and
+              tell us what you need. We will reply soon.
             </p>
           </div>
-
-          <NexusButton href="#contact-form">Contact form</NexusButton>
         </div>
 
         <div className="relative mx-auto mt-10 aspect-[1000/720] w-full max-w-5xl sm:mt-14 sm:aspect-[1000/560]">
@@ -213,11 +210,6 @@ export function HomeGetInTouch() {
           {nodes.map((n) => (
             <AbsoluteNode key={n.id} node={n} />
           ))}
-
-          <div className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 scale-90 sm:scale-100">
-            <div className="pointer-events-none absolute -inset-12 rounded-full bg-[#0d9488]/20 blur-2xl" />
-            <NexusButton href="#contact-form">Contact us</NexusButton>
-          </div>
         </div>
       </div>
     </section>

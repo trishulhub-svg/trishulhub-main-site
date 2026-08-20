@@ -39,11 +39,17 @@ export function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`mt-3 flex items-center justify-between rounded-2xl border border-[#111111]/15 bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
+          className={`relative mt-3 flex items-center justify-between rounded-2xl border border-[#111111]/15 bg-white/90 px-4 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
             scrolled ? 'border-[#111111]/25 shadow-md' : ''
           }`}
         >
-          <BrandLogo size="md" />
+          {/* Mobile: brand centered · Desktop: brand left */}
+          <div className="absolute left-1/2 z-10 -translate-x-1/2 md:static md:translate-x-0">
+            <BrandLogo size="md" />
+          </div>
+
+          {/* Spacer so mobile menu stays right while logo is centered */}
+          <div className="h-10 w-10 shrink-0 md:hidden" aria-hidden />
 
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
@@ -65,7 +71,7 @@ export function Navbar() {
             })}
           </nav>
 
-          <div className="flex items-center gap-2">
+          <div className="relative z-10 flex items-center gap-2">
             <a
               href={contactLinks.whatsapp}
               target="_blank"

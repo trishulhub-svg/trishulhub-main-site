@@ -215,11 +215,8 @@ export function ServicesPage() {
               Mobile apps, websites, and custom software — each with a clear
               preview of what we build for you.
             </p>
-            <div className="mt-8 flex flex-col items-center justify-center gap-3 sm:flex-row">
+            <div className="mt-8 flex justify-center">
               <NexusButton href={links.whatsapp}>Start a project</NexusButton>
-              <NexusButton href="#services" variant="secondary">
-                See what we offer
-              </NexusButton>
             </div>
           </motion.div>
         </div>
@@ -238,7 +235,7 @@ export function ServicesPage() {
             </p>
           </div>
 
-          <div className="grid gap-6 sm:gap-8 md:grid-cols-2 xl:grid-cols-3">
+          <div className="flex flex-col gap-8 xl:snap-y xl:snap-mandatory xl:gap-0">
             {services.map((s, i) => {
               const Icon = s.icon
               return (
@@ -247,13 +244,13 @@ export function ServicesPage() {
                   id={s.id}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.12 }}
+                  viewport={{ once: true, amount: 0.2 }}
                   transition={{
                     duration: 0.5,
-                    delay: i * 0.06,
+                    delay: i * 0.04,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="scroll-mt-28 flex flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                  className="scroll-mt-28 flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] mx-auto xl:min-h-[calc(100vh-7rem)] xl:max-w-4xl xl:snap-start xl:snap-always xl:justify-center xl:py-8"
                 >
                   <div className="p-3 pb-0 sm:p-4 sm:pb-0">
                     <ServiceMedia
