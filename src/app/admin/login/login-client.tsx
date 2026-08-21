@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { Lock, User as UserIcon, ArrowRight, Eye, EyeOff, AlertCircle, Loader2 } from 'lucide-react'
 import { BrandLogo } from '@/components/trishulhub/brand-logo'
@@ -44,18 +45,37 @@ export function LoginClient() {
     <div className="relative min-h-screen overflow-hidden bg-[#fafafa] text-[#111111]">
       <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 -translate-y-1/2 opacity-70" />
 
-      <a
-        href="/"
-        className="absolute left-5 top-5 z-50 text-sm font-medium text-[#6b7280] transition-colors hover:text-[#0D3C1F]"
-      >
-        ← Home
-      </a>
+      {/* Header — matches main site floating navbar */}
+      <header className="relative z-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
+            <div className="relative z-10 shrink-0">
+              <span className="md:hidden">
+                <BrandLogo size="mdPlus" showWordmark={false} href="/" />
+              </span>
+              <span className="hidden md:inline-flex">
+                <BrandLogo size="md" href="/" />
+              </span>
+            </div>
 
-      <div className="absolute right-5 top-5 z-50">
-        <BrandLogo size="sm" />
-      </div>
+            <Link
+              href="/"
+              className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] text-[#0a0a0a] md:hidden"
+            >
+              TrishulHub
+            </Link>
 
-      <div className="relative z-10 flex min-h-screen items-center justify-center px-4 py-12">
+            <Link
+              href="/"
+              className="relative z-10 inline-flex h-10 items-center rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28]"
+            >
+              Back to site
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      <div className="relative z-10 flex min-h-[calc(100vh-6rem)] items-center justify-center px-4 py-12">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -64,7 +84,7 @@ export function LoginClient() {
         >
           <div className="overflow-hidden rounded-2xl border border-[#111111] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-10">
             <div className="mb-8 flex flex-col items-center gap-2 text-center">
-              <BrandLogo size="md" />
+              <BrandLogo size="md" href="/" />
               <h1 className="mt-4 text-2xl font-bold uppercase tracking-[-0.03em] text-[#111111]">
                 Founder login
               </h1>

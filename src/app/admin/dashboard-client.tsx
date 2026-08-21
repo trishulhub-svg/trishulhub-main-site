@@ -25,7 +25,11 @@ import {
   Upload,
   ExternalLink,
   Image as ImageIcon,
+  Menu,
+  X,
 } from 'lucide-react'
+import { BrandLogo } from '@/components/trishulhub/brand-logo'
+import Link from 'next/link'
 
 type Skill = { name: string; level: number }
 type Education = { degree: string; school: string; year: string; description: string }
@@ -72,6 +76,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [newPassword, setNewPassword] = useState('')
   const [uploading, setUploading] = useState(false)
   const [uploadingImage2, setUploadingImage2] = useState(false)
+  const [navOpen, setNavOpen] = useState(false)
   const [siteContact, setSiteContact] = useState({
     phone: '+919662106793',
     phoneDisplay: '+91 96621 06793',
@@ -295,45 +300,99 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#111111]">
-      {/* Top bar */}
-      <header className="sticky top-0 z-50 border-b border-[#111111]/10 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <a
-              href={`/founders/${founder.slug}`}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-2 rounded-full border border-[#111111]/15 px-3 py-1.5 text-xs font-medium text-[#6b7280] transition-all hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]"
-              title="View my public portfolio"
+      {/* Header — matches main site floating navbar */}
+      <header className="sticky top-0 z-50">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="relative mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md sm:px-5">
+            {/* Logo left */}
+            <div className="relative z-10 shrink-0">
+              <span className="md:hidden">
+                <BrandLogo size="mdPlus" showWordmark={false} href="/" />
+              </span>
+              <span className="hidden md:inline-flex">
+                <BrandLogo size="md" href="/" />
+              </span>
+            </div>
+
+            {/* Mobile: brand name centered */}
+            <Link
+              href="/"
+              className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] text-[#0a0a0a] md:hidden"
             >
-              <Eye size={13} />
-              <span className="hidden sm:inline">View Portfolio</span>
-            </a>
-            <span className="hidden text-xs text-[#9ca3af] sm:inline">·</span>
-            <span className="hidden text-xs text-[#6b7280] sm:inline">
-              Signed in as <span className="font-semibold text-[#0D3C1F]">{founder.username}</span>
-            </span>
+              TrishulHub
+            </Link>
+
+            {/* Desktop actions */}
+            <div className="relative z-10 hidden items-center gap-2 md:flex">
+              <span className="mr-1 text-xs text-[#6b7280]">
+                Signed in as{' '}
+                <span className="font-semibold text-[#0D3C1F]">{founder.username}</span>
+              </span>
+              <a
+                href={`/founders/${founder.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex h-10 items-center gap-2 rounded-full border border-[#111111]/15 px-4 text-sm font-medium text-[#6b7280] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
+              >
+                <Eye size={14} />
+                View Portfolio
+              </a>
+              <button
+                type="button"
+                onClick={handleLogout}
+                className="inline-flex h-10 items-center gap-2 rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28]"
+              >
+                <LogOut size={14} />
+                Sign Out
+              </button>
+            </div>
+
+            {/* Mobile menu toggle */}
+            <button
+              type="button"
+              aria-label="Toggle menu"
+              aria-expanded={navOpen}
+              onClick={() => setNavOpen((v) => !v)}
+              className="relative z-10 inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] md:hidden"
+            >
+              {navOpen ? <X size={18} /> : <Menu size={18} />}
+            </button>
           </div>
 
-          {/* Top-right TrishulHub logo → links to main site */}
-          <a
-            href="/"
-            className="flex items-center gap-2 rounded-full border border-[#111111]/15 bg-white px-4 py-1.5 backdrop-blur-md transition-all hover:border-[#0D3C1F]/40 hover:bg-[#0D3C1F]/5"
-            title="Back to TrishulHub"
-          >
-            <span className="text-sm font-bold tracking-[0.15em] sm:text-base">
-              <span className="text-[#111111]">TRISHUL</span>
-              <span className="text-[#0D3C1F]">HUB</span>
-            </span>
-          </a>
-
-          <button
-            onClick={handleLogout}
-            className="flex items-center gap-2 rounded-full border border-[#111111]/15 px-3 py-1.5 text-xs font-medium text-[#6b7280] transition-all hover:border-red-500/40 hover:bg-red-50 hover:text-red-600"
-          >
-            <LogOut size={13} />
-            <span className="hidden sm:inline">Sign Out</span>
-          </button>
+          {navOpen && (
+            <div className="mt-2 flex flex-col rounded-2xl border border-[#111111]/15 bg-white p-4 shadow-lg md:hidden">
+              <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#0D3C1F]">
+                Admin · {founder.username}
+              </p>
+              <a
+                href={`/founders/${founder.slug}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setNavOpen(false)}
+                className="rounded-xl px-4 py-3.5 text-base font-semibold text-[#111111] transition-colors hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]"
+              >
+                View Portfolio
+              </a>
+              <Link
+                href="/"
+                onClick={() => setNavOpen(false)}
+                className="rounded-xl px-4 py-3.5 text-base font-semibold text-[#111111] transition-colors hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]"
+              >
+                Back to site
+              </Link>
+              <button
+                type="button"
+                onClick={() => {
+                  setNavOpen(false)
+                  handleLogout()
+                }}
+                className="mt-3 flex h-12 items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
+              >
+                <LogOut size={15} />
+                Sign Out
+              </button>
+            </div>
+          )}
         </div>
       </header>
 
