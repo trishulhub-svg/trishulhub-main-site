@@ -147,7 +147,7 @@ function ServiceMedia({
     return (
       <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
         <video
-          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[25/18] lg:min-h-0"
+          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[125/72] lg:min-h-0"
           src={videoSrc}
           autoPlay
           muted
