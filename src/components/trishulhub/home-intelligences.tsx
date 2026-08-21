@@ -66,8 +66,8 @@ export function HomeIntelligences() {
           </p>
         </div>
 
-        <div className="mx-auto mt-12 max-w-md md:hidden">
-          <div className="flex justify-center">
+        <div className="mx-auto mt-12 max-w-[300px] md:hidden">
+          <div className="relative z-10 flex justify-center">
             <motion.span
               initial={{ opacity: 0, scale: 0.9 }}
               whileInView={{ opacity: 1, scale: 1 }}
@@ -90,13 +90,60 @@ export function HomeIntelligences() {
             </motion.span>
           </div>
 
-          <div className="relative mx-auto my-3 flex h-10 justify-center" aria-hidden>
-            <svg width="8" height="40" className="overflow-visible">
-              <line
-                x1="4"
-                y1="0"
-                x2="4"
-                y2="40"
+          {/* Hub → 3 top tiles → corner tiles down to bottom 2 */}
+          <div className="relative mt-1">
+            <svg
+              aria-hidden
+              viewBox="0 0 300 220"
+              preserveAspectRatio="none"
+              className="pointer-events-none absolute inset-x-0 top-0 h-full w-full overflow-visible"
+              fill="none"
+            >
+              {/* Stem from logo */}
+              <path
+                d="M150 0 V24"
+                stroke="#0d9488"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+              {/* Fork to three top boxes */}
+              <path
+                d="M150 24 L50 52"
+                stroke="#0d9488"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+              <path
+                d="M150 24 L150 52"
+                stroke="#0d9488"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+              <path
+                d="M150 24 L250 52"
+                stroke="#0d9488"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+              {/* Corner boxes down to bottom row */}
+              <path
+                d="M50 120 V155"
+                stroke="#0d9488"
+                strokeWidth="2"
+                strokeDasharray="5 5"
+                className="animate-flow"
+                opacity="0.8"
+              />
+              <path
+                d="M250 120 V155"
                 stroke="#0d9488"
                 strokeWidth="2"
                 strokeDasharray="5 5"
@@ -104,17 +151,18 @@ export function HomeIntelligences() {
                 opacity="0.8"
               />
             </svg>
-          </div>
 
-          <div className="grid grid-cols-3 gap-3">
-            {pillars.slice(0, 3).map((item, i) => (
-              <PillarTile key={item.name} item={item} delay={i * 0.06} />
-            ))}
-          </div>
-          <div className="mt-3 grid grid-cols-2 gap-3 px-8">
-            {pillars.slice(3).map((item, i) => (
-              <PillarTile key={item.name} item={item} delay={(i + 3) * 0.06} />
-            ))}
+            <div className="relative z-10 grid grid-cols-3 gap-2 pt-14">
+              {pillars.slice(0, 3).map((item, i) => (
+                <MobilePillarTile key={item.name} item={item} delay={i * 0.06} />
+              ))}
+            </div>
+
+            <div className="relative z-10 mt-8 grid grid-cols-3 gap-2">
+              <MobilePillarTile item={pillars[3]} delay={0.2} />
+              <div aria-hidden className="pointer-events-none" />
+              <MobilePillarTile item={pillars[4]} delay={0.26} />
+            </div>
           </div>
         </div>
 
@@ -214,16 +262,16 @@ export function HomeIntelligences() {
         </div>
 
         <div className="mx-auto mt-14 max-w-3xl sm:mt-16">
-          <div className="flex flex-wrap items-center justify-center gap-4 text-sm sm:gap-5 sm:text-base">
-            <div className="inline-flex items-center gap-2.5">
-              <MessageCircle className="h-5 w-5 text-[#0d9488]" />
+          <div className="flex flex-nowrap items-center justify-center gap-2 whitespace-nowrap text-[11px] sm:gap-5 sm:text-base">
+            <div className="inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5">
+              <MessageCircle className="h-3.5 w-3.5 shrink-0 text-[#0d9488] sm:h-5 sm:w-5" />
               <span className="font-display font-medium text-foreground">
                 Plain English updates
               </span>
             </div>
-            <div className="h-px w-16 border-t border-dashed border-[#0d9488]/30 sm:w-28" />
-            <div className="inline-flex items-center gap-2.5">
-              <ShieldCheck className="h-5 w-5 text-[#0d9488]" />
+            <div className="h-px w-6 shrink-0 border-t border-dashed border-[#0d9488]/30 sm:w-28" />
+            <div className="inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5">
+              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#0d9488] sm:h-5 sm:w-5" />
               <span className="font-display font-medium text-foreground">
                 Work you can trust
               </span>
@@ -235,7 +283,7 @@ export function HomeIntelligences() {
   )
 }
 
-function PillarTile({ item, delay }: { item: Pillar; delay: number }) {
+function MobilePillarTile({ item, delay }: { item: Pillar; delay: number }) {
   const Icon = item.icon
   return (
     <motion.div
@@ -243,12 +291,12 @@ function PillarTile({ item, delay }: { item: Pillar; delay: number }) {
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true, amount: 0.3 }}
       transition={{ duration: 0.4, delay, ease: EASE_OUT_EXPO }}
-      className="flex flex-col items-center rounded-2xl border border-[#111111] bg-white/90 px-3 py-4 shadow-sm"
+      className="flex flex-col items-center rounded-xl border border-[#111111] bg-white/90 px-1.5 py-2.5 shadow-sm"
     >
-      <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-[#e8f4f3] text-[#0d9488]">
-        <Icon size={34} strokeWidth={1.6} />
+      <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e8f4f3] text-[#0d9488]">
+        <Icon size={18} strokeWidth={1.7} />
       </span>
-      <span className="mt-2 text-center font-sans text-[11px] text-muted-foreground">
+      <span className="mt-1.5 text-center font-sans text-[9px] leading-tight text-muted-foreground">
         {item.name}
       </span>
     </motion.div>

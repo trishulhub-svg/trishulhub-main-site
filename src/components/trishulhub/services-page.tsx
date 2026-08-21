@@ -251,10 +251,10 @@ export function ServicesPage() {
       <section id="services" className="scroll-mt-28 bg-white py-16 sm:py-24">
         <div className="lt-container">
           <div className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
-            <h2 className="whitespace-nowrap text-[clamp(1.05rem,5.1vw,3rem)] font-bold uppercase tracking-[-0.03em] text-[#111111]">
+            <h2 className="whitespace-nowrap text-[clamp(1.4rem,6.4vw,3rem)] font-bold uppercase tracking-[-0.03em] text-[#111111]">
               What we build <HeroAccentWord words="for you" animate={false} />
             </h2>
-            <p className="mt-4 whitespace-nowrap text-[clamp(0.72rem,3.4vw,1rem)] text-[#6b7280]">
+            <p className="mt-4 whitespace-nowrap text-[clamp(0.78rem,3.6vw,1rem)] text-[#6b7280]">
               Watch a preview, then pick the service that fits.
             </p>
           </div>

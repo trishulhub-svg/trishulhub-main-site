@@ -472,8 +472,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         <div className="space-y-6">
           {tab === 'profile' && (
             <Card title="Profile Photo" icon={<UserIcon size={16} />}>
-              <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
+              <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-center sm:text-left">
+                <div className="relative mx-auto h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white sm:mx-0">
                   {founder.image ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={founder.image} alt={founder.name} className="h-full w-full object-cover" />
@@ -488,7 +488,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     </div>
                   )}
                 </div>
-                <div className="flex-1">
+                <div className="flex w-full flex-1 flex-col items-center sm:items-start">
                   <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#0D3C1F]/40 px-4 py-2 text-sm font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white">
                     {uploading ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
                     {uploading ? 'Uploading...' : 'Upload Photo'}
@@ -526,8 +526,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
           {tab === 'profile' && (
             <Card title="Image 2 (About Me)" icon={<ImageIcon size={16} />}>
-              <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-                <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
+              <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-center sm:text-left">
+                <div className="relative mx-auto h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white sm:mx-0">
                   {founder.image2 ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
@@ -542,7 +542,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     </div>
                   )}
                 </div>
-                <div className="flex-1">
+                <div className="flex w-full flex-1 flex-col items-center sm:items-start">
                   <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#0D3C1F]/40 px-4 py-2 text-sm font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white">
                     {uploadingImage2 ? (
                       <Loader2 size={14} className="animate-spin" />
