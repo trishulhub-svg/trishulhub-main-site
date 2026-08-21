@@ -6,19 +6,31 @@ type HeroAccentWordProps = {
   /** Single phrase, or a list that cycles with a typewriter write/delete loop */
   words: string | readonly string[]
   className?: string
+  /**
+   * When false, render the full Playfair italic accent immediately
+   * (same two-font look, no typing or blink cursor).
+   * @default true
+   */
+  animate?: boolean
 }
 
 /**
- * Green Playfair accent with a typewriter write-in animation and blink cursor
+ * Green Playfair accent — typewriter + blink when animate, or static otherwise
  * (same visual language as the home hero).
  */
-export function HeroAccentWord({ words, className = '' }: HeroAccentWordProps) {
+export function HeroAccentWord({
+  words,
+  className = '',
+  animate = true,
+}: HeroAccentWordProps) {
   const list = useMemo(
     () => (Array.isArray(words) ? [...words] : [words]).filter(Boolean),
     // Serialize so parent inline arrays/strings stay stable when content is equal
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [Array.isArray(words) ? words.join('\0') : words],
   )
+
+  const fullStatic = list[0] ?? ''
 
   const [index, setIndex] = useState(0)
   const [charCount, setCharCount] = useState(0)
@@ -28,7 +40,7 @@ export function HeroAccentWord({ words, className = '' }: HeroAccentWordProps) {
   const shown = full.slice(0, charCount)
 
   useEffect(() => {
-    if (!full) return
+    if (!animate || !full) return
 
     if (phase === 'holding') {
       const id = window.setTimeout(() => setPhase('deleting'), 1600)
@@ -55,7 +67,17 @@ export function HeroAccentWord({ words, className = '' }: HeroAccentWordProps) {
     }
     const id = window.setTimeout(() => setCharCount((n) => n - 1), 38)
     return () => window.clearTimeout(id)
-  }, [phase, charCount, full, list.length])
+  }, [animate, phase, charCount, full, list.length])
+
+  if (!animate) {
+    return (
+      <span
+        className={`font-playfair italic normal-case text-[#0D3C1F] ${className}`}
+      >
+        {fullStatic}
+      </span>
+    )
+  }
 
   return (
     <span

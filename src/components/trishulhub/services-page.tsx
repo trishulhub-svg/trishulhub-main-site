@@ -18,6 +18,7 @@ import {
 } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { CTA } from '@/components/trishulhub/cta'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -236,7 +237,7 @@ export function ServicesPage() {
             <p className="mb-3 text-sm font-medium text-[#6b7280]">Services</p>
             <h1 className="text-4xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
               Built for how your{' '}
-              <span className="text-[#0D3C1F]">business works</span>
+              <HeroAccentWord words="business works" animate={false} />
             </h1>
             <p className="mt-4 max-w-xl text-lg leading-relaxed text-[#6b7280]">
               Mobile apps, websites, and custom software — each with a clear
@@ -251,7 +252,7 @@ export function ServicesPage() {
         <div className="lt-container">
           <div className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
             <h2 className="whitespace-nowrap text-[clamp(1.05rem,5.1vw,3rem)] font-bold uppercase tracking-[-0.03em] text-[#111111]">
-              What we build <span className="text-[#0D3C1F]">for you</span>
+              What we build <HeroAccentWord words="for you" animate={false} />
             </h2>
             <p className="mt-4 whitespace-nowrap text-[clamp(0.72rem,3.4vw,1rem)] text-[#6b7280]">
               Watch a preview, then pick the service that fits.
@@ -332,7 +333,7 @@ export function ServicesPage() {
         <div className="lt-container">
           <div className="mx-auto max-w-2xl text-center">
             <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
-              How we <span className="text-[#0D3C1F]">work</span>
+              How we <HeroAccentWord words="work" animate={false} />
             </h2>
             <p className="mt-4 text-base text-[#6b7280]">
               A clear four-step path from first conversation to launch.
@@ -378,7 +379,8 @@ export function ServicesPage() {
           <div className="grid items-start gap-12 lg:grid-cols-12 lg:gap-16">
             <div className="lg:col-span-5">
               <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
-                Why teams choose <span className="text-[#0D3C1F]">TrishulHub</span>
+                Why teams choose{' '}
+                <HeroAccentWord words="TrishulHub" animate={false} />
               </h2>
               <p className="mt-4 text-base leading-relaxed text-[#6b7280]">
                 We keep projects understandable. You get a partner who explains

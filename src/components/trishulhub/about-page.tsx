@@ -4,6 +4,7 @@ import { useRef } from 'react'
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { AboutTimeline } from '@/components/trishulhub/about-timeline'
 import { PageHero } from '@/components/trishulhub/page-hero'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { Shield, HeartHandshake, Target, Sparkles } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -88,7 +89,8 @@ export function AboutPage() {
         label="About us"
         title={
           <>
-            The team behind <span className="text-[#0D3C1F]">TrishulHub</span>
+            The team behind{' '}
+            <HeroAccentWord words="TrishulHub" animate={false} />
           </>
         }
         subtitle="We build websites, custom software, and mobile apps that help businesses work with clearer tools and fewer headaches."
@@ -99,7 +101,7 @@ export function AboutPage() {
         className="lt-glow pointer-events-none absolute left-[8%] top-40 h-64 w-64 opacity-50"
       />
 
-      <div className="lt-container">
+      <div className="lt-container mt-6 md:mt-12 lg:mt-16">
         <div className="rounded-xl border border-[#111111] bg-white p-4 sm:p-6">
           <AboutTimeline />
         </div>

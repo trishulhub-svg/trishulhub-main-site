@@ -5,6 +5,7 @@ import { motion, useScroll, useTransform } from 'framer-motion'
 import { Mail, MapPin, Phone } from 'lucide-react'
 import { PageHero } from '@/components/trishulhub/page-hero'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
@@ -26,7 +27,7 @@ export function ContactPage() {
         label="Contact us"
         title={
           <>
-            Let&apos;s work <span className="text-[#0D3C1F]">together</span>
+            Let&apos;s work <HeroAccentWord words="together" animate={false} />
           </>
         }
         subtitle="Message us on WhatsApp, call, or email. We reply as soon as we can."
