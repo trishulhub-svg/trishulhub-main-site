@@ -398,63 +398,26 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
         {/* Heading */}
-        <div className="mb-8 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-          <div>
-            <h1
-              className="text-3xl font-bold sm:text-4xl"
-              style={{ fontFamily: 'var(--font-space-grotesk)' }}
+        <div className="mb-8">
+          <h1
+            className="text-3xl font-bold sm:text-4xl"
+            style={{ fontFamily: 'var(--font-space-grotesk)' }}
+          >
+            <span className="text-[#111111]">Edit </span>
+            <span className="text-[#0D3C1F]">{founder.name}&apos;s Portfolio</span>
+          </h1>
+          <p className="mt-2 text-sm text-[#6b7280]">
+            Changes save to your public portfolio page at{' '}
+            <a
+              href={`/founders/${founder.slug}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="font-medium text-[#0D3C1F] hover:underline"
             >
-              <span className="text-[#111111]">Edit </span>
-              <span className="text-[#0D3C1F]">{founder.name}&apos;s Portfolio</span>
-            </h1>
-            <p className="mt-2 text-sm text-[#6b7280]">
-              Changes save instantly to your public portfolio page at{' '}
-              <a
-                href={`/founders/${founder.slug}`}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="font-medium text-[#0D3C1F] hover:underline"
-              >
-                /founders/{founder.slug}
-                <ExternalLink size={11} className="ml-1 inline" />
-              </a>
-            </p>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <AnimatePresence mode="wait">
-              {savedAt && (
-                <motion.span
-                  key={savedAt}
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0 }}
-                  className="flex items-center gap-1.5 text-sm font-medium text-emerald-700"
-                >
-                  <CheckCircle2 size={15} />
-                  Saved
-                </motion.span>
-              )}
-              {error && (
-                <motion.span
-                  initial={{ opacity: 0, y: -5 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="flex items-center gap-1.5 text-sm font-medium text-red-600"
-                >
-                  <AlertCircle size={15} />
-                  {error}
-                </motion.span>
-              )}
-            </AnimatePresence>
-            <button
-              onClick={handleSave}
-              disabled={saving}
-              className="flex items-center gap-2 rounded-full bg-[#0D3C1F] px-5 py-2.5 text-sm font-semibold text-white transition-all hover:bg-[#164a28] disabled:cursor-not-allowed disabled:opacity-60"
-            >
-              {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-              {saving ? 'Saving...' : 'Save Changes'}
-            </button>
-          </div>
+              /founders/{founder.slug}
+              <ExternalLink size={11} className="ml-1 inline" />
+            </a>
+          </p>
         </div>
 
         {/* Tabs */}
@@ -1072,15 +1035,16 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                   />
                 </Field>
                 <p className="text-xs text-[#9ca3af]">
-                  Click <span className="font-semibold text-[#0D3C1F]">Save Changes</span> at the top right to apply.
+                  Click <span className="font-semibold text-[#0D3C1F]">Save Changes</span> at the
+                  bottom to apply.
                 </p>
               </div>
             </Card>
           )}
         </div>
 
-        {/* Bottom save bar (mobile-friendly) */}
-        <div className="mt-10 flex items-center justify-end gap-3 border-t border-[#111111]/15 pt-6">
+        {/* Bottom save bar */}
+        <div className="mt-10 flex flex-col items-center justify-center gap-3 border-t border-[#111111]/15 pt-6">
           <AnimatePresence mode="wait">
             {savedAt && (
               <motion.span
@@ -1088,20 +1052,32 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                 initial={{ opacity: 0, y: -5 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                className="flex items-center gap-1.5 text-sm font-medium text-green-400"
+                className="flex items-center gap-1.5 text-sm font-medium text-emerald-700"
               >
                 <CheckCircle2 size={15} />
                 Saved
               </motion.span>
             )}
+            {error && (
+              <motion.span
+                key={error}
+                initial={{ opacity: 0, y: -5 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="flex items-center gap-1.5 text-sm font-medium text-red-600"
+              >
+                <AlertCircle size={15} />
+                {error}
+              </motion.span>
+            )}
           </AnimatePresence>
           <button
+            type="button"
             onClick={handleSave}
             disabled={saving}
-            className="flex items-center gap-2 rounded-full bg-[#0D3C1F] px-6 py-3 text-sm font-semibold text-white transition-all hover:bg-[#164a28] disabled:cursor-not-allowed disabled:opacity-60"
+            className="flex items-center justify-center gap-2 rounded-full bg-[#0D3C1F] px-8 py-3 text-sm font-semibold text-white transition-all hover:bg-[#164a28] disabled:cursor-not-allowed disabled:opacity-60"
           >
             {saving ? <Loader2 size={15} className="animate-spin" /> : <Save size={15} />}
-            {saving ? 'Saving...' : 'Save All Changes'}
+            {saving ? 'Saving...' : 'Save Changes'}
           </button>
         </div>
       </div>
