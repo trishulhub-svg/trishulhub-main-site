@@ -191,9 +191,24 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         setError(data?.error || 'Upload failed')
         return
       }
+
+      const url = data.url as string
       setFounder((f) =>
-        slot === 'image' ? { ...f, image: data.url } : { ...f, image2: data.url },
+        slot === 'image' ? { ...f, image: url } : { ...f, image2: url },
       )
+
+      // Persist immediately so portfolio updates without a separate Save click
+      const saveRes = await fetch('/admin/api/update-profile', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(slot === 'image' ? { image: url } : { image2: url }),
+      })
+      const saveData = await saveRes.json()
+      if (!saveRes.ok || !saveData.ok) {
+        setError(saveData?.error || 'Uploaded, but failed to save. Click Save Changes.')
+        return
+      }
+      setSavedAt(Date.now())
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Network error during upload')
     } finally {
