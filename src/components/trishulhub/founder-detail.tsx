@@ -1,6 +1,5 @@
 'use client'
 
-import { useEffect, useRef } from 'react'
 import { motion } from 'framer-motion'
 import {
   ArrowLeft,
@@ -33,7 +32,7 @@ type Founder = {
   bio: string
   projects: string
   image: string | null
-  videoUrl: string | null
+  image2: string | null
   dateOfBirth: string | null
   address: string | null
   zipCode: string | null
@@ -65,48 +64,16 @@ type Founder = {
   }[]
 }
 
-const FOUNDER_VIDEOS: Record<string, string> = {
-  taroon: '/videos/founder-taroon.mp4',
-  akshat: '/videos/founder-akshat.mp4',
-  pruthvi: '/videos/founder-pruthvi.mp4',
-}
-
 const socialBtn =
   'flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/20 text-[#6b7280] transition-all hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white'
 
 export function FounderDetailClient({
-  slug,
   founder: f,
 }: {
   slug: string
   founder: Founder
 }) {
-  const founderVideo = f.videoUrl || FOUNDER_VIDEOS[slug] || null
-  const videoRef = useRef<HTMLVideoElement>(null)
-
-  useEffect(() => {
-    const v = videoRef.current
-    if (!v) return
-    const tryPlay = () => {
-      v.muted = true
-      v.play().catch(() => {})
-    }
-    tryPlay()
-    const onFirstInteraction = () => {
-      tryPlay()
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-    window.addEventListener('click', onFirstInteraction)
-    window.addEventListener('touchstart', onFirstInteraction)
-    window.addEventListener('keydown', onFirstInteraction)
-    return () => {
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-  }, [])
+  const aboutImage = f.image2 || f.image
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#111111]">
@@ -198,20 +165,7 @@ export function FounderDetailClient({
           >
             <div className="relative mx-auto aspect-[4/5] w-full max-w-md overflow-hidden rounded-2xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]">
               <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]" />
-              {founderVideo ? (
-                <video
-                  ref={videoRef}
-                  src={founderVideo}
-                  autoPlay
-                  loop
-                  muted
-                  playsInline
-                  preload="auto"
-                  aria-hidden
-                  className="absolute inset-0 h-full w-full object-cover"
-                  style={{ objectPosition: 'center top' }}
-                />
-              ) : f.image ? (
+              {f.image ? (
                 // eslint-disable-next-line @next/next/no-img-element
                 <img
                   src={f.image}
@@ -251,10 +205,10 @@ export function FounderDetailClient({
               className="flex justify-center lg:justify-start"
             >
               <div className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-[#111111] bg-[#fafafa]">
-                {f.image ? (
+                {aboutImage ? (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
-                    src={f.image}
+                    src={aboutImage}
                     alt={f.name}
                     className="absolute inset-0 h-full w-full object-cover"
                   />

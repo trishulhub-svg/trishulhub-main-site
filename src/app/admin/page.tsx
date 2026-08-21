@@ -21,6 +21,7 @@ export default async function AdminPage() {
     bio: founder.bio,
     projects: founder.projects,
     image: founder.image,
+    image2: founder.image2,
     videoUrl: founder.videoUrl,
     dateOfBirth: founder.dateOfBirth,
     address: founder.address,

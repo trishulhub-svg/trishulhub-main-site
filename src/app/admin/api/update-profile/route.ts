@@ -11,6 +11,7 @@ type UpdateBody = {
   bio?: string
   projects?: string
   image?: string | null
+  image2?: string | null
   videoUrl?: string | null
   dateOfBirth?: string | null
   address?: string | null
@@ -46,6 +47,7 @@ export async function GET() {
       bio: founder.bio,
       projects: founder.projects,
       image: founder.image,
+      image2: founder.image2,
       videoUrl: founder.videoUrl,
       dateOfBirth: founder.dateOfBirth,
       address: founder.address,
@@ -82,6 +84,7 @@ export async function PUT(req: NextRequest) {
     if (typeof body.bio === 'string') data.bio = body.bio
     if (typeof body.projects === 'string') data.projects = body.projects
     if (body.image !== undefined) data.image = body.image
+    if (body.image2 !== undefined) data.image2 = body.image2
     if (body.videoUrl !== undefined) data.videoUrl = body.videoUrl
     if (body.dateOfBirth !== undefined) data.dateOfBirth = body.dateOfBirth
     if (body.address !== undefined) data.address = body.address

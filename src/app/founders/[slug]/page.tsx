@@ -40,7 +40,7 @@ export default async function FounderPage({ params }: { params: Promise<{ slug: 
     bio: founder.bio,
     projects: founder.projects,
     image: founder.image,
-    videoUrl: founder.videoUrl,
+    image2: founder.image2,
     dateOfBirth: founder.dateOfBirth,
     address: founder.address,
     zipCode: founder.zipCode,

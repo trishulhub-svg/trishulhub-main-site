@@ -24,7 +24,7 @@ import {
   Trash2,
   Upload,
   ExternalLink,
-  Video,
+  Image as ImageIcon,
 } from 'lucide-react'
 
 type Skill = { name: string; level: number }
@@ -41,6 +41,7 @@ type Founder = {
   bio: string
   projects: string
   image: string | null
+  image2: string | null
   videoUrl: string | null
   dateOfBirth: string | null
   address: string | null
@@ -70,7 +71,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [error, setError] = useState<string | null>(null)
   const [newPassword, setNewPassword] = useState('')
   const [uploading, setUploading] = useState(false)
-  const [uploadingVideo, setUploadingVideo] = useState(false)
+  const [uploadingImage2, setUploadingImage2] = useState(false)
   const [siteContact, setSiteContact] = useState({
     phone: '+919662106793',
     phoneDisplay: '+91 96621 06793',
@@ -128,6 +129,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         bio: founder.bio,
         projects: founder.projects,
         image: founder.image,
+        image2: founder.image2,
         videoUrl: founder.videoUrl,
         dateOfBirth: founder.dateOfBirth,
         address: founder.address,
@@ -172,53 +174,31 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     router.refresh()
   }
 
-  async function handleImageUpload(file: File) {
-    setUploading(true)
+  async function handleImageUpload(file: File, slot: 'image' | 'image2' = 'image') {
+    if (slot === 'image') setUploading(true)
+    else setUploadingImage2(true)
     setError(null)
     try {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/admin/api/upload-image', { method: 'POST', body: fd })
+      const { compressImageToDataUrl } = await import('@/lib/compress-image')
+      const dataUrl = await compressImageToDataUrl(file)
+      const res = await fetch('/admin/api/upload-image', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ dataUrl }),
+      })
       const data = await res.json()
       if (!res.ok || !data.ok) {
         setError(data?.error || 'Upload failed')
         return
       }
-      setFounder((f) => ({ ...f, image: data.url }))
-    } catch {
-      setError('Network error during upload')
+      setFounder((f) =>
+        slot === 'image' ? { ...f, image: data.url } : { ...f, image2: data.url },
+      )
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Network error during upload')
     } finally {
-      setUploading(false)
-    }
-  }
-
-  /*
-   * Upload an intro video for the founder. The video is saved to
-   * /public/uploads/founders/ and the URL is stored in the founder's
-   * `videoUrl` DB field. On save, the video automatically appears on:
-   *   - the home page 'Meet The Founders' team card (replacing the photo)
-   *   - the founder's portfolio page hero (replacing the photo)
-   * If a founder has BOTH a video and a photo, the video takes priority
-   * for the team card / portfolio hero. Setting video back to null
-   * (Remove Video button) falls back to the photo.
-   */
-  async function handleVideoUpload(file: File) {
-    setUploadingVideo(true)
-    setError(null)
-    try {
-      const fd = new FormData()
-      fd.append('file', file)
-      const res = await fetch('/admin/api/upload-video', { method: 'POST', body: fd })
-      const data = await res.json()
-      if (!res.ok || !data.ok) {
-        setError(data?.error || 'Video upload failed')
-        return
-      }
-      setFounder((f) => ({ ...f, videoUrl: data.url }))
-    } catch {
-      setError('Network error during video upload')
-    } finally {
-      setUploadingVideo(false)
+      if (slot === 'image') setUploading(false)
+      else setUploadingImage2(false)
     }
   }
 
@@ -426,16 +406,15 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           {tab === 'profile' && (
             <Card title="Profile Photo" icon={<UserIcon size={16} />}>
               <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-                {/* Preview */}
                 <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
                   {founder.image ? (
-                     
+                    // eslint-disable-next-line @next/next/no-img-element
                     <img src={founder.image} alt={founder.name} className="h-full w-full object-cover" />
                   ) : (
                     <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]">
                       <span
                         className="text-5xl font-bold"
-                        style={{ color: '#0D3C1F', fontFamily: 'var(--font-space-grotesk)' }}
+                        style={{ color: '#0D3C1F' }}
                       >
                         {founder.initial}
                       </span>
@@ -453,21 +432,22 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       disabled={uploading}
                       onChange={(e) => {
                         const file = e.target.files?.[0]
-                        if (file) handleImageUpload(file)
+                        if (file) handleImageUpload(file, 'image')
                         e.target.value = ''
                       }}
                     />
                   </label>
                   <p className="mt-2 text-xs text-[#9ca3af]">
-                    PNG, JPEG, WebP, or GIF · Max 5MB · Square aspect recommended
+                    PNG, JPEG, WebP, or GIF · Auto-compressed · Portrait recommended
                   </p>
                   <p className="mt-1 text-xs text-[#9ca3af]">
-                    Used as a fallback if no intro video is set, and as the photo in the About Me section of your portfolio page.
+                    Shows as the main photo on your portfolio hero and on Meet Our Founders. Click{' '}
+                    <span className="text-[#0D3C1F]">Save Changes</span> to apply.
                   </p>
                   {founder.image && (
                     <button
                       onClick={() => setFounder((f) => ({ ...f, image: null }))}
-                      className="mt-3 block text-xs text-red-400 hover:underline"
+                      className="mt-3 block text-xs text-red-600 hover:underline"
                     >
                       Remove photo
                     </button>
@@ -478,55 +458,57 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           )}
 
           {tab === 'profile' && (
-            <Card title="Intro Video" icon={<Video size={16} />}>
+            <Card title="Image 2 (About Me)" icon={<ImageIcon size={16} />}>
               <div className="flex flex-col items-start gap-6 sm:flex-row sm:items-center">
-                {/* Preview */}
                 <div className="relative h-32 w-32 flex-shrink-0 overflow-hidden rounded-2xl border border-[#0D3C1F]/30 bg-white">
-                  {founder.videoUrl ? (
-                    <video
-                      src={founder.videoUrl}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
+                  {founder.image2 ? (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      src={founder.image2}
+                      alt={`${founder.name} about`}
                       className="h-full w-full object-cover"
-                      style={{ objectPosition: 'center top' }}
                     />
                   ) : (
                     <div className="flex h-full w-full flex-col items-center justify-center bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]">
-                      <Video size={28} style={{ color: '#0D3C1F' }} />
-                      <span className="mt-1 text-[10px] text-[#9ca3af]">No video</span>
+                      <ImageIcon size={28} className="text-[#0D3C1F]" />
+                      <span className="mt-1 text-[10px] text-[#9ca3af]">No image</span>
                     </div>
                   )}
                 </div>
                 <div className="flex-1">
                   <label className="inline-flex cursor-pointer items-center gap-2 rounded-full border border-[#0D3C1F]/40 px-4 py-2 text-sm font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white">
-                    {uploadingVideo ? <Loader2 size={14} className="animate-spin" /> : <Upload size={14} />}
-                    {uploadingVideo ? 'Uploading...' : 'Upload Video'}
+                    {uploadingImage2 ? (
+                      <Loader2 size={14} className="animate-spin" />
+                    ) : (
+                      <Upload size={14} />
+                    )}
+                    {uploadingImage2 ? 'Uploading...' : 'Upload Image 2'}
                     <input
                       type="file"
-                      accept="video/mp4,video/webm,video/ogg,video/quicktime,.mp4,.webm,.mov,.m4v"
+                      accept="image/png,image/jpeg,image/webp,image/gif"
                       className="hidden"
-                      disabled={uploadingVideo}
+                      disabled={uploadingImage2}
                       onChange={(e) => {
                         const file = e.target.files?.[0]
-                        if (file) handleVideoUpload(file)
+                        if (file) handleImageUpload(file, 'image2')
                         e.target.value = ''
                       }}
                     />
                   </label>
                   <p className="mt-2 text-xs text-[#9ca3af]">
-                    MP4, WebM, MOV · Max 30MB · 4:5 portrait aspect recommended (e.g. 858×1072)
+                    PNG, JPEG, WebP, or GIF · Auto-compressed · Portrait recommended
                   </p>
                   <p className="mt-1 text-xs text-[#9ca3af]">
-                    This video plays on a loop on your <span className="text-[#0D3C1F]">Meet The Founders</span> team card AND on your <span className="text-[#0D3C1F]">portfolio page hero</span>. It takes priority over the photo. Click <span className="text-[#0D3C1F]">Save Changes</span> below to apply.
+                    Shows in the <span className="text-[#0D3C1F]">About Me</span> section of your
+                    portfolio page. Click <span className="text-[#0D3C1F]">Save Changes</span> to
+                    apply.
                   </p>
-                  {founder.videoUrl && (
+                  {founder.image2 && (
                     <button
-                      onClick={() => setFounder((f) => ({ ...f, videoUrl: null }))}
-                      className="mt-3 block text-xs text-red-400 hover:underline"
+                      onClick={() => setFounder((f) => ({ ...f, image2: null }))}
+                      className="mt-3 block text-xs text-red-600 hover:underline"
                     >
-                      Remove video (fall back to photo)
+                      Remove image 2
                     </button>
                   )}
                 </div>

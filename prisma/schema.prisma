@@ -42,8 +42,9 @@ model Founder {
   bio          String
   projects     String   // "50+"
   // Profile details
-  image        String?  // URL or data URL of profile photo
-  videoUrl     String?  // URL of intro video — shown on home team card + portfolio hero
+  image        String?  // Main portfolio / hero photo (URL or data URL)
+  image2       String?  // About Me section photo (URL or data URL)
+  videoUrl     String?  // legacy — unused in UI (kept for DB compat)
   dateOfBirth  String?
   address      String?
   zipCode      String?

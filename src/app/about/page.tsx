@@ -19,7 +19,6 @@ export default async function AboutRoute() {
     role: string
     projects: string
     bio: string
-    videoUrl: string | null
     image: string | null
   }[] = []
 
@@ -33,7 +32,6 @@ export default async function AboutRoute() {
         role: true,
         projects: true,
         bio: true,
-        videoUrl: true,
         image: true,
       },
     })

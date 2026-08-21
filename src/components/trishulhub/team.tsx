@@ -13,13 +13,7 @@ type Founder = {
   role: string
   projects: string
   bio: string
-  videoUrl?: string | null
   image?: string | null
-}
-
-const FOUNDER_VIDEOS: Record<string, string> = {
-  taroon: '/videos/founder-taroon.mp4',
-  pruthvi: '/videos/founder-pruthvi.mp4',
 }
 
 function ProjectsCountUp({ raw }: { raw: string }) {
@@ -83,40 +77,11 @@ function ProjectsCountUp({ raw }: { raw: string }) {
 }
 
 export function Team({ founders }: { founders: Founder[] }) {
-  const sectionRef = useRef<HTMLElement>(null)
   const reduce = useReducedMotion()
-
-  useEffect(() => {
-    const section = sectionRef.current
-    if (!section) return
-    const videos = Array.from(section.querySelectorAll<HTMLVideoElement>('video'))
-    const kick = () => {
-      videos.forEach((v) => {
-        v.muted = true
-        v.play().catch(() => {})
-      })
-    }
-    kick()
-    const onFirstInteraction = () => {
-      kick()
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-    window.addEventListener('click', onFirstInteraction)
-    window.addEventListener('touchstart', onFirstInteraction)
-    window.addEventListener('keydown', onFirstInteraction)
-    return () => {
-      window.removeEventListener('click', onFirstInteraction)
-      window.removeEventListener('touchstart', onFirstInteraction)
-      window.removeEventListener('keydown', onFirstInteraction)
-    }
-  }, [])
 
   return (
     <section
       id="founders"
-      ref={sectionRef}
       className="relative overflow-hidden bg-[#fafafa] px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
     >
       <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-50" />
@@ -158,7 +123,6 @@ export function Team({ founders }: { founders: Founder[] }) {
           className="grid grid-cols-1 gap-6 sm:grid-cols-2"
         >
           {founders.map((m) => {
-            const founderVideo = m.videoUrl || FOUNDER_VIDEOS[m.slug] || null
             const founderImage = m.image || null
             return (
               <motion.a
@@ -180,21 +144,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                 <div className="relative aspect-square overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]" />
 
-                  {founderVideo && (
-                    <video
-                      src={founderVideo}
-                      autoPlay
-                      loop
-                      muted
-                      playsInline
-                      preload="auto"
-                      aria-hidden
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-                      style={{ objectPosition: 'center top' }}
-                    />
-                  )}
-
-                  {!founderVideo && founderImage && (
+                  {founderImage ? (
                     // eslint-disable-next-line @next/next/no-img-element
                     <img
                       src={founderImage}
@@ -202,9 +152,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       style={{ objectPosition: 'center top' }}
                     />
-                  )}
-
-                  {!founderVideo && !founderImage && (
+                  ) : (
                     <div className="absolute inset-0 flex items-center justify-center">
                       <span className="select-none text-[120px] font-bold leading-none text-[#0D3C1F]/25 sm:text-[140px]">
                         {m.initial}
