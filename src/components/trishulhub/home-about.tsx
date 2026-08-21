@@ -31,7 +31,7 @@ export function HomeAbout() {
             </motion.span>
             <h2 className="text-4xl font-bold uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl">
               We build the systems behind{' '}
-              <HeroAccentWord words="growing businesses" />
+              <HeroAccentWord words="growing businesses" animate={false} />
             </h2>
           </div>
           <div className="lg:col-span-5">

@@ -22,7 +22,7 @@ export function CTA() {
           className="relative mx-auto max-w-3xl rounded-[2rem] border border-[#111111] bg-white px-8 py-14 text-center sm:px-14 sm:py-16"
         >
           <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl md:text-5xl">
-            Let&apos;s work <HeroAccentWord words="together" />
+            Let&apos;s work <HeroAccentWord words="together" animate={false} />
           </h2>
           <p className="mx-auto mt-6 max-w-xl text-base text-[#6b7280] sm:text-lg">
             Tell us what you need — a website, software, or a mobile app — and

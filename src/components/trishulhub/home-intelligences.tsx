@@ -56,7 +56,8 @@ export function HomeIntelligences() {
           </span>
 
           <h2 className="mt-5 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl">
-            What you can <HeroAccentWord words="expect from us" />
+            What you can{' '}
+            <HeroAccentWord words="expect from us" animate={false} />
           </h2>
 
           <p className="mx-auto mt-5 max-w-2xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -84,7 +85,7 @@ export function HomeIntelligences() {
                 alt="TrishulHub"
                 width={80}
                 height={80}
-                className="relative z-10 h-[72%] w-[72%] object-contain object-center"
+                className="relative z-10 h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
               />
             </motion.span>
           </div>
@@ -175,7 +176,10 @@ export function HomeIntelligences() {
                     className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-[#111111] bg-white text-[#0d9488] shadow-[0_10px_30px_rgba(11,18,32,0.08)] sm:h-20 sm:w-20"
                     style={{ animationDelay: `${i * 0.22}s` }}
                   >
-                    <Icon size={28} strokeWidth={1.75} />
+                    <Icon
+                      className="h-10 w-10 sm:h-12 sm:w-12"
+                      strokeWidth={1.55}
+                    />
                   </span>
                   <span className="relative z-20 mt-1.5 font-sans text-[11px] text-muted-foreground">
                     {item.name}
@@ -202,7 +206,7 @@ export function HomeIntelligences() {
                   alt="TrishulHub"
                   width={80}
                   height={80}
-                  className="relative z-10 h-[72%] w-[72%] object-contain object-center"
+                  className="relative z-10 mx-auto my-auto block h-[92%] w-[92%] object-contain object-center"
                 />
               </span>
             </div>
@@ -242,7 +246,7 @@ function PillarTile({ item, delay }: { item: Pillar; delay: number }) {
       className="flex flex-col items-center rounded-2xl border border-[#111111] bg-white/90 px-3 py-4 shadow-sm"
     >
       <span className="inline-flex h-14 w-14 items-center justify-center rounded-xl bg-[#e8f4f3] text-[#0d9488]">
-        <Icon size={24} strokeWidth={1.75} />
+        <Icon size={34} strokeWidth={1.6} />
       </span>
       <span className="mt-2 text-center font-sans text-[11px] text-muted-foreground">
         {item.name}

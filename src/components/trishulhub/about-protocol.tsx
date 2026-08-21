@@ -113,7 +113,8 @@ export function AboutProtocol({
               Project planner
             </p>
             <h3 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] md:text-4xl">
-              Let&apos;s plan your <HeroAccentWord words="project" />
+              Let&apos;s plan your{' '}
+              <HeroAccentWord words="project" animate={false} />
             </h3>
             <p className="mt-3 text-[#6b7280]">
               Tell us a few details and we will reply with a simple plan within

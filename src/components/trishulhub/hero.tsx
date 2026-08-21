@@ -88,12 +88,12 @@ export function Hero() {
 
       <div ref={revealRef} className="relative z-10 flex h-full min-h-screen flex-col">
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-6 sm:py-28">
-          <h1 className="reveal-up text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#0D3C1F] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
-            <span className="font-sans">
+          <h1 className="reveal-up text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#111111] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
+            <span className="font-sans text-[#111111]">
               Digital products that make your business{' '}
             </span>
             <span
-              className="inline-block border-r-4 border-[#0D3C1F] pr-1 font-playfair italic animate-blink transition-opacity duration-200"
+              className="inline-block border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
               style={{ opacity: fade ? 1 : 0 }}
               aria-live="polite"
             >
@@ -111,7 +111,7 @@ export function Hero() {
               href={links.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex h-12 items-center justify-center bg-[#0D3C1F] px-8 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#164a28] sm:h-14 sm:px-10 sm:text-sm"
+              className="inline-flex h-12 items-center justify-center rounded-md bg-[#0D3C1F] px-8 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#164a28] sm:h-14 sm:px-10 sm:text-sm"
             >
               Let&apos;s build yours
             </a>
