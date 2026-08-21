@@ -27,7 +27,8 @@ type UpdateBody = {
   education?: { degree: string; school: string; year: string; description: string }[]
   experience?: { role: string; company: string; period: string; description: string }[]
   projectsList?: { name: string; description: string; link: string; year: string }[]
-  password?: string // optional — only update if non-empty
+  currentPassword?: string
+  password?: string // optional — only update if non-empty + currentPassword matches
 }
 
 export async function GET() {
@@ -122,8 +123,29 @@ export async function PUT(req: NextRequest) {
         body.projectsList.filter((p) => p && p.name && p.name.trim()),
       )
     }
-    if (typeof body.password === 'string' && body.password.trim().length >= 4) {
-      data.password = body.password.trim()
+    if (typeof body.password === 'string' && body.password.trim().length > 0) {
+      const next = body.password.trim()
+      if (next.length < 4) {
+        return NextResponse.json(
+          { ok: false, error: 'New password must be at least 4 characters.' },
+          { status: 400 },
+        )
+      }
+      const current =
+        typeof body.currentPassword === 'string' ? body.currentPassword : ''
+      if (!current) {
+        return NextResponse.json(
+          { ok: false, error: 'Current password is required to change password.' },
+          { status: 400 },
+        )
+      }
+      if (current !== founder.password) {
+        return NextResponse.json(
+          { ok: false, error: 'Current password is incorrect.' },
+          { status: 400 },
+        )
+      }
+      data.password = next
     }
 
     const updated = await db.founder.update({

@@ -16,6 +16,7 @@ import {
   Lock,
   LogOut,
   Eye,
+  EyeOff,
   Save,
   Loader2,
   CheckCircle2,
@@ -73,7 +74,12 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   const [saving, setSaving] = useState(false)
   const [savedAt, setSavedAt] = useState<number | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [currentPassword, setCurrentPassword] = useState('')
   const [newPassword, setNewPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [showCurrentPass, setShowCurrentPass] = useState(false)
+  const [showNewPass, setShowNewPass] = useState(false)
+  const [showConfirmPass, setShowConfirmPass] = useState(false)
   const [uploading, setUploading] = useState(false)
   const [uploadingImage2, setUploadingImage2] = useState(false)
   const [navOpen, setNavOpen] = useState(false)
@@ -151,7 +157,26 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         experience: founder.experience,
         projectsList: founder.projectsList,
       }
-      if (newPassword.trim()) body.password = newPassword.trim()
+      if (
+        currentPassword.trim() ||
+        newPassword.trim() ||
+        confirmPassword.trim()
+      ) {
+        if (!currentPassword.trim()) {
+          setError('Enter your current password to change it.')
+          return
+        }
+        if (newPassword.trim().length < 4) {
+          setError('New password must be at least 4 characters.')
+          return
+        }
+        if (newPassword.trim() !== confirmPassword.trim()) {
+          setError('New password and confirmation do not match.')
+          return
+        }
+        body.currentPassword = currentPassword.trim()
+        body.password = newPassword.trim()
+      }
 
       const res = await fetch('/admin/api/update-profile', {
         method: 'PUT',
@@ -164,7 +189,12 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         return
       }
       setSavedAt(Date.now())
+      setCurrentPassword('')
       setNewPassword('')
+      setConfirmPassword('')
+      setShowCurrentPass(false)
+      setShowNewPass(false)
+      setShowConfirmPass(false)
     } catch {
       setError('Network error while saving')
     } finally {
@@ -1023,20 +1053,46 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
             <Card title="Change Password" icon={<Lock size={16} />}>
               <div className="max-w-md space-y-4">
                 <p className="text-sm text-[#6b7280]">
-                  Set a new password for your account (<span className="font-mono text-[#0D3C1F]">{founder.username}</span>).
-                  Leave blank to keep current password. Min 4 characters.
+                  Change the password for{' '}
+                  <span className="font-mono text-[#0D3C1F]">{founder.username}</span>.
+                  You must enter your current password first. Min 4 characters for
+                  the new password.
                 </p>
+                <Field label="Current Password">
+                  <PasswordInput
+                    value={currentPassword}
+                    onChange={setCurrentPassword}
+                    show={showCurrentPass}
+                    onToggleShow={() => setShowCurrentPass((v) => !v)}
+                    placeholder="Enter current password"
+                    autoComplete="current-password"
+                  />
+                </Field>
                 <Field label="New Password">
-                  <Input
-                    type="password"
+                  <PasswordInput
                     value={newPassword}
                     onChange={setNewPassword}
+                    show={showNewPass}
+                    onToggleShow={() => setShowNewPass((v) => !v)}
                     placeholder="Enter new password"
+                    autoComplete="new-password"
+                  />
+                </Field>
+                <Field label="Confirm New Password">
+                  <PasswordInput
+                    value={confirmPassword}
+                    onChange={setConfirmPassword}
+                    show={showConfirmPass}
+                    onToggleShow={() => setShowConfirmPass((v) => !v)}
+                    placeholder="Re-enter new password"
+                    autoComplete="new-password"
                   />
                 </Field>
                 <p className="text-xs text-[#9ca3af]">
-                  Click <span className="font-semibold text-[#0D3C1F]">Save Changes</span> at the
-                  bottom to apply.
+                  Click{' '}
+                  <span className="font-semibold text-[#0D3C1F]">Save Changes</span>{' '}
+                  at the bottom to apply. Leave all fields blank to keep your
+                  current password.
                 </p>
               </div>
             </Card>
@@ -1146,6 +1202,43 @@ function Input({
       placeholder={placeholder}
       className={`w-full rounded-lg border border-[#111111]/15 bg-white px-3 py-2.5 text-sm text-[#111111] placeholder-[#9ca3af] transition-colors focus:border-[#0D3C1F]/60 focus:outline-none focus:ring-1 focus:ring-[#0D3C1F]/30 ${className}`}
     />
+  )
+}
+
+function PasswordInput({
+  value,
+  onChange,
+  show,
+  onToggleShow,
+  placeholder,
+  autoComplete,
+}: {
+  value: string
+  onChange: (v: string) => void
+  show: boolean
+  onToggleShow: () => void
+  placeholder?: string
+  autoComplete?: string
+}) {
+  return (
+    <div className="relative">
+      <input
+        type={show ? 'text' : 'password'}
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        placeholder={placeholder}
+        autoComplete={autoComplete}
+        className="w-full rounded-lg border border-[#111111]/15 bg-white px-3 py-2.5 pr-10 text-sm text-[#111111] placeholder-[#9ca3af] transition-colors focus:border-[#0D3C1F]/60 focus:outline-none focus:ring-1 focus:ring-[#0D3C1F]/30"
+      />
+      <button
+        type="button"
+        onClick={onToggleShow}
+        className="absolute right-3 top-1/2 -translate-y-1/2 text-[#9ca3af] hover:text-[#0D3C1F]"
+        aria-label={show ? 'Hide password' : 'Show password'}
+      >
+        {show ? <EyeOff size={16} /> : <Eye size={16} />}
+      </button>
+    </div>
   )
 }
 
