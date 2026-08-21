@@ -17,7 +17,8 @@ const sizes = {
   /** Mobile / compact navbar icon — larger mark in the floating header */
   mdPlus: { box: 52, img: 48, text: 'text-base' },
   lg: { box: 48, img: 44, text: 'text-lg sm:text-xl' },
-  xl: { box: 72, img: 64, text: 'text-2xl sm:text-3xl' },
+  /** Admin login hero mark */
+  xl: { box: 128, img: 118, text: 'text-2xl sm:text-3xl' },
 }
 
 export function BrandLogo({
