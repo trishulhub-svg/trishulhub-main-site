@@ -14,9 +14,9 @@ type BrandLogoProps = {
 const sizes = {
   sm: { box: 28, img: 24, text: 'text-sm sm:text-base' },
   md: { box: 32, img: 28, text: 'text-sm sm:text-base md:text-lg' },
-  /** ~20% larger than md — used for mobile navbar icon */
-  mdPlus: { box: 38, img: 34, text: 'text-base' },
-  lg: { box: 40, img: 36, text: 'text-lg sm:text-xl' },
+  /** Mobile / compact navbar icon — larger mark in the floating header */
+  mdPlus: { box: 52, img: 48, text: 'text-base' },
+  lg: { box: 48, img: 44, text: 'text-lg sm:text-xl' },
   xl: { box: 72, img: 64, text: 'text-2xl sm:text-3xl' },
 }
 

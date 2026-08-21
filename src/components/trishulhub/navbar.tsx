@@ -49,7 +49,7 @@ export function Navbar() {
               <BrandLogo size="mdPlus" showWordmark={false} />
             </span>
             <span className="hidden md:inline-flex">
-              <BrandLogo size="md" />
+              <BrandLogo size="lg" />
             </span>
           </div>
 
