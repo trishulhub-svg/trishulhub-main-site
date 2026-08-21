@@ -5,18 +5,19 @@ import Link from 'next/link'
 
 type BrandLogoProps = {
   href?: string
-  size?: 'sm' | 'md' | 'mdPlus' | 'lg'
+  size?: 'sm' | 'md' | 'mdPlus' | 'lg' | 'xl'
   showWordmark?: boolean
   className?: string
   variant?: 'default' | 'onDark'
 }
 
 const sizes = {
-  sm: { box: 28, img: 24 },
-  md: { box: 32, img: 28 },
+  sm: { box: 28, img: 24, text: 'text-sm sm:text-base' },
+  md: { box: 32, img: 28, text: 'text-sm sm:text-base md:text-lg' },
   /** ~20% larger than md — used for mobile navbar icon */
-  mdPlus: { box: 38, img: 34 },
-  lg: { box: 40, img: 36 },
+  mdPlus: { box: 38, img: 34, text: 'text-base' },
+  lg: { box: 40, img: 36, text: 'text-lg sm:text-xl' },
+  xl: { box: 56, img: 50, text: 'text-2xl sm:text-3xl' },
 }
 
 export function BrandLogo({
@@ -50,7 +51,7 @@ export function BrandLogo({
       </span>
       {showWordmark && (
         <span
-          className={`truncate whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] sm:text-base md:text-lg ${
+          className={`truncate whitespace-nowrap font-bold uppercase tracking-[0.06em] ${s.text} ${
             onDark ? 'text-white' : 'text-[#0a0a0a]'
           }`}
         >
