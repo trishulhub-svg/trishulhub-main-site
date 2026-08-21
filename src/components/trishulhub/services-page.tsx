@@ -201,26 +201,48 @@ function ServiceMedia({
 export function ServicesPage() {
   const { links } = useSiteContact()
 
+  const HERO_BG_MOBILE =
+    'https://plain-apac-prod-public.komododecks.com/202608/21/dXF5hHeWvycu18MHGGoO/image.png'
+  const HERO_BG_DESKTOP =
+    'https://plain-apac-prod-public.komododecks.com/202608/21/hH54N30aWl3d4olZFyJz/image.png'
+
   return (
     <div className="pb-8">
-      <section className="relative overflow-hidden border-b border-[#e5e7eb] bg-[#fafafa] pt-28 pb-14 sm:pt-32 sm:pb-16">
-        <div className="lt-glow pointer-events-none absolute -right-20 top-0 h-[28rem] w-[28rem] opacity-70" />
-        <div className="lt-container relative mx-auto max-w-3xl text-center">
+      <section className="relative overflow-hidden border-b border-[#e5e7eb] pt-28 pb-14 sm:pt-32 sm:pb-16">
+        {/* PC background */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 hidden bg-cover bg-center bg-no-repeat md:block"
+          style={{ backgroundImage: `url(${HERO_BG_DESKTOP})` }}
+        />
+        {/* Mobile background */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+          style={{ backgroundImage: `url(${HERO_BG_MOBILE})` }}
+        />
+        {/* Soft veil so heading stays readable like About/Contact */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-white/55 md:bg-white/50"
+        />
+
+        <div className="lt-container relative">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+            transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+            className="max-w-3xl"
           >
-            <p className="mb-4 text-sm font-medium text-[#6b7280]">Services</p>
-            <h1 className="text-4xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl">
-              Built for how your{' '}
-              <span className="accent-text">business works</span>
+            <p className="mb-3 text-sm font-medium text-[#6b7280]">Services</p>
+            <h1 className="text-4xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
+              Built for how your <HeroAccentWord words="business works" />
             </h1>
-            <p className="mx-auto mt-5 max-w-xl text-base leading-relaxed text-[#6b7280] sm:text-lg">
+            <p className="mt-4 max-w-xl text-lg leading-relaxed text-[#6b7280]">
               Mobile apps, websites, and custom software — each with a clear
               preview of what we build for you.
             </p>
-            <div className="mt-8 flex justify-center">
+            <div className="mt-8">
               <NexusButton href={links.whatsapp}>Start a project</NexusButton>
             </div>
           </motion.div>
