@@ -340,7 +340,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                 <BrandLogo size="mdPlus" showWordmark={false} href="/" />
               </span>
               <span className="hidden md:inline-flex">
-                <BrandLogo size="md" href="/" />
+                <BrandLogo size="lg" href="/" />
               </span>
             </div>
 
