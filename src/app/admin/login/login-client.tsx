@@ -61,12 +61,12 @@ export function LoginClient() {
           className="w-full max-w-md"
         >
           <div className="overflow-hidden rounded-2xl border border-[#111111] bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-10">
-            <div className="mb-8 flex flex-col items-center gap-3 text-center sm:mb-10 sm:gap-4">
+            <div className="mb-8 flex flex-col items-center text-center sm:mb-10">
               <BrandLogo size="xl" href="/" showWordmark={false} className="justify-center" />
-              <h1 className="mt-1 text-3xl font-bold uppercase tracking-[0.06em] text-[#0a0a0a] sm:text-4xl">
+              <h1 className="-mt-2 text-3xl font-bold uppercase tracking-[0.06em] text-[#0a0a0a] sm:-mt-3 sm:text-4xl">
                 TrishulHub
               </h1>
-              <p className="text-sm font-medium text-[#6b7280] sm:text-base">
+              <p className="mt-2 text-sm font-medium text-[#6b7280] sm:text-base">
                 Founders login
               </p>
             </div>
