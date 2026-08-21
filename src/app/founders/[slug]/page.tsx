@@ -1,23 +1,28 @@
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { FounderDetailClient } from '@/components/trishulhub/founder-detail'
+import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
 
 export async function generateStaticParams() {
   try {
     const founders = await db.founder.findMany({ select: { slug: true } })
     return founders.map((f) => ({ slug: f.slug }))
   } catch (err) {
-    // During cold-start builds the DB env vars may not be wired up yet.
-    // Returning an empty array here lets the page render dynamically at
-    // runtime instead of failing the entire production build.
-    console.warn('[founders/[slug]] generateStaticParams skipped:', err instanceof Error ? err.message : err)
+    console.warn(
+      '[founders/[slug]] generateStaticParams skipped:',
+      err instanceof Error ? err.message : err,
+    )
     return []
   }
 }
 
 export const dynamic = 'force-dynamic'
 
-export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }) {
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
   const founder = await db.founder.findUnique({ where: { slug } })
   if (!founder) return { title: 'Founder Not Found | TrishulHub' }
@@ -27,7 +32,11 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   }
 }
 
-export default async function FounderPage({ params }: { params: Promise<{ slug: string }> }) {
+export default async function FounderPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>
+}) {
   const { slug } = await params
   const founder = await db.founder.findUnique({ where: { slug } })
 
@@ -46,7 +55,6 @@ export default async function FounderPage({ params }: { params: Promise<{ slug: 
     zipCode: founder.zipCode,
     email: founder.email,
     phone: founder.phone,
-    origin: founder.origin,
     github: founder.github,
     linkedin: founder.linkedin,
     twitter: founder.twitter,
@@ -72,5 +80,9 @@ export default async function FounderPage({ params }: { params: Promise<{ slug: 
     }[],
   }
 
-  return <FounderDetailClient slug={slug} founder={data} />
+  return (
+    <ServerSiteShell>
+      <FounderDetailClient slug={slug} founder={data} />
+    </ServerSiteShell>
+  )
 }

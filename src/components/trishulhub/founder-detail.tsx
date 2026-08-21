@@ -2,26 +2,20 @@
 
 import { motion } from 'framer-motion'
 import {
-  ArrowLeft,
   ArrowUpRight,
-  Download,
   Mail,
   Phone,
   MapPin,
-  Home,
   Calendar,
   User as UserIcon,
   Github,
   Linkedin,
   Twitter,
-  Globe,
   Briefcase,
   GraduationCap,
   Code,
   FolderGit2,
-  Send,
 } from 'lucide-react'
-import { BrandLogo } from '@/components/trishulhub/brand-logo'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -38,7 +32,6 @@ type Founder = {
   zipCode: string | null
   email: string | null
   phone: string | null
-  origin: string | null
   github: string | null
   linkedin: string | null
   twitter: string | null
@@ -77,24 +70,8 @@ export function FounderDetailClient({
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#111111]">
-      <header className="sticky top-0 z-50 border-b border-[#111111]/10 bg-white/90 backdrop-blur-md">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3 sm:px-6 lg:px-8">
-          <a
-            href="/about#founders"
-            className="group flex items-center gap-2 text-sm font-medium text-[#6b7280] transition-colors hover:text-[#0D3C1F]"
-          >
-            <ArrowLeft
-              size={16}
-              className="transition-transform group-hover:-translate-x-1"
-            />
-            Back to founders
-          </a>
-          <BrandLogo size="sm" />
-        </div>
-      </header>
-
-      {/* Hero */}
-      <section className="relative overflow-hidden border-b border-[#e5e7eb] px-4 py-14 sm:px-6 sm:py-20 lg:px-8">
+      {/* Hero — padded for shared site navbar */}
+      <section className="relative overflow-hidden border-b border-[#e5e7eb] px-4 pt-28 pb-14 sm:px-6 sm:pt-32 sm:pb-20 lg:px-8">
         <div className="lt-glow pointer-events-none absolute -right-20 top-0 h-[28rem] w-[28rem] opacity-60" />
         <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
           <motion.div
@@ -117,13 +94,15 @@ export function FounderDetailClient({
             </p>
 
             <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
-              <a
-                href={`mailto:${f.email ?? '#'}`}
-                className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0D3C1F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28]"
-              >
-                <Send size={15} />
-                Hire Me
-              </a>
+              {f.email ? (
+                <a
+                  href={`mailto:${f.email}`}
+                  className="inline-flex items-center justify-center gap-2 rounded-full bg-[#0D3C1F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28]"
+                >
+                  <Mail size={15} />
+                  Contact me
+                </a>
+              ) : null}
               <a
                 href="#projects"
                 className="inline-flex items-center justify-center gap-2 rounded-full border border-[#111111] bg-white px-7 py-3.5 text-sm font-semibold text-[#111111] transition hover:bg-[#0D3C1F] hover:text-white"
@@ -147,11 +126,6 @@ export function FounderDetailClient({
               {f.twitter && (
                 <a href={f.twitter} target="_blank" rel="noopener noreferrer" aria-label="Twitter" className={socialBtn}>
                   <Twitter size={16} />
-                </a>
-              )}
-              {f.website && (
-                <a href={f.website} target="_blank" rel="noopener noreferrer" aria-label="Website" className={socialBtn}>
-                  <Globe size={16} />
                 </a>
               )}
             </div>
@@ -180,9 +154,6 @@ export function FounderDetailClient({
                   </span>
                 </div>
               )}
-              <div className="absolute bottom-4 left-4 rounded-full bg-[#0D3C1F] px-4 py-1.5 text-sm font-semibold text-white">
-                {f.projects} projects complete
-              </div>
             </div>
           </motion.div>
         </div>
@@ -219,9 +190,6 @@ export function FounderDetailClient({
                     </span>
                   </div>
                 )}
-                <div className="absolute bottom-4 left-4 rounded-full bg-[#0D3C1F] px-4 py-1.5 text-sm font-semibold text-white">
-                  {f.projects} projects
-                </div>
               </div>
             </motion.div>
 
@@ -239,9 +207,6 @@ export function FounderDetailClient({
                 {f.address && (
                   <DetailRow icon={<MapPin size={16} />} label="Address" value={f.address} />
                 )}
-                {f.origin && (
-                  <DetailRow icon={<Home size={16} />} label="Origin" value={f.origin} />
-                )}
                 {f.zipCode && (
                   <DetailRow icon={<MapPin size={16} />} label="Zip code" value={f.zipCode} />
                 )}
@@ -252,14 +217,6 @@ export function FounderDetailClient({
                   <DetailRow icon={<Phone size={16} />} label="Phone" value={f.phone} />
                 )}
               </ul>
-
-              <a
-                href={`mailto:${f.email ?? '#'}`}
-                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#0D3C1F] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#164a28]"
-              >
-                <Download size={15} />
-                Get in touch
-              </a>
             </motion.div>
           </div>
         </div>
@@ -373,12 +330,6 @@ export function FounderDetailClient({
           </div>
         </div>
       </section>
-
-      <footer className="border-t border-[#e5e7eb] bg-white px-4 py-6 text-center sm:px-6 lg:px-8">
-        <p className="text-xs text-[#9ca3af]">
-          © {new Date().getFullYear()} {f.name} · TrishulHub
-        </p>
-      </footer>
     </div>
   )
 }

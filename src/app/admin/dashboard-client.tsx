@@ -657,13 +657,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     placeholder="e.g. January 15, 1998"
                   />
                 </Field>
-                <Field label="Origin / Hometown">
-                  <Input
-                    value={founder.origin ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, origin: v || null }))}
-                    placeholder="e.g. Rajkot, Gujarat, India"
-                  />
-                </Field>
                 <Field label="Address">
                   <Input
                     value={founder.address ?? ''}
