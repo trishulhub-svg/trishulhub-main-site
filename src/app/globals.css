@@ -100,7 +100,7 @@
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
     -webkit-overflow-scrolling: touch;
-    overscroll-behavior-y: none;
+    overscroll-behavior-y: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -108,7 +108,7 @@
   body {
     @apply bg-background text-foreground font-sans;
     overflow-anchor: none;
-    overscroll-behavior-y: contain;
+    overscroll-behavior-y: auto;
   }
   h1,
   h2,

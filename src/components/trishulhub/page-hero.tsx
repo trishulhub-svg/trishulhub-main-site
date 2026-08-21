@@ -4,6 +4,11 @@ import { motion } from 'framer-motion'
 import type { ReactNode } from 'react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
+const HERO_BG_MOBILE =
+  'https://plain-apac-prod-public.komododecks.com/202608/21/dXF5hHeWvycu18MHGGoO/image.png'
+const HERO_BG_DESKTOP =
+  'https://plain-apac-prod-public.komododecks.com/202608/21/hH54N30aWl3d4olZFyJz/image.png'
+
 type PageHeroProps = {
   title: ReactNode
   subtitle?: string
@@ -12,8 +17,24 @@ type PageHeroProps = {
 
 export function PageHero({ title, subtitle, label }: PageHeroProps) {
   return (
-    <section className="relative overflow-hidden bg-[#fafafa] pt-28 pb-14 sm:pt-32 sm:pb-16">
-      <div className="lt-glow pointer-events-none absolute -right-20 top-0 h-80 w-80 opacity-70" />
+    <section className="relative overflow-hidden border-b border-[#e5e7eb] pt-28 pb-14 sm:pt-32 sm:pb-16">
+      {/* PC background — same as Services */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 hidden bg-cover bg-center bg-no-repeat md:block"
+        style={{ backgroundImage: `url(${HERO_BG_DESKTOP})` }}
+      />
+      {/* Mobile background */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
+        style={{ backgroundImage: `url(${HERO_BG_MOBILE})` }}
+      />
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0 bg-white/55 md:bg-white/50"
+      />
+
       <div className="lt-container relative">
         <motion.div
           initial={{ opacity: 0, y: 16 }}

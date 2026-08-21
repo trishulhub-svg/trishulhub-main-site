@@ -27,6 +27,13 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (reduce) return // skip Lenis for reduced-motion users (native scroll is fine)
 
+    // Native scroll on touch/coarse pointers so pull-to-refresh (wipe) works.
+    const isTouch =
+      typeof window !== 'undefined' &&
+      (window.matchMedia('(pointer: coarse)').matches ||
+        'ontouchstart' in window)
+    if (isTouch) return
+
     const lenis = new Lenis({
       // Snappy smooth scroll — lighter feel, less "heavy" trailing.
       duration: 0.55,
