@@ -17,7 +17,7 @@ const sizes = {
   /** ~20% larger than md — used for mobile navbar icon */
   mdPlus: { box: 38, img: 34, text: 'text-base' },
   lg: { box: 40, img: 36, text: 'text-lg sm:text-xl' },
-  xl: { box: 56, img: 50, text: 'text-2xl sm:text-3xl' },
+  xl: { box: 72, img: 64, text: 'text-2xl sm:text-3xl' },
 }
 
 export function BrandLogo({
