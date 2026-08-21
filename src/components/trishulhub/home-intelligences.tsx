@@ -206,7 +206,7 @@ export function HomeIntelligences() {
                   alt="TrishulHub"
                   width={80}
                   height={80}
-                  className="relative z-10 mx-auto my-auto block h-[92%] w-[92%] object-contain object-center"
+                  className="relative z-10 block h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
                 />
               </span>
             </div>
