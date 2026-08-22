@@ -107,7 +107,7 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate h-[80svh] overflow-hidden text-gray-900 antialiased selection:bg-gray-100 md:h-screen"
+      className="relative isolate h-[100svh] overflow-hidden text-gray-900 antialiased selection:bg-gray-100 md:h-screen"
     >
       {videoSrc ? (
         <HeroBgVideo src={videoSrc} />
