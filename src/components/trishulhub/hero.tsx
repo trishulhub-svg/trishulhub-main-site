@@ -33,14 +33,30 @@ function useIsDesktop() {
 }
 
 /** Full-bleed muted hero video — infinite loop. */
-function HeroBgVideo({ src }: { src: string }) {
+function HeroBgVideo({
+  src,
+  variant,
+}: {
+  src: string
+  variant: 'desktop' | 'mobile'
+}) {
+  const isMobile = variant === 'mobile'
+
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6]"
+      className={[
+        'pointer-events-none absolute inset-0 -z-10 overflow-hidden',
+        isMobile ? 'bg-[#c9dced]' : 'bg-[#f3f4f6]',
+      ].join(' ')}
     >
       <video
-        className="absolute inset-0 h-full w-full object-cover"
+        className={
+          isMobile
+            ? // Width-first so both glass cards stay in frame; shift up to crop extra sky
+              'absolute left-1/2 top-[48%] h-auto w-[110%] max-w-none -translate-x-1/2 -translate-y-[58%]'
+            : 'absolute inset-0 h-full w-full object-cover'
+        }
         src={src}
         autoPlay
         muted
@@ -109,7 +125,12 @@ export function Hero() {
       id="home"
       className="relative isolate h-screen overflow-hidden text-gray-900 antialiased selection:bg-gray-100"
     >
-      {videoSrc ? <HeroBgVideo src={videoSrc} /> : (
+      {videoSrc ? (
+        <HeroBgVideo
+          src={videoSrc}
+          variant={isDesktop ? 'desktop' : 'mobile'}
+        />
+      ) : (
         <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[#f3f4f6]" />
       )}
 
