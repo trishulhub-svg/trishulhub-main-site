@@ -18,8 +18,6 @@ const CAROUSEL_WORDS = [
   'scalable.',
 ] as const
 
-const LOOP_FLASH_MS = 200
-
 function useIsDesktop() {
   const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
 
@@ -34,52 +32,24 @@ function useIsDesktop() {
   return isDesktop
 }
 
-/** Full-bleed muted hero video — restarts forever with a 0.2s outer shadow flash on end. */
+/** Full-bleed muted hero video — infinite loop. */
 function HeroBgVideo({ src }: { src: string }) {
-  const videoRef = useRef<HTMLVideoElement>(null)
-  const [loopFlash, setLoopFlash] = useState(false)
-  const flashTimer = useRef<number | null>(null)
-
-  useEffect(() => {
-    return () => {
-      if (flashTimer.current != null) window.clearTimeout(flashTimer.current)
-    }
-  }, [])
-
-  function handleEnded() {
-    setLoopFlash(true)
-    if (flashTimer.current != null) window.clearTimeout(flashTimer.current)
-    flashTimer.current = window.setTimeout(() => {
-      setLoopFlash(false)
-      const v = videoRef.current
-      if (!v) return
-      v.currentTime = 0
-      void v.play().catch(() => {})
-    }, LOOP_FLASH_MS)
-  }
-
   return (
     <div
       aria-hidden
-      className={[
-        'pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6] transition-[filter,box-shadow] duration-200 ease-out',
-        loopFlash
-          ? 'shadow-[0_28px_56px_rgba(0,0,0,0.55),0_8px_20px_rgba(0,0,0,0.35)] [filter:brightness(0.82)]'
-          : 'shadow-none [filter:brightness(1)]',
-      ].join(' ')}
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6]"
     >
       <video
-        ref={videoRef}
         className="absolute inset-0 h-full w-full object-cover"
         src={src}
         autoPlay
         muted
+        loop
         playsInline
         preload="auto"
         controls={false}
         disablePictureInPicture
         disableRemotePlayback
-        onEnded={handleEnded}
       />
     </div>
   )
