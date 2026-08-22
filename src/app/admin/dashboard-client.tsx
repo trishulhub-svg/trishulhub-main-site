@@ -34,6 +34,10 @@ import {
 } from 'lucide-react'
 import { BrandLogo } from '@/components/trishulhub/brand-logo'
 import Link from 'next/link'
+import {
+  buildUniversalLeadHtmlLink,
+  buildUniversalLeadLink,
+} from '@/lib/lead-share'
 
 type Skill = { name: string; level: number }
 type Education = { degree: string; school: string; year: string; description: string }
@@ -155,24 +159,42 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     }
   }, [tab])
 
-  function leadShareUrl(token: string) {
-    if (typeof window === 'undefined') return `/lead/${token}`
-    return `${window.location.origin}/lead/${token}`
+  function openLeadPreview(lead: ContactLeadRow) {
+    const url = buildUniversalLeadHtmlLink(lead)
+    window.open(url, '_blank', 'noopener,noreferrer')
   }
 
-  function leadJsonUrl(token: string) {
-    if (typeof window === 'undefined') return `/api/leads/${token}`
-    return `${window.location.origin}/api/leads/${token}`
-  }
-
-  async function copyLeadLink(token: string) {
-    const url = leadShareUrl(token)
+  async function copyLeadLink(lead: ContactLeadRow) {
+    const url = buildUniversalLeadLink(lead)
     try {
       await navigator.clipboard.writeText(url)
-      setCopiedToken(token)
+      setCopiedToken(lead.id)
       window.setTimeout(() => setCopiedToken(null), 2000)
     } catch {
-      window.prompt('Copy this lead link:', url)
+      window.prompt(
+        'Copy this universal lead link (self-contained — no website access needed):',
+        url,
+      )
+    }
+  }
+
+  async function deleteLead(lead: ContactLeadRow) {
+    const ok = window.confirm(`Delete lead from ${lead.name} (${lead.email})?`)
+    if (!ok) return
+    try {
+      const res = await fetch('/admin/api/leads', {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: lead.id }),
+      })
+      const data = await res.json()
+      if (!res.ok || !data.ok) {
+        setLeadsError(data?.error || 'Could not delete lead')
+        return
+      }
+      setLeads((prev) => prev.filter((l) => l.id !== lead.id))
+    } catch {
+      setLeadsError('Network error while deleting')
     }
   }
 
@@ -1149,8 +1171,9 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           {tab === 'leads' && (
             <Card title="Form leads" icon={<Inbox size={16} />}>
               <p className="mb-5 text-sm text-[#6b7280]">
-                Contact form submissions. Generate a universal link for any lead —
-                open it on this site or load the JSON URL in another admin panel.
+                Contact form submissions. <span className="font-semibold text-[#0D3C1F]">Generate link</span>{' '}
+                copies a self-contained universal link (data URI) with the full lead inside —
+                no website login or domain access required for other tools to read it.
               </p>
               {leadsLoading ? (
                 <p className="text-sm text-[#9ca3af]">Loading leads…</p>
@@ -1167,7 +1190,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       dateStyle: 'medium',
                       timeStyle: 'short',
                     })
-                    const copied = copiedToken === lead.shareToken
+                    const copied = copiedToken === lead.id
                     return (
                       <div
                         key={lead.id}
@@ -1194,28 +1217,30 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                           <div className="flex shrink-0 flex-wrap gap-2">
                             <button
                               type="button"
-                              onClick={() => copyLeadLink(lead.shareToken)}
+                              onClick={() => deleteLead(lead)}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
+                            >
+                              <Trash2 size={13} />
+                              Delete
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => openLeadPreview(lead)}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
+                            >
+                              <ExternalLink size={13} />
+                              Open
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => copyLeadLink(lead)}
                               className="inline-flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-2 text-xs font-semibold text-[#0D3C1F] transition hover:bg-[#0D3C1F] hover:text-white"
                             >
                               {copied ? <Check size={13} /> : <Link2 size={13} />}
                               {copied ? 'Copied' : 'Generate link'}
                             </button>
-                            <a
-                              href={leadShareUrl(lead.shareToken)}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
-                            >
-                              <ExternalLink size={13} />
-                              Open
-                            </a>
                           </div>
                         </div>
-                        <p className="mt-3 break-all font-mono text-[11px] text-[#9ca3af]">
-                          HTML: {leadShareUrl(lead.shareToken)}
-                          <br />
-                          JSON: {leadJsonUrl(lead.shareToken)}
-                        </p>
                       </div>
                     )
                   })}

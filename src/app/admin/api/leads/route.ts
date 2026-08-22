@@ -1,4 +1,4 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getCurrentFounder } from '@/lib/auth'
 
@@ -30,6 +30,30 @@ export async function GET() {
     console.error('[admin/api/leads] GET', e)
     return NextResponse.json(
       { ok: false, error: 'Could not load leads' },
+      { status: 500 },
+    )
+  }
+}
+
+/** Admin-only delete a contact lead. */
+export async function DELETE(req: NextRequest) {
+  const founder = await getCurrentFounder()
+  if (!founder) {
+    return NextResponse.json({ ok: false, error: 'Not authenticated' }, { status: 401 })
+  }
+
+  try {
+    const body = await req.json().catch(() => ({}))
+    const id = String(body?.id || '').trim()
+    if (!id) {
+      return NextResponse.json({ ok: false, error: 'Lead id required' }, { status: 400 })
+    }
+    await db.contactLead.delete({ where: { id } })
+    return NextResponse.json({ ok: true })
+  } catch (e) {
+    console.error('[admin/api/leads] DELETE', e)
+    return NextResponse.json(
+      { ok: false, error: 'Could not delete lead' },
       { status: 500 },
     )
   }
