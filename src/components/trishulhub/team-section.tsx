@@ -12,6 +12,7 @@ type FounderCard = {
   bio: string
   image: string | null
   email: string | null
+  phone: string | null
   linkedin: string | null
   whatsapp: string | null
   instagram: string | null

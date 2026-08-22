@@ -14,6 +14,7 @@ type NexusButtonProps = {
   external?: boolean
   type?: 'button' | 'submit'
   variant?: 'primary' | 'secondary'
+  disabled?: boolean
 }
 
 /** Lawtrades primary/secondary buttons — 48px, 8px radius */
@@ -27,6 +28,7 @@ export function NexusButton({
   external,
   type = 'button',
   variant = 'primary',
+  disabled = false,
 }: NexusButtonProps) {
   const shellStyle: CSSProperties = fullWidth
     ? { display: 'block', width: '100%' }
@@ -41,7 +43,7 @@ export function NexusButton({
         href.startsWith('https://wa.me')))
 
   const base =
-    'group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none transition-all duration-200 active:scale-[0.98]'
+    'group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60'
   const primary =
     'bg-[#0D3C1F] text-white hover:scale-[1.02] hover:bg-[#164a28] hover:shadow-[0_8px_24px_rgba(13,60,31,0.2)]'
   const secondary =
@@ -66,20 +68,21 @@ export function NexusButton({
   return (
     <div className="relative" style={shellStyle}>
       {!href ? (
-        <button type={type} onClick={onClick} className={classNames}>
+        <button type={type} onClick={onClick} disabled={disabled} className={classNames}>
           {inner}
         </button>
       ) : isExternal ? (
         <a
-          href={href}
+          href={disabled ? undefined : href}
           target="_blank"
           rel="noopener noreferrer"
           className={classNames}
+          aria-disabled={disabled}
         >
           {inner}
         </a>
       ) : (
-        <Link href={href} className={classNames}>
+        <Link href={href} className={classNames} aria-disabled={disabled}>
           {inner}
         </Link>
       )}

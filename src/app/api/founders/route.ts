@@ -18,6 +18,7 @@ export async function GET() {
         bio: true,
         image: true,
         email: true,
+        phone: true,
         linkedin: true,
         whatsapp: true,
         instagram: true,

@@ -147,7 +147,7 @@ function ServiceMedia({
     return (
       <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
         <video
-          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[125/72] lg:min-h-0"
+          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[280px]"
           src={videoSrc}
           autoPlay
           muted
@@ -259,7 +259,7 @@ export function ServicesPage() {
             </p>
           </div>
 
-          <div className="flex flex-col gap-10 lg:gap-14">
+          <div className="flex flex-col gap-10 lg:grid lg:grid-cols-3 lg:items-stretch lg:gap-6">
             {services.map((s, i) => {
               const Icon = s.icon
               return (
@@ -268,16 +268,16 @@ export function ServicesPage() {
                   id={s.id}
                   initial={{ opacity: 0, y: 24 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.2 }}
+                  viewport={{ once: true, amount: 0.15 }}
                   transition={{
                     duration: 0.5,
                     delay: i * 0.04,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="scroll-mt-28 mx-auto flex w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] lg:max-w-4xl"
+                  className="scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] lg:max-w-none"
                 >
                   {/* Video on top (centered) → text → button */}
-                  <div className="p-3 pb-0 sm:p-5 sm:pb-0 lg:px-8 lg:pt-8">
+                  <div className="p-3 pb-0 sm:p-5 sm:pb-0 lg:p-4 lg:pb-0">
                     <ServiceMedia
                       title={s.title}
                       embedUrl={s.embedUrl}
@@ -287,7 +287,7 @@ export function ServicesPage() {
                     />
                   </div>
 
-                  <div className="flex flex-1 flex-col p-5 sm:p-6 lg:px-8 lg:pb-8 lg:pt-6">
+                  <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-5 lg:pt-5">
                     <div className="mb-3 flex items-center gap-2">
                       <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
                         {s.num}
@@ -296,15 +296,15 @@ export function ServicesPage() {
                         {s.tagline}
                       </span>
                     </div>
-                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-3xl">
+                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-[1.35rem] lg:leading-snug">
                       {s.title}
                     </h3>
 
-                    <ul className="mt-4 space-y-2.5">
+                    <ul className="mt-4 flex-1 space-y-2.5">
                       {s.outcomes.map((o) => (
                         <li
                           key={o}
-                          className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px]"
+                          className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px] lg:text-sm"
                         >
                           <CheckCircle2
                             size={16}

@@ -69,6 +69,18 @@ model Founder {
   updatedAt    DateTime @updatedAt
 }
 
+model ContactLead {
+  id         String   @id @default(cuid())
+  name       String
+  email      String
+  service    String
+  message    String
+  /// Public share token for universal lead link (/lead/[token])
+  shareToken String   @unique
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+}
+
 // =========================================================
 // E-COMMERCE SCHEMA — products, categories, cart, orders
 // =========================================================

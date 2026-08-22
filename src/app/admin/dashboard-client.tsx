@@ -28,6 +28,9 @@ import {
   Image as ImageIcon,
   Menu,
   X,
+  Inbox,
+  Link2,
+  Check,
 } from 'lucide-react'
 import { BrandLogo } from '@/components/trishulhub/brand-logo'
 import Link from 'next/link'
@@ -67,7 +70,17 @@ type Founder = {
   username: string
 }
 
-type Tab = 'profile' | 'about' | 'skills' | 'education' | 'experience' | 'projects' | 'security'
+type Tab = 'profile' | 'about' | 'skills' | 'education' | 'experience' | 'projects' | 'leads' | 'security'
+
+type ContactLeadRow = {
+  id: string
+  name: string
+  email: string
+  service: string
+  message: string
+  shareToken: string
+  createdAt: string
+}
 
 export function AdminDashboardClient({ founder: initialFounder }: { founder: Founder }) {
   const router = useRouter()
@@ -95,6 +108,10 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     whatsappPrefill: 'Hi TrishulHub — I want to talk about a project.',
   })
   const [savingSite, setSavingSite] = useState(false)
+  const [leads, setLeads] = useState<ContactLeadRow[]>([])
+  const [leadsLoading, setLeadsLoading] = useState(false)
+  const [leadsError, setLeadsError] = useState<string | null>(null)
+  const [copiedToken, setCopiedToken] = useState<string | null>(null)
 
   // Auto-clear save notice
   useEffect(() => {
@@ -102,6 +119,62 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     const t = setTimeout(() => setSavedAt(null), 3000)
     return () => clearTimeout(t)
   }, [savedAt])
+
+  useEffect(() => {
+    if (tab !== 'leads') return
+    let cancelled = false
+    ;(async () => {
+      setLeadsLoading(true)
+      setLeadsError(null)
+      try {
+        const res = await fetch('/admin/api/leads')
+        const data = await res.json()
+        if (cancelled) return
+        if (!res.ok || !data.ok) {
+          setLeadsError(data?.error || 'Could not load leads')
+          setLeads([])
+          return
+        }
+        setLeads(
+          (data.leads || []).map((l: ContactLeadRow) => ({
+            ...l,
+            createdAt: l.createdAt,
+          })),
+        )
+      } catch {
+        if (!cancelled) {
+          setLeadsError('Network error loading leads')
+          setLeads([])
+        }
+      } finally {
+        if (!cancelled) setLeadsLoading(false)
+      }
+    })()
+    return () => {
+      cancelled = true
+    }
+  }, [tab])
+
+  function leadShareUrl(token: string) {
+    if (typeof window === 'undefined') return `/lead/${token}`
+    return `${window.location.origin}/lead/${token}`
+  }
+
+  function leadJsonUrl(token: string) {
+    if (typeof window === 'undefined') return `/api/leads/${token}`
+    return `${window.location.origin}/api/leads/${token}`
+  }
+
+  async function copyLeadLink(token: string) {
+    const url = leadShareUrl(token)
+    try {
+      await navigator.clipboard.writeText(url)
+      setCopiedToken(token)
+      window.setTimeout(() => setCopiedToken(null), 2000)
+    } catch {
+      window.prompt('Copy this lead link:', url)
+    }
+  }
 
   useEffect(() => {
     fetch('/admin/api/site-contact')
@@ -329,6 +402,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     { id: 'education', label: 'Education', icon: <GraduationCap size={15} /> },
     { id: 'experience', label: 'Experience', icon: <Briefcase size={15} /> },
     { id: 'projects', label: 'Projects', icon: <FolderGit2 size={15} /> },
+    { id: 'leads', label: 'Form leads', icon: <Inbox size={15} /> },
     { id: 'security', label: 'Security', icon: <Lock size={15} /> },
   ]
 
@@ -1067,6 +1141,84 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                       </div>
                     </div>
                   ))}
+                </div>
+              )}
+            </Card>
+          )}
+
+          {tab === 'leads' && (
+            <Card title="Form leads" icon={<Inbox size={16} />}>
+              <p className="mb-5 text-sm text-[#6b7280]">
+                Contact form submissions. Generate a universal link for any lead —
+                open it on this site or load the JSON URL in another admin panel.
+              </p>
+              {leadsLoading ? (
+                <p className="text-sm text-[#9ca3af]">Loading leads…</p>
+              ) : leadsError ? (
+                <p className="text-sm text-red-600">{leadsError}</p>
+              ) : leads.length === 0 ? (
+                <p className="rounded-xl border border-dashed border-[#111111]/20 px-4 py-8 text-center text-sm text-[#9ca3af]">
+                  No form submissions yet.
+                </p>
+              ) : (
+                <div className="space-y-3">
+                  {leads.map((lead) => {
+                    const when = new Date(lead.createdAt).toLocaleString('en-IN', {
+                      dateStyle: 'medium',
+                      timeStyle: 'short',
+                    })
+                    const copied = copiedToken === lead.shareToken
+                    return (
+                      <div
+                        key={lead.id}
+                        className="rounded-xl border border-[#111111]/15 bg-[#fafafa] p-4"
+                      >
+                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+                          <div className="min-w-0">
+                            <p className="truncate text-base font-semibold text-[#111111]">
+                              {lead.name}
+                            </p>
+                            <a
+                              href={`mailto:${lead.email}`}
+                              className="truncate text-sm text-[#0D3C1F] hover:underline"
+                            >
+                              {lead.email}
+                            </a>
+                            <p className="mt-1 text-xs text-[#9ca3af]">
+                              {lead.service} · {when}
+                            </p>
+                            <p className="mt-2 line-clamp-2 text-sm text-[#6b7280]">
+                              {lead.message}
+                            </p>
+                          </div>
+                          <div className="flex shrink-0 flex-wrap gap-2">
+                            <button
+                              type="button"
+                              onClick={() => copyLeadLink(lead.shareToken)}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-2 text-xs font-semibold text-[#0D3C1F] transition hover:bg-[#0D3C1F] hover:text-white"
+                            >
+                              {copied ? <Check size={13} /> : <Link2 size={13} />}
+                              {copied ? 'Copied' : 'Generate link'}
+                            </button>
+                            <a
+                              href={leadShareUrl(lead.shareToken)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
+                            >
+                              <ExternalLink size={13} />
+                              Open
+                            </a>
+                          </div>
+                        </div>
+                        <p className="mt-3 break-all font-mono text-[11px] text-[#9ca3af]">
+                          HTML: {leadShareUrl(lead.shareToken)}
+                          <br />
+                          JSON: {leadJsonUrl(lead.shareToken)}
+                        </p>
+                      </div>
+                    )
+                  })}
                 </div>
               )}
             </Card>
