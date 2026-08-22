@@ -1172,10 +1172,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
           {tab === 'leads' && (
             <Card title="Form leads" icon={<Inbox size={16} />}>
-              <p className="mb-5 text-sm text-[#6b7280]">
-                Generate link = short contact JSON (message preview only, stays small). Full
-                message: Open or Download.
-              </p>
               {leadsLoading ? (
                 <p className="text-sm text-[#9ca3af]">Loading leads…</p>
               ) : leadsError ? (
