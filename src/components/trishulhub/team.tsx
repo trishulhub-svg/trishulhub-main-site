@@ -196,7 +196,7 @@ export function Team({ founders }: { founders: Founder[] }) {
               key: string
               href: string
               label: string
-              icon: React.ReactNode
+              icon: ReactNode
               external: boolean
             }[]
 
