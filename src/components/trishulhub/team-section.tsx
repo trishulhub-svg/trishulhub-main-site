@@ -11,6 +11,10 @@ type FounderCard = {
   projects: string
   bio: string
   image: string | null
+  email: string | null
+  linkedin: string | null
+  whatsapp: string | null
+  instagram: string | null
 }
 
 /**

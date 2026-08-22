@@ -59,6 +59,8 @@ export default async function FounderPage({
     linkedin: founder.linkedin,
     twitter: founder.twitter,
     website: founder.website,
+    whatsapp: founder.whatsapp,
+    instagram: founder.instagram,
     skills: JSON.parse(founder.skills) as { name: string; level: number }[],
     education: JSON.parse(founder.education) as {
       degree: string

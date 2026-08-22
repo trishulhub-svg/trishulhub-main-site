@@ -33,6 +33,8 @@ export default async function AdminPage() {
     linkedin: founder.linkedin,
     twitter: founder.twitter,
     website: founder.website,
+    whatsapp: founder.whatsapp,
+    instagram: founder.instagram,
     skills: JSON.parse(founder.skills),
     education: JSON.parse(founder.education),
     experience: JSON.parse(founder.experience),

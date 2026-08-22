@@ -51,10 +51,12 @@ model Founder {
   email        String?
   phone        String?
   origin       String?  // hometown / origin
-  github       String?
+  github       String?  // legacy — unused in Meet Our Founders UI
   linkedin     String?
-  twitter      String?
+  twitter      String?  // legacy — unused in Meet Our Founders UI
   website      String?
+  whatsapp     String?  // digits / phone → https://wa.me/{digits}
+  instagram    String?  // profile URL
   // JSON-stringified arrays of objects
   skills       String   // [{name, level}]
   education    String   // [{degree, school, year, description}]

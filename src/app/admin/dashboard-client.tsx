@@ -58,6 +58,8 @@ type Founder = {
   linkedin: string | null
   twitter: string | null
   website: string | null
+  whatsapp: string | null
+  instagram: string | null
   skills: Skill[]
   education: Education[]
   experience: Experience[]
@@ -152,6 +154,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         linkedin: founder.linkedin,
         twitter: founder.twitter,
         website: founder.website,
+        whatsapp: founder.whatsapp,
+        instagram: founder.instagram,
         skills: founder.skills,
         education: founder.education,
         experience: founder.experience,
@@ -744,13 +748,27 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
           {tab === 'about' && (
             <Card title="Social Links" icon={<Globe size={16} />}>
+              <p className="mb-4 text-sm text-[#9ca3af]">
+                Shown on Meet Our Founders (About us). Links are built automatically:
+                LinkedIn &amp; Instagram from URLs, WhatsApp from a number, Email from an
+                address.
+              </p>
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Field label="GitHub URL">
+                <Field label="WhatsApp number">
                   <Input
-                    value={founder.github ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, github: v || null }))}
-                    placeholder="https://github.com/..."
+                    value={founder.whatsapp ?? ''}
+                    onChange={(v) =>
+                      setFounder((f) => ({
+                        ...f,
+                        whatsapp: v.replace(/\D/g, '') || null,
+                      }))
+                    }
+                    placeholder="9198XXXXXXXX (country code + number)"
                   />
+                  <p className="mt-1.5 text-[11px] text-[#9ca3af]">
+                    Digits only → opens{' '}
+                    <span className="font-mono text-[#0D3C1F]">wa.me/…</span>
+                  </p>
                 </Field>
                 <Field label="LinkedIn URL">
                   <Input
@@ -759,19 +777,24 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     placeholder="https://linkedin.com/in/..."
                   />
                 </Field>
-                <Field label="Twitter / X URL">
+                <Field label="Instagram URL">
                   <Input
-                    value={founder.twitter ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, twitter: v || null }))}
-                    placeholder="https://twitter.com/..."
+                    value={founder.instagram ?? ''}
+                    onChange={(v) => setFounder((f) => ({ ...f, instagram: v || null }))}
+                    placeholder="https://instagram.com/..."
                   />
                 </Field>
-                <Field label="Website">
+                <Field label="Email (mailto)">
                   <Input
-                    value={founder.website ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, website: v || null }))}
-                    placeholder="https://..."
+                    value={founder.email ?? ''}
+                    onChange={(v) => setFounder((f) => ({ ...f, email: v || null }))}
+                    placeholder="you@trishulhub.com"
+                    type="email"
                   />
+                  <p className="mt-1.5 text-[11px] text-[#9ca3af]">
+                    Same email as portfolio contact →{' '}
+                    <span className="font-mono text-[#0D3C1F]">mailto:</span> link
+                  </p>
                 </Field>
               </div>
             </Card>

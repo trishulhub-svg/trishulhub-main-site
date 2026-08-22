@@ -23,6 +23,8 @@ type UpdateBody = {
   linkedin?: string | null
   twitter?: string | null
   website?: string | null
+  whatsapp?: string | null
+  instagram?: string | null
   skills?: { name: string; level: number }[]
   education?: { degree: string; school: string; year: string; description: string }[]
   experience?: { role: string; company: string; period: string; description: string }[]
@@ -60,6 +62,8 @@ export async function GET() {
       linkedin: founder.linkedin,
       twitter: founder.twitter,
       website: founder.website,
+      whatsapp: founder.whatsapp,
+      instagram: founder.instagram,
       skills: JSON.parse(founder.skills),
       education: JSON.parse(founder.education),
       experience: JSON.parse(founder.experience),
@@ -97,6 +101,13 @@ export async function PUT(req: NextRequest) {
     if (body.linkedin !== undefined) data.linkedin = body.linkedin
     if (body.twitter !== undefined) data.twitter = body.twitter
     if (body.website !== undefined) data.website = body.website
+    if (body.whatsapp !== undefined) {
+      data.whatsapp =
+        typeof body.whatsapp === 'string'
+          ? body.whatsapp.replace(/\D/g, '') || null
+          : body.whatsapp
+    }
+    if (body.instagram !== undefined) data.instagram = body.instagram
 
     if (Array.isArray(body.skills)) {
       data.skills = JSON.stringify(

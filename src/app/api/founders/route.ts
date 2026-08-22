@@ -17,6 +17,10 @@ export async function GET() {
         projects: true,
         bio: true,
         image: true,
+        email: true,
+        linkedin: true,
+        whatsapp: true,
+        instagram: true,
       },
     })
     const founders = all.filter((f) => f.slug !== 'akshat')
