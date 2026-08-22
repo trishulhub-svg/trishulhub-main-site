@@ -8,91 +8,83 @@ export type LeadShareData = {
   createdAt: string
 }
 
-export type LeadSharePayload = {
-  schema: 'trishulhub.contact_lead.v1'
-  lead: {
-    id: string
-    name: string
-    email: string
-    service: string
-    message: string
-    submittedAt: string
-  }
+/** Compact lead object — short keys, easy for any AI to parse from paste. */
+export type CompactLead = {
+  v: 1
+  n: string
+  e: string
+  s: string
+  m: string
+  t: string
 }
 
-/** Unicode-safe base64 for browser + Node. */
-export function utf8ToBase64(text: string): string {
-  if (typeof window !== 'undefined' && typeof window.btoa === 'function') {
-    return window.btoa(unescape(encodeURIComponent(text)))
-  }
-  return Buffer.from(text, 'utf8').toString('base64')
-}
-
-export function buildLeadPayload(lead: LeadShareData): LeadSharePayload {
+export function toCompactLead(lead: LeadShareData): CompactLead {
   return {
-    schema: 'trishulhub.contact_lead.v1',
-    lead: {
-      id: lead.id,
-      name: lead.name,
-      email: lead.email,
-      service: lead.service,
-      message: lead.message,
-      submittedAt: new Date(lead.createdAt).toISOString(),
-    },
+    v: 1,
+    n: lead.name,
+    e: lead.email,
+    s: lead.service,
+    m: lead.message,
+    t: new Date(lead.createdAt).toISOString(),
   }
 }
 
 /**
- * Self-contained universal link — embeds the full lead JSON in a data URI.
- * No website fetch required (works when domain access is blocked).
+ * Short self-contained share string (not a website URL).
+ * Paste into Cursor / any AI — it can read name, email, service, message directly.
+ * Example: {"v":1,"n":"Ada","e":"a@b.c","s":"Website","m":"Hi","t":"2026-08-22T…"}
  */
 export function buildUniversalLeadLink(lead: LeadShareData): string {
-  const json = JSON.stringify(buildLeadPayload(lead))
-  return `data:application/json;charset=utf-8;base64,${utf8ToBase64(json)}`
+  return JSON.stringify(toCompactLead(lead))
 }
 
-/** Self-contained HTML preview for the Open button (no domain required). */
-export function buildUniversalLeadHtmlLink(lead: LeadShareData): string {
+export function leadPageUrl(lead: LeadShareData): string {
+  const token = lead.shareToken || lead.id
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return `${window.location.origin}/lead/${token}`
+  }
+  return `/lead/${token}`
+}
+
+function escapeHtml(s: string): string {
+  return String(s)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+}
+
+/** Word-compatible .doc (HTML) download — opens in Microsoft Word / Google Docs. */
+export function downloadLeadDoc(lead: LeadShareData): void {
   const submitted = new Date(lead.createdAt).toLocaleString('en-IN', {
     dateStyle: 'medium',
     timeStyle: 'short',
   })
-  const esc = (s: string) =>
-    String(s)
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-
-  const html = `<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>Lead — ${esc(lead.name)}</title>
-<style>
-  body{margin:0;font-family:system-ui,sans-serif;background:#fafafa;color:#111;line-height:1.5}
-  .card{max-width:560px;margin:32px auto;padding:28px 24px;background:#fff;border:1px solid #111;border-radius:16px}
-  .eyebrow{font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#0D3C1F;margin:0 0 8px}
-  h1{margin:0 0 6px;font-size:28px}
-  .meta{color:#6b7280;font-size:14px;margin-bottom:22px}
-  .label{display:block;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#9ca3af;margin:0 0 4px}
-  .row{margin-bottom:16px}
-  .value{font-size:15px;white-space:pre-wrap;word-break:break-word}
-  a{color:#0D3C1F}
-</style>
-</head>
+  const html = `<html xmlns:o="urn:schemas-microsoft-com:office:office"
+xmlns:w="urn:schemas-microsoft-com:office:word"
+xmlns="http://www.w3.org/TR/REC-html40">
+<head><meta charset="utf-8"><title>Lead — ${escapeHtml(lead.name)}</title></head>
 <body>
-  <div class="card">
-    <p class="eyebrow">TrishulHub contact lead</p>
-    <h1>${esc(lead.name)}</h1>
-    <p class="meta">Submitted ${esc(submitted)}</p>
-    <div class="row"><span class="label">Email</span><div class="value"><a href="mailto:${esc(lead.email)}">${esc(lead.email)}</a></div></div>
-    <div class="row"><span class="label">Service</span><div class="value">${esc(lead.service)}</div></div>
-    <div class="row"><span class="label">Message</span><div class="value">${esc(lead.message)}</div></div>
-  </div>
+  <h1>TrishulHub contact lead</h1>
+  <p><b>Name:</b> ${escapeHtml(lead.name)}</p>
+  <p><b>Email:</b> ${escapeHtml(lead.email)}</p>
+  <p><b>Service:</b> ${escapeHtml(lead.service)}</p>
+  <p><b>Submitted:</b> ${escapeHtml(submitted)}</p>
+  <p><b>Message:</b></p>
+  <p>${escapeHtml(lead.message).replace(/\n/g, '<br/>')}</p>
 </body>
 </html>`
 
-  return `data:text/html;charset=utf-8;base64,${utf8ToBase64(html)}`
+  const blob = new Blob(['\ufeff', html], {
+    type: 'application/msword;charset=utf-8',
+  })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  const safe = lead.name.replace(/[^\w\-]+/g, '_').slice(0, 40) || 'lead'
+  a.href = url
+  a.download = `lead-${safe}.doc`
+  document.body.appendChild(a)
+  a.click()
+  a.remove()
+  URL.revokeObjectURL(url)
 }

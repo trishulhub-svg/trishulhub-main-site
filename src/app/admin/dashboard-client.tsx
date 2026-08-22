@@ -31,12 +31,14 @@ import {
   Inbox,
   Link2,
   Check,
+  FileDown,
 } from 'lucide-react'
 import { BrandLogo } from '@/components/trishulhub/brand-logo'
 import Link from 'next/link'
 import {
-  buildUniversalLeadHtmlLink,
   buildUniversalLeadLink,
+  downloadLeadDoc,
+  leadPageUrl,
 } from '@/lib/lead-share'
 
 type Skill = { name: string; level: number }
@@ -160,22 +162,22 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   }, [tab])
 
   function openLeadPreview(lead: ContactLeadRow) {
-    const url = buildUniversalLeadHtmlLink(lead)
-    window.open(url, '_blank', 'noopener,noreferrer')
+    window.open(leadPageUrl(lead), '_blank', 'noopener,noreferrer')
   }
 
   async function copyLeadLink(lead: ContactLeadRow) {
-    const url = buildUniversalLeadLink(lead)
+    const payload = buildUniversalLeadLink(lead)
     try {
-      await navigator.clipboard.writeText(url)
+      await navigator.clipboard.writeText(payload)
       setCopiedToken(lead.id)
       window.setTimeout(() => setCopiedToken(null), 2000)
     } catch {
-      window.prompt(
-        'Copy this universal lead link (self-contained — no website access needed):',
-        url,
-      )
+      window.prompt('Copy this lead payload:', payload)
     }
+  }
+
+  function downloadLead(lead: ContactLeadRow) {
+    downloadLeadDoc(lead)
   }
 
   async function deleteLead(lead: ContactLeadRow) {
@@ -1171,9 +1173,7 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           {tab === 'leads' && (
             <Card title="Form leads" icon={<Inbox size={16} />}>
               <p className="mb-5 text-sm text-[#6b7280]">
-                Contact form submissions. <span className="font-semibold text-[#0D3C1F]">Generate link</span>{' '}
-                copies a self-contained universal link (data URI) with the full lead inside —
-                no website login or domain access required for other tools to read it.
+                Contact form leads. Generate link copies a short JSON payload any AI can read.
               </p>
               {leadsLoading ? (
                 <p className="text-sm text-[#9ca3af]">Loading leads…</p>
@@ -1238,6 +1238,14 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                             >
                               {copied ? <Check size={13} /> : <Link2 size={13} />}
                               {copied ? 'Copied' : 'Generate link'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={() => downloadLead(lead)}
+                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
+                            >
+                              <FileDown size={13} />
+                              Download
                             </button>
                           </div>
                         </div>

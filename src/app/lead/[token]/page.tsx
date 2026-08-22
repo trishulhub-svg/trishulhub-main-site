@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
+import { toCompactLead } from '@/lib/lead-share'
 
 export const dynamic = 'force-dynamic'
 
@@ -12,19 +13,19 @@ export async function generateMetadata({
   try {
     const lead = await db.contactLead.findUnique({
       where: { shareToken: token },
-      select: { name: true },
+      select: { name: true, email: true },
     })
     if (!lead) return { title: 'Lead not found | TrishulHub' }
     return {
       title: `Lead — ${lead.name} | TrishulHub`,
-      robots: { index: false, follow: false },
+      description: `Contact lead from ${lead.name} (${lead.email})`,
     }
   } catch {
     return { title: 'Lead | TrishulHub' }
   }
 }
 
-/** Universal HTML view of a contact lead — loadable from any site via this URL. */
+/** Lead preview page — used by admin Open button. */
 export default async function LeadSharePage({
   params,
 }: {
@@ -40,10 +41,23 @@ export default async function LeadSharePage({
     dateStyle: 'medium',
     timeStyle: 'short',
   })
-  const jsonUrl = `/api/leads/${lead.shareToken}`
+  const compact = toCompactLead({
+    id: lead.id,
+    name: lead.name,
+    email: lead.email,
+    service: lead.service,
+    message: lead.message,
+    shareToken: lead.shareToken,
+    createdAt: lead.createdAt.toISOString(),
+  })
 
   return (
     <main className="min-h-screen bg-[#fafafa] px-5 py-12 text-[#111111]">
+      <script
+        type="application/json"
+        id="trishulhub-lead"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(compact) }}
+      />
       <div className="mx-auto max-w-xl rounded-2xl border border-[#111111] bg-white p-7 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-9">
         <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[#0D3C1F]">
           TrishulHub contact lead
@@ -77,16 +91,6 @@ export default async function LeadSharePage({
               {lead.message}
             </p>
           </div>
-        </div>
-
-        <div className="mt-8 border-t border-[#e5e7eb] pt-5 text-sm text-[#6b7280]">
-          <p>Machine-readable JSON for other sites / admin panels:</p>
-          <a
-            href={jsonUrl}
-            className="mt-2 block break-all rounded-lg bg-[#f3f4f6] px-3 py-2.5 font-mono text-xs text-[#0D3C1F] hover:underline"
-          >
-            {jsonUrl}
-          </a>
         </div>
       </div>
     </main>
