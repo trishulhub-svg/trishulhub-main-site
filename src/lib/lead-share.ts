@@ -8,7 +8,7 @@ export type LeadShareData = {
   createdAt: string
 }
 
-/** Compact lead object — short keys, easy for any AI to parse from paste. */
+/** Full compact lead — used on the /lead page embed (not clipboard). */
 export type CompactLead = {
   v: 1
   n: string
@@ -16,6 +16,36 @@ export type CompactLead = {
   s: string
   m: string
   t: string
+}
+
+/**
+ * Clipboard share payload — always short, even if the form message is huge.
+ * Message is a short preview only; full text is on Open / Download.
+ */
+export type ShareLead = {
+  v: 2
+  n: string
+  e: string
+  s: string
+  /** Short message preview (never the full long message). */
+  m: string
+  t: string
+  /** Share token — Open uses /lead/{k} for the full lead. */
+  k: string
+  /** 1 = message was truncated; use Open or Download for full text. */
+  x?: 1
+}
+
+const SHARE_NAME_MAX = 48
+const SHARE_EMAIL_MAX = 64
+const SHARE_SERVICE_MAX = 32
+/** Keep Generate link tiny regardless of how long the visitor wrote. */
+const SHARE_MSG_PREVIEW = 72
+
+function clip(s: string, max: number): { text: string; cut: boolean } {
+  const t = String(s || '').replace(/\s+/g, ' ').trim()
+  if (t.length <= max) return { text: t, cut: false }
+  return { text: `${t.slice(0, Math.max(0, max - 1)).trimEnd()}…`, cut: true }
 }
 
 export function toCompactLead(lead: LeadShareData): CompactLead {
@@ -29,13 +59,31 @@ export function toCompactLead(lead: LeadShareData): CompactLead {
   }
 }
 
+export function toShareLead(lead: LeadShareData): ShareLead {
+  const name = clip(lead.name, SHARE_NAME_MAX)
+  const email = clip(lead.email, SHARE_EMAIL_MAX)
+  const service = clip(lead.service, SHARE_SERVICE_MAX)
+  const msg = clip(lead.message, SHARE_MSG_PREVIEW)
+  const out: ShareLead = {
+    v: 2,
+    n: name.text,
+    e: email.text,
+    s: service.text,
+    m: msg.text,
+    t: new Date(lead.createdAt).toISOString(),
+    k: lead.shareToken || lead.id,
+  }
+  if (msg.cut) out.x = 1
+  return out
+}
+
 /**
- * Short self-contained share string (not a website URL).
- * Paste into Cursor / any AI — it can read name, email, service, message directly.
- * Example: {"v":1,"n":"Ada","e":"a@b.c","s":"Website","m":"Hi","t":"2026-08-22T…"}
+ * Always-short paste string for Cursor / any AI.
+ * Full message stays out of the clipboard when long — use Open or Download.
+ * Example: {"v":2,"n":"Ada","e":"a@b.c","s":"Website","m":"Need a…","t":"…","k":"abc","x":1}
  */
 export function buildUniversalLeadLink(lead: LeadShareData): string {
-  return JSON.stringify(toCompactLead(lead))
+  return JSON.stringify(toShareLead(lead))
 }
 
 export function leadPageUrl(lead: LeadShareData): string {
@@ -54,7 +102,7 @@ function escapeHtml(s: string): string {
     .replace(/"/g, '&quot;')
 }
 
-/** Word-compatible .doc (HTML) download — opens in Microsoft Word / Google Docs. */
+/** Word-compatible .doc (HTML) download — full message included. */
 export function downloadLeadDoc(lead: LeadShareData): void {
   const submitted = new Date(lead.createdAt).toLocaleString('en-IN', {
     dateStyle: 'medium',
