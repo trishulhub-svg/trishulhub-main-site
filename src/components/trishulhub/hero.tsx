@@ -4,11 +4,10 @@ import { useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
-const HERO_BG_DESKTOP =
-  'https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/169cdb38-2656-4555-bec1-d1acc64bb6fa_3840w.png'
-/** Mobile hero background */
-const HERO_BG_MOBILE =
-  'https://plain-apac-prod-public.komododecks.com/202608/20/SsGFNBJYZesoLmEAxZcU/image.png'
+const HERO_VIDEO_DESKTOP =
+  'https://videotourl.com/videos/1787373793283-a7a319b3-9af4-4903-ab04-d08a9d00fbe2.mp4'
+const HERO_VIDEO_MOBILE =
+  'https://videotourl.com/videos/1787374175670-eabf5216-f601-480c-b114-3179ce86bbff.mp4'
 
 const CAROUSEL_WORDS = [
   'productive.',
@@ -19,11 +18,79 @@ const CAROUSEL_WORDS = [
   'scalable.',
 ] as const
 
+const LOOP_FLASH_MS = 200
+
+function useIsDesktop() {
+  const [isDesktop, setIsDesktop] = useState<boolean | null>(null)
+
+  useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)')
+    const sync = () => setIsDesktop(mq.matches)
+    sync()
+    mq.addEventListener('change', sync)
+    return () => mq.removeEventListener('change', sync)
+  }, [])
+
+  return isDesktop
+}
+
+/** Full-bleed muted hero video — restarts forever with a 0.2s outer shadow flash on end. */
+function HeroBgVideo({ src }: { src: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+  const [loopFlash, setLoopFlash] = useState(false)
+  const flashTimer = useRef<number | null>(null)
+
+  useEffect(() => {
+    return () => {
+      if (flashTimer.current != null) window.clearTimeout(flashTimer.current)
+    }
+  }, [])
+
+  function handleEnded() {
+    setLoopFlash(true)
+    if (flashTimer.current != null) window.clearTimeout(flashTimer.current)
+    flashTimer.current = window.setTimeout(() => {
+      setLoopFlash(false)
+      const v = videoRef.current
+      if (!v) return
+      v.currentTime = 0
+      void v.play().catch(() => {})
+    }, LOOP_FLASH_MS)
+  }
+
+  return (
+    <div
+      aria-hidden
+      className={[
+        'pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6] transition-[filter,box-shadow] duration-200 ease-out',
+        loopFlash
+          ? 'shadow-[0_28px_56px_rgba(0,0,0,0.55),0_8px_20px_rgba(0,0,0,0.35)] [filter:brightness(0.82)]'
+          : 'shadow-none [filter:brightness(1)]',
+      ].join(' ')}
+    >
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        src={src}
+        autoPlay
+        muted
+        playsInline
+        preload="auto"
+        controls={false}
+        disablePictureInPicture
+        disableRemotePlayback
+        onEnded={handleEnded}
+      />
+    </div>
+  )
+}
+
 export function Hero() {
   const { links } = useSiteContact()
   const [wordIndex, setWordIndex] = useState(0)
   const [fade, setFade] = useState(true)
   const revealRef = useRef<HTMLDivElement>(null)
+  const isDesktop = useIsDesktop()
 
   // Smooth infinite word carousel
   useEffect(() => {
@@ -60,31 +127,21 @@ export function Hero() {
   }, [])
 
   const word = CAROUSEL_WORDS[wordIndex]
+  const videoSrc =
+    isDesktop === null
+      ? null
+      : isDesktop
+        ? HERO_VIDEO_DESKTOP
+        : HERO_VIDEO_MOBILE
 
   return (
     <section
       id="home"
       className="relative isolate h-screen overflow-hidden text-gray-900 antialiased selection:bg-gray-100"
     >
-      {/* BG only inside hero — absolute, not fixed to the page */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 hidden animate-bg-zoom-out bg-cover bg-center bg-no-repeat md:block"
-        style={{
-          backgroundImage: `url(${HERO_BG_DESKTOP})`,
-          backgroundPosition: 'center center',
-          backgroundSize: 'cover',
-        }}
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 -z-10 bg-cover bg-center bg-no-repeat md:hidden"
-        style={{
-          backgroundImage: `url(${HERO_BG_MOBILE})`,
-          backgroundPosition: 'center center',
-          backgroundSize: 'cover',
-        }}
-      />
+      {videoSrc ? <HeroBgVideo src={videoSrc} /> : (
+        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[#f3f4f6]" />
+      )}
 
       <div ref={revealRef} className="relative z-10 flex h-full min-h-screen flex-col">
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-6 sm:py-28">
@@ -93,7 +150,7 @@ export function Hero() {
               Digital products that make your business{' '}
             </span>
             <span
-              className="inline-block border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
+              className="inline-flex border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
               style={{ opacity: fade ? 1 : 0 }}
               aria-live="polite"
             >
