@@ -32,31 +32,15 @@ function useIsDesktop() {
   return isDesktop
 }
 
-/** Full-bleed muted hero video — infinite loop. */
-function HeroBgVideo({
-  src,
-  variant,
-}: {
-  src: string
-  variant: 'desktop' | 'mobile'
-}) {
-  const isMobile = variant === 'mobile'
-
+/** Full-bleed muted hero video — infinite loop, covers the hero with no gaps. */
+function HeroBgVideo({ src }: { src: string }) {
   return (
     <div
       aria-hidden
-      className={[
-        'pointer-events-none absolute inset-0 -z-10 overflow-hidden',
-        isMobile ? 'bg-[#c9dced]' : 'bg-[#f3f4f6]',
-      ].join(' ')}
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6]"
     >
       <video
-        className={
-          isMobile
-            ? // Width-first so both glass cards stay in frame; shift up to crop extra sky
-              'absolute left-1/2 top-[48%] h-auto w-[110%] max-w-none -translate-x-1/2 -translate-y-[58%]'
-            : 'absolute inset-0 h-full w-full object-cover'
-        }
+        className="absolute inset-0 h-full w-full object-cover"
         src={src}
         autoPlay
         muted
@@ -123,19 +107,19 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="relative isolate h-screen overflow-hidden text-gray-900 antialiased selection:bg-gray-100"
+      className="relative isolate h-[80svh] overflow-hidden text-gray-900 antialiased selection:bg-gray-100 md:h-screen"
     >
       {videoSrc ? (
-        <HeroBgVideo
-          src={videoSrc}
-          variant={isDesktop ? 'desktop' : 'mobile'}
-        />
+        <HeroBgVideo src={videoSrc} />
       ) : (
-        <div aria-hidden className="pointer-events-none absolute inset-0 -z-10 bg-[#f3f4f6]" />
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 -z-10 bg-[#f3f4f6]"
+        />
       )}
 
-      <div ref={revealRef} className="relative z-10 flex h-full min-h-screen flex-col">
-        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-24 text-center sm:px-6 sm:py-28">
+      <div ref={revealRef} className="relative z-10 flex h-full flex-col">
+        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-16 text-center sm:px-6 sm:py-24 md:py-28">
           <h1 className="reveal-up text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#111111] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
             <span className="font-sans text-[#111111]">
               Digital products that make your business{' '}
