@@ -150,7 +150,7 @@ export function Hero() {
               Digital products that make your business{' '}
             </span>
             <span
-              className="inline-flex border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
+              className="inline-block border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
               style={{ opacity: fade ? 1 : 0 }}
               aria-live="polite"
             >
