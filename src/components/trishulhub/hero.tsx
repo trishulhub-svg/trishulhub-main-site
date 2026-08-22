@@ -119,7 +119,7 @@ export function Hero() {
       )}
 
       <div ref={revealRef} className="relative z-10 flex h-full flex-col">
-        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 py-16 text-center sm:px-6 sm:py-24 md:py-28">
+        <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-start px-5 pb-12 pt-28 text-center sm:px-6 sm:pb-16 sm:pt-32 md:justify-center md:py-28">
           <h1 className="reveal-up text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#111111] sm:text-5xl md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
             <span className="font-sans text-[#111111]">
               Digital products that make your business{' '}
