@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
 import {
   Globe,
@@ -184,6 +185,17 @@ const faqs = [
 // Service visuals (animated device / browser / dashboard mockups) live in ./service-visuals
 export function ServicesPage() {
   const { links } = useSiteContact()
+  const [step, setStep] = useState(0)
+
+  // Sequential highlight for the "How we work" steps (same single-index
+  // pattern used on the home page — one timer, no per-card choreography).
+  useEffect(() => {
+    const id = window.setInterval(
+      () => setStep((s) => (s + 1) % steps.length),
+      2200,
+    )
+    return () => window.clearInterval(id)
+  }, [])
 
   return (
     <div className="pb-8">
@@ -309,31 +321,59 @@ export function ServicesPage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {steps.map((s, i) => {
               const Icon = s.icon
+              const isActive = i === step
               return (
                 <motion.div
                   key={s.n}
                   initial={{ opacity: 0, y: 18 }}
                   whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  onMouseEnter={() => setStep(i)}
+                  animate={{
+                    y: isActive ? -6 : 0,
+                    borderColor: isActive
+                      ? 'rgba(13,60,31,0.35)'
+                      : 'rgba(13,60,31,0.1)',
+                    boxShadow: isActive
+                      ? '0 18px 42px rgba(6,43,22,0.11)'
+                      : '0 6px 20px rgba(6,43,22,0.04)',
+                  }}
                   transition={{
-                    delay: i * 0.07,
+                    delay: i * 0.05,
                     duration: 0.45,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="rounded-xl border border-[#111111] bg-white p-6"
+                  className="relative overflow-hidden rounded-2xl border bg-white p-6"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-xs font-bold tracking-[0.16em] text-[#0D3C1F]">
+                    <span
+                      className={`flex h-9 w-9 items-center justify-center rounded-xl text-[11px] font-bold transition-colors duration-300 ${
+                        isActive
+                          ? 'bg-[#0D3C1F] text-white'
+                          : 'bg-[#e8f5ef] text-[#0D3C1F]'
+                      }`}
+                    >
                       {s.n}
                     </span>
-                    <Icon size={18} strokeWidth={1.5} className="text-[#0D3C1F]" />
+                    <Icon
+                      size={18}
+                      strokeWidth={1.5}
+                      className={isActive ? 'text-[#0D3C1F]' : 'text-[#9ca3af]'}
+                    />
                   </div>
                   <h3 className="mt-5 text-lg font-bold text-[#111111]">
                     {s.title}
                   </h3>
-                  <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
+                  <p className="mt-2 pb-5 text-sm leading-relaxed text-[#6b7280]">
                     {s.text}
                   </p>
+                  <span className="absolute inset-x-6 bottom-4 block h-[3px] overflow-hidden rounded-full bg-[#0d3c1f]/10">
+                    <motion.span
+                      className="block h-full rounded-full bg-gradient-to-r from-[#0d9488] to-[#5eead4]"
+                      animate={{ width: isActive ? '100%' : '0%' }}
+                      transition={{ duration: 1.9, ease: 'linear' }}
+                    />
+                  </span>
                 </motion.div>
               )
             })}

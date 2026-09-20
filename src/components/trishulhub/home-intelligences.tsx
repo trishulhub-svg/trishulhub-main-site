@@ -1,11 +1,12 @@
 'use client'
 
-import { motion } from 'framer-motion'
+import { useEffect, useRef, useState } from 'react'
+import { motion, useReducedMotion } from 'framer-motion'
 import {
-  MessageCircle,
-  ShieldCheck,
   Clock,
   HeartHandshake,
+  MessageCircle,
+  ShieldCheck,
   TrendingUp,
   type LucideIcon,
 } from 'lucide-react'
@@ -13,15 +14,11 @@ import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const VB_W = 900
-const VB_H = 420
+const VB_H = 400
 
-type Pillar = {
-  name: string
-  icon: LucideIcon
-  x: number
-}
+type Pillar = { name: string; icon: LucideIcon; x: number }
 
-const pillars: Pillar[] = [
+const PILLARS: Pillar[] = [
   { name: 'Clear plans', icon: MessageCircle, x: 90 },
   { name: 'Quality work', icon: ShieldCheck, x: 270 },
   { name: 'On time', icon: Clock, x: 450 },
@@ -30,20 +27,36 @@ const pillars: Pillar[] = [
 ]
 
 const HUB_X = 450
-const HUB_Y = 380
-const HUB_TOP = HUB_Y - 40
-const LINE_END_Y = 118
+const HUB_Y = 352
+const HUB_TOP = HUB_Y - 34
+const NODE_Y = 96
+const STEP_MS = 1900
 
-const paths = pillars.map((item) => {
-  const endX = item.x
-  const midX = HUB_X + (endX - HUB_X) * 0.35
-  return {
-    d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${midX} ${LINE_END_Y + 40}, ${endX} ${LINE_END_Y}`,
-    len: 360 + Math.abs(endX - HUB_X) * 0.3,
-  }
-})
+const PATHS = PILLARS.map((p) => ({
+  name: p.name,
+  d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${HUB_X + (p.x - HUB_X) * 0.35} ${NODE_Y + 46}, ${p.x} ${NODE_Y}`,
+}))
 
+/**
+ * HomeIntelligences — "signal relay" promise diagram.
+ *
+ * A single cycling index drives the whole visual: the hub emits a pulse, each
+ * connector fills in turn, and the matching pillar lights up. Hovering a
+ * pillar parks the relay so people can read it. Reduced motion = fully static.
+ */
 export function HomeIntelligences() {
+  const reduce = useReducedMotion()
+  const [active, setActive] = useState(0)
+  const paused = useRef(false)
+
+  useEffect(() => {
+    if (reduce) return
+    const id = window.setInterval(() => {
+      if (!paused.current) setActive((i) => (i + 1) % PILLARS.length)
+    }, STEP_MS)
+    return () => window.clearInterval(id)
+  }, [reduce])
+
   return (
     <section className="relative overflow-hidden lt-section">
       <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-40" />
@@ -54,214 +67,213 @@ export function HomeIntelligences() {
             <HeartHandshake className="h-3.5 w-3.5 text-[#0d9488]" />
             The TrishulHub promise
           </span>
-
           <h2 className="text-balance mt-6 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl">
             What you can{' '}
             <HeroAccentWord words="expect from us" animate={false} />
           </h2>
-
-          <p className="mx-auto mt-5 max-w-2xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="text-pretty mx-auto mt-5 max-w-2xl font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
             No jargon, no hidden steps — just a clear, friendly way of working
             that puts your business first.
           </p>
         </div>
 
-        <div className="mx-auto mt-12 max-w-[300px] md:hidden">
-          <div className="relative z-10 flex justify-center">
-            <motion.span
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-              className="relative flex h-20 w-20 items-center justify-center overflow-hidden rounded-2xl border border-[#111111] bg-white shadow-[0_12px_40px_rgba(11,18,32,0.08)]"
-            >
-              <span
-                aria-hidden
-                className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#0d9488]/25 blur-md"
-              />
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="/images/trishulhub-logo.png"
-                alt="TrishulHub"
-                width={80}
-                height={80}
-                className="relative z-10 h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
-              />
-            </motion.span>
-          </div>
-
-          {/* Hub → 3 top tiles → corner tiles down to bottom 2 */}
-          <div className="relative mt-1">
-            <svg
-              aria-hidden
-              viewBox="0 0 300 220"
-              preserveAspectRatio="none"
-              className="pointer-events-none absolute inset-x-0 top-0 h-full w-full overflow-visible"
-              fill="none"
-            >
-              {/* Stem from logo */}
-              <path
-                d="M150 0 V24"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-              {/* Fork to three top boxes */}
-              <path
-                d="M150 24 L50 52"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-              <path
-                d="M150 24 L150 52"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-              <path
-                d="M150 24 L250 52"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-              {/* Corner boxes down to bottom row */}
-              <path
-                d="M50 120 V155"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-              <path
-                d="M250 120 V155"
-                stroke="#0d9488"
-                strokeWidth="2"
-                strokeDasharray="5 5"
-                className="animate-flow"
-                opacity="0.8"
-              />
-            </svg>
-
-            <div className="relative z-10 grid grid-cols-3 gap-2 pt-14">
-              {pillars.slice(0, 3).map((item, i) => (
-                <MobilePillarTile key={item.name} item={item} delay={i * 0.06} />
-              ))}
-            </div>
-
-            <div className="relative z-10 mt-8 grid grid-cols-3 gap-2">
-              <MobilePillarTile item={pillars[3]} delay={0.2} />
-              <div aria-hidden className="pointer-events-none" />
-              <MobilePillarTile item={pillars[4]} delay={0.26} />
-            </div>
-          </div>
-        </div>
-
-        <div className="relative mx-auto mt-14 hidden w-full max-w-5xl md:mt-16 md:block">
-          <div className="relative aspect-[900/420] w-full">
+        {/* ---------- Desktop relay ---------- */}
+        <div className="relative mx-auto mt-14 hidden w-full max-w-5xl md:block">
+          <div className="relative aspect-[900/400] w-full">
             <svg
               viewBox={`0 0 ${VB_W} ${VB_H}`}
               className="absolute inset-0 h-full w-full"
               fill="none"
-              aria-hidden="true"
+              aria-hidden
             >
-              {paths.map((p, i) => (
-                <path
-                  key={p.d}
-                  d={p.d}
-                  stroke="#0d9488"
-                  strokeWidth="2.25"
-                  strokeLinecap="round"
-                  fill="none"
-                  className="intel-line-shake"
-                  style={{
-                    strokeDasharray: p.len,
-                    strokeDashoffset: p.len,
-                    animationDelay: `${i * 0.18}s`,
-                    ['--intel-dash' as string]: String(p.len),
-                  }}
-                >
-                  <animate
-                    attributeName="stroke-dashoffset"
-                    values={`${p.len};0;${p.len}`}
-                    dur="3.2s"
-                    begin={`${i * 0.18}s`}
-                    repeatCount="indefinite"
-                  />
-                </path>
-              ))}
+              <defs>
+                <linearGradient id="promise-beam" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stopColor="#0d9488" stopOpacity="0.15" />
+                  <stop offset="100%" stopColor="#0d9488" stopOpacity="0.85" />
+                </linearGradient>
+              </defs>
+
+              {/* Dotted ring around the hub */}
+              <motion.circle
+                cx={HUB_X}
+                cy={HUB_Y}
+                r="58"
+                stroke="#0d9488"
+                strokeOpacity="0.25"
+                strokeWidth="1.5"
+                strokeDasharray="4 8"
+                animate={reduce ? undefined : { rotate: 360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+                style={{ transformOrigin: `${HUB_X}px ${HUB_Y}px` }}
+              />
+
+              {/* Connectors — each fills when its pillar is active */}
+              {PATHS.map((p, i) => {
+                const lit = i <= active
+                const isActive = i === active
+                return (
+                  <g key={p.name}>
+                    <path
+                      d={p.d}
+                      stroke="#0d3c1f"
+                      strokeOpacity="0.12"
+                      strokeWidth="2"
+                      strokeLinecap="round"
+                    />
+                    <motion.path
+                      d={p.d}
+                      stroke="url(#promise-beam)"
+                      strokeWidth={isActive ? 3 : 2}
+                      strokeLinecap="round"
+                      initial={false}
+                      animate={{ pathLength: lit ? 1 : 0, opacity: lit ? 1 : 0 }}
+                      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+                    />
+                    {!reduce && isActive ? (
+                      <circle r="4" fill="#5eead4">
+                        <animateMotion dur="1.5s" repeatCount="indefinite" path={p.d} />
+                      </circle>
+                    ) : null}
+                  </g>
+                )
+              })}
             </svg>
 
-            {pillars.map((item, i) => {
-              const Icon = item.icon
+            {/* Pillars */}
+            {PILLARS.map((pillar, i) => {
+              const Icon = pillar.icon
+              const isActive = i === active
               return (
-                <motion.div
-                  key={item.name}
-                  initial={{ opacity: 0, y: -10 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true, amount: 0.15 }}
-                  transition={{
-                    duration: 0.5,
-                    delay: i * 0.06,
-                    ease: EASE_OUT_EXPO,
+                <button
+                  key={pillar.name}
+                  type="button"
+                  onMouseEnter={() => {
+                    paused.current = true
+                    setActive(i)
+                  }}
+                  onMouseLeave={() => {
+                    paused.current = false
+                  }}
+                  onFocus={() => {
+                    paused.current = true
+                    setActive(i)
+                  }}
+                  onBlur={() => {
+                    paused.current = false
                   }}
                   className="absolute z-10 flex -translate-x-1/2 flex-col items-center"
                   style={{
-                    left: `${(item.x / VB_W) * 100}%`,
-                    top: 0,
+                    left: `${(pillar.x / VB_W) * 100}%`,
+                    top: `${(NODE_Y / VB_H) * 100}%`,
+                    transform: 'translate(-50%, -50%)',
                   }}
                 >
-                  <span
-                    className="intel-icon-shake inline-flex h-16 w-16 items-center justify-center rounded-2xl border border-[#111111] bg-white text-[#0d9488] shadow-[0_10px_30px_rgba(11,18,32,0.08)] sm:h-20 sm:w-20"
-                    style={{ animationDelay: `${i * 0.22}s` }}
+                  <motion.span
+                    animate={{
+                      scale: isActive ? 1.08 : 1,
+                      borderColor: isActive ? '#0D3C1F' : 'rgba(13,60,31,0.12)',
+                    }}
+                    transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+                    className={`relative flex h-[68px] w-[68px] items-center justify-center rounded-2xl border bg-white shadow-[0_10px_30px_rgba(6,43,22,0.08)] transition-colors duration-300 ${
+                      isActive ? 'text-[#0D3C1F]' : 'text-[#9ca3af]'
+                    }`}
                   >
-                    <Icon
-                      className="h-10 w-10 sm:h-12 sm:w-12"
-                      strokeWidth={1.55}
-                    />
+                    <Icon size={26} strokeWidth={1.6} />
+                    {isActive && !reduce ? (
+                      <motion.span
+                        aria-hidden
+                        animate={{ scale: [1, 1.55], opacity: [0.45, 0] }}
+                        transition={{ duration: 1.5, repeat: Infinity }}
+                        className="absolute inset-0 rounded-2xl border border-[#0d9488]"
+                      />
+                    ) : null}
+                  </motion.span>
+                  <span
+                    className={`mt-2 text-[11.5px] font-medium transition-colors ${
+                      isActive ? 'text-[#0D3C1F]' : 'text-muted-foreground'
+                    }`}
+                  >
+                    {pillar.name}
                   </span>
-                  <span className="relative z-20 mt-1.5 font-sans text-[11px] text-muted-foreground">
-                    {item.name}
-                  </span>
-                </motion.div>
+                </button>
               )
             })}
 
+            {/* Hub */}
             <div
-              className="absolute z-10 flex -translate-x-1/2 -translate-y-1/2 items-center justify-center"
+              className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
               style={{
                 left: `${(HUB_X / VB_W) * 100}%`,
                 top: `${(HUB_Y / VB_H) * 100}%`,
               }}
             >
-              <span className="relative flex h-16 w-16 items-center justify-center overflow-hidden rounded-2xl border border-[#111111] bg-white shadow-md sm:h-20 sm:w-20">
-                <span
+              <span className="relative flex h-[74px] w-[74px] items-center justify-center overflow-hidden rounded-2xl border border-[#0D3C1F]/15 bg-white shadow-[0_14px_36px_rgba(6,43,22,0.12)]">
+                <motion.span
                   aria-hidden
-                  className="intel-hub-pulse pointer-events-none absolute inset-[-20%] rounded-full bg-[#0d9488]/25 blur-md"
+                  animate={reduce ? undefined : { scale: [1, 1.35, 1], opacity: [0.35, 0.7, 0.35] }}
+                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
+                  className="absolute inset-2 rounded-full bg-[#0d9488]/25 blur-md"
                 />
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src="/images/trishulhub-logo.png"
                   alt="TrishulHub"
-                  width={80}
-                  height={80}
-                  className="relative z-10 block h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
+                  width={74}
+                  height={74}
+                  className="relative z-10 h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
                 />
               </span>
             </div>
           </div>
         </div>
 
-        <div className="mx-auto mt-14 max-w-3xl sm:mt-16">
+        {/* ---------- Mobile relay ---------- */}
+        <ul className="relative mx-auto mt-12 max-w-md space-y-3 md:hidden">
+          {PILLARS.map((pillar, i) => {
+            const Icon = pillar.icon
+            const isActive = i === active
+            return (
+              <li key={pillar.name}>
+                <button
+                  type="button"
+                  onClick={() => setActive(i)}
+                  className={`flex w-full items-center gap-4 rounded-2xl border p-3.5 text-left transition-all duration-300 ${
+                    isActive
+                      ? 'border-[#0D3C1F]/35 bg-white shadow-[0_12px_30px_rgba(6,43,22,0.09)]'
+                      : 'border-[#0d3c1f]/10 bg-white/70'
+                  }`}
+                >
+                  <span
+                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${
+                      isActive
+                        ? 'border-[#0D3C1F] bg-[#0D3C1F] text-white'
+                        : 'border-[#0d3c1f]/12 bg-white text-[#9ca3af]'
+                    }`}
+                  >
+                    <Icon size={19} strokeWidth={1.7} />
+                  </span>
+                  <span
+                    className={`text-[14px] font-semibold ${
+                      isActive ? 'text-[#0D3C1F]' : 'text-[#374151]'
+                    }`}
+                  >
+                    {pillar.name}
+                  </span>
+                  <span className="ml-auto h-[3px] w-12 overflow-hidden rounded-full bg-[#0d3c1f]/10">
+                    <motion.span
+                      className="block h-full rounded-full bg-[#0d9488]"
+                      animate={{ width: isActive ? '100%' : '0%' }}
+                      transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
+                    />
+                  </span>
+                </button>
+              </li>
+            )
+          })}
+        </ul>
+
+        {/* Closing chips */}
+        <div className="mx-auto mt-12 max-w-3xl sm:mt-14">
           <div className="flex flex-nowrap items-center justify-center gap-2 whitespace-nowrap text-[11px] sm:gap-5 sm:text-base">
             <div className="inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5">
               <MessageCircle className="h-3.5 w-3.5 shrink-0 text-[#0d9488] sm:h-5 sm:w-5" />
@@ -280,25 +292,5 @@ export function HomeIntelligences() {
         </div>
       </div>
     </section>
-  )
-}
-
-function MobilePillarTile({ item, delay }: { item: Pillar; delay: number }) {
-  const Icon = item.icon
-  return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, amount: 0.3 }}
-      transition={{ duration: 0.4, delay, ease: EASE_OUT_EXPO }}
-      className="flex flex-col items-center rounded-xl border border-[#111111] bg-white/90 px-1.5 py-2.5 shadow-sm"
-    >
-      <span className="inline-flex h-9 w-9 items-center justify-center rounded-lg bg-[#e8f4f3] text-[#0d9488]">
-        <Icon size={18} strokeWidth={1.7} />
-      </span>
-      <span className="mt-1.5 text-center font-sans text-[9px] leading-tight text-muted-foreground">
-        {item.name}
-      </span>
-    </motion.div>
   )
 }
