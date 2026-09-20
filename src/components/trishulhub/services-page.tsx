@@ -143,25 +143,6 @@ function ServiceMedia({
   videoSrc?: string
   icon: LucideIcon
 }) {
-  if (videoSrc) {
-    return (
-      <div className="relative mx-auto w-full overflow-hidden rounded-lg bg-[#0D3C1F]/5 shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
-        <video
-          className="aspect-[10/9] w-full object-cover sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[280px]"
-          src={videoSrc}
-          autoPlay
-          muted
-          loop
-          playsInline
-          controls={false}
-          disablePictureInPicture
-          disableRemotePlayback
-          aria-label={`${title} preview`}
-        />
-      </div>
-    )
-  }
-
   if (embedUrl) {
     return (
       <div
@@ -183,15 +164,18 @@ function ServiceMedia({
     )
   }
 
-  // Placeholder until video is provided
+  // Ultra-fast lightweight branded visual card
   return (
-    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#e0f7fa] to-[#c8e6c9] shadow-[0_2px_8px_rgba(63,69,81,0.16)]">
-      <div className="text-center">
-        <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white/80 text-[#0D3C1F]">
-          <Icon size={28} strokeWidth={1.5} />
+    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#f0fdf4] via-[#f8fafc] to-[#e8f5ef] p-6 shadow-[0_2px_8px_rgba(63,69,81,0.08)] sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
+      <div className="text-center flex flex-col items-center">
+        <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm border border-[#0D3C1F]/10 text-[#0D3C1F]">
+          <Icon size={32} strokeWidth={1.5} />
         </span>
-        <p className="mt-3 text-xs font-medium text-[#0D3C1F]/70">
-          Preview video coming soon
+        <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-[#0D3C1F]">
+          {title}
+        </p>
+        <p className="mt-1 text-[11px] text-[#6b7280]">
+          Bespoke Architecture & Engineering
         </p>
       </div>
     </div>

@@ -10,12 +10,12 @@ const HERO_VIDEO_MOBILE =
   'https://videotourl.com/videos/1787374175670-eabf5216-f601-480c-b114-3179ce86bbff.mp4'
 
 const CAROUSEL_WORDS = [
-  'productive.',
-  'efficient.',
-  'fast.',
-  'successful.',
+  'high-performing.',
+  'bespoke.',
   'reliable.',
   'scalable.',
+  'future-proof.',
+  'secure.',
 ] as const
 
 function useIsDesktop() {
@@ -37,19 +37,13 @@ function HeroBgVideo({ src }: { src: string }) {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#f3f4f6]"
+      className="pointer-events-none absolute inset-0 -z-10 overflow-hidden bg-[#fafafa]"
     >
-      <video
-        className="absolute inset-0 h-full w-full object-cover"
-        src={src}
-        autoPlay
-        muted
-        loop
-        playsInline
-        preload="auto"
-        controls={false}
-        disablePictureInPicture
-        disableRemotePlayback
+      <div
+        className="absolute inset-0 bg-[radial-gradient(#e5e7eb_1px,transparent_1px)] [background-size:24px_24px] opacity-70"
+      />
+      <div
+        className="absolute -top-40 left-1/2 h-[38rem] w-[50rem] -translate-x-1/2 rounded-full bg-gradient-to-tr from-[#0D3C1F]/10 via-[#0d9488]/10 to-transparent blur-3xl"
       />
     </div>
   )
@@ -122,7 +116,7 @@ export function Hero() {
         <div className="mx-auto flex w-full max-w-4xl flex-1 flex-col items-center justify-center px-5 text-center max-md:justify-start max-md:pb-8 max-md:pt-[10.5rem] sm:px-6 md:py-28">
           <h1 className="reveal-up max-md:mt-6 text-[1.85rem] font-semibold leading-[1.15] tracking-tight text-[#111111] sm:text-5xl md:mt-0 md:text-6xl lg:text-[4.25rem] lg:leading-[1.1]">
             <span className="font-sans text-[#111111]">
-              Digital products that make your business{' '}
+              Digital engineering that makes your business{' '}
             </span>
             <span
               className="inline-block border-r-4 border-[#0D3C1F] pr-1 font-playfair italic text-[#0D3C1F] animate-blink transition-opacity duration-200"
@@ -134,8 +128,8 @@ export function Hero() {
           </h1>
 
           <p className="reveal-up mt-5 max-w-xl text-sm font-normal leading-relaxed text-gray-500 sm:mt-6 sm:text-base md:text-lg">
-            TrishulHub builds websites, custom software, and mobile apps for
-            growing businesses — clear products your team can use every day.
+            We architect and engineer high-speed web platforms, bespoke software systems,
+            and mobile applications built for reliable, scalable growth.
           </p>
 
           <div className="reveal-up mt-8 sm:mt-10">
@@ -145,7 +139,7 @@ export function Hero() {
               rel="noopener noreferrer"
               className="inline-flex h-12 items-center justify-center rounded-md bg-[#0D3C1F] px-8 text-xs font-semibold uppercase tracking-[0.1em] text-white transition hover:bg-[#164a28] sm:h-14 sm:px-10 sm:text-sm"
             >
-              Let&apos;s build yours
+              Start Your Project
             </a>
           </div>
 
