@@ -151,6 +151,12 @@ export default function RootLayout({
         {children}
         <Toaster />
         <AgentationLive />
+        {/* TrishulHub Call — browser call button for site visitors. */}
+        <script
+          src="https://call.trishulhub.com/widget.js"
+          data-site="tc_BnUzxX-Bi0lGAhly6hrjoNZrjo"
+          async
+        />
         <script
           type="application/ld+json"
           // eslint-disable-next-line react/no-danger
@@ -160,3 +166,4 @@ export default function RootLayout({
     </html>
   );
 }
+
