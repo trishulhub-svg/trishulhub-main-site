@@ -4,12 +4,8 @@ import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import {
-  AnimatePresence,
-  motion,
-  useReducedMotion,
-  useScroll,
-  useSpring,
-} from 'framer-motion'
+  AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Menu, X } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
@@ -25,7 +21,7 @@ const navLinks = [
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [open, setOpen] = useState(false)
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const pathname = usePathname()
   const { links: contactLinks } = useSiteContact()
 

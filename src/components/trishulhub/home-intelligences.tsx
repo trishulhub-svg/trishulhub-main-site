@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import {
   Clock,
   HeartHandshake,
@@ -54,7 +55,7 @@ const STEP_MS = 2600
  * reduced motion renders the rail statically with every commitment listed.
  */
 export function HomeIntelligences() {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
 

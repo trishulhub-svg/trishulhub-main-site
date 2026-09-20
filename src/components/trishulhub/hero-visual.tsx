@@ -2,12 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 import {
-  motion,
-  useMotionValue,
-  useReducedMotion,
-  useSpring,
-  useTransform,
-} from 'framer-motion'
+  motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import {
   Activity,
   ArrowUpRight,
@@ -37,7 +33,7 @@ const CHART_PATH =
   'M0,86 C26,74 44,96 70,78 C96,60 116,72 142,52 C168,32 190,44 216,26 C238,12 252,20 272,10'
 
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [value, setValue] = useState(reduce ? to : 0)
 
   useEffect(() => {
@@ -63,7 +59,7 @@ function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
 }
 
 export function HeroVisual() {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const ref = useRef<HTMLDivElement>(null)
 
   // Pointer parallax (desktop only)

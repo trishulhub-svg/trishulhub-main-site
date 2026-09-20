@@ -16,10 +16,10 @@
  */
 
 import { useEffect, type ReactNode } from 'react'
-import { useReducedMotion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
 
   useEffect(() => {
     if (reduce) return // skip Lenis for reduced-motion users (native scroll is fine)

@@ -21,6 +21,12 @@ const sizes = {
   xl: { box: 128, img: 118, text: 'text-2xl sm:text-3xl' },
 }
 
+/**
+ * The mark is 527×473, not square. Passing square width/height made Next warn
+ * about a modified aspect ratio, so derive the height from the real file.
+ */
+const LOGO_RATIO = 527 / 473
+
 export function BrandLogo({
   href = '/',
   size = 'md',
@@ -45,7 +51,7 @@ export function BrandLogo({
           src="/images/trishulhub-logo.png"
           alt="TrishulHub logo"
           width={s.img}
-          height={s.img}
+          height={Math.round(s.img / LOGO_RATIO)}
           className="object-contain"
           priority
         />

@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Mail, MessageCircle, Phone } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
@@ -35,7 +36,7 @@ const STEP_MS = 1800
 export function HomeGetInTouch() {
   const contact = useSiteContact()
   const { email, phoneDisplay, whatsappWithMessage } = contact
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
 

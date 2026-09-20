@@ -2,7 +2,8 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import {
   ArrowRight,
   Code2,
@@ -69,7 +70,7 @@ const PROOF = [
 
 export function Hero() {
   const { links } = useSiteContact()
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [wordIndex, setWordIndex] = useState(0)
 
   useEffect(() => {

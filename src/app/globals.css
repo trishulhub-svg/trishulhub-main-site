@@ -116,7 +116,7 @@
     overscroll-behavior-y: auto;
   }
   /* Never let one wide element push the whole page sideways on a phone. */
-  img,
+  img:not([data-nimg]),
   video,
   canvas,
   svg {

@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import {
   BatteryFull,
   Bell,
@@ -43,7 +44,7 @@ function Glow({ className = '', color = '#10b981' }: { className?: string; color
 
 /** Small counter that ticks up to `to` whenever the card scrolls into view. */
 function Counter({ to, suffix = '' }: { to: number; suffix?: string }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [value, setValue] = useState(reduce ? to : 0)
 
   useEffect(() => {

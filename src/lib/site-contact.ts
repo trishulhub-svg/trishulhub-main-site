@@ -77,6 +77,9 @@ type EnquiryDetails = {
   service?: string
   budget?: string
   timing?: string
+  name?: string
+  email?: string
+  phone?: string
 }
 
 /**
@@ -106,6 +109,9 @@ export function enquiryEmailDraft(extra?: EnquiryDetails): {
   const service = extra?.service?.trim() || 'Not decided yet'
   const budget = extra?.budget?.trim() || 'Open to your recommendation'
   const timing = extra?.timing?.trim() || 'Flexible'
+  const name = extra?.name?.trim() || ''
+  const email = extra?.email?.trim() || ''
+  const phone = extra?.phone?.trim() || ''
 
   const body = [
     'Hello TrishulHub team,',
@@ -128,10 +134,11 @@ export function enquiryEmailDraft(extra?: EnquiryDetails): {
     '• Anything else we should know: ',
     '',
     'ABOUT ME',
-    '• Name: ',
+    `• Name: ${name}`,
     '• Company: ',
     '• Role: ',
-    '• Best number: ',
+    `• Email: ${email}`,
+    `• Best number: ${phone}`,
     '• Preferred reply: email / WhatsApp / phone',
     '',
     'Thanks,',
@@ -154,6 +161,9 @@ export function enquiryWhatsAppDraft(extra?: EnquiryDetails): string {
   const service = extra?.service?.trim() || 'Not decided yet'
   const budget = extra?.budget?.trim() || 'Open to advice'
   const timing = extra?.timing?.trim() || 'Flexible'
+  const name = extra?.name?.trim() || ''
+  const email = extra?.email?.trim() || ''
+  const phone = extra?.phone?.trim() || ''
 
   return [
     'Hello TrishulHub — project enquiry',
@@ -166,8 +176,10 @@ export function enquiryWhatsAppDraft(extra?: EnquiryDetails): string {
     '*Who it is for:* ',
     '*Current site / links:* ',
     '',
-    'Name: ',
+    `Name: ${name}`,
     'Company: ',
+    `Email: ${email}`,
+    `Phone: ${phone}`,
     '',
     'Thanks!',
   ].join('\n')

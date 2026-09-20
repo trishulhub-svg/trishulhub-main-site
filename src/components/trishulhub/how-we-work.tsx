@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Check, Cpu, Database, Send, Smartphone } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -47,7 +48,7 @@ const STEP_MS = 2200
  * users get a static, fully-visible diagram.
  */
 export function HowWeWork() {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
 

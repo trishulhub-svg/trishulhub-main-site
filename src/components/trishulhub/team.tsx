@@ -2,7 +2,8 @@
 
 import type { ReactNode } from 'react'
 import Link from 'next/link'
-import { motion, useReducedMotion } from 'framer-motion'
+import { motion } from 'framer-motion'
+import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Linkedin, Mail, ArrowUpRight, Instagram } from 'lucide-react'
 import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
@@ -45,7 +46,7 @@ const iconBtn =
   'flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/15 text-[#6b7280] transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white'
 
 export function Team({ founders }: { founders: Founder[] }) {
-  const reduce = useReducedMotion()
+  const reduce = useReducedMotionSafe()
 
   return (
     <section
