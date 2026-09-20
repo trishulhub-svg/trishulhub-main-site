@@ -123,14 +123,14 @@ export function FounderDetailClient({
                   Contact me
                 </a>
               ) : null}
-              <a
-                href="#projects"
-                className="inline-flex items-center justify-center gap-2 rounded-full border border-[#111111] bg-white px-7 py-3.5 text-sm font-semibold text-[#111111] transition hover:bg-[#0D3C1F] hover:text-white"
-              >
-                My Works
-                <ArrowUpRight size={15} />
-              </a>
-            </div>
+            <a
+              href="#projects"
+              className="inline-flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-7 py-3.5 text-sm font-semibold text-[#111111] shadow-sm transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white"
+            >
+              Selected Projects
+              <ArrowUpRight size={15} />
+            </a>
+          </div>
 
             <div className="mt-8 flex items-center gap-3">
               {whatsappHref(f.whatsapp) && (

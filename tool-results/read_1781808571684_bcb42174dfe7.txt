@@ -1,0 +1,745 @@
+     1→'use client'
+     2→
+     3→import { useEffect, useRef } from 'react'
+     4→import { motion } from 'framer-motion'
+     5→import {
+     6→  ArrowLeft,
+     7→  ArrowUpRight,
+     8→  Download,
+     9→  Mail,
+    10→  Phone,
+    11→  MapPin,
+    12→  Home,
+    13→  Calendar,
+    14→  User as UserIcon,
+    15→  Github,
+    16→  Linkedin,
+    17→  Twitter,
+    18→  Globe,
+    19→  Briefcase,
+    20→  GraduationCap,
+    21→  Code,
+    22→  FolderGit2,
+    23→  Send,
+    24→} from 'lucide-react'
+    25→
+    26→type Founder = {
+    27→  name: string
+    28→  initial: string
+    29→  role: string
+    30→  bio: string
+    31→  projects: string
+    32→  image: string | null
+    33→  dateOfBirth: string | null
+    34→  address: string | null
+    35→  zipCode: string | null
+    36→  email: string | null
+    37→  phone: string | null
+    38→  origin: string | null
+    39→  github: string | null
+    40→  linkedin: string | null
+    41→  twitter: string | null
+    42→  website: string | null
+    43→  skills: { name: string; level: number }[]
+    44→  education: {
+    45→    degree: string
+    46→    school: string
+    47→    year: string
+    48→    description: string
+    49→  }[]
+    50→  experience: {
+    51→    role: string
+    52→    company: string
+    53→    period: string
+    54→    description: string
+    55→  }[]
+    56→  projectsList: {
+    57→    name: string
+    58→    description: string
+    59→    link: string
+    60→    year: string
+    61→  }[]
+    62→}
+    63→
+    64→/*
+    65→ * Founder intro videos — same clips used on the team section cards, shown
+    66→ * here on the portfolio hero so visitors see the same looping video when
+    67→ * they click a founder's image. Kiran and Taroon have custom videos; other
+    68→ * founders fall back to the existing image / initial-letter design.
+    69→ */
+    70→const FOUNDER_VIDEOS: Record<string, string> = {
+    71→  kiran: '/videos/founder-kiran.mp4',
+    72→  taroon: '/videos/founder-taroon.mp4',
+    73→}
+    74→
+    75→export function FounderDetailClient({
+    76→  slug,
+    77→  founder: f,
+    78→}: {
+    79→  slug: string
+    80→  founder: Founder
+    81→}) {
+    82→  /* Looping founder intro video (kiran + taroon only) */
+    83→  const founderVideo = FOUNDER_VIDEOS[slug]
+    84→  const videoRef = useRef<HTMLVideoElement>(null)
+    85→
+    86→  // Explicit .play() kick — some browsers block autoplay until the user
+    87→  // has interacted with the page. Retry on first interaction.
+    88→  useEffect(() => {
+    89→    const v = videoRef.current
+    90→    if (!v) return
+    91→    const tryPlay = () => {
+    92→      v.muted = true
+    93→      v.play().catch(() => {})
+    94→    }
+    95→    tryPlay()
+    96→    const onFirstInteraction = () => {
+    97→      tryPlay()
+    98→      window.removeEventListener('click', onFirstInteraction)
+    99→      window.removeEventListener('touchstart', onFirstInteraction)
+   100→      window.removeEventListener('keydown', onFirstInteraction)
+   101→    }
+   102→    window.addEventListener('click', onFirstInteraction)
+   103→    window.addEventListener('touchstart', onFirstInteraction)
+   104→    window.addEventListener('keydown', onFirstInteraction)
+   105→    return () => {
+   106→      window.removeEventListener('click', onFirstInteraction)
+   107→      window.removeEventListener('touchstart', onFirstInteraction)
+   108→      window.removeEventListener('keydown', onFirstInteraction)
+   109→    }
+   110→  }, [])
+   111→
+   112→  return (
+   113→    <div className="min-h-screen bg-[#0A0A0A] text-white">
+   114→      {/* ===== Top nav ===== */}
+   115→      <header className="sticky top-0 z-50 border-b border-white/10 bg-[#0A0A0A]/80 backdrop-blur-xl">
+   116→        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-4 sm:px-6 lg:px-8">
+   117→          <a
+   118→            href="/"
+   119→            className="group flex items-center gap-2 text-sm font-medium text-white/70 transition-colors hover:text-[#00DEFF]"
+   120→          >
+   121→            <ArrowLeft size={16} className="transition-transform group-hover:-translate-x-1" />
+   122→            Back to TrishulHub
+   123→          </a>
+   124→          <a href="/" className="text-lg font-bold tracking-[0.15em] sm:text-xl">
+   125→            <span className="text-white">TRISHUL</span>
+   126→            <span className="gradient-text">HUB</span>
+   127→          </a>
+   128→        </div>
+   129→      </header>
+   130→
+   131→      {/* ===== HERO SECTION ===== */}
+   132→      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+   133→        {/* Background effects */}
+   134→        <div
+   135→          className="pointer-events-none absolute inset-0 opacity-[0.07]"
+   136→          style={{
+   137→            backgroundImage:
+   138→              'linear-gradient(rgba(0,222,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,222,255,0.6) 1px, transparent 1px)',
+   139→            backgroundSize: '48px 48px',
+   140→          }}
+   141→        />
+   142→        <div
+   143→          className="pointer-events-none absolute left-1/2 top-0 h-[500px] w-[500px] -translate-x-1/2 rounded-full opacity-20 blur-[120px]"
+   144→          style={{ background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)' }}
+   145→        />
+   146→        <div
+   147→          className="pointer-events-none absolute right-0 top-1/3 h-[400px] w-[400px] rounded-full opacity-15 blur-[100px]"
+   148→          style={{ background: 'radial-gradient(circle, #0088CC 0%, transparent 70%)' }}
+   149→        />
+   150→
+   151→        <div className="relative z-10 mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 lg:grid-cols-2">
+   152→          {/* Left: text */}
+   153→          <motion.div
+   154→            initial={{ opacity: 0, x: -30 }}
+   155→            animate={{ opacity: 1, x: 0 }}
+   156→            transition={{ duration: 0.7 }}
+   157→            className="order-2 lg:order-1"
+   158→          >
+   159→            <p className="mb-4 text-sm font-semibold uppercase tracking-[0.3em] text-[#00DEFF]">
+   160→              HELLO!
+   161→            </p>
+   162→            <h1 className="text-4xl font-bold leading-[1.1] sm:text-5xl lg:text-6xl">
+   163→              <span className="text-white">I&apos;m </span>
+   164→              <span className="gradient-text">{f.name}</span>
+   165→            </h1>
+   166→            <p className="mt-4 text-lg font-medium text-white/80 sm:text-xl">{f.role}</p>
+   167→            <p className="mt-6 max-w-xl text-sm leading-relaxed text-white/60 sm:text-base">
+   168→              {f.bio}
+   169→            </p>
+   170→
+   171→            {/* CTAs */}
+   172→            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:gap-4">
+   173→              <a
+   174→                href={`mailto:${f.email ?? '#'}`}
+   175→                className="group inline-flex items-center justify-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3.5 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_30px_rgba(0,222,255,0.5)]"
+   176→              >
+   177→                <Send size={15} />
+   178→                Hire Me
+   179→              </a>
+   180→              <a
+   181→                href="#projects"
+   182→                className="group inline-flex items-center justify-center gap-2 rounded-full border border-white/20 px-7 py-3.5 text-sm font-semibold text-white transition-all hover:border-[#00DEFF]/60 hover:bg-[#00DEFF]/5 hover:text-[#00DEFF]"
+   183→              >
+   184→                My Works
+   185→                <ArrowUpRight size={15} className="transition-transform group-hover:translate-x-1 group-hover:-translate-y-1" />
+   186→              </a>
+   187→            </div>
+   188→
+   189→            {/* Social row */}
+   190→            <div className="mt-8 flex items-center gap-3">
+   191→              {f.github && (
+   192→                <a
+   193→                  href={f.github}
+   194→                  target="_blank"
+   195→                  rel="noopener noreferrer"
+   196→                  aria-label="GitHub"
+   197→                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+   198→                >
+   199→                  <Github size={16} />
+   200→                </a>
+   201→              )}
+   202→              {f.linkedin && (
+   203→                <a
+   204→                  href={f.linkedin}
+   205→                  target="_blank"
+   206→                  rel="noopener noreferrer"
+   207→                  aria-label="LinkedIn"
+   208→                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+   209→                >
+   210→                  <Linkedin size={16} />
+   211→                </a>
+   212→              )}
+   213→              {f.twitter && (
+   214→                <a
+   215→                  href={f.twitter}
+   216→                  target="_blank"
+   217→                  rel="noopener noreferrer"
+   218→                  aria-label="Twitter"
+   219→                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+   220→                >
+   221→                  <Twitter size={16} />
+   222→                </a>
+   223→              )}
+   224→              {f.website && (
+   225→                <a
+   226→                  href={f.website}
+   227→                  target="_blank"
+   228→                  rel="noopener noreferrer"
+   229→                  aria-label="Website"
+   230→                  className="flex h-10 w-10 items-center justify-center rounded-full border border-white/15 text-white/70 transition-all hover:border-[#00DEFF] hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+   231→                >
+   232→                  <Globe size={16} />
+   233→                </a>
+   234→              )}
+   235→            </div>
+   236→          </motion.div>
+   237→
+   238→          {/* Right: photo / initial card */}
+   239→          <motion.div
+   240→            initial={{ opacity: 0, scale: 0.9 }}
+   241→            animate={{ opacity: 1, scale: 1 }}
+   242→            transition={{ duration: 0.7, delay: 0.2 }}
+   243→            className="order-1 lg:order-2"
+   244→          >
+   245→            <div className="relative mx-auto aspect-square w-full max-w-md overflow-hidden rounded-3xl border border-[#00DEFF]/20">
+   246→              {/* Background gradient */}
+   247→              <div
+   248→                className="absolute inset-0"
+   249→                style={{
+   250→                  background:
+   251→                    'linear-gradient(135deg, #0a2a35 0%, #0A0A0A 50%, #061218 100%)',
+   252→                }}
+   253→              />
+   254→              {/* Radial glow */}
+   255→              <div
+   256→                className="absolute inset-0"
+   257→                style={{
+   258→                  background:
+   259→                    'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,222,255,0.35) 0%, transparent 70%)',
+   260→                }}
+   261→              />
+   262→              {/* Grid pattern */}
+   263→              <div
+   264→                className="absolute inset-0 opacity-[0.08]"
+   265→                style={{
+   266→                  backgroundImage:
+   267→                    'linear-gradient(rgba(0,222,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,222,255,0.6) 1px, transparent 1px)',
+   268→                  backgroundSize: '28px 28px',
+   269→                }}
+   270→              />
+   271→
+   272→              {founderVideo ? (
+   273→                <video
+   274→                  ref={videoRef}
+   275→                  src={founderVideo}
+   276→                  autoPlay
+   277→                  loop
+   278→                  muted
+   279→                  playsInline
+   280→                  preload="auto"
+   281→                  aria-hidden="true"
+   282→                  className="absolute inset-0 h-full w-full object-cover"
+   283→                />
+   284→              ) : f.image ? (
+   285→                <img
+   286→                  src={f.image}
+   287→                  alt={f.name}
+   288→                  className="absolute inset-0 h-full w-full object-cover"
+   289→                />
+   290→              ) : (
+   291→                <div className="absolute inset-0 flex items-center justify-center">
+   292→                  <span
+   293→                    className="select-none text-[180px] font-bold leading-none sm:text-[240px]"
+   294→                    style={{
+   295→                      color: '#00DEFF',
+   296→                      fontFamily: 'var(--font-space-grotesk)',
+   297→                      textShadow: 'rgba(0,222,255,0.45) 0px 0px 40px',
+   298→                    }}
+   299→                  >
+   300→                    {f.initial}
+   301→                  </span>
+   302→                </div>
+   303→              )}
+   304→
+   305→              {/* Projects badge */}
+   306→              <div className="absolute bottom-4 left-4 rounded-full bg-[#00DEFF] px-4 py-1.5 text-sm font-bold text-[#0A0A0A] backdrop-blur-sm">
+   307→                {f.projects} Project Complete
+   308→              </div>
+   309→            </div>
+   310→          </motion.div>
+   311→        </div>
+   312→      </section>
+   313→
+   314→      {/* ===== ABOUT ME SECTION ===== */}
+   315→      <section className="relative overflow-hidden border-t border-white/10 px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+   316→        <div className="mx-auto max-w-6xl">
+   317→          <SectionHeading white="About" cyan="Me" />
+   318→
+   319→          <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:text-base">
+   320→            {f.bio}
+   321→          </p>
+   322→
+   323→          <div className="grid grid-cols-1 gap-10 lg:grid-cols-2 lg:gap-16">
+   324→            {/* Left: photo */}
+   325→            <motion.div
+   326→              initial={{ opacity: 0, y: 20 }}
+   327→              whileInView={{ opacity: 1, y: 0 }}
+   328→              viewport={{ once: true }}
+   329→              transition={{ duration: 0.5 }}
+   330→              className="flex justify-center lg:justify-start"
+   331→            >
+   332→              <div className="relative aspect-[4/5] w-full max-w-sm overflow-hidden rounded-2xl border border-[#00DEFF]/20">
+   333→                <div
+   334→                  className="absolute inset-0"
+   335→                  style={{
+   336→                    background:
+   337→                      'linear-gradient(135deg, #0a2a35 0%, #0A0A0A 60%, #061218 100%)',
+   338→                  }}
+   339→                />
+   340→                <div
+   341→                  className="absolute inset-0"
+   342→                  style={{
+   343→                    background:
+   344→                      'radial-gradient(ellipse 70% 60% at 50% 40%, rgba(0,222,255,0.3) 0%, transparent 70%)',
+   345→                  }}
+   346→                />
+   347→                <div
+   348→                  className="absolute inset-0 opacity-[0.08]"
+   349→                  style={{
+   350→                    backgroundImage:
+   351→                      'linear-gradient(rgba(0,222,255,0.6) 1px, transparent 1px), linear-gradient(90deg, rgba(0,222,255,0.6) 1px, transparent 1px)',
+   352→                    backgroundSize: '28px 28px',
+   353→                  }}
+   354→                />
+   355→                {f.image ? (
+   356→                   
+   357→                  <img
+   358→                    src={f.image}
+   359→                    alt={f.name}
+   360→                    className="absolute inset-0 h-full w-full object-cover"
+   361→                  />
+   362→                ) : (
+   363→                  <div className="absolute inset-0 flex items-center justify-center">
+   364→                    <span
+   365→                      className="select-none text-[160px] font-bold leading-none"
+   366→                      style={{
+   367→                        color: '#00DEFF',
+   368→                        fontFamily: 'var(--font-space-grotesk)',
+   369→                        textShadow: 'rgba(0,222,255,0.45) 0px 0px 36px',
+   370→                      }}
+   371→                    >
+   372→                      {f.initial}
+   373→                    </span>
+   374→                  </div>
+   375→                )}
+   376→                {/* Project count badge */}
+   377→                <div className="absolute bottom-4 left-4 rounded-full bg-[#00DEFF] px-4 py-1.5 text-sm font-bold text-[#0A0A0A]">
+   378→                  {f.projects} Project complete
+   379→                </div>
+   380→              </div>
+   381→            </motion.div>
+   382→
+   383→            {/* Right: details list */}
+   384→            <motion.div
+   385→              initial={{ opacity: 0, y: 20 }}
+   386→              whileInView={{ opacity: 1, y: 0 }}
+   387→              viewport={{ once: true }}
+   388→              transition={{ duration: 0.5, delay: 0.1 }}
+   389→            >
+   390→              <ul className="space-y-4">
+   391→                <DetailRow icon={<UserIcon size={16} />} label="Name" value={f.name} />
+   392→                {f.dateOfBirth && (
+   393→                  <DetailRow
+   394→                    icon={<Calendar size={16} />}
+   395→                    label="Date of birth"
+   396→                    value={f.dateOfBirth}
+   397→                  />
+   398→                )}
+   399→                {f.address && (
+   400→                  <DetailRow
+   401→                    icon={<MapPin size={16} />}
+   402→                    label="Address"
+   403→                    value={f.address}
+   404→                  />
+   405→                )}
+   406→                {f.origin && (
+   407→                  <DetailRow
+   408→                    icon={<Home size={16} />}
+   409→                    label="Origin"
+   410→                    value={f.origin}
+   411→                  />
+   412→                )}
+   413→                {f.zipCode && (
+   414→                  <DetailRow
+   415→                    icon={<MapPin size={16} />}
+   416→                    label="Zip code"
+   417→                    value={f.zipCode}
+   418→                  />
+   419→                )}
+   420→                {f.email && (
+   421→                  <DetailRow
+   422→                    icon={<Mail size={16} />}
+   423→                    label="Email"
+   424→                    value={f.email}
+   425→                  />
+   426→                )}
+   427→                {f.phone && (
+   428→                  <DetailRow
+   429→                    icon={<Phone size={16} />}
+   430→                    label="Phone"
+   431→                    value={f.phone}
+   432→                  />
+   433→                )}
+   434→              </ul>
+   435→
+   436→              {/* CV / contact button */}
+   437→              <a
+   438→                href={`mailto:${f.email ?? '#'}`}
+   439→                className="mt-8 inline-flex items-center gap-2 rounded-full bg-[#00DEFF] px-7 py-3 text-sm font-semibold text-[#0A0A0A] transition-all hover:shadow-[0_0_30px_rgba(0,222,255,0.5)]"
+   440→              >
+   441→                <Download size={15} />
+   442→                Get In Touch
+   443→              </a>
+   444→            </motion.div>
+   445→          </div>
+   446→        </div>
+   447→      </section>
+   448→
+   449→      {/* ===== MY SKILLS SECTION ===== */}
+   450→      <section className="relative overflow-hidden border-t border-white/10 px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+   451→        <div
+   452→          className="pointer-events-none absolute left-1/2 top-0 h-[400px] w-[600px] -translate-x-1/2 rounded-full opacity-10 blur-[120px]"
+   453→          style={{ background: 'radial-gradient(circle, #00DEFF 0%, transparent 70%)' }}
+   454→        />
+   455→
+   456→        <div className="relative z-10 mx-auto max-w-5xl">
+   457→          <SectionHeading white="My" cyan="Skills" />
+   458→          <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:text-base">
+   459→            A blend of technical and soft skills honed over years of delivering real client work at TrishulHub.
+   460→          </p>
+   461→
+   462→          <div className="grid grid-cols-1 gap-x-10 gap-y-6 sm:grid-cols-2">
+   463→            {f.skills.map((s, i) => (
+   464→              <SkillBar key={s.name} name={s.name} level={s.level} index={i} />
+   465→            ))}
+   466→          </div>
+   467→        </div>
+   468→      </section>
+   469→
+   470→      {/* ===== EDUCATION SECTION ===== */}
+   471→      <section className="relative overflow-hidden border-t border-white/10 px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+   472→        <div className="mx-auto max-w-5xl">
+   473→          <SectionHeading white="My" cyan="Education" />
+   474→          <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:text-base">
+   475→            Formal education and certifications that built the foundation of my career.
+   476→          </p>
+   477→
+   478→          <div className="space-y-6">
+   479→            {f.education.map((e, i) => (
+   480→              <TimelineCard
+   481→                key={i}
+   482→                icon={<GraduationCap size={18} />}
+   483→                title={e.degree}
+   484→                org={e.school}
+   485→                period={e.year}
+   486→                description={e.description}
+   487→                index={i}
+   488→              />
+   489→            ))}
+   490→          </div>
+   491→        </div>
+   492→      </section>
+   493→
+   494→      {/* ===== EXPERIENCE SECTION ===== */}
+   495→      <section className="relative overflow-hidden border-t border-white/10 px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+   496→        <div
+   497→          className="pointer-events-none absolute right-0 top-0 h-[400px] w-[400px] rounded-full opacity-10 blur-[100px]"
+   498→          style={{ background: 'radial-gradient(circle, #0088CC 0%, transparent 70%)' }}
+   499→        />
+   500→
+   501→        <div className="relative z-10 mx-auto max-w-5xl">
+   502→          <SectionHeading white="My" cyan="Experience" />
+   503→          <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:text-base">
+   504→            Professional journey across companies and roles.
+   505→          </p>
+   506→
+   507→          <div className="space-y-6">
+   508→            {f.experience.map((e, i) => (
+   509→              <TimelineCard
+   510→                key={i}
+   511→                icon={<Briefcase size={18} />}
+   512→                title={e.role}
+   513→                org={e.company}
+   514→                period={e.period}
+   515→                description={e.description}
+   516→                index={i}
+   517→              />
+   518→            ))}
+   519→          </div>
+   520→        </div>
+   521→      </section>
+   522→
+   523→      {/* ===== PROJECTS SECTION ===== */}
+   524→      <section
+   525→        id="projects"
+   526→        className="relative overflow-hidden border-t border-white/10 px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
+   527→      >
+   528→        <div className="mx-auto max-w-6xl">
+   529→          <SectionHeading white="My" cyan="Projects" />
+   530→          <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-white/60 sm:text-base">
+   531→            Selected work shipped at TrishulHub and beyond.
+   532→          </p>
+   533→
+   534→          <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+   535→            {f.projectsList.map((p, i) => (
+   536→              <ProjectCard key={i} project={p} index={i} />
+   537→            ))}
+   538→          </div>
+   539→        </div>
+   540→      </section>
+   541→
+   542→      {/* ===== CONTACT / FOOTER ===== */}
+   543→      <section className="relative overflow-hidden border-t border-white/10 bg-gradient-to-b from-[#0A0A0A] to-[#061218] px-4 py-16 sm:px-6 sm:py-20 lg:px-8">
+   544→        <div className="mx-auto max-w-4xl text-center">
+   545→          <SectionHeading white="Get In" cyan="Touch" />
+   546→          <p className="mx-auto mb-8 mt-4 max-w-2xl text-sm leading-relaxed text-white/60 sm:text-base">
+   547→            Have a project in mind or just want to say hi? Drop a message — I usually reply within 24 hours.
+   548→          </p>
+   549→
+   550→          <div className="flex flex-wrap items-center justify-center gap-4">
+   551→            {f.email && (
+   552→              <a
+   553→                href={`mailto:${f.email}`}
+   554→                className="inline-flex items-center gap-2 rounded-full border border-[#00DEFF]/40 px-6 py-3 text-sm font-semibold text-[#00DEFF] transition-all hover:bg-[#00DEFF] hover:text-[#0A0A0A]"
+   555→              >
+   556→                <Mail size={15} />
+   557→                {f.email}
+   558→              </a>
+   559→            )}
+   560→            {f.phone && (
+   561→              <a
+   562→                href={`tel:${f.phone}`}
+   563→                className="inline-flex items-center gap-2 rounded-full border border-white/20 px-6 py-3 text-sm font-semibold text-white/80 transition-all hover:border-[#00DEFF]/60 hover:text-[#00DEFF]"
+   564→              >
+   565→                <Phone size={15} />
+   566→                {f.phone}
+   567→              </a>
+   568→            )}
+   569→          </div>
+   570→        </div>
+   571→      </section>
+   572→
+   573→      {/* Footer line */}
+   574→      <footer className="border-t border-white/10 px-4 py-6 text-center sm:px-6 lg:px-8">
+   575→        <p className="text-xs text-white/40">
+   576→          © {new Date().getFullYear()} {f.name} · TrishulHub · Built with Next.js + Tailwind CSS
+   577→        </p>
+   578→      </footer>
+   579→    </div>
+   580→  )
+   581→}
+   582→
+   583→/* ============ Sub-components ============ */
+   584→
+   585→function SectionHeading({ white, cyan }: { white: string; cyan: string }) {
+   586→  return (
+   587→    <motion.h2
+   588→      initial={{ opacity: 0, y: 20 }}
+   589→      whileInView={{ opacity: 1, y: 0 }}
+   590→      viewport={{ once: true }}
+   591→      transition={{ duration: 0.5 }}
+   592→      className="text-center text-3xl font-bold sm:text-4xl lg:text-5xl"
+   593→      style={{ fontFamily: 'var(--font-space-grotesk)' }}
+   594→    >
+   595→      <span className="text-white">{white} </span>
+   596→      <span className="gradient-text">{cyan}</span>
+   597→    </motion.h2>
+   598→  )
+   599→}
+   600→
+   601→function DetailRow({
+   602→  icon,
+   603→  label,
+   604→  value,
+   605→}: {
+   606→  icon: React.ReactNode
+   607→  label: string
+   608→  value: string
+   609→}) {
+   610→  return (
+   611→    <li className="flex items-center gap-4 border-b border-white/5 pb-3">
+   612→      <span className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full border border-[#00DEFF]/30 bg-[#00DEFF]/5 text-[#00DEFF]">
+   613→        {icon}
+   614→      </span>
+   615→      <div className="min-w-0 flex-1">
+   616→        <p className="text-xs uppercase tracking-wider text-white/40">{label}</p>
+   617→        <p className="truncate text-sm font-medium text-white">{value}</p>
+   618→      </div>
+   619→    </li>
+   620→  )
+   621→}
+   622→
+   623→function SkillBar({
+   624→  name,
+   625→  level,
+   626→  index,
+   627→}: {
+   628→  name: string
+   629→  level: number
+   630→  index: number
+   631→}) {
+   632→  return (
+   633→    <motion.div
+   634→      initial={{ opacity: 0, y: 10 }}
+   635→      whileInView={{ opacity: 1, y: 0 }}
+   636→      viewport={{ once: true }}
+   637→      transition={{ duration: 0.4, delay: index * 0.05 }}
+   638→    >
+   639→      <div className="mb-2 flex items-center justify-between">
+   640→        <span className="text-sm font-medium text-white/90">{name}</span>
+   641→        <span className="text-sm font-semibold text-[#00DEFF]">{level}%</span>
+   642→      </div>
+   643→      <div className="h-2 w-full overflow-hidden rounded-full bg-white/5">
+   644→        <motion.div
+   645→          initial={{ width: 0 }}
+   646→          whileInView={{ width: `${level}%` }}
+   647→          viewport={{ once: true }}
+   648→          transition={{ duration: 1, delay: 0.2 + index * 0.05, ease: 'easeOut' }}
+   649→          className="h-full rounded-full"
+   650→          style={{
+   651→            background: 'linear-gradient(to right, #0088CC 0%, #00DEFF 100%)',
+   652→            boxShadow: '0 0 12px rgba(0,222,255,0.5)',
+   653→          }}
+   654→        />
+   655→      </div>
+   656→    </motion.div>
+   657→  )
+   658→}
+   659→
+   660→function TimelineCard({
+   661→  icon,
+   662→  title,
+   663→  org,
+   664→  period,
+   665→  description,
+   666→  index,
+   667→}: {
+   668→  icon: React.ReactNode
+   669→  title: string
+   670→  org: string
+   671→  period: string
+   672→  description: string
+   673→  index: number
+   674→}) {
+   675→  return (
+   676→    <motion.div
+   677→      initial={{ opacity: 0, y: 20 }}
+   678→      whileInView={{ opacity: 1, y: 0 }}
+   679→      viewport={{ once: true }}
+   680→      transition={{ duration: 0.5, delay: index * 0.1 }}
+   681→      className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-6 transition-all hover:border-[#00DEFF]/40 hover:bg-[#00DEFF]/[0.03] sm:p-7"
+   682→    >
+   683→      {/* Hover glow */}
+   684→      <div
+   685→        aria-hidden="true"
+   686→        className="pointer-events-none absolute -inset-px rounded-xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+   687→        style={{ boxShadow: '0 0 0 1px #00DEFF, 0 0 24px rgba(0,222,255,0.2)' }}
+   688→      />
+   689→
+   690→      <div className="relative flex items-start gap-4">
+   691→        <span className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/5 text-[#00DEFF]">
+   692→          {icon}
+   693→        </span>
+   694→        <div className="flex-1">
+   695→          <div className="flex flex-wrap items-baseline justify-between gap-2">
+   696→            <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+   697→              {title}
+   698→            </h3>
+   699→            <span className="text-xs font-medium text-[#00DEFF]">{period}</span>
+   700→          </div>
+   701→          <p className="mt-0.5 text-sm font-medium text-white/60">{org}</p>
+   702→          <p className="mt-3 text-sm leading-relaxed text-white/60">{description}</p>
+   703→        </div>
+   704→      </div>
+   705→    </motion.div>
+   706→  )
+   707→}
+   708→
+   709→function ProjectCard({
+   710→  project: p,
+   711→  index,
+   712→}: {
+   713→  project: { name: string; description: string; link: string; year: string }
+   714→  index: number
+   715→}) {
+   716→  return (
+   717→    <motion.a
+   718→      href={p.link === '#' ? undefined : p.link}
+   719→      target={p.link === '#' ? undefined : '_blank'}
+   720→      rel={p.link === '#' ? undefined : 'noopener noreferrer'}
+   721→      initial={{ opacity: 0, y: 20 }}
+   722→      whileInView={{ opacity: 1, y: 0 }}
+   723→      viewport={{ once: true }}
+   724→      transition={{ duration: 0.5, delay: index * 0.08 }}
+   725→      className="group relative flex flex-col overflow-hidden rounded-xl border border-white/10 bg-white/[0.02] p-6 transition-all hover:-translate-y-1 hover:border-[#00DEFF]/40 hover:shadow-[0_20px_60px_-15px_rgba(0,222,255,0.3)]"
+   726→    >
+   727→      <div className="mb-4 flex items-center justify-between">
+   728→        <span className="flex h-10 w-10 items-center justify-center rounded-xl border border-[#00DEFF]/30 bg-[#00DEFF]/5 text-[#00DEFF]">
+   729→          <FolderGit2 size={18} />
+   730→        </span>
+   731→        <span className="text-xs font-medium text-[#00DEFF]">{p.year}</span>
+   732→      </div>
+   733→      <h3 className="text-lg font-bold text-white" style={{ fontFamily: 'var(--font-space-grotesk)' }}>
+   734→        {p.name}
+   735→      </h3>
+   736→      <p className="mt-2 flex-1 text-sm leading-relaxed text-white/60">{p.description}</p>
+   737→      <div className="mt-4 flex items-center gap-1.5 text-xs font-medium text-[#00DEFF] opacity-70 transition-all group-hover:gap-2.5 group-hover:opacity-100">
+   738→        <Code size={12} />
+   739→        View Project
+   740→        <ArrowUpRight size={12} />
+   741→      </div>
+   742→    </motion.a>
+   743→  )
+   744→}
+   745→
