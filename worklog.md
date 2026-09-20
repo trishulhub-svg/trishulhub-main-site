@@ -1,5 +1,69 @@
 # TrishulHub Rebuild Worklog
 
+---
+
+## Full-site overhaul — 20 Sep 2026
+
+Goal: make every page faster, more professional and better animated; move the
+studio positioning to the UK market; remove broken third-party dependencies.
+
+### Performance
+- Removed the 43KB GSAP + WebGL launch screen from the global shell (it was
+  never enabled — `showLoader` defaults to false — but shipped on every page).
+  Component kept at `src/components/trishulhub/loading-screen.tsx` for reuse.
+- Lenis smooth scroll now downloads lazily after hydration (idle callback),
+  desktop pointers only.
+- Removed two unused Google font families (Almarai, Instrument Serif);
+  Almarai alone pulled 4 weights + the Arabic subset on every page.
+- Replaced the dead external hero backgrounds
+  (`plain-apac-prod-public.komododecks.com` — no longer resolvable) with a
+  zero-request CSS background (`th-hero-bg`) on Services, About, Contact, 404.
+- `next.config.ts`: `compress`, `poweredByHeader: false`, no browser source
+  maps, `optimizePackageImports` for framer-motion + lucide-react.
+- `vercel.json`: 1-year immutable caching for `/images/**` and `/videos/**`,
+  long caching for icons + OG image, `must-revalidate` for `site-contact.json`.
+- Founder/team portraits: lazy loading + async decoding.
+- Deleted 12 dead components (portfolio, about-signals, home-process,
+  home-services, spline-background, tech-stack, stats-dashboard,
+  motion-primitives, words-pull-up, about-hero-protocol, services).
+
+### Design & content
+- Hero: aurora background, blur-morph word carousel, dual CTAs, local tech-logo
+  marquee.
+- Navbar: reading-progress bar, animated active pill (`layoutId`), staggered
+  mobile menu with body-scroll lock.
+- CTA: dark premium panel with animated conic gradient border + assurances.
+- Footer: 4-column layout, socials, service links, legal links, back-to-top.
+- Services: animated device/dashboard mockups, new "always included" grid and an
+  FAQ section.
+- About: hero CTAs, honest stats band, "principles" grid, refreshed values copy.
+- Contact: company + budget fields, honeypot spam trap, response-time promise.
+- Founder pages: removed the "My Works" button, renamed the grid heading to
+  "Selected projects", added a WhatsApp CTA, lazy images.
+- UK positioning: `hello@trishulhub.com`, "London, United Kingdom · Remote &
+  Global Delivery", UK GDPR copy. Phone number intentionally left unchanged.
+
+### SEO / new routes
+- `src/app/sitemap.ts` and `src/app/robots.ts` (replaces `public/robots.txt`, so
+  the sitemap link and `/admin`, `/api`, `/lead` disallows now actually apply).
+- Branded `not-found.tsx`, plus `privacy` and `terms` pages.
+- Metadata: canonical URLs, `en_GB` locale, OpenGraph/Twitter cards, generated
+  `public/opengraph-image.png` (`scripts/generate-og-image.mjs`) and
+  `ProfessionalService` JSON-LD in the root layout.
+
+### Verified
+- `npm run build` green; routes smoke-tested locally before deploy.
+- Live checks on trishulhub.com: `/`, `/services`, `/about`, `/contact`,
+  `/privacy`, `/terms`, `/robots.txt`, `/sitemap.xml`, `/opengraph-image.png`
+  and `/founders/{taroon,pruthvi,akshat}` all 200; unknown paths 404.
+- Contact form POST writes to Turso; honeypot submissions are dropped.
+- Static assets serve `immutable` caching from the London (`lhr1`) edge.
+
+### Open question for the owner
+- `/founders/akshat` is publicly reachable (200) while `/api/founders`
+  deliberately excludes `akshat` from the About page team list. Confirm whether
+  that profile should stay public or return 404 to stay consistent.
+
 Project: Rebuilding the TrishulHub digital solutions agency landing page
 Source: https://r1j3r5da60n0-deploy.space-z.ai (read via web-reader skill)
 
