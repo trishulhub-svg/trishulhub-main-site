@@ -1450,3 +1450,332 @@ textarea.field-input {
     transform: none;
   }
 }
+
+/* ============================================================
+   DARK THEME
+
+   The site is authored with literal hex utilities (`bg-[#fafafa]`,
+   `text-[#111111]`, …) rather than semantic tokens, so the dark theme is
+   applied as one mapping layer here instead of adding a `dark:` twin to
+   ~400 class usages. Components that already use semantic tokens
+   (bg-background / text-foreground / text-muted-foreground / border-border)
+   switch automatically from the token block below.
+
+   Elements that must stay light on purpose (a white CTA button that sits on a
+   dark panel, the white notification card inside a dark phone mockup) carry
+   `.th-keep-light` and are excluded.
+
+   Palette
+     page      #0a0f11     card      #111a1c
+     raised    #16211f     tint      #14201d
+     hairline  #223030     text      #eef3f1
+     muted     #a4b0b2     faint     #8b9799
+     accent    #5eead4     accent-2  #2dd4bf
+     primary   #0f5f3f (keeps white text legible: ~7:1)
+   ============================================================ */
+
+.dark {
+  color-scheme: dark;
+
+  --background: #0a0f11;
+  --foreground: #eef3f1;
+  --card: #111a1c;
+  --card-foreground: #eef3f1;
+  --popover: #111a1c;
+  --popover-foreground: #eef3f1;
+  --primary: #0f5f3f;
+  --primary-foreground: #ffffff;
+  --secondary: #16211f;
+  --secondary-foreground: #eef3f1;
+  --muted: #16211f;
+  --muted-foreground: #a4b0b2;
+  --accent: #12251f;
+  --accent-foreground: #5eead4;
+  --destructive: #f87171;
+  --border: #223030;
+  --input: #223030;
+  --ring: #2dd4bf;
+
+  --brand: #5eead4;
+  --brand-light: #12251f;
+  --mint: #1d3b33;
+
+  --sidebar: #0f1618;
+  --sidebar-foreground: #eef3f1;
+  --sidebar-primary: #0f5f3f;
+  --sidebar-primary-foreground: #ffffff;
+  --sidebar-accent: #16211f;
+  --sidebar-accent-foreground: #eef3f1;
+  --sidebar-border: #223030;
+  --sidebar-ring: #2dd4bf;
+
+  --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.45);
+  --shadow-hover: 0 10px 36px rgba(0, 0, 0, 0.55);
+  --shadow-subtle: 0 2px 8px rgba(0, 0, 0, 0.4);
+
+  /* Local palette used by the mappings below */
+  --th-page: #0a0f11;
+  --th-surface: #111a1c;
+  --th-raised: #16211f;
+  --th-tint: #14201d;
+  --th-hairline: #223030;
+  --th-text: #eef3f1;
+  --th-muted: #a4b0b2;
+  --th-faint: #8b9799;
+  --th-accent: #5eead4;
+  --th-accent-2: #2dd4bf;
+  --th-primary: #0f5f3f;
+  --th-primary-hover: #14724c;
+}
+
+/* ---------- Surfaces ---------- */
+.dark .bg-white:not(.th-keep-light) {
+  background-color: var(--th-surface);
+}
+.dark .bg-white\/95:not(.th-keep-light),
+.dark .bg-white\/90:not(.th-keep-light),
+.dark .bg-white\/85:not(.th-keep-light),
+.dark .bg-white\/80:not(.th-keep-light),
+.dark .bg-white\/70:not(.th-keep-light) {
+  background-color: color-mix(in srgb, var(--th-surface) 88%, transparent);
+}
+.dark .bg-\[\#fafafa\],
+.dark .bg-\[\#faf9f6\] {
+  background-color: var(--th-page);
+}
+.dark .bg-\[\#f7fbf9\],
+.dark .bg-\[\#f4faf7\],
+.dark .bg-\[\#f6fbf9\],
+.dark .bg-\[\#e8f5ef\],
+.dark .bg-\[\#e8f4f3\],
+.dark .bg-\[\#e0f7fa\] {
+  background-color: var(--th-tint);
+}
+.dark .bg-\[\#f3f4f6\] {
+  background-color: var(--th-raised);
+}
+.dark .bg-\[\#e5e7eb\] {
+  background-color: var(--th-hairline);
+}
+
+/* Brand fills — lighter so white text keeps its contrast on a dark page */
+.dark .bg-\[\#0D3C1F\],
+.dark .bg-\[\#0d3c1f\] {
+  background-color: var(--th-primary);
+}
+.dark .hover\:bg-\[\#164a28\]:hover,
+.dark .bg-\[\#164a28\] {
+  background-color: var(--th-primary-hover);
+}
+.dark .bg-\[\#0d9488\] {
+  background-color: var(--th-accent-2);
+}
+.dark .bg-\[\#0a0a0a\] {
+  background-color: #060a0b;
+}
+.dark .bg-\[\#07140c\] {
+  background-color: #08170f;
+}
+
+/* ---------- Text ---------- */
+.dark .text-\[\#111111\],
+.dark .text-\[\#0a0a0a\],
+.dark .text-\[\#0A0A0A\] {
+  color: var(--th-text);
+}
+.dark .text-\[\#374151\],
+.dark .text-\[\#4b5563\] {
+  color: #c9d4d4;
+}
+.dark .text-\[\#6b7280\] {
+  color: var(--th-muted);
+}
+.dark .text-\[\#9ca3af\] {
+  color: var(--th-faint);
+}
+/* Brand green as *text* is unreadable on dark — lift it to mint */
+.dark .text-\[\#0D3C1F\],
+.dark .text-\[\#0d3c1f\] {
+  color: var(--th-accent);
+}
+.dark .text-\[\#0d9488\] {
+  color: var(--th-accent-2);
+}
+.dark .text-\[\#0D3C1F\]\/25,
+.dark .text-\[\#0D3C1F\]\/20 {
+  color: color-mix(in srgb, var(--th-accent) 30%, transparent);
+}
+
+/* ---------- Borders & rings ---------- */
+.dark .border-\[\#e5e7eb\],
+.dark .border-\[\#d1d5db\] {
+  border-color: var(--th-hairline);
+}
+.dark .border-\[\#111111\],
+.dark .border-\[\#111111\]\/20,
+.dark .border-\[\#111111\]\/15,
+.dark .border-\[\#111111\]\/12 {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+.dark .border-\[\#0d3c1f\]\/40,
+.dark .border-\[\#0D3C1F\]\/35,
+.dark .border-\[\#0d3c1f\]\/15,
+.dark .border-\[\#0d3c1f\]\/12,
+.dark .border-\[\#0d3c1f\]\/10,
+.dark .border-\[\#0d3c1f\]\/8,
+.dark .border-\[\#0D3C1F\]\/30 {
+  border-color: rgba(94, 234, 212, 0.16);
+}
+.dark .border-\[\#0D3C1F\] {
+  border-color: rgba(94, 234, 212, 0.35);
+}
+.dark .border-\[\#0d9488\]\/30,
+.dark .border-\[\#0d9488\]\/25,
+.dark .border-\[\#0d9488\] {
+  border-color: rgba(45, 212, 191, 0.42);
+}
+.dark .ring-\[\#0D3C1F\]\/30,
+.dark .ring-\[\#0d3c1f\]\/10 {
+  --tw-ring-color: rgba(94, 234, 212, 0.2);
+}
+
+/* ---------- Shared components ---------- */
+.dark .surface-card {
+  background: var(--th-surface);
+  border-color: var(--th-hairline);
+}
+.dark .th-card:hover {
+  box-shadow: 0 18px 48px rgba(0, 0, 0, 0.5);
+  border-color: rgba(94, 234, 212, 0.28);
+}
+.dark .th-eyebrow {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(94, 234, 212, 0.22);
+  color: var(--th-accent);
+}
+.dark .field-input {
+  background: var(--th-raised);
+  border-color: var(--th-hairline);
+  color: var(--th-text);
+}
+.dark .field-input::placeholder {
+  color: var(--th-faint);
+}
+.dark .field-input:focus {
+  border-color: var(--th-accent-2);
+  box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.2);
+}
+.dark .field-input option {
+  background: var(--th-surface);
+  color: var(--th-text);
+}
+.dark .lt-pill {
+  background: var(--th-raised);
+  border-color: var(--th-hairline);
+  color: var(--th-text);
+}
+.dark .lt-pill-active {
+  background: var(--th-accent);
+  border-color: var(--th-accent);
+  color: #06251a;
+}
+.dark .accent-text,
+.dark .gradient-text,
+.dark .gradient-text-animated {
+  color: var(--th-accent);
+  -webkit-text-fill-color: var(--th-accent);
+}
+.dark .lt-glow,
+.dark .atelier-mesh {
+  background: radial-gradient(
+    circle,
+    rgba(15, 118, 110, 0.4) 0%,
+    rgba(13, 60, 31, 0.28) 45%,
+    transparent 72%
+  );
+}
+.dark .th-aurora-glow {
+  opacity: 0.5;
+}
+.dark .th-conic-border::before {
+  background: conic-gradient(
+    from var(--th-angle, 0deg),
+    rgba(94, 234, 212, 0.7),
+    rgba(45, 212, 191, 0.18),
+    rgba(255, 255, 255, 0.04),
+    rgba(94, 234, 212, 0.7)
+  );
+}
+.dark .th-shimmer {
+  background: linear-gradient(
+    100deg,
+    rgba(34, 48, 48, 0.6) 20%,
+    rgba(22, 33, 31, 0.95) 50%,
+    rgba(34, 48, 48, 0.6) 80%
+  );
+  background-size: 220% 100%;
+}
+
+/* ---------- Page-hero background (CSS-owned) ---------- */
+.dark .th-hero-bg {
+  background:
+    radial-gradient(ellipse 60% 55% at 78% 12%, rgba(45, 212, 191, 0.14), transparent 60%),
+    radial-gradient(ellipse 55% 45% at 12% 88%, rgba(13, 148, 136, 0.1), transparent 62%),
+    linear-gradient(180deg, #0c1315 0%, #0a0f11 55%, #0a0f11 100%);
+}
+.dark .th-hero-bg::before {
+  background-image:
+    linear-gradient(rgba(94, 234, 212, 0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(94, 234, 212, 0.06) 1px, transparent 1px);
+}
+.dark .th-hero-bg::after {
+  opacity: 0.28;
+}
+
+/* ---------- Dot grids authored inline (light dots on light paper) ---------- */
+.dark [class*='radial-gradient(#e2e8e5'],
+.dark [class*='radial-gradient(#0d3c1f_1px'],
+.dark [class*='radial-gradient(#0d3c1f_1'] {
+  background-image: radial-gradient(
+    rgba(94, 234, 212, 0.22) 1px,
+    transparent 1px
+  );
+}
+
+/* ---------- Gradients between light surfaces ---------- */
+.dark [class*='from-[#f4faf7]'],
+.dark [class*='from-[#f6fbf9]'],
+.dark [class*='from-white'],
+.dark [class*='from-[#fafafa]'] {
+  --tw-gradient-from: var(--th-surface);
+}
+.dark [class*='to-white'],
+.dark [class*='to-[#f7fbf9]'],
+.dark [class*='to-[#fafafa]'] {
+  --tw-gradient-to: var(--th-tint);
+}
+
+/* ---------- Scrollbar ---------- */
+.dark ::-webkit-scrollbar-track {
+  background: #0d1416;
+}
+.dark ::-webkit-scrollbar-thumb {
+  background: #263333;
+  border-color: #0d1416;
+}
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: #2dd4bf;
+}
+
+/* ---------- Chat widget surfaces ---------- */
+.dark .th-chat-panel {
+  background: #0d1416;
+  border-color: #223030;
+}
+.dark .th-chat-surface {
+  background: #16211f;
+}
+.dark .th-chat-bubble {
+  background: #1b2626;
+  color: #eef3f1;
+}

@@ -96,11 +96,20 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0d3c1f",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#0d3c1f" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0f11" },
+  ],
   width: "device-width",
   initialScale: 1,
-  colorScheme: "light",
+  colorScheme: "light dark",
 };
+
+/**
+ * Runs before first paint so a dark-mode visitor never sees a white flash.
+ * Kept inline (not a module) on purpose — it must execute before React.
+ */
+const themeScript = `(function(){try{var s=localStorage.getItem('trishulhub-theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;var d=s?s==='dark':m;var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';}catch(e){}})();`;
 
 const organizationSchema = {
   "@context": "https://schema.org",
@@ -146,6 +155,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en-GB" suppressHydrationWarning>
+      <head>
+        <script
+          // eslint-disable-next-line react/no-danger
+          dangerouslySetInnerHTML={{ __html: themeScript }}
+        />
+      </head>
       <body
         className={`${inter.variable} ${playfair.variable} font-sans antialiased bg-background text-foreground selection:bg-[#75B4B1]/35 selection:text-[#111111]`}
       >

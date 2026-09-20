@@ -301,13 +301,13 @@ export function ChatWidget() {
   if (hidden) return null
 
   const optionClass =
-    'w-full rounded-xl border border-[#0d3c1f]/15 bg-white px-4 py-2.5 text-left text-[13.5px] font-medium text-[#111111] transition hover:-translate-y-px hover:border-[#0D3C1F]/40 hover:bg-[#f4faf7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0d9488]'
+    'w-full rounded-xl th-chat-surface border border-[#0d3c1f]/15 bg-white px-4 py-2.5 text-left text-[13.5px] font-medium text-[#111111] transition hover:-translate-y-px hover:border-[#0D3C1F]/40 hover:bg-[#f4faf7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0d9488]'
   const primaryClass =
     'inline-flex w-full items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-5 py-2.5 text-[13.5px] font-semibold text-white transition hover:bg-[#164a28] disabled:pointer-events-none disabled:opacity-50'
   const ghostClass =
     'inline-flex flex-1 items-center justify-center gap-1.5 rounded-xl border border-[#d1d5db] px-3 py-2.5 text-[12.5px] font-semibold text-[#111111] transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
   const bubble =
-    'max-w-[88%] rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#374151] shadow-sm'
+    'max-w-[88%] th-chat-bubble rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#374151] shadow-sm'
 
   return (
     <>
@@ -338,7 +338,7 @@ export function ChatWidget() {
         <section
           aria-label="Chat with TrishulHub"
           role="dialog"
-          className="fixed bottom-24 right-5 z-[2147483000] flex max-h-[min(76vh,600px)] w-[min(92vw,384px)] flex-col overflow-hidden rounded-2xl border border-[#0d3c1f]/15 bg-[#f7fbf9] shadow-[0_28px_70px_rgba(6,43,22,0.28)]"
+          className="fixed bottom-24 right-5 z-[2147483000] flex max-h-[min(76vh,600px)] w-[min(92vw,384px)] flex-col overflow-hidden rounded-2xl border border-[#0d3c1f]/15 th-chat-panel bg-[#f7fbf9] shadow-[0_28px_70px_rgba(6,43,22,0.28)]"
         >
           {/* Header */}
           <header className="relative bg-[#0D3C1F] px-4 py-3 text-white">
@@ -420,7 +420,7 @@ export function ChatWidget() {
             {typing ? (
               <span
                 aria-hidden
-                className="inline-flex items-center gap-1 rounded-2xl rounded-tl-sm bg-white px-3.5 py-3 shadow-sm"
+                className="th-chat-bubble inline-flex items-center gap-1 rounded-2xl rounded-tl-sm bg-white px-3.5 py-3 shadow-sm"
               >
                 {[0, 1, 2].map((dot) => (
                   <span
@@ -621,7 +621,7 @@ export function ChatWidget() {
 
             {stage === 'review' ? (
               <div className="space-y-3 pt-1">
-                <pre className="whitespace-pre-wrap break-words rounded-xl border border-[#0d3c1f]/12 bg-white p-3 text-[12.5px] leading-relaxed text-[#374151]">
+                <pre className="th-chat-surface whitespace-pre-wrap break-words rounded-xl border border-[#0d3c1f]/12 bg-white p-3 text-[12.5px] leading-relaxed text-[#374151]">
                   {summaryLines.join('\n')}
                 </pre>
                 {error ? (
@@ -664,7 +664,7 @@ export function ChatWidget() {
 
             {stage === 'done' ? (
               <div className="space-y-3 pt-1">
-                <p className="flex items-start gap-2 rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#374151] shadow-sm">
+                <p className="flex items-start gap-2 th-chat-bubble rounded-2xl rounded-tl-sm bg-white px-3.5 py-2.5 text-[13.5px] leading-relaxed text-[#374151] shadow-sm">
                   <Check
                     aria-hidden
                     className="mt-0.5 shrink-0 text-[#0d9488]"
@@ -693,7 +693,7 @@ export function ChatWidget() {
           </div>
 
           {/* Footer: back + note */}
-          <div className="flex items-center justify-between gap-3 border-t border-[#0d3c1f]/10 bg-white px-4 py-2">
+          <div className="flex items-center justify-between gap-3 th-chat-surface border-t border-[#0d3c1f]/10 bg-white px-4 py-2">
             {stage !== 'service' && stage !== 'done' ? (
               <button
                 className="inline-flex items-center gap-1.5 rounded-lg px-1.5 py-1 text-[12px] font-semibold text-[#6b7280] transition hover:text-[#0D3C1F]"

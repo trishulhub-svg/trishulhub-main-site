@@ -8,6 +8,7 @@ import {
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Menu, X } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
+import { ThemeToggle } from './theme-toggle'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -126,6 +127,8 @@ export function Navbar() {
           </nav>
 
           <div className="relative z-10 flex shrink-0 items-center gap-2">
+            <ThemeToggle className="hidden sm:inline-flex" />
+
             <a
               href={contactLinks.whatsapp}
               target="_blank"
@@ -209,6 +212,12 @@ export function Navbar() {
               >
                 Get Started
               </motion.a>
+              <div className="mt-3 flex items-center justify-between rounded-xl border border-[#0d3c1f]/10 px-4 py-2.5 sm:hidden">
+                <span className="text-sm font-semibold text-[#111111]">
+                  Appearance
+                </span>
+                <ThemeToggle />
+              </div>
               <div className="mt-3 border-t border-[#e5e7eb] px-1 pt-3 text-center text-xs text-[#6b7280]">
                 UK-based · Replying within one business day
               </div>

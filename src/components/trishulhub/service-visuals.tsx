@@ -124,7 +124,7 @@ function MobileAppVisual() {
         <motion.div
           animate={{ y: [0, -6, 0], opacity: [0.85, 1, 0.85] }}
           transition={{ ...LOOP, duration: 3.6 }}
-          className="absolute -top-5 right-[-26px] z-20 hidden w-[148px] rounded-xl border border-white/20 bg-white/95 p-2.5 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:block"
+          className="th-keep-light absolute -top-5 right-[-26px] z-20 hidden w-[148px] rounded-xl border border-white/20 bg-white/95 p-2.5 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:block"
         >
           <div className="flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600">

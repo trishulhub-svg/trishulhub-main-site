@@ -57,7 +57,7 @@ export function CTA() {
                 href={links.whatsapp}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="btn-shine inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-[#07140c] transition hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(255,255,255,0.18)] sm:w-auto"
+                className="btn-shine th-keep-light inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-[#07140c] transition hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(255,255,255,0.18)] sm:w-auto"
               >
                 Start on WhatsApp
                 <ArrowRight size={16} />
