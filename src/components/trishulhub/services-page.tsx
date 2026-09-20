@@ -130,56 +130,180 @@ const reasons = [
   },
 ]
 
-function ServiceMedia({
-  title,
-  embedUrl,
-  embedAspectPct = 90,
-  videoSrc,
-  icon: Icon,
-}: {
-  title: string
-  embedUrl?: string
-  embedAspectPct?: number
-  videoSrc?: string
-  icon: LucideIcon
-}) {
-  if (embedUrl) {
-    return (
-      <div
-        className="relative w-full overflow-hidden rounded-lg shadow-[0_2px_8px_rgba(63,69,81,0.16)]"
-        style={{
-          height: 0,
-          paddingTop: `${embedAspectPct}%`,
-        }}
-      >
-        <iframe
-          loading="lazy"
-          title={`${title} preview`}
-          className="absolute inset-0 h-full w-full border-0"
-          src={embedUrl}
-          allow="autoplay; fullscreen; encrypted-media; picture-in-picture"
-          allowFullScreen
-        />
-      </div>
-    )
-  }
-
-  // Ultra-fast lightweight branded visual card
+function MobileAppGraphic() {
   return (
-    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#f0fdf4] via-[#f8fafc] to-[#e8f5ef] p-6 shadow-[0_2px_8px_rgba(63,69,81,0.08)] sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
-      <div className="text-center flex flex-col items-center">
-        <span className="flex h-16 w-16 items-center justify-center rounded-2xl bg-white shadow-sm border border-[#0D3C1F]/10 text-[#0D3C1F]">
-          <Icon size={32} strokeWidth={1.5} />
-        </span>
-        <p className="mt-4 text-xs font-semibold uppercase tracking-wider text-[#0D3C1F]">
-          {title}
-        </p>
-        <p className="mt-1 text-[11px] text-[#6b7280]">
-          Bespoke Architecture & Engineering
-        </p>
+    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#0D3C1F]/90 via-[#0a2f18] to-[#051a0d] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
+      {/* Ambient background glow & grid */}
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
+      <motion.div
+        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#10b981] blur-2xl"
+      />
+
+      {/* Animated Mobile Frame Mockup */}
+      <div className="relative z-10 w-full max-w-[200px] rounded-2xl border-2 border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
+        {/* Top bar & notch */}
+        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30" />
+        <div className="flex items-center justify-between border-b border-white/10 pb-2 text-[10px] text-white/70">
+          <span className="font-semibold text-emerald-400">iOS / Android</span>
+          <motion.span
+            animate={{ opacity: [0.4, 1, 0.4] }}
+            transition={{ duration: 1.5, repeat: Infinity }}
+            className="h-1.5 w-1.5 rounded-full bg-emerald-400"
+          />
+        </div>
+
+        {/* Animated App UI Elements */}
+        <div className="mt-3 space-y-2">
+          <motion.div
+            animate={{ y: [0, -3, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="rounded-lg bg-white/10 p-2 border border-white/10"
+          >
+            <div className="flex items-center gap-2">
+              <div className="h-6 w-6 rounded-md bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+                <Smartphone size={12} />
+              </div>
+              <div className="flex-1 space-y-1">
+                <div className="h-1.5 w-12 rounded bg-white/60" />
+                <div className="h-1 w-16 rounded bg-white/30" />
+              </div>
+            </div>
+          </motion.div>
+
+          <motion.div
+            animate={{ y: [0, 3, 0] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
+            className="flex items-center justify-between rounded-lg bg-emerald-950/60 p-2 border border-emerald-500/30"
+          >
+            <span className="text-[10px] text-emerald-300 font-medium">Push Notification</span>
+            <span className="text-[9px] rounded bg-emerald-500/30 px-1.5 py-0.5 text-emerald-200">Active</span>
+          </motion.div>
+
+          <div className="flex gap-1.5 pt-1">
+            <div className="h-4 flex-1 rounded bg-white/15" />
+            <div className="h-4 flex-1 rounded bg-emerald-500/40" />
+          </div>
+        </div>
       </div>
     </div>
   )
+}
+
+function WebGraphic() {
+  return (
+    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#091e2b] via-[#0b2b3d] to-[#04121b] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#00DEFF_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
+      <motion.div
+        animate={{ scale: [1, 1.25, 1], opacity: [0.2, 0.5, 0.2] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute -left-10 -bottom-10 h-36 w-36 rounded-full bg-cyan-500 blur-2xl"
+      />
+
+      {/* Animated Browser Window Mockup */}
+      <div className="relative z-10 w-full max-w-[220px] rounded-xl border border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
+        {/* Browser Top Navigation Bar */}
+        <div className="flex items-center gap-1.5 border-b border-white/10 pb-2">
+          <span className="h-2 w-2 rounded-full bg-rose-500/80" />
+          <span className="h-2 w-2 rounded-full bg-amber-500/80" />
+          <span className="h-2 w-2 rounded-full bg-emerald-500/80" />
+          <div className="ml-2 flex-1 rounded bg-white/10 px-2 py-0.5 text-[8px] text-cyan-300 truncate">
+            trishulhub.com/live
+          </div>
+        </div>
+
+        {/* Web Visual Elements */}
+        <div className="mt-3 space-y-2">
+          <div className="flex gap-2">
+            <motion.div
+              animate={{ scale: [0.98, 1, 0.98] }}
+              transition={{ duration: 2.5, repeat: Infinity }}
+              className="flex-1 rounded-md bg-cyan-950/70 border border-cyan-500/30 p-2 text-center"
+            >
+              <span className="text-[11px] font-bold text-cyan-300">99.9%</span>
+              <p className="text-[8px] text-white/50">Speed Score</p>
+            </motion.div>
+            <div className="flex-1 rounded-md bg-white/5 border border-white/10 p-2 text-center">
+              <span className="text-[11px] font-bold text-white">Edge</span>
+              <p className="text-[8px] text-white/50">CDN Global</p>
+            </div>
+          </div>
+
+          <motion.div
+            animate={{ x: [-2, 2, -2] }}
+            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
+            className="flex items-center justify-between rounded-md bg-white/10 p-2"
+          >
+            <span className="text-[9px] text-white/80">Next.js & SSR Ready</span>
+            <Globe size={11} className="text-cyan-400" />
+          </motion.div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function SoftwareGraphic() {
+  return (
+    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#1b1429] via-[#241a37] to-[#100b1a] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
+      <motion.div
+        animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.55, 0.25] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+        className="pointer-events-none absolute -right-6 -bottom-6 h-36 w-36 rounded-full bg-purple-600 blur-2xl"
+      />
+
+      {/* Animated Dashboard / Analytics Mockup */}
+      <div className="relative z-10 w-full max-w-[220px] rounded-xl border border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
+        <div className="flex items-center justify-between border-b border-white/10 pb-2">
+          <div className="flex items-center gap-1.5">
+            <LayoutDashboard size={12} className="text-purple-400" />
+            <span className="text-[10px] font-semibold text-purple-300">Custom Admin</span>
+          </div>
+          <span className="text-[8px] rounded bg-purple-500/20 px-1 py-0.5 text-purple-200">Live DB</span>
+        </div>
+
+        <div className="mt-3 space-y-2">
+          {/* Mini Data Bar Chart Animation */}
+          <div className="flex items-end gap-1.5 rounded-lg bg-white/5 p-2 border border-white/10 h-14">
+            <motion.div
+              animate={{ height: ['40%', '80%', '40%'] }}
+              transition={{ duration: 2.2, repeat: Infinity }}
+              className="w-1/4 rounded-t bg-purple-400/60"
+            />
+            <motion.div
+              animate={{ height: ['60%', '95%', '60%'] }}
+              transition={{ duration: 2.8, repeat: Infinity, delay: 0.2 }}
+              className="w-1/4 rounded-t bg-purple-500"
+            />
+            <motion.div
+              animate={{ height: ['30%', '70%', '30%'] }}
+              transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
+              className="w-1/4 rounded-t bg-purple-400/80"
+            />
+            <motion.div
+              animate={{ height: ['50%', '90%', '50%'] }}
+              transition={{ duration: 2.3, repeat: Infinity, delay: 0.1 }}
+              className="w-1/4 rounded-t bg-emerald-400"
+            />
+          </div>
+
+          <div className="flex items-center justify-between text-[9px] text-white/60">
+            <span>Real-time Sync</span>
+            <span className="text-emerald-400 font-semibold">Online</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function ServiceMedia({ id }: { id: string }) {
+  if (id === 'mobile') return <MobileAppGraphic />
+  if (id === 'website') return <WebGraphic />
+  if (id === 'software') return <SoftwareGraphic />
+  return <WebGraphic />
 }
 
 export function ServicesPage() {
@@ -263,11 +387,7 @@ export function ServicesPage() {
                   {/* Video on top (centered) → text → button */}
                   <div className="p-3 pb-0 sm:p-5 sm:pb-0 lg:p-4 lg:pb-0">
                     <ServiceMedia
-                      title={s.title}
-                      embedUrl={s.embedUrl}
-                      embedAspectPct={s.embedAspectPct}
-                      videoSrc={s.videoSrc}
-                      icon={Icon}
+                      id={s.id}
                     />
                   </div>
 
