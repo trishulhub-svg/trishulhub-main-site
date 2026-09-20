@@ -95,7 +95,7 @@ export function Navbar() {
           {/* Mobile: brand name centered */}
           <Link
             href="/"
-            className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap text-sm font-bold uppercase tracking-[0.06em] text-[#0a0a0a] md:hidden"
+            className="absolute left-1/2 top-1/2 z-10 -translate-x-1/2 -translate-y-1/2 whitespace-nowrap px-3 py-2.5 text-sm font-bold uppercase tracking-[0.06em] text-[#0a0a0a] md:hidden"
             aria-label="TrishulHub home"
           >
             TrishulHub
@@ -144,7 +144,7 @@ export function Navbar() {
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F] md:hidden"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F] md:hidden"
             >
               <AnimatePresence mode="wait" initial={false}>
                 <motion.span

@@ -102,7 +102,7 @@ export default function TermsPage() {
               <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
                 We are happy to work from your MSA or SOW. Email{' '}
                 <a
-                  className="th-link font-medium text-[#0D3C1F]"
+                  className="th-link inline-block py-1 font-medium text-[#0D3C1F]"
                   href="mailto:info@trishulhub.in"
                 >
                   info@trishulhub.in

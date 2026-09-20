@@ -103,7 +103,7 @@ export function HeroVisual() {
         aria-hidden
         animate={{ rotate: 360 }}
         transition={{ duration: 34, repeat: Infinity, ease: 'linear' }}
-        className="pointer-events-none absolute left-1/2 top-1/2 h-[420px] w-[420px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.5] blur-[46px]"
+        className="pointer-events-none absolute left-1/2 top-1/2 h-[280px] w-[280px] -translate-x-1/2 -translate-y-1/2 rounded-full opacity-[0.5] blur-[46px] sm:h-[420px] sm:w-[420px]"
         style={{
           background:
             'conic-gradient(from 90deg, rgba(13,148,136,0.55), rgba(94,234,212,0.18), rgba(13,60,31,0.5), rgba(13,148,136,0.55))',
@@ -160,7 +160,7 @@ export function HeroVisual() {
                     <Icon size={10} className="text-[#0d9488]" />
                     {kpi.label}
                   </span>
-                  <p className="mt-1 text-base font-bold text-[#111111] sm:text-lg">
+                  <p className="mt-1 text-[15px] font-bold text-[#111111] sm:text-lg">
                     <Counter to={kpi.value} suffix={kpi.suffix} />
                   </p>
                 </motion.div>

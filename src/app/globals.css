@@ -100,6 +100,10 @@
     scroll-behavior: smooth;
     scroll-padding-top: 100px;
     -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+    /* Guards against sideways scroll from decorative glows/rails. */
+    overflow-x: clip;
     overscroll-behavior-y: auto;
     text-rendering: optimizeLegibility;
     -webkit-font-smoothing: antialiased;
@@ -107,8 +111,29 @@
   }
   body {
     @apply bg-background text-foreground font-sans;
+    overflow-x: clip;
     overflow-anchor: none;
     overscroll-behavior-y: auto;
+  }
+  /* Never let one wide element push the whole page sideways on a phone. */
+  img,
+  video,
+  canvas,
+  svg {
+    max-width: 100%;
+  }
+
+  /* Comfortable touch behaviour. */
+  @media (pointer: coarse) {
+    button,
+    a {
+      -webkit-tap-highlight-color: transparent;
+    }
+    input,
+    select,
+    textarea {
+      font-size: 16px; /* stops iOS zoom-on-focus */
+    }
   }
   h1,
   h2,
@@ -146,19 +171,19 @@
   .group:hover .group-hover\:translate-x-1 {
     will-change: transform;
   }
-  /* Content-visibility: auto on sections off-screen — browser skips
-   * rendering/painting work for them until they scroll near viewport.
-   * Huge perf win for long pages with many sections. */
-  section {
-    content-visibility: auto;
-    contain-intrinsic-size: auto 600px;
-  }
-  /* But skip this for the hero (always visible on load) and any section
-   * with a video (we don't want content-visibility pausing the video). */
-  section:has(video),
-  #home {
-    content-visibility: visible;
-    contain-intrinsic-size: auto none;
+  /* Content-visibility: auto skips off-screen render work — a real win on
+   * long pages, but on phones it fights anchor scrolling and adds jump on
+   * fast flings, so it is desktop-only. */
+  @media (min-width: 1024px) {
+    section {
+      content-visibility: auto;
+      contain-intrinsic-size: auto 600px;
+    }
+    section:has(video),
+    #home {
+      content-visibility: visible;
+      contain-intrinsic-size: auto none;
+    }
   }
   /* Respect users who prefer reduced motion — they get instant scrolling */
   @media (prefers-reduced-motion: reduce) {

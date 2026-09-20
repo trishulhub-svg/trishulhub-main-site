@@ -6,7 +6,11 @@ import { Mail, MessageCircle, Phone } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import { emailDraftUrl, enquiryEmailDraft } from '@/lib/site-contact'
+import {
+  emailDraftUrl,
+  enquiryEmailDraft,
+  enquiryWhatsAppDraft,
+} from '@/lib/site-contact'
 
 type Channel = {
   id: string
@@ -30,7 +34,7 @@ const STEP_MS = 1800
  */
 export function HomeGetInTouch() {
   const contact = useSiteContact()
-  const { email, phoneDisplay, links } = contact
+  const { email, phoneDisplay, whatsappWithMessage } = contact
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
@@ -40,8 +44,8 @@ export function HomeGetInTouch() {
       id: 'whatsapp',
       label: 'WhatsApp',
       value: 'Chat now',
-      hint: 'Fastest — usually minutes',
-      href: links.whatsapp,
+      hint: 'Opens with a ready-made brief',
+      href: whatsappWithMessage(enquiryWhatsAppDraft()),
       external: true,
       icon: <MessageCircle size={20} strokeWidth={1.7} />,
     },
@@ -58,7 +62,7 @@ export function HomeGetInTouch() {
       label: 'Phone',
       value: phoneDisplay,
       hint: 'Mon–Sat, 9am–7pm',
-      href: links.tel,
+      href: `tel:${phoneDisplay.replace(/[^\d+]/g, '')}`,
       external: true,
       icon: <Phone size={20} strokeWidth={1.7} />,
     },

@@ -7,7 +7,11 @@ import { EASE_OUT_EXPO } from '@/lib/animations'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
-import { emailDraftUrl, enquiryEmailDraft } from '@/lib/site-contact'
+import {
+  emailDraftUrl,
+  enquiryEmailDraft,
+  enquiryWhatsAppDraft,
+} from '@/lib/site-contact'
 
 /** Projects start at £1,500; the last stop is an open "Custom" budget. */
 const BUDGETS_GBP = ['£1,500', '£2,500', '£5,000', '£10,000', 'Custom'] as const
@@ -41,6 +45,14 @@ const STEPS = [
 const LANES = ['Custom Software', 'Websites', 'Mobile Apps'] as const
 const TIMING = ['ASAP', 'This month', 'Next quarter', 'Flexible'] as const
 
+/** £1,500 → £1.5k (phones only) so the five budget stops still fit. */
+function shortBudget(label: string): string {
+  const bare = label.replace('£', '')
+  const n = Number(bare.replace(/,/g, ''))
+  if (!Number.isFinite(n)) return label
+  return `£${n / 1000}k`.replace('.0k', 'k')
+}
+
 export function AboutProtocol({
   className = 'mt-28 sm:mt-36',
 }: {
@@ -61,7 +73,6 @@ export function AboutProtocol({
   const budgetOption = budgets[budgetIndex]
   const isCustom = budgetOption === 'Custom'
   const budget = isCustom ? customBudget.trim() || 'Custom (to scope)' : budgetOption
-  const summary = `Budget: ${budget}\nService: ${lane}\nTiming: ${timing}`
 
   const handlePct = useCallback(
     (clientX: number) => {
@@ -178,7 +189,7 @@ export function AboutProtocol({
                         onPointerMove={onPointerMove}
                         onPointerUp={onPointerUp}
                         onPointerCancel={onPointerUp}
-                        className="relative h-14 cursor-pointer select-none rounded-2xl bg-[#f3f4f6]"
+                        className="relative h-14 cursor-pointer touch-none select-none rounded-2xl bg-[#f3f4f6]"
                       >
                         <div className="absolute left-4 right-4 top-1/2 h-1.5 -translate-y-1/2 rounded-full bg-[#e5e7eb]" />
                         <div className="absolute left-4 right-4 top-1/2 flex -translate-y-1/2 justify-between">
@@ -195,7 +206,7 @@ export function AboutProtocol({
                         <button
                           type="button"
                           aria-label="Budget handle"
-                          className="absolute top-1/2 size-6 -translate-y-1/2 rounded-full border-2 border-white bg-[#0D3C1F] shadow-md transition-transform hover:scale-110"
+                          className="absolute top-1/2 h-8 w-8 -translate-y-1/2 rounded-full border-2 border-white bg-[#0D3C1F] shadow-md transition-transform hover:scale-110 sm:h-6 sm:w-6"
                           style={{ left: handleLeft }}
                           onPointerDown={onPointerDown}
                         />
@@ -208,9 +219,13 @@ export function AboutProtocol({
                           </div>
                         </div>
                       </div>
-                      <div className="mt-10 flex justify-between text-xs text-[#6b7280]">
+                      <div className="mt-10 flex justify-between text-[10.5px] text-[#6b7280] sm:text-xs">
                         {budgets.map((b) => (
-                          <span key={b}>{b}</span>
+                          <span key={b} className="text-center">
+                            {/* Phones get short labels so five stops still fit. */}
+                            <span className="sm:hidden">{shortBudget(b)}</span>
+                            <span className="hidden sm:inline">{b}</span>
+                          </span>
                         ))}
                       </div>
 
@@ -300,14 +315,29 @@ export function AboutProtocol({
 
                       <details className="group mt-4 border-t border-[#e5e7eb] pt-3">
                         <summary className="flex cursor-pointer list-none items-center justify-between text-[12.5px] font-semibold text-[#0D3C1F]">
-                          What we will send by email
+                          Preview what we will send
                           <span className="text-[11px] font-normal text-[#9ca3af] transition group-open:rotate-180">
                             ▾
                           </span>
                         </summary>
-                        <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-xl bg-white p-3 text-[11.5px] leading-relaxed text-[#6b7280] ring-1 ring-[#0d3c1f]/10">
-                          {enquiryEmailDraft({ service: lane, budget, timing }).body}
-                        </pre>
+                        <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                          <div>
+                            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b7280]">
+                              Email
+                            </p>
+                            <pre className="max-h-44 overflow-auto whitespace-pre-wrap break-words rounded-xl bg-white p-3 text-[11.5px] leading-relaxed text-[#6b7280] ring-1 ring-[#0d3c1f]/10">
+                              {enquiryEmailDraft({ service: lane, budget, timing }).body}
+                            </pre>
+                          </div>
+                          <div>
+                            <p className="mb-1.5 text-[11px] font-semibold uppercase tracking-[0.12em] text-[#6b7280]">
+                              WhatsApp
+                            </p>
+                            <pre className="max-h-44 overflow-auto whitespace-pre-wrap break-words rounded-xl bg-white p-3 text-[11.5px] leading-relaxed text-[#6b7280] ring-1 ring-[#0d3c1f]/10">
+                              {enquiryWhatsAppDraft({ service: lane, budget, timing })}
+                            </pre>
+                          </div>
+                        </div>
                       </details>
                     </div>
                   )}
@@ -322,7 +352,7 @@ export function AboutProtocol({
                 <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
                   <NexusButton
                     href={whatsappWithMessage(
-                      `Hi TrishulHub — project plan:\n${summary}`,
+                      enquiryWhatsAppDraft({ service: lane, budget, timing }),
                     )}
                     showArrow
                   >

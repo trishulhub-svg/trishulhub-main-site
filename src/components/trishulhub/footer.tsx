@@ -99,12 +99,12 @@ export function Footer() {
 
           <div className="lg:col-span-2">
             <h3 className="text-sm font-semibold text-white">Company</h3>
-            <ul className="mt-5 space-y-3">
+            <ul className="mt-4 space-y-0.5">
               {company.map((c) => (
                 <li key={c.label}>
                   <Link
                     href={c.href}
-                    className="th-link text-sm text-white/55 transition hover:text-white"
+                    className="th-link inline-block py-2 text-sm text-white/55 transition hover:text-white"
                   >
                     {c.label}
                   </Link>
@@ -115,12 +115,12 @@ export function Footer() {
 
           <div className="lg:col-span-3">
             <h3 className="text-sm font-semibold text-white">Services</h3>
-            <ul className="mt-5 space-y-3">
+            <ul className="mt-4 space-y-0.5">
               {services.map((s) => (
                 <li key={s.label}>
                   <Link
                     href={s.href}
-                    className="th-link text-sm text-white/55 transition hover:text-white"
+                    className="th-link inline-block py-2 text-sm text-white/55 transition hover:text-white"
                   >
                     {s.label}
                   </Link>
@@ -134,13 +134,13 @@ export function Footer() {
             <ul className="mt-5 space-y-3.5 text-sm text-white/55">
               <li className="flex items-start gap-2.5">
                 <Mail size={15} className="mt-0.5 shrink-0 text-[#5eead4]" />
-                <a href={links.mailto} className="th-link hover:text-white">
+                <a href={links.mailto} className="th-link py-1 hover:text-white">
                   {email}
                 </a>
               </li>
               <li className="flex items-start gap-2.5">
                 <Phone size={15} className="mt-0.5 shrink-0 text-[#5eead4]" />
-                <a href={links.tel} className="th-link hover:text-white">
+                <a href={links.tel} className="th-link py-1 hover:text-white">
                   {phoneDisplay}
                 </a>
               </li>
@@ -161,14 +161,14 @@ export function Footer() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="th-link text-xs text-white/40 transition hover:text-white/80"
+                className="th-link inline-block py-2 text-xs text-white/40 transition hover:text-white/80"
               >
                 {l.label}
               </Link>
             ))}
             <a
               href="#home"
-              className="inline-flex items-center gap-1.5 text-xs text-white/40 transition hover:text-white/80"
+              className="inline-flex items-center gap-1.5 py-2 text-xs text-white/40 transition hover:text-white/80"
             >
               Back to top
               <ArrowUp size={13} />

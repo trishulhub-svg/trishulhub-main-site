@@ -114,7 +114,7 @@ export function Hero() {
               initial={{ opacity: 0, y: 18 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.65, delay: 0.05, ease: EASE_OUT_EXPO }}
-              className="text-balance text-[2.1rem] font-bold leading-[1.12] tracking-[-0.035em] text-[#111111] sm:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
+              className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               <span className="font-sans">We build digital products that are </span>
               <span className="relative inline-flex align-baseline">

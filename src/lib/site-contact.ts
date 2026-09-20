@@ -21,7 +21,8 @@ export const DEFAULT_SITE_CONTACT: SiteContact = {
   email: 'info@trishulhub.in',
   instagram: 'https://www.instagram.com/',
   location: 'London, United Kingdom · Remote & Global Delivery',
-  whatsappPrefill: 'Hi TrishulHub — I would like to discuss a project.',
+  whatsappPrefill:
+    'Hello TrishulHub — I would like to enquire about a new project. I will share the details here:',
 }
 
 export function normalizeWhatsapp(value: string): string {
@@ -69,6 +70,15 @@ export function mailtoUrl(contact: SiteContact): string {
   return `mailto:${contact.email}`
 }
 
+/** Email clients want CRLF; bare \n is what turns drafts into one wall of text. */
+const CRLF = '\r\n'
+
+type EnquiryDetails = {
+  service?: string
+  budget?: string
+  timing?: string
+}
+
 /**
  * Pre-filled mailto so an "Email" click opens a ready-to-send draft — the
  * visitor only has to add their details and hit send.
@@ -88,31 +98,79 @@ export function emailDraftUrl(
   return `mailto:${contact.email}?${params.toString().replace(/\+/g, '%20')}`
 }
 
-/** The default email brief we pre-fill for visitors who prefer email. */
-export function enquiryEmailDraft(extra?: {
-  service?: string
-  budget?: string
-  timing?: string
-}): { subject: string; body: string } {
-  const lines = [
-    'Hi TrishulHub,',
+/** Professional, ready-to-send email brief. */
+export function enquiryEmailDraft(extra?: EnquiryDetails): {
+  subject: string
+  body: string
+} {
+  const service = extra?.service?.trim() || 'Not decided yet'
+  const budget = extra?.budget?.trim() || 'Open to your recommendation'
+  const timing = extra?.timing?.trim() || 'Flexible'
+
+  const body = [
+    'Hello TrishulHub team,',
     '',
-    "I'd like help with the following:",
+    'I would like to discuss a new project. Here is a short brief:',
     '',
-    `What we need: ${extra?.service ?? ''}`,
-    'Who it is for: ',
-    'Must-have features: ',
-    `Timeline: ${extra?.timing ?? ''}`,
-    `Budget range: ${extra?.budget ?? ''}`,
-    'Helpful links (current site, references): ',
+    'PROJECT',
+    `• Type of work: ${service}`,
+    '• Who it is for: ',
+    '• Main goal: ',
     '',
-    'My name: ',
-    'Company: ',
-    'Best number to reach me: ',
+    'SCOPE',
+    '• Must-have features: ',
+    '• Nice to have: ',
+    `• Preferred start: ${timing}`,
+    `• Budget range: ${budget}`,
+    '',
+    'CONTEXT',
+    '• Current website / references: ',
+    '• Anything else we should know: ',
+    '',
+    'ABOUT ME',
+    '• Name: ',
+    '• Company: ',
+    '• Role: ',
+    '• Best number: ',
+    '• Preferred reply: email / WhatsApp / phone',
     '',
     'Thanks,',
-  ]
-  return { subject: 'Project enquiry — TrishulHub', body: lines.join('\n') }
+    '',
+    // Signature block the sender fills in
+    '',
+  ].join(CRLF)
+
+  return {
+    subject: `Project enquiry — ${service}`,
+    body,
+  }
+}
+
+/**
+ * WhatsApp version: WhatsApp renders *bold* and real line breaks, so this is
+ * the same brief in chat form — shorter, scannable, still professional.
+ */
+export function enquiryWhatsAppDraft(extra?: EnquiryDetails): string {
+  const service = extra?.service?.trim() || 'Not decided yet'
+  const budget = extra?.budget?.trim() || 'Open to advice'
+  const timing = extra?.timing?.trim() || 'Flexible'
+
+  return [
+    'Hello TrishulHub — project enquiry',
+    '',
+    `*Service:* ${service}`,
+    `*Timeline:* ${timing}`,
+    `*Budget:* ${budget}`,
+    '',
+    '*What it needs to do:* ',
+    '*Who it is for:* ',
+    '*Current site / links:* ',
+    '',
+    'Name: ',
+    'Company: ',
+    '',
+    'Thanks!',
+  ].join('\n')
 }
 
 export function contactLinks(contact: SiteContact) {

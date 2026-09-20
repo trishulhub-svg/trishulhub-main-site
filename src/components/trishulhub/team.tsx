@@ -42,7 +42,7 @@ function WhatsAppIcon({ size = 14 }: { size?: number }) {
 }
 
 const iconBtn =
-  'flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#6b7280] transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white'
+  'flex h-10 w-10 items-center justify-center rounded-full border border-[#111111]/15 text-[#6b7280] transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white'
 
 export function Team({ founders }: { founders: Founder[] }) {
   const reduce = useReducedMotion()

@@ -398,7 +398,7 @@ export function ServicesPage() {
                   href={links.whatsapp}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 text-[15px] font-semibold text-[#111111] transition hover:text-[#0D3C1F]"
+                  className="inline-flex items-center gap-2 py-2 text-[15px] font-semibold text-[#111111] transition hover:text-[#0D3C1F]"
                 >
                   Ask us anything
                   <ArrowRight size={16} strokeWidth={1.5} />

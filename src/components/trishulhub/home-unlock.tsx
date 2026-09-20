@@ -273,7 +273,7 @@ export function HomeUnlock() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-gradient-to-b from-white to-[#f7fbf9] p-6 shadow-[0_16px_44px_rgba(6,43,22,0.07)] sm:p-8 lg:col-span-5"
+            className="relative z-10 flex min-h-[380px] flex-col overflow-hidden rounded-[1.75rem] lg:min-h-[480px] border border-[#0d3c1f]/12 bg-gradient-to-b from-white to-[#f7fbf9] p-6 shadow-[0_16px_44px_rgba(6,43,22,0.07)] sm:p-8 lg:col-span-5"
           >
             <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#0d9488]/18 blur-3xl" />
             <div

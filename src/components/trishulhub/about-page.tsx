@@ -131,7 +131,7 @@ export function AboutPage() {
   const { links } = useSiteContact()
 
   return (
-    <div ref={ref} className="relative pb-8">
+    <div ref={ref} className="relative overflow-hidden pb-8">
       <PageHero
         label="About us"
         title={
