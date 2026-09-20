@@ -102,6 +102,13 @@ export function ChatWidget() {
   const [mounted, setMounted] = useState(false)
   const [open, setOpen] = useState(false)
   const [seen, setSeen] = useState(true)
+  /**
+   * Hydration-safe hiding: we cannot branch on `usePathname()` during the very
+   * first render without risking a server/client mismatch, so the trigger is
+   * always server-rendered and simply removed once we know we are on an
+   * internal screen (/admin, /lead).
+   */
+  const [hidden, setHidden] = useState(false)
   const [stage, setStage] = useState<Stage>('service')
   const [answers, setAnswers] = useState<Answers>(EMPTY)
   const [text, setText] = useState('')
@@ -113,7 +120,9 @@ export function ChatWidget() {
   const inputRef = useRef<HTMLInputElement | null>(null)
   const logRef = useRef<HTMLDivElement | null>(null)
 
-  const hidden = HIDDEN_PREFIXES.some((p) => pathname?.startsWith(p))
+  useEffect(() => {
+    setHidden(HIDDEN_PREFIXES.some((p) => (pathname ?? '').startsWith(p)))
+  }, [pathname])
 
   /* ---------- restore / persist progress ---------- */
   useEffect(() => {
@@ -287,7 +296,9 @@ export function ChatWidget() {
     answers.phone ? `Phone: ${answers.phone}` : '',
   ].filter(Boolean)
 
-  if (!mounted || hidden) return null
+  // The trigger is rendered on the server so the button is present in the
+  // initial HTML; `mounted` only gates session-scoped extras (unread dot).
+  if (hidden) return null
 
   const optionClass =
     'w-full rounded-xl border border-[#0d3c1f]/15 bg-white px-4 py-2.5 text-left text-[13.5px] font-medium text-[#111111] transition hover:-translate-y-px hover:border-[#0D3C1F]/40 hover:bg-[#f4faf7] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#0d9488]'
