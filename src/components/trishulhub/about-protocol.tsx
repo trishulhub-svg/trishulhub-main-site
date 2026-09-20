@@ -7,14 +7,17 @@ import { EASE_OUT_EXPO } from '@/lib/animations'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
+import { emailDraftUrl, enquiryEmailDraft } from '@/lib/site-contact'
 
-const BUDGETS_GBP = ['£400', '£600', '£900', '£1,200', '£1,500'] as const
+/** Projects start at £1,500; the last stop is an open "Custom" budget. */
+const BUDGETS_GBP = ['£1,500', '£2,500', '£5,000', '£10,000', 'Custom'] as const
 
 const STEPS = [
   {
     id: 1,
     title: 'What is your budget?',
-    subtitle: 'Pick a range in pounds. We can adjust it later together.',
+    subtitle:
+      'Projects start at £1,500. Pick a range, or choose Custom and we will scope it with you.',
   },
   {
     id: 2,
@@ -30,7 +33,8 @@ const STEPS = [
   {
     id: 4,
     title: 'Ready to talk?',
-    subtitle: 'We will message you on WhatsApp with a simple next step.',
+    subtitle:
+      'Send this straight to us — WhatsApp for the fastest reply, or email if you prefer.',
   },
 ] as const
 
@@ -42,17 +46,22 @@ export function AboutProtocol({
 }: {
   className?: string
 }) {
-  const { whatsappWithMessage } = useSiteContact()
+  const contact = useSiteContact()
+  const { whatsappWithMessage } = contact
   const [step, setStep] = useState(1)
   const [budgetIndex, setBudgetIndex] = useState(0)
   const [lane, setLane] = useState<string>(LANES[0])
   const [timing, setTiming] = useState<string>(TIMING[1])
   const [dragging, setDragging] = useState(false)
+  const [customBudget, setCustomBudget] = useState('')
   const trackRef = useRef<HTMLDivElement>(null)
 
   const budgets = BUDGETS_GBP
   const current = STEPS[step - 1]
-  const budget = budgets[budgetIndex]
+  const budgetOption = budgets[budgetIndex]
+  const isCustom = budgetOption === 'Custom'
+  const budget = isCustom ? customBudget.trim() || 'Custom (to scope)' : budgetOption
+  const summary = `Budget: ${budget}\nService: ${lane}\nTiming: ${timing}`
 
   const handlePct = useCallback(
     (clientX: number) => {
@@ -204,6 +213,24 @@ export function AboutProtocol({
                           <span key={b}>{b}</span>
                         ))}
                       </div>
+
+                      {isCustom ? (
+                        <label className="mx-auto mt-6 block max-w-sm text-left">
+                          <span className="mb-2 block text-xs font-semibold uppercase tracking-[0.12em] text-[#6b7280]">
+                            Your budget
+                          </span>
+                          <input
+                            value={customBudget}
+                            onChange={(e) => setCustomBudget(e.target.value)}
+                            placeholder="e.g. £3,500 — or “not sure yet”"
+                            className="field-input"
+                          />
+                          <span className="mt-2 block text-[11.5px] leading-relaxed text-[#9ca3af]">
+                            Not sure? Leave it blank — we will send a range with
+                            the plan instead.
+                          </span>
+                        </label>
+                      ) : null}
                     </div>
                   )}
 
@@ -270,6 +297,18 @@ export function AboutProtocol({
                           </span>
                         </li>
                       </ul>
+
+                      <details className="group mt-4 border-t border-[#e5e7eb] pt-3">
+                        <summary className="flex cursor-pointer list-none items-center justify-between text-[12.5px] font-semibold text-[#0D3C1F]">
+                          What we will send by email
+                          <span className="text-[11px] font-normal text-[#9ca3af] transition group-open:rotate-180">
+                            ▾
+                          </span>
+                        </summary>
+                        <pre className="mt-3 max-h-40 overflow-auto whitespace-pre-wrap rounded-xl bg-white p-3 text-[11.5px] leading-relaxed text-[#6b7280] ring-1 ring-[#0d3c1f]/10">
+                          {enquiryEmailDraft({ service: lane, budget, timing }).body}
+                        </pre>
+                      </details>
                     </div>
                   )}
                 </motion.div>
@@ -280,13 +319,29 @@ export function AboutProtocol({
               {step < 4 ? (
                 <NexusButton onClick={next}>Next step</NexusButton>
               ) : (
-                <NexusButton
-                  href={whatsappWithMessage(
-                    `Hi TrishulHub — project plan:\nBudget: ${budget}\nService: ${lane}\nTiming: ${timing}`,
-                  )}
-                >
-                  Talk on WhatsApp
-                </NexusButton>
+                <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
+                  <NexusButton
+                    href={whatsappWithMessage(
+                      `Hi TrishulHub — project plan:\n${summary}`,
+                    )}
+                    showArrow
+                  >
+                    Send on WhatsApp
+                  </NexusButton>
+                  <NexusButton
+                    variant="secondary"
+                    href={emailDraftUrl(
+                      contact,
+                      enquiryEmailDraft({
+                        service: lane,
+                        budget,
+                        timing,
+                      }),
+                    )}
+                  >
+                    Send by email
+                  </NexusButton>
+                </div>
               )}
             </div>
           </div>

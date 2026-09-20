@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
+import { AnimatePresence, motion, useReducedMotion } from 'framer-motion'
 import {
   Clock,
   HeartHandshake,
@@ -13,36 +13,45 @@ import {
 import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const VB_W = 900
-const VB_H = 400
-
-type Pillar = { name: string; icon: LucideIcon; x: number }
+type Pillar = { name: string; icon: LucideIcon; detail: string }
 
 const PILLARS: Pillar[] = [
-  { name: 'Clear plans', icon: MessageCircle, x: 90 },
-  { name: 'Quality work', icon: ShieldCheck, x: 270 },
-  { name: 'On time', icon: Clock, x: 450 },
-  { name: 'Real support', icon: HeartHandshake, x: 630 },
-  { name: 'Built to grow', icon: TrendingUp, x: 810 },
+  {
+    name: 'Clear plans',
+    icon: MessageCircle,
+    detail: 'Fixed scope, fixed price, plain English — you always know what is next.',
+  },
+  {
+    name: 'Quality work',
+    icon: ShieldCheck,
+    detail: 'Clean, reviewed code with tested paths before anything reaches your users.',
+  },
+  {
+    name: 'On time',
+    icon: Clock,
+    detail: 'Milestones agreed up front and hit in order, with weekly visibility.',
+  },
+  {
+    name: 'Real support',
+    icon: HeartHandshake,
+    detail: 'A direct line to the people who built it — not a ticket queue.',
+  },
+  {
+    name: 'Built to grow',
+    icon: TrendingUp,
+    detail: 'Simple to extend when your customers, team or data volumes grow.',
+  },
 ]
 
-const HUB_X = 450
-const HUB_Y = 352
-const HUB_TOP = HUB_Y - 34
-const NODE_Y = 96
-const STEP_MS = 1900
-
-const PATHS = PILLARS.map((p) => ({
-  name: p.name,
-  d: `M${HUB_X} ${HUB_TOP} C ${HUB_X} ${HUB_TOP - 70}, ${HUB_X + (p.x - HUB_X) * 0.35} ${NODE_Y + 46}, ${p.x} ${NODE_Y}`,
-}))
+const STEP_MS = 2600
 
 /**
- * HomeIntelligences — "signal relay" promise diagram.
+ * HomeIntelligences — "TrishulHub promise" signal rail.
  *
- * A single cycling index drives the whole visual: the hub emits a pulse, each
- * connector fills in turn, and the matching pillar lights up. Hovering a
- * pillar parks the relay so people can read it. Reduced motion = fully static.
+ * One travelling hub walks a five-stop rail; the stop it reaches lights up and
+ * its commitment fades in underneath. One index + one interval drives the whole
+ * thing, so the motion stays cheap. Hover/tap a stop to park the hub on it;
+ * reduced motion renders the rail statically with every commitment listed.
  */
 export function HomeIntelligences() {
   const reduce = useReducedMotion()
@@ -56,6 +65,8 @@ export function HomeIntelligences() {
     }, STEP_MS)
     return () => window.clearInterval(id)
   }, [reduce])
+
+  const travel = (active / (PILLARS.length - 1)) * 100
 
   return (
     <section className="relative overflow-hidden lt-section">
@@ -77,200 +88,180 @@ export function HomeIntelligences() {
           </p>
         </div>
 
-        {/* ---------- Desktop relay ---------- */}
-        <div className="relative mx-auto mt-14 hidden w-full max-w-5xl md:block">
-          <div className="relative aspect-[900/400] w-full">
-            <svg
-              viewBox={`0 0 ${VB_W} ${VB_H}`}
-              className="absolute inset-0 h-full w-full"
-              fill="none"
-              aria-hidden
-            >
-              <defs>
-                <linearGradient id="promise-beam" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stopColor="#0d9488" stopOpacity="0.15" />
-                  <stop offset="100%" stopColor="#0d9488" stopOpacity="0.85" />
-                </linearGradient>
-              </defs>
+        <div className="relative mt-16 overflow-hidden rounded-[2rem] border border-[#0d3c1f]/12 bg-white p-6 shadow-[0_18px_50px_rgba(6,43,22,0.07)] sm:p-9">
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.05]"
+          />
 
-              {/* Dotted ring around the hub */}
-              <motion.circle
-                cx={HUB_X}
-                cy={HUB_Y}
-                r="58"
-                stroke="#0d9488"
-                strokeOpacity="0.25"
-                strokeWidth="1.5"
-                strokeDasharray="4 8"
-                animate={reduce ? undefined : { rotate: 360 }}
-                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
-                style={{ transformOrigin: `${HUB_X}px ${HUB_Y}px` }}
-              />
+          {/* ---------- Desktop rail ---------- */}
+          <div className="relative hidden md:block">
+            <div className="relative h-[112px]">
+              {/* Rail */}
+              <div className="absolute left-[10%] right-[10%] top-[38px] h-[2px] rounded-full bg-[#0d3c1f]/12">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-[#0d9488] to-[#5eead4]"
+                  animate={{ width: `${travel}%` }}
+                  transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+                />
+              </div>
 
-              {/* Connectors — each fills when its pillar is active */}
-              {PATHS.map((p, i) => {
-                const lit = i <= active
+              {/* Travelling hub */}
+              <motion.div
+                aria-hidden
+                animate={{ left: `calc(10% + (80% * ${active / (PILLARS.length - 1)}))` }}
+                transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+                className="absolute top-[38px] z-20 -translate-x-1/2 -translate-y-1/2"
+              >
+                <span className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-[#0D3C1F]/20 bg-white shadow-[0_12px_30px_rgba(6,43,22,0.18)]">
+                  <motion.span
+                    animate={reduce ? undefined : { scale: [1, 1.4], opacity: [0.5, 0] }}
+                    transition={{ duration: 1.8, repeat: Infinity }}
+                    className="absolute inset-0 rounded-2xl border border-[#0d9488]"
+                  />
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src="/images/trishulhub-logo.png"
+                    alt="TrishulHub"
+                    width={48}
+                    height={48}
+                    className="relative z-10 h-[86%] w-[86%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
+                  />
+                </span>
+              </motion.div>
+
+              {/* Stops */}
+              {PILLARS.map((pillar, i) => {
+                const Icon = pillar.icon
                 const isActive = i === active
+                const isDone = i < active
                 return (
-                  <g key={p.name}>
-                    <path
-                      d={p.d}
-                      stroke="#0d3c1f"
-                      strokeOpacity="0.12"
-                      strokeWidth="2"
-                      strokeLinecap="round"
-                    />
-                    <motion.path
-                      d={p.d}
-                      stroke="url(#promise-beam)"
-                      strokeWidth={isActive ? 3 : 2}
-                      strokeLinecap="round"
-                      initial={false}
-                      animate={{ pathLength: lit ? 1 : 0, opacity: lit ? 1 : 0 }}
-                      transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-                    />
-                    {!reduce && isActive ? (
-                      <circle r="4" fill="#5eead4">
-                        <animateMotion dur="1.5s" repeatCount="indefinite" path={p.d} />
-                      </circle>
-                    ) : null}
-                  </g>
+                  <button
+                    key={pillar.name}
+                    type="button"
+                    onMouseEnter={() => {
+                      paused.current = true
+                      setActive(i)
+                    }}
+                    onMouseLeave={() => {
+                      paused.current = false
+                    }}
+                    onFocus={() => {
+                      paused.current = true
+                      setActive(i)
+                    }}
+                    onBlur={() => {
+                      paused.current = false
+                    }}
+                    className="absolute top-0 flex -translate-x-1/2 flex-col items-center"
+                    style={{ left: `${10 + (80 * i) / (PILLARS.length - 1)}%` }}
+                  >
+                    <motion.span
+                      animate={{
+                        scale: isActive ? 1.08 : 1,
+                        borderColor: isActive
+                          ? 'rgba(13,60,31,0.55)'
+                          : 'rgba(13,60,31,0.12)',
+                        backgroundColor: isActive
+                          ? '#ffffff'
+                          : isDone
+                            ? '#e8f5ef'
+                            : '#ffffff',
+                      }}
+                      transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+                      className={`relative flex h-[76px] w-[76px] items-center justify-center rounded-2xl border shadow-[0_10px_28px_rgba(6,43,22,0.07)] ${
+                        isActive ? 'text-[#0D3C1F]' : 'text-[#9ca3af]'
+                      }`}
+                    >
+                      <Icon size={28} strokeWidth={1.55} />
+                    </motion.span>
+                    <span
+                      className={`mt-3 text-[12.5px] font-semibold transition-colors ${
+                        isActive ? 'text-[#0D3C1F]' : 'text-[#6b7280]'
+                      }`}
+                    >
+                      {pillar.name}
+                    </span>
+                  </button>
                 )
               })}
-            </svg>
+            </div>
 
-            {/* Pillars */}
-            {PILLARS.map((pillar, i) => {
-              const Icon = pillar.icon
-              const isActive = i === active
-              return (
-                <button
-                  key={pillar.name}
-                  type="button"
-                  onMouseEnter={() => {
-                    paused.current = true
-                    setActive(i)
-                  }}
-                  onMouseLeave={() => {
-                    paused.current = false
-                  }}
-                  onFocus={() => {
-                    paused.current = true
-                    setActive(i)
-                  }}
-                  onBlur={() => {
-                    paused.current = false
-                  }}
-                  className="absolute z-10 flex -translate-x-1/2 flex-col items-center"
-                  style={{
-                    left: `${(pillar.x / VB_W) * 100}%`,
-                    top: `${(NODE_Y / VB_H) * 100}%`,
-                    transform: 'translate(-50%, -50%)',
-                  }}
+            {/* Commitment detail */}
+            <div className="mt-6 flex min-h-[64px] items-center justify-center rounded-2xl border border-[#0d3c1f]/10 bg-[#f7fbf9] px-6 py-4">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.p
+                  key={PILLARS[active].name}
+                  initial={{ opacity: 0, y: 8 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -8 }}
+                  transition={{ duration: 0.32, ease: EASE_OUT_EXPO }}
+                  className="max-w-3xl text-center text-[14.5px] leading-relaxed text-[#374151]"
                 >
-                  <motion.span
-                    animate={{
-                      scale: isActive ? 1.08 : 1,
-                      borderColor: isActive ? '#0D3C1F' : 'rgba(13,60,31,0.12)',
-                    }}
-                    transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-                    className={`relative flex h-[68px] w-[68px] items-center justify-center rounded-2xl border bg-white shadow-[0_10px_30px_rgba(6,43,22,0.08)] transition-colors duration-300 ${
-                      isActive ? 'text-[#0D3C1F]' : 'text-[#9ca3af]'
-                    }`}
-                  >
-                    <Icon size={26} strokeWidth={1.6} />
-                    {isActive && !reduce ? (
-                      <motion.span
-                        aria-hidden
-                        animate={{ scale: [1, 1.55], opacity: [0.45, 0] }}
-                        transition={{ duration: 1.5, repeat: Infinity }}
-                        className="absolute inset-0 rounded-2xl border border-[#0d9488]"
-                      />
-                    ) : null}
-                  </motion.span>
-                  <span
-                    className={`mt-2 text-[11.5px] font-medium transition-colors ${
-                      isActive ? 'text-[#0D3C1F]' : 'text-muted-foreground'
-                    }`}
-                  >
-                    {pillar.name}
-                  </span>
-                </button>
-              )
-            })}
-
-            {/* Hub */}
-            <div
-              className="absolute z-10 -translate-x-1/2 -translate-y-1/2"
-              style={{
-                left: `${(HUB_X / VB_W) * 100}%`,
-                top: `${(HUB_Y / VB_H) * 100}%`,
-              }}
-            >
-              <span className="relative flex h-[74px] w-[74px] items-center justify-center overflow-hidden rounded-2xl border border-[#0D3C1F]/15 bg-white shadow-[0_14px_36px_rgba(6,43,22,0.12)]">
-                <motion.span
-                  aria-hidden
-                  animate={reduce ? undefined : { scale: [1, 1.35, 1], opacity: [0.35, 0.7, 0.35] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: 'easeInOut' }}
-                  className="absolute inset-2 rounded-full bg-[#0d9488]/25 blur-md"
-                />
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src="/images/trishulhub-logo.png"
-                  alt="TrishulHub"
-                  width={74}
-                  height={74}
-                  className="relative z-10 h-[92%] w-[92%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
-                />
-              </span>
+                  <span className="font-semibold text-[#0D3C1F]">
+                    {PILLARS[active].name}:
+                  </span>{' '}
+                  {PILLARS[active].detail}
+                </motion.p>
+              </AnimatePresence>
             </div>
           </div>
-        </div>
 
-        {/* ---------- Mobile relay ---------- */}
-        <ul className="relative mx-auto mt-12 max-w-md space-y-3 md:hidden">
-          {PILLARS.map((pillar, i) => {
-            const Icon = pillar.icon
-            const isActive = i === active
-            return (
-              <li key={pillar.name}>
-                <button
-                  type="button"
-                  onClick={() => setActive(i)}
-                  className={`flex w-full items-center gap-4 rounded-2xl border p-3.5 text-left transition-all duration-300 ${
-                    isActive
-                      ? 'border-[#0D3C1F]/35 bg-white shadow-[0_12px_30px_rgba(6,43,22,0.09)]'
-                      : 'border-[#0d3c1f]/10 bg-white/70'
-                  }`}
-                >
-                  <span
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-colors ${
-                      isActive
-                        ? 'border-[#0D3C1F] bg-[#0D3C1F] text-white'
-                        : 'border-[#0d3c1f]/12 bg-white text-[#9ca3af]'
-                    }`}
-                  >
-                    <Icon size={19} strokeWidth={1.7} />
-                  </span>
-                  <span
-                    className={`text-[14px] font-semibold ${
-                      isActive ? 'text-[#0D3C1F]' : 'text-[#374151]'
-                    }`}
-                  >
-                    {pillar.name}
-                  </span>
-                  <span className="ml-auto h-[3px] w-12 overflow-hidden rounded-full bg-[#0d3c1f]/10">
-                    <motion.span
-                      className="block h-full rounded-full bg-[#0d9488]"
-                      animate={{ width: isActive ? '100%' : '0%' }}
-                      transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-                    />
-                  </span>
-                </button>
-              </li>
-            )
-          })}
-        </ul>
+          {/* ---------- Mobile: vertical rail ---------- */}
+          <div className="relative md:hidden">
+            <span
+              aria-hidden
+              className="absolute left-[26px] top-3 bottom-3 w-[2px] rounded-full bg-[#0d3c1f]/12"
+            />
+            <motion.span
+              aria-hidden
+              className="absolute left-[26px] top-3 w-[2px] rounded-full bg-gradient-to-b from-[#0d9488] to-[#5eead4]"
+              animate={{ height: `${(active / (PILLARS.length - 1)) * 86 + 5}%` }}
+              transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
+            />
+            <ul className="relative space-y-3">
+              {PILLARS.map((pillar, i) => {
+                const Icon = pillar.icon
+                const isActive = i === active
+                return (
+                  <li key={pillar.name}>
+                    <button
+                      type="button"
+                      onClick={() => setActive(i)}
+                      className={`flex w-full items-start gap-4 rounded-2xl border p-4 text-left transition-all duration-300 ${
+                        isActive
+                          ? 'border-[#0D3C1F]/35 bg-white shadow-[0_14px_34px_rgba(6,43,22,0.1)]'
+                          : 'border-[#0d3c1f]/10 bg-white/70'
+                      }`}
+                    >
+                      <span
+                        className={`relative z-10 flex h-[52px] w-[52px] shrink-0 items-center justify-center rounded-2xl border transition-colors ${
+                          isActive
+                            ? 'border-[#0D3C1F] bg-[#0D3C1F] text-white'
+                            : 'border-[#0d3c1f]/12 bg-white text-[#9ca3af]'
+                        }`}
+                      >
+                        <Icon size={20} strokeWidth={1.7} />
+                      </span>
+                      <span className="min-w-0">
+                        <span
+                          className={`block text-[14px] font-bold ${
+                            isActive ? 'text-[#0D3C1F]' : 'text-[#374151]'
+                          }`}
+                        >
+                          {pillar.name}
+                        </span>
+                        <span className="mt-1 block text-[12.5px] leading-relaxed text-[#6b7280]">
+                          {pillar.detail}
+                        </span>
+                      </span>
+                    </button>
+                  </li>
+                )
+              })}
+            </ul>
+          </div>
+        </div>
 
         {/* Closing chips */}
         <div className="mx-auto mt-12 max-w-3xl sm:mt-14">

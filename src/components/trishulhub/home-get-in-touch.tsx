@@ -6,6 +6,7 @@ import { Mail, MessageCircle, Phone } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { emailDraftUrl, enquiryEmailDraft } from '@/lib/site-contact'
 
 type Channel = {
   id: string
@@ -28,7 +29,8 @@ const STEP_MS = 1800
  * Instagram was intentionally dropped here (it stays in the footer).
  */
 export function HomeGetInTouch() {
-  const { email, phoneDisplay, links } = useSiteContact()
+  const contact = useSiteContact()
+  const { email, phoneDisplay, links } = contact
   const reduce = useReducedMotion()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
@@ -47,8 +49,8 @@ export function HomeGetInTouch() {
       id: 'email',
       label: 'Email',
       value: email,
-      hint: 'Best for briefs and files',
-      href: links.mailto,
+      hint: 'Opens a ready-to-send draft',
+      href: emailDraftUrl(contact, enquiryEmailDraft()),
       icon: <Mail size={20} strokeWidth={1.7} />,
     },
     {
@@ -84,7 +86,10 @@ export function HomeGetInTouch() {
         />
 
         <div className="relative mx-auto max-w-2xl text-center">
-          <span className="th-eyebrow">Channels</span>
+          <span className="th-eyebrow">
+            <MessageCircle size={13} className="text-[#0d9488]" />
+            Contact
+          </span>
           <motion.h2
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -98,8 +103,9 @@ export function HomeGetInTouch() {
             </span>
           </motion.h2>
           <p className="text-pretty mx-auto mt-4 max-w-xl font-sans text-base leading-relaxed text-muted-foreground">
-            Pick the channel that suits you. Every message reaches a real
-            engineer — not a queue.
+            Pick whichever suits you best. Email opens a pre-written brief — add
+            your details, hit send, done. Every message reaches a real engineer,
+            not a queue.
           </p>
         </div>
 

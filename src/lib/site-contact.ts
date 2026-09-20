@@ -69,6 +69,52 @@ export function mailtoUrl(contact: SiteContact): string {
   return `mailto:${contact.email}`
 }
 
+/**
+ * Pre-filled mailto so an "Email" click opens a ready-to-send draft — the
+ * visitor only has to add their details and hit send.
+ *
+ * ponytail: mailto caps out around 2000 chars in some clients; the planner
+ * summary is well under that. Swap for a hosted form if ever exceeded.
+ */
+export function emailDraftUrl(
+  contact: SiteContact,
+  draft: { subject: string; body: string },
+): string {
+  const params = new URLSearchParams({
+    subject: draft.subject,
+    body: draft.body,
+  })
+  // URLSearchParams encodes spaces as "+" which mail clients show literally.
+  return `mailto:${contact.email}?${params.toString().replace(/\+/g, '%20')}`
+}
+
+/** The default email brief we pre-fill for visitors who prefer email. */
+export function enquiryEmailDraft(extra?: {
+  service?: string
+  budget?: string
+  timing?: string
+}): { subject: string; body: string } {
+  const lines = [
+    'Hi TrishulHub,',
+    '',
+    "I'd like help with the following:",
+    '',
+    `What we need: ${extra?.service ?? ''}`,
+    'Who it is for: ',
+    'Must-have features: ',
+    `Timeline: ${extra?.timing ?? ''}`,
+    `Budget range: ${extra?.budget ?? ''}`,
+    'Helpful links (current site, references): ',
+    '',
+    'My name: ',
+    'Company: ',
+    'Best number to reach me: ',
+    '',
+    'Thanks,',
+  ]
+  return { subject: 'Project enquiry — TrishulHub', body: lines.join('\n') }
+}
+
 export function contactLinks(contact: SiteContact) {
   return {
     whatsapp: whatsappUrl(contact),

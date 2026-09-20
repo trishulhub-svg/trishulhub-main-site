@@ -21,6 +21,7 @@ import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
+import { AboutProtocol } from '@/components/trishulhub/about-protocol'
 
 const STEPS = [
   {
@@ -317,60 +318,6 @@ export function ContactPage() {
             </ol>
           </motion.div>
 
-          {/* Direct channels */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true, amount: 0.15 }}
-            transition={{ duration: 0.55, delay: 0.06, ease: EASE_OUT_EXPO }}
-            className="overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white"
-          >
-            <a
-              href={links.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group flex items-center gap-4 border-b border-[#0d3c1f]/8 p-5 transition hover:bg-[#f7fbf9]"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
-                <MessageCircle size={18} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-[#0a0a0a]">
-                  WhatsApp — fastest
-                </p>
-                <p className="truncate text-[13px] text-[#6b7280]">
-                  Best for quick questions and scoping
-                </p>
-              </div>
-            </a>
-            <a
-              href={links.mailto}
-              className="group flex items-center gap-4 border-b border-[#0d3c1f]/8 p-5 transition hover:bg-[#f7fbf9]"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
-                <Mail size={18} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-[#0a0a0a]">Email</p>
-                <p className="truncate text-[13px] text-[#6b7280]">{email}</p>
-              </div>
-            </a>
-            <a
-              href={links.tel}
-              className="group flex items-center gap-4 p-5 transition hover:bg-[#f7fbf9]"
-            >
-              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
-                <Phone size={18} />
-              </span>
-              <div className="min-w-0">
-                <p className="text-sm font-semibold text-[#0a0a0a]">Phone</p>
-                <p className="truncate text-[13px] text-[#6b7280]">
-                  {phoneDisplay}
-                </p>
-              </div>
-            </a>
-          </motion.div>
-
           {/* What to include */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
@@ -404,6 +351,12 @@ export function ContactPage() {
       <section className="lt-container mt-14 lg:mt-20">
         <HomeGetInTouch />
       </section>
+
+      {/* Project planner — same wizard as the home page, so visitors can send a
+          structured brief instead of typing one out. */}
+      <div className="lt-container mt-4">
+        <AboutProtocol className="mt-14 lg:mt-20" />
+      </div>
 
       <AnimatePresence>
         {showSuccess ? (
