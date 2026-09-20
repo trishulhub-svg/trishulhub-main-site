@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
@@ -152,10 +153,11 @@ export default function RootLayout({
         <Toaster />
         <AgentationLive />
         {/* TrishulHub Call — browser call button for site visitors. */}
-        <script
+        <Script
+          id="trishulhub-call-widget"
           src="https://call.trishulhub.com/widget.js"
           data-site="tc_BnUzxX-Bi0lGAhly6hrjoNZrjo"
-          async
+          strategy="afterInteractive"
         />
         <script
           type="application/ld+json"
