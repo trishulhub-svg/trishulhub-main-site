@@ -168,6 +168,8 @@ export function Team({ founders }: { founders: Founder[] }) {
                     <img
                       src={founderImage}
                       alt={m.name}
+                      loading="lazy"
+                      decoding="async"
                       className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                       style={{ objectPosition: 'center top' }}
                     />

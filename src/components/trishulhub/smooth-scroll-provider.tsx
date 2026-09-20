@@ -8,18 +8,15 @@
  * without being laggy. It respects prefers-reduced-motion (instant scroll
  * for users who prefer reduced motion).
  *
- * The page-load fade-in is a single motion.div that wraps children and
- * fades in from 0 → 1 opacity over 0.8s with easeOut easing, exactly as
- * the user specified.
- *
- * Also re-renders the page on route changes so exit/enter transitions
- * can fire (used by template.tsx if we add one — currently only the
- * fade-in on initial load is wired).
+ * Performance notes:
+ *  - Lenis is imported dynamically *after* hydration so its ~10KB payload
+ *    never blocks first paint (desktop + wheel pointers only).
+ *  - There is no wrapper opacity fade anymore: fading the whole app delayed
+ *    LCP and made the first paint feel slower than it was.
  */
 
 import { useEffect, type ReactNode } from 'react'
-import { motion, useReducedMotion } from 'framer-motion'
-import Lenis from 'lenis'
+import { useReducedMotion } from 'framer-motion'
 
 export function SmoothScrollProvider({ children }: { children: ReactNode }) {
   const reduce = useReducedMotion()
@@ -34,55 +31,67 @@ export function SmoothScrollProvider({ children }: { children: ReactNode }) {
         'ontouchstart' in window)
     if (isTouch) return
 
-    const lenis = new Lenis({
-      // Snappy smooth scroll — lighter feel, less "heavy" trailing.
-      duration: 0.55,
-      easing: (t: number) => 1 - Math.pow(1 - t, 3),
-      smoothWheel: true,
-      wheelMultiplier: 1.05,
-      touchMultiplier: 1.4,
-      lerp: 0.14,
-      prevent: (node) => {
-        return node.tagName === 'SELECT' || !!node.closest('[data-lenis-prevent]')
-      },
-    })
+    let cancelled = false
+    let cleanup: (() => void) | undefined
 
-    // Hook Lenis into the requestAnimationFrame loop
-    let rafId = 0
-    const raf = (time: number) => {
-      lenis.raf(time)
+    // Defer the library download until the browser is idle.
+    const start = async () => {
+      const { default: Lenis } = await import('lenis')
+      if (cancelled) return
+
+      const lenis = new Lenis({
+        // Snappy smooth scroll — lighter feel, less "heavy" trailing.
+        duration: 0.55,
+        easing: (t: number) => 1 - Math.pow(1 - t, 3),
+        smoothWheel: true,
+        wheelMultiplier: 1.05,
+        touchMultiplier: 1.4,
+        lerp: 0.14,
+        prevent: (node) =>
+          node.tagName === 'SELECT' ||
+          !!node.closest('[data-lenis-prevent]'),
+      })
+
+      let rafId = 0
+      const raf = (time: number) => {
+        lenis.raf(time)
+        rafId = requestAnimationFrame(raf)
+      }
       rafId = requestAnimationFrame(raf)
-    }
-    rafId = requestAnimationFrame(raf)
 
-    // Handle anchor link clicks (#home, #services, etc.) via Lenis
-    // so they get the same smooth feel as wheel scrolling
-    const onAnchorClick = (e: MouseEvent) => {
-      const target = (e.target as HTMLElement)?.closest('a[href^="#"]')
-      if (!target) return
-      const href = target.getAttribute('href')
-      if (!href || href === '#') return
-      const el = document.querySelector(href)
-      if (!el) return
-      e.preventDefault()
-      lenis.scrollTo(el as HTMLElement, { offset: -80, duration: 1.4 })
+      // Anchor links (#home, #services…) get the same smooth feel.
+      const onAnchorClick = (e: MouseEvent) => {
+        const target = (e.target as HTMLElement)?.closest('a[href^="#"]')
+        if (!target) return
+        const href = target.getAttribute('href')
+        if (!href || href === '#') return
+        const el = document.querySelector(href)
+        if (!el) return
+        e.preventDefault()
+        lenis.scrollTo(el as HTMLElement, { offset: -90, duration: 1.1 })
+      }
+      document.addEventListener('click', onAnchorClick)
+
+      cleanup = () => {
+        cancelAnimationFrame(rafId)
+        document.removeEventListener('click', onAnchorClick)
+        lenis.destroy()
+      }
     }
-    document.addEventListener('click', onAnchorClick)
+
+    const idleWindow = window as Window & {
+      requestIdleCallback?: (cb: () => void) => number
+    }
+    const idleId = idleWindow.requestIdleCallback
+      ? idleWindow.requestIdleCallback(() => void start())
+      : window.setTimeout(() => void start(), 900)
 
     return () => {
-      cancelAnimationFrame(rafId)
-      document.removeEventListener('click', onAnchorClick)
-      lenis.destroy()
+      cancelled = true
+      if (typeof idleId === 'number') window.clearTimeout(idleId)
+      cleanup?.()
     }
   }, [reduce])
 
-  return (
-    <motion.div
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.4, ease: 'easeOut' }}
-    >
-      {children}
-    </motion.div>
-  )
+  return <>{children}</>
 }

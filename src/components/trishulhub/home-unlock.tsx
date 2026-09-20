@@ -23,8 +23,8 @@ const plans: {
     id: 'software',
     label: 'Custom Software Development',
     icon: LayoutDashboard,
-    price: 'Custom',
-    period: '/build',
+    price: 'Fixed quote',
+    period: 'per build',
     description:
       'Admin panels and tools that match how your team works every day.',
     features: [
@@ -40,8 +40,8 @@ const plans: {
     id: 'website',
     label: 'Website Development',
     icon: Globe,
-    price: 'Custom',
-    period: '/project',
+    price: 'Fixed quote',
+    period: 'per project',
     description:
       'Clean websites that look good and help customers find you.',
     features: [
@@ -57,8 +57,8 @@ const plans: {
     id: 'mobile',
     label: 'Mobile Apps',
     icon: Smartphone,
-    price: 'Custom',
-    period: '/app',
+    price: 'Fixed quote',
+    period: 'per app',
     description:
       'Phone apps for Android and iOS that help customers or your staff.',
     features: [

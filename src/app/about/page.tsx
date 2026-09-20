@@ -3,9 +3,16 @@ import { AboutPage, AboutValues } from '@/components/trishulhub/about-page'
 import { TeamSection } from '@/components/trishulhub/team-section'
 
 export const metadata = {
-  title: 'About us | TrishulHub',
+  title: 'About us',
   description:
-    'TrishulHub builds websites, business software, and mobile apps that help your company work better.',
+    'Meet the TrishulHub team — a UK-based digital engineering studio building websites, bespoke software and mobile apps for growing businesses.',
+  alternates: { canonical: '/about' },
+  openGraph: {
+    title: 'About us | TrishulHub',
+    description:
+      'A UK-based studio building websites, bespoke software and mobile apps that remove friction from growing businesses.',
+    url: '/about',
+  },
 }
 
 export default function AboutRoute() {

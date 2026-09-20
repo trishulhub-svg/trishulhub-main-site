@@ -3,7 +3,13 @@
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { motion, useReducedMotion } from 'framer-motion'
+import {
+  AnimatePresence,
+  motion,
+  useReducedMotion,
+  useScroll,
+  useSpring,
+} from 'framer-motion'
 import { Menu, X } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
@@ -23,12 +29,35 @@ export function Navbar() {
   const pathname = usePathname()
   const { links: contactLinks } = useSiteContact()
 
+  // Reading-progress bar (top of the viewport)
+  const { scrollYProgress } = useScroll()
+  const progress = useSpring(scrollYProgress, {
+    stiffness: 140,
+    damping: 26,
+    restDelta: 0.001,
+  })
+
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 24)
     onScroll()
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Close the mobile menu on route change
+  useEffect(() => {
+    setOpen(false)
+  }, [pathname])
+
+  // Lock body scroll while the mobile menu is open
+  useEffect(() => {
+    if (!open) return
+    const prev = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = prev
+    }
+  }, [open])
 
   return (
     <motion.header
@@ -37,10 +66,20 @@ export function Navbar() {
       transition={{ duration: 0.6, delay: 0.15, ease: 'easeOut' }}
       className="fixed inset-x-0 top-0 z-50"
     >
+      {!reduce ? (
+        <motion.div
+          aria-hidden
+          style={{ scaleX: progress }}
+          className="absolute inset-x-0 top-0 h-[3px] origin-left bg-gradient-to-r from-[#0d9488] via-[#0D3C1F] to-[#5eead4]"
+        />
+      ) : null}
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div
-          className={`relative mt-3 flex items-center justify-between gap-3 rounded-2xl border border-[#111111]/15 bg-white/90 px-3 py-2.5 shadow-sm backdrop-blur-md transition-all duration-300 sm:px-5 ${
-            scrolled ? 'border-[#111111]/25 shadow-md' : ''
+          className={`relative mt-3 flex items-center justify-between gap-3 rounded-2xl border px-3 py-2.5 backdrop-blur-md transition-all duration-300 sm:px-5 ${
+            scrolled
+              ? 'border-[#111111]/20 bg-white/95 shadow-[0_8px_30px_rgba(6,43,22,0.08)]'
+              : 'border-[#111111]/12 bg-white/80 shadow-sm'
           }`}
         >
           {/* Mobile: logo left (larger) · Desktop: logo + wordmark */}
@@ -64,19 +103,27 @@ export function Navbar() {
 
           <nav className="hidden items-center gap-1 md:flex">
             {navLinks.map((l) => {
-              const active = pathname === l.href
+              const active =
+                l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
               return (
                 <Link
                   key={l.label}
                   href={l.href}
                   onClick={() => setOpen(false)}
-                  className={`rounded-full px-4 py-2 text-sm font-medium transition-colors ${
+                  className={`relative rounded-full px-4 py-2 text-sm font-medium transition-colors ${
                     active
-                      ? 'bg-[#0D3C1F]/10 text-[#0D3C1F]'
+                      ? 'text-[#0D3C1F]'
                       : 'text-[#6b7280] hover:text-[#0D3C1F]'
                   }`}
                 >
-                  {l.label}
+                  {active ? (
+                    <motion.span
+                      layoutId="th-nav-pill"
+                      transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+                      className="absolute inset-0 -z-10 rounded-full bg-[#0D3C1F]/10"
+                    />
+                  ) : null}
+                  <span className="relative z-10">{l.label}</span>
                 </Link>
               )
             })}
@@ -87,7 +134,7 @@ export function Navbar() {
               href={contactLinks.whatsapp}
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden h-10 items-center rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28] sm:inline-flex"
+              className="btn-shine group hidden h-10 items-center gap-1.5 rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_8px_22px_rgba(13,60,31,0.22)] sm:inline-flex"
             >
               Get Started
             </a>
@@ -97,51 +144,81 @@ export function Navbar() {
               aria-label="Toggle menu"
               aria-expanded={open}
               onClick={() => setOpen((v) => !v)}
-              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] md:hidden"
+              className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[#e5e7eb] text-[#0a0a0a] transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F] md:hidden"
             >
-              {open ? <X size={18} /> : <Menu size={18} />}
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.span
+                  key={open ? 'close' : 'menu'}
+                  initial={{ opacity: 0, rotate: -90 }}
+                  animate={{ opacity: 1, rotate: 0 }}
+                  exit={{ opacity: 0, rotate: 90 }}
+                  transition={{ duration: 0.18 }}
+                >
+                  {open ? <X size={18} /> : <Menu size={18} />}
+                </motion.span>
+              </AnimatePresence>
             </button>
           </div>
         </div>
 
-        {open && (
-          <motion.nav
-            initial={{ opacity: 0, y: -10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.3, ease: EASE_OUT_EXPO }}
-            className="mt-2 flex flex-col rounded-2xl border border-[#111111]/15 bg-white p-4 shadow-lg md:hidden"
-          >
-            <p className="mb-3 px-1 text-xs font-semibold uppercase tracking-[0.16em] text-[#0D3C1F]">
-              Menu
-            </p>
-            {navLinks.map((l) => {
-              const active = pathname === l.href
-              return (
-                <Link
-                  key={l.label}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className={`rounded-xl px-4 py-3.5 text-base font-semibold leading-snug tracking-tight transition-colors ${
-                    active
-                      ? 'bg-[#0D3C1F]/8 text-[#0D3C1F]'
-                      : 'text-[#111111] hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]'
-                  }`}
-                >
-                  {l.label}
-                </Link>
-              )
-            })}
-            <a
-              href={contactLinks.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
-              onClick={() => setOpen(false)}
-              className="mt-3 flex h-12 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
+        <AnimatePresence>
+          {open ? (
+            <motion.nav
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -8 }}
+              transition={{ duration: 0.28, ease: EASE_OUT_EXPO }}
+              className="mt-2 flex flex-col rounded-2xl border border-[#111111]/15 bg-white p-3 shadow-xl md:hidden"
             >
-              Get Started
-            </a>
-          </motion.nav>
-        )}
+              {navLinks.map((l, i) => {
+                const active =
+                  l.href === '/' ? pathname === '/' : pathname.startsWith(l.href)
+                return (
+                  <motion.div
+                    key={l.label}
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{
+                      delay: 0.04 * i,
+                      duration: 0.3,
+                      ease: EASE_OUT_EXPO,
+                    }}
+                  >
+                    <Link
+                      href={l.href}
+                      onClick={() => setOpen(false)}
+                      className={`flex items-center justify-between rounded-xl px-4 py-3.5 text-base font-semibold leading-snug tracking-tight transition-colors ${
+                        active
+                          ? 'bg-[#0D3C1F]/8 text-[#0D3C1F]'
+                          : 'text-[#111111] hover:bg-[#0D3C1F]/5 hover:text-[#0D3C1F]'
+                      }`}
+                    >
+                      {l.label}
+                      {active ? (
+                        <span className="h-1.5 w-1.5 rounded-full bg-[#0D3C1F]" />
+                      ) : null}
+                    </Link>
+                  </motion.div>
+                )
+              })}
+              <motion.a
+                href={contactLinks.whatsapp}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setOpen(false)}
+                initial={{ opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.18, duration: 0.3, ease: EASE_OUT_EXPO }}
+                className="mt-2 flex h-12 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
+              >
+                Get Started
+              </motion.a>
+              <div className="mt-3 border-t border-[#e5e7eb] px-1 pt-3 text-center text-xs text-[#6b7280]">
+                UK-based · Replying within one business day
+              </div>
+            </motion.nav>
+          ) : null}
+        </AnimatePresence>
       </div>
     </motion.header>
   )

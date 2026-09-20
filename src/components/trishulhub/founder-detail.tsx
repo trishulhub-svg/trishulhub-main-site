@@ -123,14 +123,18 @@ export function FounderDetailClient({
                   Contact me
                 </a>
               ) : null}
-            <a
-              href="#projects"
-              className="inline-flex items-center justify-center gap-2 rounded-full border border-gray-300 bg-white px-7 py-3.5 text-sm font-semibold text-[#111111] shadow-sm transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white"
-            >
-              Selected Projects
-              <ArrowUpRight size={15} />
-            </a>
-          </div>
+              {whatsappHref(f.whatsapp) ? (
+                <a
+                  href={whatsappHref(f.whatsapp)!}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center justify-center gap-2 rounded-full border border-[#111111]/15 bg-white px-7 py-3.5 text-sm font-semibold text-[#111111] shadow-sm transition hover:border-[#0D3C1F] hover:bg-[#0D3C1F] hover:text-white"
+                >
+                  <WhatsAppIcon size={15} />
+                  Message on WhatsApp
+                </a>
+              ) : null}
+            </div>
 
             <div className="mt-8 flex items-center gap-3">
               {whatsappHref(f.whatsapp) && (
@@ -191,6 +195,8 @@ export function FounderDetailClient({
                 <img
                   src={f.image}
                   alt={f.name}
+                  loading="lazy"
+                  decoding="async"
                   className="absolute inset-0 h-full w-full object-cover"
                   style={{ objectPosition: 'center top' }}
                 />
@@ -228,6 +234,8 @@ export function FounderDetailClient({
                   <img
                     src={aboutImage}
                     alt={f.name}
+                    loading="lazy"
+                    decoding="async"
                     className="absolute inset-0 h-full w-full object-cover"
                   />
                 ) : (
@@ -336,9 +344,10 @@ export function FounderDetailClient({
         className="border-b border-[#e5e7eb] bg-white px-4 py-16 sm:px-6 sm:py-24 lg:px-8"
       >
         <div className="mx-auto max-w-6xl">
-          <SectionHeading lead="My" accent="projects" />
+          <SectionHeading lead="Selected" accent="projects" />
           <p className="mx-auto mb-12 mt-4 max-w-2xl text-center text-sm leading-relaxed text-[#6b7280] sm:text-base">
-            Selected work shipped at TrishulHub and beyond.
+            A snapshot of the products, platforms and client work this founder
+            has shipped.
           </p>
           <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {f.projectsList.map((p, i) => (

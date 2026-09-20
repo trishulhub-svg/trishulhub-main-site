@@ -23,13 +23,13 @@ export function HomeAbout() {
             <motion.span
               initial={{ opacity: 0, y: 12 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              className="mb-5 inline-flex items-center gap-2 text-sm font-medium text-[#6b7280]"
+              viewport={{ once: true, amount: 0.3 }}
+              className="th-eyebrow mb-5"
             >
               <Sparkles className="h-3.5 w-3.5 text-[#0d9488]" />
-              About TrishulHub
+              <span>About TrishulHub</span>
             </motion.span>
-            <h2 className="text-4xl font-bold uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl">
+            <h2 className="text-balance text-4xl font-bold uppercase leading-[1.08] tracking-[-0.03em] text-[#111111] sm:text-5xl lg:text-6xl">
               We build the systems behind{' '}
               <HeroAccentWord words="growing businesses" animate={false} />
             </h2>
@@ -38,13 +38,13 @@ export function HomeAbout() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, amount: 0.2 }}
               transition={{ delay: 0.1, duration: 0.55, ease: EASE_OUT_EXPO }}
-              className="font-sans text-base leading-relaxed text-muted-foreground sm:text-lg"
+              className="text-pretty font-sans text-base leading-relaxed text-muted-foreground sm:text-lg"
             >
-              We started in 2023 making websites. Today we also build custom
-              software and mobile apps — simple tools that help your business run
-              better every day.
+              We started in 2023 building websites. Today we also design and
+              engineer bespoke software and mobile apps — products that remove
+              manual work, surface the right numbers, and stay fast as you grow.
             </motion.p>
             <div className="mt-7">
               <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
@@ -52,12 +52,10 @@ export function HomeAbout() {
           </div>
         </div>
 
-        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] border border-[#111111] bg-white p-5 sm:p-8 lg:p-10">
+        <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] border border-[#111111]/12 bg-white p-5 sm:p-8 lg:p-10">
           <div className="relative mb-8 flex flex-wrap items-end justify-between gap-4">
             <div>
-              <span className="text-sm font-medium text-[#6b7280]">
-                How we work
-              </span>
+              <span className="th-eyebrow">How we work</span>
               <p className="mt-2 text-2xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-3xl">
                 From your idea to a{' '}
                 <span className="accent-text">live product</span>
@@ -218,7 +216,7 @@ function NodeCard({
 }) {
   return (
     <div
-      className={`rounded-[1.35rem] border border-[#111111] bg-white p-5 shadow-[0_8px_30px_rgba(11,18,32,0.06)] ${className}`}
+      className={`th-card rounded-[1.35rem] border border-[#111111]/12 bg-white p-5 shadow-[0_8px_30px_rgba(11,18,32,0.06)] ${className}`}
     >
       <div className="mb-3 flex h-9 w-9 items-center justify-center rounded-xl bg-[#e0f7fa] text-[#0d9488]">
         <Icon size={16} />

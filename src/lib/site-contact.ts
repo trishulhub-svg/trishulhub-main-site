@@ -18,10 +18,10 @@ export const DEFAULT_SITE_CONTACT: SiteContact = {
   whatsapp: '919662106793',
   phone: '+919662106793',
   phoneDisplay: '+91 96621 06793',
-  email: 'info@trishulhub.in',
+  email: 'hello@trishulhub.com',
   instagram: 'https://www.instagram.com/',
-  location: 'India · Remote-friendly',
-  whatsappPrefill: 'Hi TrishulHub — I want to talk about a project.',
+  location: 'London, United Kingdom · Remote & Global Delivery',
+  whatsappPrefill: 'Hi TrishulHub — I would like to discuss a project.',
 }
 
 export function normalizeWhatsapp(value: string): string {

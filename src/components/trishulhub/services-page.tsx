@@ -14,6 +14,12 @@ import {
   Clock,
   ShieldCheck,
   Headphones,
+  Gauge,
+  Lock,
+  Search,
+  LifeBuoy,
+  Layers,
+  Plus,
   type LucideIcon,
 } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
@@ -127,6 +133,62 @@ const reasons = [
     icon: Headphones,
     title: 'Human support',
     text: 'Talk to us on WhatsApp after launch. Real answers, not ticket queues.',
+  },
+]
+
+const inclusions = [
+  {
+    icon: Gauge,
+    title: 'Performance budget',
+    text: 'We set a load-time target up front and measure it on the live site, not just locally.',
+  },
+  {
+    icon: Search,
+    title: 'Technical SEO foundations',
+    text: 'Semantic markup, sitemap, structured data and metadata configured for real search visibility.',
+  },
+  {
+    icon: Lock,
+    title: 'Secure by default',
+    text: 'Hashed credentials, scoped sessions, rate-limited APIs and no secrets in the client bundle.',
+  },
+  {
+    icon: Layers,
+    title: 'Admin you can actually use',
+    text: 'Where content changes often, we ship a simple dashboard so you are not paying for edits.',
+  },
+  {
+    icon: ShieldCheck,
+    title: 'Analytics & monitoring',
+    text: 'Traffic and error visibility wired in from launch, so problems surface before customers report them.',
+  },
+  {
+    icon: LifeBuoy,
+    title: 'Handover & support',
+    text: 'Documentation, a walkthrough call and a support window after go-live. No lock-in.',
+  },
+] as { icon: LucideIcon; title: string; text: string }[]
+
+const faqs = [
+  {
+    q: 'How long does a typical project take?',
+    a: 'A focused marketing website usually ships in 2–4 weeks. A custom dashboard or internal tool runs 4–8 weeks depending on scope, and mobile apps typically 6–12 weeks. You get a milestone plan before any work starts.',
+  },
+  {
+    q: 'How is pricing structured?',
+    a: 'We quote a fixed price per milestone, so you always know the cost before the next phase begins. Smaller sites start around £900; complex platforms are quoted after a short discovery call.',
+  },
+  {
+    q: 'Do you work with existing codebases?',
+    a: 'Yes. We regularly take over Next.js, React, Node and serverless codebases — starting with a short audit so you know exactly what state things are in before committing.',
+  },
+  {
+    q: 'Who owns the code and the data?',
+    a: 'You do, entirely. Repositories are transferred to your organisation and we document the infrastructure so any competent team can pick it up later.',
+  },
+  {
+    q: 'How do we communicate during the project?',
+    a: 'A shared WhatsApp thread or Slack channel plus a short weekly call. You will see progress on a staging link rather than waiting for a big-bang reveal.',
   },
 ]
 
@@ -309,31 +371,11 @@ function ServiceMedia({ id }: { id: string }) {
 export function ServicesPage() {
   const { links } = useSiteContact()
 
-  const HERO_BG_MOBILE =
-    'https://plain-apac-prod-public.komododecks.com/202608/21/dXF5hHeWvycu18MHGGoO/image.png'
-  const HERO_BG_DESKTOP =
-    'https://plain-apac-prod-public.komododecks.com/202608/21/hH54N30aWl3d4olZFyJz/image.png'
-
   return (
     <div className="pb-8">
       <section className="relative overflow-hidden border-b border-[#e5e7eb] pt-28 pb-14 sm:pt-32 sm:pb-16">
-        {/* PC background */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 hidden bg-cover bg-center bg-no-repeat md:block"
-          style={{ backgroundImage: `url(${HERO_BG_DESKTOP})` }}
-        />
-        {/* Mobile background */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-cover bg-center bg-no-repeat md:hidden"
-          style={{ backgroundImage: `url(${HERO_BG_MOBILE})` }}
-        />
-        {/* Soft veil so heading stays readable like About/Contact */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute inset-0 bg-white/55 md:bg-white/50"
-        />
+        {/* Zero-request local hero background (CSS grid + animated aurora) */}
+        <div aria-hidden className="th-hero-bg" />
 
         <div className="lt-container relative">
           <motion.div
@@ -342,14 +384,17 @@ export function ServicesPage() {
             transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
             className="max-w-3xl"
           >
-            <p className="mb-3 text-sm font-medium text-[#6b7280]">Services</p>
-            <h1 className="text-4xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl lg:text-[56px] lg:leading-[1.1]">
+            <span className="th-eyebrow mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0d9488]" />
+              Services
+            </span>
+            <h1 className="text-balance text-4xl font-bold tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl lg:text-[56px] lg:leading-[1.08]">
               Built for how your{' '}
               <HeroAccentWord words="business works" animate={false} />
             </h1>
-            <p className="mt-4 max-w-xl text-lg leading-relaxed text-[#6b7280]">
-              Mobile apps, websites, and custom software — each with a clear
-              preview of what we build for you.
+            <p className="mt-5 max-w-xl text-pretty text-base leading-relaxed text-[#6b7280] sm:text-lg">
+              Websites, bespoke software, and mobile apps — engineered for speed,
+              security, and the way your team actually works.
             </p>
           </motion.div>
         </div>
@@ -359,11 +404,12 @@ export function ServicesPage() {
       <section id="services" className="scroll-mt-28 bg-white py-16 sm:py-24">
         <div className="lt-container">
           <div className="mx-auto mb-12 max-w-2xl text-center sm:mb-14">
-            <h2 className="whitespace-nowrap text-[clamp(1.4rem,6.4vw,3rem)] font-bold uppercase tracking-[-0.03em] text-[#111111]">
+            <h2 className="text-[clamp(1.4rem,6.4vw,3rem)] font-bold uppercase tracking-[-0.03em] text-[#111111]">
               What we build <HeroAccentWord words="for you" animate={false} />
             </h2>
-            <p className="mt-4 whitespace-nowrap text-[clamp(0.78rem,3.6vw,1rem)] text-[#6b7280]">
-              Watch a preview, then pick the service that fits.
+            <p className="mx-auto mt-4 max-w-xl text-[clamp(0.85rem,3.6vw,1rem)] text-[#6b7280]">
+              Three focused services. Each one shipped with a clear scope,
+              measurable speed targets and full handover.
             </p>
           </div>
 
@@ -530,6 +576,96 @@ export function ServicesPage() {
                   </motion.div>
                 )
               })}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* What's always included */}
+      <section className="border-y border-[#e5e7eb] bg-[#fafafa] py-16 sm:py-24">
+        <div className="lt-container">
+          <div className="mx-auto max-w-2xl text-center">
+            <span className="th-eyebrow mb-4">
+              <span className="h-1.5 w-1.5 rounded-full bg-[#0d9488]" />
+              Always included
+            </span>
+            <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
+              Every build ships with the{' '}
+              <HeroAccentWord words="boring bits done right" animate={false} />
+            </h2>
+            <p className="mx-auto mt-4 max-w-xl text-base text-[#6b7280]">
+              The fundamentals that keep a product healthy long after launch.
+            </p>
+          </div>
+
+          <div className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {inclusions.map((item, i) => {
+              const Icon = item.icon
+              return (
+                <motion.div
+                  key={item.title}
+                  initial={{ opacity: 0, y: 16 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.2 }}
+                  transition={{ duration: 0.45, delay: i * 0.05, ease: EASE_OUT_EXPO }}
+                  className="th-card rounded-2xl border border-[#111111]/12 bg-white p-6"
+                >
+                  <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
+                    <Icon size={19} strokeWidth={1.6} />
+                  </span>
+                  <h3 className="mt-4 text-base font-bold text-[#111111]">
+                    {item.title}
+                  </h3>
+                  <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
+                    {item.text}
+                  </p>
+                </motion.div>
+              )
+            })}
+          </div>
+        </div>
+      </section>
+
+      {/* FAQ */}
+      <section className="bg-white py-16 sm:py-24">
+        <div className="lt-container">
+          <div className="grid gap-10 lg:grid-cols-[0.85fr_1.15fr] lg:gap-16">
+            <div>
+              <span className="th-eyebrow mb-4">
+                <span className="h-1.5 w-1.5 rounded-full bg-[#0d9488]" />
+                Questions
+              </span>
+              <h2 className="text-3xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-4xl">
+                Answers before you{' '}
+                <HeroAccentWord words="ask" animate={false} />
+              </h2>
+              <p className="mt-4 text-base leading-relaxed text-[#6b7280]">
+                Still unsure about something? Message us on WhatsApp — you will
+                get a straight answer, not a sales pitch.
+              </p>
+              <div className="mt-6">
+                <NexusButton href={links.whatsapp} variant="secondary" showArrow>
+                  Ask a question
+                </NexusButton>
+              </div>
+            </div>
+
+            <div className="divide-y divide-[#e5e7eb] border-y border-[#e5e7eb]">
+              {faqs.map((f, i) => (
+                <details key={f.q} className="group py-5" open={i === 0}>
+                  <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-left">
+                    <span className="text-base font-semibold text-[#111111] sm:text-lg">
+                      {f.q}
+                    </span>
+                    <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full border border-[#111111]/15 text-[#0D3C1F] transition group-open:rotate-45 group-open:border-[#0D3C1F] group-open:bg-[#0D3C1F] group-open:text-white">
+                      <Plus size={14} />
+                    </span>
+                  </summary>
+                  <p className="mt-3 max-w-2xl text-sm leading-relaxed text-[#6b7280]">
+                    {f.a}
+                  </p>
+                </details>
+              ))}
             </div>
           </div>
         </div>

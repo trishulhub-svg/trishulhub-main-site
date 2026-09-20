@@ -2,7 +2,15 @@
 
 import { useRef, useState } from 'react'
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
-import { CheckCircle2, Mail, MapPin, Phone, X } from 'lucide-react'
+import {
+  CheckCircle2,
+  Clock,
+  Mail,
+  MapPin,
+  Phone,
+  ShieldCheck,
+  X,
+} from 'lucide-react'
 import { PageHero } from '@/components/trishulhub/page-hero'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
@@ -22,6 +30,7 @@ export function ContactPage() {
   const [error, setError] = useState<string | null>(null)
   const { email, phoneDisplay, location, links } = useSiteContact()
   const formRef = useRef<HTMLFormElement>(null)
+  const [service, setService] = useState('Website')
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault()
@@ -31,8 +40,12 @@ export function ContactPage() {
     const payload = {
       name: String(fd.get('name') || ''),
       email: String(fd.get('email') || ''),
+      company: String(fd.get('company') || ''),
+      budget: String(fd.get('budget') || ''),
       service: String(fd.get('service') || ''),
       message: String(fd.get('message') || ''),
+      /** Honeypot — real users never fill this in. */
+      website: String(fd.get('website') || ''),
     }
     try {
       const res = await fetch('/api/contact-leads', {
@@ -46,6 +59,7 @@ export function ContactPage() {
         return
       }
       formRef.current?.reset()
+      setService('Website')
       setShowSuccess(true)
     } catch {
       setError('Network error. Please try again.')
@@ -63,8 +77,23 @@ export function ContactPage() {
             Let&apos;s work <HeroAccentWord words="together" animate={false} />
           </>
         }
-        subtitle="Message us on WhatsApp, call, or email. We reply as soon as we can."
-      />
+        subtitle="Tell us what you are trying to build or fix. You will get a clear, honest response — usually within one business day."
+      >
+        <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-[#4b5563]">
+          <span className="inline-flex items-center gap-2">
+            <Clock size={14} className="text-[#0d9488]" />
+            Replies within 1 business day
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <ShieldCheck size={14} className="text-[#0d9488]" />
+            NDA-friendly
+          </span>
+          <span className="inline-flex items-center gap-2">
+            <MapPin size={14} className="text-[#0d9488]" />
+            {location}
+          </span>
+        </div>
+      </PageHero>
 
       <div className="lt-container">
         <HomeGetInTouch />
@@ -146,13 +175,42 @@ export function ContactPage() {
           </label>
           <label className="mb-4 block">
             <span className="mb-2 block text-sm font-medium text-[#6b7280]">
+              Company <span className="font-normal text-[#9ca3af]">(optional)</span>
+            </span>
+            <input
+              name="company"
+              className="field-input"
+              placeholder="Company or organisation"
+              autoComplete="organization"
+            />
+          </label>
+          <label className="mb-4 block">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
               Service
             </span>
-            <select name="service" className="field-input" defaultValue="Website">
+            <select
+              name="service"
+              className="field-input"
+              value={service}
+              onChange={(e) => setService(e.target.value)}
+            >
               <option>Website</option>
               <option>Custom Software</option>
               <option>Mobile Apps</option>
+              <option>Performance / SEO audit</option>
               <option>Not sure yet</option>
+            </select>
+          </label>
+          <label className="mb-4 block">
+            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
+              Budget range <span className="font-normal text-[#9ca3af]">(optional)</span>
+            </span>
+            <select name="budget" className="field-input" defaultValue="£900 – £2,000">
+              <option>Under £900</option>
+              <option>£900 – £2,000</option>
+              <option>£2,000 – £5,000</option>
+              <option>£5,000+</option>
+              <option>Not decided yet</option>
             </select>
           </label>
           <label className="mb-6 block">
@@ -163,12 +221,29 @@ export function ContactPage() {
               name="message"
               required
               className="field-input min-h-[120px] resize-y"
-              placeholder="Tell us what you want to build"
+              placeholder="Tell us what you want to build, the problem it solves, and any deadline you are working towards."
             />
           </label>
+
+          {/* Honeypot field — hidden from humans, catches naive bots */}
+          <div className="hidden" aria-hidden>
+            <label>
+              Website
+              <input
+                name="website"
+                tabIndex={-1}
+                autoComplete="off"
+                defaultValue=""
+              />
+            </label>
+          </div>
+
           <NexusButton type="submit" fullWidth showArrow={!sending} disabled={sending}>
-            {sending ? 'Submitting…' : 'Submit'}
+            {sending ? 'Sending…' : 'Send message'}
           </NexusButton>
+          <p className="mt-3 text-center text-xs text-[#9ca3af]">
+            We only use your details to reply to this enquiry.
+          </p>
         </motion.form>
       </div>
 

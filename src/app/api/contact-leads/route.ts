@@ -16,7 +16,15 @@ export async function POST(req: NextRequest) {
     const name = String(body?.name || '').trim()
     const email = String(body?.email || '').trim()
     const service = String(body?.service || '').trim() || 'Not sure yet'
-    const message = String(body?.message || '').trim()
+    const company = String(body?.company || '').trim().slice(0, 120)
+    const budget = String(body?.budget || '').trim().slice(0, 60)
+    const honeypot = String(body?.website || '').trim()
+    const rawMessage = String(body?.message || '').trim()
+
+    // Silently accept-and-drop obvious bot submissions (honeypot filled).
+    if (honeypot) {
+      return NextResponse.json({ ok: true, lead: null })
+    }
 
     if (!name || name.length > 120) {
       return NextResponse.json(
@@ -30,12 +38,22 @@ export async function POST(req: NextRequest) {
         { status: 400 },
       )
     }
-    if (!message || message.length > 5000) {
+    if (!rawMessage || rawMessage.length > 5000) {
       return NextResponse.json(
         { ok: false, error: 'Please enter a message.' },
         { status: 400 },
       )
     }
+
+    // Keep the extra qualification detail with the message so the stored
+    // schema stays unchanged while admins still see the full context.
+    const extras = [
+      company ? `Company: ${company}` : null,
+      budget ? `Budget: ${budget}` : null,
+    ].filter(Boolean)
+    const message = extras.length
+      ? `${rawMessage}\n\n—\n${extras.join('\n')}`
+      : rawMessage
 
     const shareToken = makeShareToken()
     const lead = await db.contactLead.create({
