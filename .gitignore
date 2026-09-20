@@ -54,3 +54,15 @@ server.log
 # Skills directory
 /skills/prisma/placeholder.db
 prisma/placeholder.db
+
+# local database artifacts (never commit)
+/db/*.db
+/placeholder.db
+
+# graphify knowledge-graph output (never commit)
+/graphify-out/
+
+# Unused uploads and test assets
+/upload/
+/download/
+/tool-results/
