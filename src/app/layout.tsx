@@ -3,6 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
+import { ChatWidget } from "@/components/trishulhub/chat-widget";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -151,6 +152,7 @@ export default function RootLayout({
         {children}
         <Toaster />
         <AgentationLive />
+        <ChatWidget />
 
         <script
           type="application/ld+json"
