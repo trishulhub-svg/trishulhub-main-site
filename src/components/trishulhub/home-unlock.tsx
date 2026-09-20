@@ -6,6 +6,7 @@ import { Globe, LayoutDashboard, Smartphone, Zap } from 'lucide-react'
 import { NexusButton } from './nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
+import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type PlanId = 'website' | 'software' | 'mobile'
 
@@ -144,23 +145,24 @@ export function HomeUnlock() {
   return (
     <section
       id="solutions"
-      className="relative overflow-hidden border-y border-[#e5e7eb] bg-[#fafafa] py-24 sm:py-32"
+      className="relative overflow-hidden py-24 sm:py-32"
     >
-      <div className="pointer-events-none absolute inset-0 bg-noise opacity-[0.04]" />
-
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="mb-10 max-w-2xl">
-          <p className="mb-4 text-sm font-medium text-[#6b7280]">Solutions</p>
-          <h2 className="text-4xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-5xl">
+          <span className="th-eyebrow mb-4">
+            <span className="h-1.5 w-1.5 rounded-full bg-[#0d9488]" />
+            Solutions
+          </span>
+          <h2 className="text-balance text-4xl font-bold uppercase tracking-[-0.03em] text-[#111111] sm:text-5xl">
             Unlock custom <HeroAccentWord words="growth" />
           </h2>
-          <p className="mt-4 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
+          <p className="text-pretty mt-4 font-sans text-base leading-relaxed text-muted-foreground sm:text-lg">
             Choose the solution that fits your business — then talk with us and
             we will build it with you.
           </p>
         </div>
 
-        <div className="rounded-[2rem] border border-[#111111] bg-white p-4 shadow-[0_4px_24px_rgba(0,0,0,0.04)] sm:p-6 lg:p-8">
+        <div className="rounded-[2rem] border border-[#0d3c1f]/12 bg-white/85 p-4 shadow-[0_20px_60px_rgba(6,43,22,0.08)] backdrop-blur-xl sm:p-6 lg:p-8">
           <div className="mb-5 flex items-center gap-3">
             <span className="h-px flex-1 bg-gradient-to-r from-transparent via-[#111111]/20 to-transparent" />
             <span className="rounded-full border border-[#111111]/15 bg-[#fafafa] px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-[#6b7280]">
@@ -182,12 +184,19 @@ export function HomeUnlock() {
                   }}
                   type="button"
                   onClick={() => setActive(plan.id)}
-                  className={`relative flex min-h-[68px] w-full items-center justify-between rounded-[1.75rem] px-5 py-4 text-left transition-all duration-300 ${
+                  className={`relative flex min-h-[68px] w-full items-center justify-between overflow-hidden rounded-[1.75rem] px-5 py-4 text-left transition-all duration-300 ${
                     isActive
-                      ? 'bg-[#0D3C1F] text-white shadow-[0_12px_32px_rgba(13,60,31,0.2)]'
-                      : 'border border-[#111111] bg-white text-[#6b7280] hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]'
+                      ? 'bg-[#0D3C1F] text-white shadow-[0_16px_40px_rgba(13,60,31,0.24)]'
+                      : 'border border-[#0d3c1f]/15 bg-white/80 text-[#6b7280] hover:-translate-y-0.5 hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F] hover:shadow-[0_12px_28px_rgba(6,43,22,0.08)]'
                   }`}
                 >
+                  {isActive ? (
+                    <motion.span
+                      layoutId="plan-active-sheen"
+                      transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
+                      className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_20%_20%,rgba(94,234,212,0.25),transparent_60%)]"
+                    />
+                  ) : null}
                   <div className="flex min-w-0 items-center gap-3">
                     <Icon
                       size={18}
@@ -264,9 +273,13 @@ export function HomeUnlock() {
             initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] border border-[#111111] bg-[#fafafa] p-6 sm:p-8 lg:col-span-5"
+            className="relative z-10 flex min-h-[480px] flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-gradient-to-b from-white to-[#f7fbf9] p-6 shadow-[0_16px_44px_rgba(6,43,22,0.07)] sm:p-8 lg:col-span-5"
           >
-            <div className="pointer-events-none absolute -right-16 -top-16 h-40 w-40 rounded-full bg-[#0d9488]/20 blur-3xl" />
+            <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#0d9488]/18 blur-3xl" />
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.06]"
+            />
             <div className="flex flex-wrap items-start justify-between gap-4">
               <h3 className="max-w-[16rem] font-display text-2xl font-medium text-foreground sm:max-w-none sm:text-3xl lg:text-4xl">
                 {current.label}

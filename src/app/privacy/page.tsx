@@ -46,7 +46,7 @@ const sections = [
     heading: 'Your rights',
     body: [
       'You have the right to access, correct, or erase the personal data we hold about you, to restrict or object to processing, and to request portability.',
-      'To exercise any of these rights, email hello@trishulhub.com. We aim to respond within 30 days.',
+      'To exercise any of these rights, email info@trishulhub.in. We aim to respond within 30 days.',
     ],
   },
   {
@@ -110,9 +110,9 @@ export default function PrivacyPage() {
                 Email{' '}
                 <a
                   className="th-link font-medium text-[#0D3C1F]"
-                  href="mailto:hello@trishulhub.com"
+                  href="mailto:info@trishulhub.in"
                 >
-                  hello@trishulhub.com
+                  info@trishulhub.in
                 </a>{' '}
                 and we will respond within 30 days.
               </p>

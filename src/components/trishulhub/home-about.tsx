@@ -12,11 +12,23 @@ const PATH_A =
 const PATH_B =
   'M200,260 C320,260 360,410 520,430 C640,445 720,370 820,260'
 
+/** Same facts shown on /about — restated here so the home page stands alone. */
+const FACTS = [
+  { value: '2023', label: 'Building since' },
+  { value: '3', label: 'Core services' },
+  { value: '1 day', label: 'Typical reply time' },
+  { value: '100%', label: 'Code you own' },
+] as const
+
 export function HomeAbout() {
   const { links } = useSiteContact()
 
   return (
-    <section id="about-home" className="relative overflow-hidden bg-[#fafafa] py-24 sm:py-32">
+    <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-32 top-10 h-[26rem] w-[26rem] rounded-full bg-[#0d9488]/8 blur-[130px]"
+      />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
           <div className="lg:col-span-7">
@@ -195,6 +207,27 @@ export function HomeAbout() {
               </div>
             ))}
           </div>
+        </div>
+
+        {/* Fact rail — the same numbers we stand behind, restyled */}
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+          {FACTS.map((f, i) => (
+            <motion.div
+              key={f.label}
+              initial={{ opacity: 0, y: 14 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, amount: 0.3 }}
+              transition={{ duration: 0.45, delay: i * 0.07, ease: EASE_OUT_EXPO }}
+              className="th-card rounded-2xl border border-[#0d3c1f]/10 bg-white p-5 text-center sm:text-left"
+            >
+              <p className="font-playfair text-2xl font-semibold text-[#0D3C1F] sm:text-[1.7rem]">
+                {f.value}
+              </p>
+              <p className="mt-1 text-[11px] uppercase tracking-[0.14em] text-[#6b7280]">
+                {f.label}
+              </p>
+            </motion.div>
+          ))}
         </div>
       </div>
     </section>

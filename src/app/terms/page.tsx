@@ -103,9 +103,9 @@ export default function TermsPage() {
                 We are happy to work from your MSA or SOW. Email{' '}
                 <a
                   className="th-link font-medium text-[#0D3C1F]"
-                  href="mailto:hello@trishulhub.com"
+                  href="mailto:info@trishulhub.in"
                 >
-                  hello@trishulhub.com
+                  info@trishulhub.in
                 </a>
                 .
               </p>

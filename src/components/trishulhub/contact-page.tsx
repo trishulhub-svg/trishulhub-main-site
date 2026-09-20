@@ -1,14 +1,18 @@
 'use client'
 
 import { useRef, useState } from 'react'
-import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   CheckCircle2,
+  ChevronDown,
   Clock,
   Mail,
   MapPin,
+  MessageCircle,
   Phone,
+  Send,
   ShieldCheck,
+  Sparkles,
   X,
 } from 'lucide-react'
 import { PageHero } from '@/components/trishulhub/page-hero'
@@ -18,13 +22,32 @@ import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 
+const STEPS = [
+  {
+    n: '01',
+    title: 'You send the brief',
+    text: 'Two minutes on the form — or message us directly on WhatsApp.',
+  },
+  {
+    n: '02',
+    title: 'We reply with questions',
+    text: 'Usually within one business day, plus a short call if it helps.',
+  },
+  {
+    n: '03',
+    title: 'You get a written plan',
+    text: 'Scope, milestones, timeline and a fixed price before anything starts.',
+  },
+] as const
+
+const HELPFUL = [
+  'What the product needs to do',
+  'Who will use it (customers, staff, both)',
+  'Any deadline you are working towards',
+  'Links to a current site or reference',
+] as const
+
 export function ContactPage() {
-  const ref = useRef<HTMLDivElement>(null)
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ['start start', 'end end'],
-  })
-  const formY = useTransform(scrollYProgress, [0, 1], [16, -16])
   const [sending, setSending] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -69,7 +92,7 @@ export function ContactPage() {
   }
 
   return (
-    <div ref={ref} className="relative overflow-hidden pb-28">
+    <div className="pb-24">
       <PageHero
         label="Contact us"
         title={
@@ -95,162 +118,297 @@ export function ContactPage() {
         </div>
       </PageHero>
 
-      <div className="lt-container">
-        <HomeGetInTouch />
-      </div>
-
-      <div className="lt-container mt-4 grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:gap-10">
-        <div className="space-y-4">
-          <a
-            href={links.mailto}
-            className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5 transition hover:-translate-y-0.5"
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
-              <Mail size={20} />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-[#0a0a0a]">Email</p>
-              <p className="text-sm text-[#6b7280]">{email}</p>
-            </div>
-          </a>
-          <a
-            href={links.tel}
-            className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5 transition hover:-translate-y-0.5"
-          >
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
-              <Phone size={20} />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-[#0a0a0a]">Phone</p>
-              <p className="text-sm text-[#6b7280]">{phoneDisplay}</p>
-            </div>
-          </a>
-          <div className="flex items-center gap-4 rounded-xl border border-[#111111] bg-white p-5">
-            <span className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
-              <MapPin size={20} />
-            </span>
-            <div>
-              <p className="text-sm font-semibold text-[#0a0a0a]">Location</p>
-              <p className="text-sm text-[#6b7280]">{location}</p>
-            </div>
-          </div>
-        </div>
-
+      {/* Form + guidance */}
+      <section className="lt-container mt-12 grid gap-8 lg:mt-16 lg:grid-cols-[1.02fr_0.98fr] lg:gap-12">
+        {/* ---- Form ---- */}
         <motion.form
           ref={formRef}
           id="contact-form"
-          style={{ y: formY }}
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
+          viewport={{ once: true, amount: 0.1 }}
           transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
           onSubmit={handleSubmit}
-          className="scroll-mt-28 rounded-xl border border-[#111111] bg-white p-6 sm:p-8"
+          className="scroll-mt-28 overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_18px_50px_rgba(6,43,22,0.07)]"
         >
-          <h2 className="mb-6 text-2xl font-bold text-[#0a0a0a]">
-            Send us a message
-          </h2>
-          {error ? (
-            <p className="mb-4 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
-              {error}
-            </p>
-          ) : null}
-          <label className="mb-4 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Name
+          <div className="flex items-center gap-3 border-b border-[#0d3c1f]/8 bg-gradient-to-r from-[#f4faf7] to-white px-6 py-5 sm:px-8">
+            <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#0D3C1F] text-white">
+              <Send size={17} />
             </span>
-            <input name="name" required className="field-input" placeholder="Your name" />
-          </label>
-          <label className="mb-4 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Email
-            </span>
-            <input
-              name="email"
-              type="email"
-              required
-              className="field-input"
-              placeholder="you@company.com"
-            />
-          </label>
-          <label className="mb-4 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Company <span className="font-normal text-[#9ca3af]">(optional)</span>
-            </span>
-            <input
-              name="company"
-              className="field-input"
-              placeholder="Company or organisation"
-              autoComplete="organization"
-            />
-          </label>
-          <label className="mb-4 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Service
-            </span>
-            <select
-              name="service"
-              className="field-input"
-              value={service}
-              onChange={(e) => setService(e.target.value)}
-            >
-              <option>Website</option>
-              <option>Custom Software</option>
-              <option>Mobile Apps</option>
-              <option>Performance / SEO audit</option>
-              <option>Not sure yet</option>
-            </select>
-          </label>
-          <label className="mb-4 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Budget range <span className="font-normal text-[#9ca3af]">(optional)</span>
-            </span>
-            <select name="budget" className="field-input" defaultValue="£900 – £2,000">
-              <option>Under £900</option>
-              <option>£900 – £2,000</option>
-              <option>£2,000 – £5,000</option>
-              <option>£5,000+</option>
-              <option>Not decided yet</option>
-            </select>
-          </label>
-          <label className="mb-6 block">
-            <span className="mb-2 block text-sm font-medium text-[#6b7280]">
-              Message
-            </span>
-            <textarea
-              name="message"
-              required
-              className="field-input min-h-[120px] resize-y"
-              placeholder="Tell us what you want to build, the problem it solves, and any deadline you are working towards."
-            />
-          </label>
-
-          {/* Honeypot field — hidden from humans, catches naive bots */}
-          <div className="hidden" aria-hidden>
-            <label>
-              Website
-              <input
-                name="website"
-                tabIndex={-1}
-                autoComplete="off"
-                defaultValue=""
-              />
-            </label>
+            <div>
+              <h2 className="text-lg font-bold text-[#0a0a0a]">
+                Send us a message
+              </h2>
+              <p className="text-xs text-[#6b7280]">
+                No sales sequence. One human reply.
+              </p>
+            </div>
           </div>
 
-          <NexusButton type="submit" fullWidth showArrow={!sending} disabled={sending}>
-            {sending ? 'Sending…' : 'Send message'}
-          </NexusButton>
-          <p className="mt-3 text-center text-xs text-[#9ca3af]">
-            We only use your details to reply to this enquiry.
-          </p>
+          <div className="px-6 py-6 sm:px-8 sm:py-7">
+            {error ? (
+              <p className="mb-5 rounded-lg border border-red-200 bg-red-50 px-3 py-2 text-sm text-red-700">
+                {error}
+              </p>
+            ) : null}
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <label className="block">
+                <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                  Name
+                </span>
+                <input
+                  name="name"
+                  required
+                  autoComplete="name"
+                  className="field-input"
+                  placeholder="Your name"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                  Email
+                </span>
+                <input
+                  name="email"
+                  type="email"
+                  required
+                  autoComplete="email"
+                  className="field-input"
+                  placeholder="you@company.com"
+                />
+              </label>
+              <label className="block">
+                <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                  Company{' '}
+                  <span className="font-normal text-[#9ca3af]">(optional)</span>
+                </span>
+                <input
+                  name="company"
+                  autoComplete="organization"
+                  className="field-input"
+                  placeholder="Company or organisation"
+                />
+              </label>
+              <label className="relative block">
+                <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                  Service
+                </span>
+                <select
+                  name="service"
+                  className="field-input appearance-none pr-10"
+                  value={service}
+                  onChange={(e) => setService(e.target.value)}
+                >
+                  <option>Website</option>
+                  <option>Custom Software</option>
+                  <option>Mobile Apps</option>
+                  <option>Performance / SEO audit</option>
+                  <option>Not sure yet</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="pointer-events-none absolute bottom-4 right-4 text-[#9ca3af]"
+                />
+              </label>
+              <label className="relative block sm:col-span-2">
+                <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                  Budget range{' '}
+                  <span className="font-normal text-[#9ca3af]">(optional)</span>
+                </span>
+                <select
+                  name="budget"
+                  className="field-input appearance-none pr-10"
+                  defaultValue="£900 – £2,000"
+                >
+                  <option>Under £900</option>
+                  <option>£900 – £2,000</option>
+                  <option>£2,000 – £5,000</option>
+                  <option>£5,000+</option>
+                  <option>Not decided yet</option>
+                </select>
+                <ChevronDown
+                  size={16}
+                  className="pointer-events-none absolute bottom-4 right-4 text-[#9ca3af]"
+                />
+              </label>
+            </div>
+
+            <label className="mt-4 block">
+              <span className="mb-2 block text-[13px] font-medium text-[#374151]">
+                Message
+              </span>
+              <textarea
+                name="message"
+                required
+                className="field-input min-h-[130px] resize-y"
+                placeholder="Tell us what you want to build, the problem it solves, and any deadline you are working towards."
+              />
+            </label>
+
+            {/* Honeypot — hidden from humans, catches naive bots */}
+            <div className="hidden" aria-hidden>
+              <label>
+                Website
+                <input name="website" tabIndex={-1} autoComplete="off" />
+              </label>
+            </div>
+
+            <div className="mt-6">
+              <NexusButton
+                type="submit"
+                fullWidth
+                showArrow={!sending}
+                disabled={sending}
+              >
+                {sending ? 'Sending…' : 'Send message'}
+              </NexusButton>
+            </div>
+            <p className="mt-3 text-center text-xs text-[#9ca3af]">
+              We only use your details to reply to this enquiry.
+            </p>
+          </div>
         </motion.form>
-      </div>
+
+        {/* ---- Guidance column ---- */}
+        <div className="space-y-5">
+          {/* What happens next */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55, ease: EASE_OUT_EXPO }}
+            className="rounded-[1.75rem] border border-[#0d3c1f]/12 bg-[#f7fbf9] p-6 sm:p-7"
+          >
+            <span className="th-eyebrow">
+              <Sparkles size={13} className="text-[#0d9488]" />
+              What happens next
+            </span>
+            <ol className="mt-6 space-y-5">
+              {STEPS.map((s, i) => (
+                <motion.li
+                  key={s.n}
+                  initial={{ opacity: 0, x: -10 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true, amount: 0.3 }}
+                  transition={{
+                    duration: 0.45,
+                    delay: i * 0.08,
+                    ease: EASE_OUT_EXPO,
+                  }}
+                  className="flex gap-4"
+                >
+                  <span className="relative flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[11px] font-bold text-[#0D3C1F] shadow-[0_6px_18px_rgba(6,43,22,0.08)] ring-1 ring-[#0d3c1f]/10">
+                    {s.n}
+                    {i < STEPS.length - 1 ? (
+                      <span className="absolute left-1/2 top-full h-5 w-px -translate-x-1/2 bg-[#0d3c1f]/15" />
+                    ) : null}
+                  </span>
+                  <div>
+                    <p className="text-sm font-semibold text-[#111111]">
+                      {s.title}
+                    </p>
+                    <p className="mt-1 text-[13px] leading-relaxed text-[#6b7280]">
+                      {s.text}
+                    </p>
+                  </div>
+                </motion.li>
+              ))}
+            </ol>
+          </motion.div>
+
+          {/* Direct channels */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55, delay: 0.06, ease: EASE_OUT_EXPO }}
+            className="overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white"
+          >
+            <a
+              href={links.whatsapp}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group flex items-center gap-4 border-b border-[#0d3c1f]/8 p-5 transition hover:bg-[#f7fbf9]"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
+                <MessageCircle size={18} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#0a0a0a]">
+                  WhatsApp — fastest
+                </p>
+                <p className="truncate text-[13px] text-[#6b7280]">
+                  Best for quick questions and scoping
+                </p>
+              </div>
+            </a>
+            <a
+              href={links.mailto}
+              className="group flex items-center gap-4 border-b border-[#0d3c1f]/8 p-5 transition hover:bg-[#f7fbf9]"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
+                <Mail size={18} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#0a0a0a]">Email</p>
+                <p className="truncate text-[13px] text-[#6b7280]">{email}</p>
+              </div>
+            </a>
+            <a
+              href={links.tel}
+              className="group flex items-center gap-4 p-5 transition hover:bg-[#f7fbf9]"
+            >
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition group-hover:bg-[#0D3C1F] group-hover:text-white">
+                <Phone size={18} />
+              </span>
+              <div className="min-w-0">
+                <p className="text-sm font-semibold text-[#0a0a0a]">Phone</p>
+                <p className="truncate text-[13px] text-[#6b7280]">
+                  {phoneDisplay}
+                </p>
+              </div>
+            </a>
+          </motion.div>
+
+          {/* What to include */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, amount: 0.15 }}
+            transition={{ duration: 0.55, delay: 0.12, ease: EASE_OUT_EXPO }}
+            className="rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white p-6 sm:p-7"
+          >
+            <h3 className="text-sm font-bold text-[#0a0a0a]">
+              Helpful to include
+            </h3>
+            <ul className="mt-4 grid gap-2.5 sm:grid-cols-2">
+              {HELPFUL.map((h) => (
+                <li
+                  key={h}
+                  className="flex items-start gap-2 text-[13px] leading-relaxed text-[#6b7280]"
+                >
+                  <CheckCircle2
+                    size={14}
+                    className="mt-0.5 shrink-0 text-[#0d9488]"
+                  />
+                  {h}
+                </li>
+              ))}
+            </ul>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* Animated channel network */}
+      <section className="lt-container mt-14 lg:mt-20">
+        <HomeGetInTouch />
+      </section>
 
       <AnimatePresence>
         {showSuccess ? (
           <motion.div
-            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/40 p-4"
+            className="fixed inset-0 z-[80] flex items-center justify-center bg-black/45 p-4 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -264,14 +422,14 @@ export function ContactPage() {
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.96, y: 8 }}
               transition={{ duration: 0.28, ease: EASE_OUT_EXPO }}
-              className="relative w-full max-w-sm rounded-2xl border border-[#111111] bg-white p-7 text-center shadow-xl"
+              className="relative w-full max-w-sm rounded-2xl border border-[#0d3c1f]/12 bg-white p-7 text-center shadow-2xl"
               onClick={(e) => e.stopPropagation()}
             >
               <button
                 type="button"
                 aria-label="Close"
                 onClick={() => setShowSuccess(false)}
-                className="absolute right-3 top-3 rounded-full p-1.5 text-[#9ca3af] hover:bg-[#f3f4f6] hover:text-[#111111]"
+                className="absolute right-3 top-3 rounded-full p-1.5 text-[#9ca3af] transition hover:bg-[#f3f4f6] hover:text-[#111111]"
               >
                 <X size={16} />
               </button>
@@ -282,18 +440,30 @@ export function ContactPage() {
                 id="contact-success-title"
                 className="mt-4 text-xl font-bold text-[#111111]"
               >
-                Form submitted successfully
+                Message received
               </h3>
-              <p className="mt-2 text-sm text-[#6b7280]">
-                Thanks — we received your message and will get back to you soon.
+              <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
+                Thanks — your enquiry is with us. Expect a reply within one
+                business day. Need it sooner? Ping us on WhatsApp.
               </p>
-              <button
-                type="button"
-                onClick={() => setShowSuccess(false)}
-                className="mt-6 inline-flex h-11 w-full items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white hover:bg-[#164a28]"
-              >
-                Done
-              </button>
+              <div className="mt-6 space-y-2.5">
+                <a
+                  href={links.whatsapp}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white transition hover:bg-[#164a28]"
+                >
+                  <MessageCircle size={15} />
+                  Continue on WhatsApp
+                </a>
+                <button
+                  type="button"
+                  onClick={() => setShowSuccess(false)}
+                  className="inline-flex h-11 w-full items-center justify-center rounded-full border border-[#d1d5db] text-sm font-semibold text-[#111111] transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]"
+                >
+                  Done
+                </button>
+              </div>
             </motion.div>
           </motion.div>
         ) : null}

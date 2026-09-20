@@ -25,6 +25,7 @@ import {
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { CTA } from '@/components/trishulhub/cta'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
+import { ServiceVisual } from '@/components/trishulhub/service-visuals'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -35,12 +36,6 @@ type ServiceCard = {
   title: string
   tagline: string
   outcomes: string[]
-  /** Canva / embed watch URL (iframe) */
-  embedUrl?: string
-  /** Aspect padding-top % matching Canva export (e.g. 90 for 90%) */
-  embedAspectPct?: number
-  /** Optional mp4 for native muted loop */
-  videoSrc?: string
 }
 
 const services: ServiceCard[] = [
@@ -56,8 +51,6 @@ const services: ServiceCard[] = [
       'Secure login for users and staff',
       'Connects to your website or software',
     ],
-    videoSrc:
-      'https://videotourl.com/videos/1787245173747-a2d523b8-abc8-499e-a55e-c746f4011a13.mp4',
   },
   {
     id: 'website',
@@ -71,8 +64,6 @@ const services: ServiceCard[] = [
       'Shop or brochure layouts as needed',
       'Launch support and simple handoff',
     ],
-    videoSrc:
-      'https://videotourl.com/videos/1787247239567-7ce4f36c-c7d1-4823-92ae-02a36884da79.mp4',
   },
   {
     id: 'software',
@@ -86,8 +77,6 @@ const services: ServiceCard[] = [
       'Alerts, workflows, and daily ops screens',
       'Training so your team can run it',
     ],
-    videoSrc:
-      'https://videotourl.com/videos/1787247148510-55835ce0-2d21-4fbe-874a-23cac01637ce.mp4',
   },
 ]
 
@@ -192,182 +181,7 @@ const faqs = [
   },
 ]
 
-function MobileAppGraphic() {
-  return (
-    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#0D3C1F]/90 via-[#0a2f18] to-[#051a0d] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
-      {/* Ambient background glow & grid */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#ffffff_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
-      <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-10 -top-10 h-36 w-36 rounded-full bg-[#10b981] blur-2xl"
-      />
-
-      {/* Animated Mobile Frame Mockup */}
-      <div className="relative z-10 w-full max-w-[200px] rounded-2xl border-2 border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
-        {/* Top bar & notch */}
-        <div className="mx-auto mb-3 h-1 w-10 rounded-full bg-white/30" />
-        <div className="flex items-center justify-between border-b border-white/10 pb-2 text-[10px] text-white/70">
-          <span className="font-semibold text-emerald-400">iOS / Android</span>
-          <motion.span
-            animate={{ opacity: [0.4, 1, 0.4] }}
-            transition={{ duration: 1.5, repeat: Infinity }}
-            className="h-1.5 w-1.5 rounded-full bg-emerald-400"
-          />
-        </div>
-
-        {/* Animated App UI Elements */}
-        <div className="mt-3 space-y-2">
-          <motion.div
-            animate={{ y: [0, -3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="rounded-lg bg-white/10 p-2 border border-white/10"
-          >
-            <div className="flex items-center gap-2">
-              <div className="h-6 w-6 rounded-md bg-emerald-500/20 flex items-center justify-center text-emerald-400">
-                <Smartphone size={12} />
-              </div>
-              <div className="flex-1 space-y-1">
-                <div className="h-1.5 w-12 rounded bg-white/60" />
-                <div className="h-1 w-16 rounded bg-white/30" />
-              </div>
-            </div>
-          </motion.div>
-
-          <motion.div
-            animate={{ y: [0, 3, 0] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut', delay: 0.5 }}
-            className="flex items-center justify-between rounded-lg bg-emerald-950/60 p-2 border border-emerald-500/30"
-          >
-            <span className="text-[10px] text-emerald-300 font-medium">Push Notification</span>
-            <span className="text-[9px] rounded bg-emerald-500/30 px-1.5 py-0.5 text-emerald-200">Active</span>
-          </motion.div>
-
-          <div className="flex gap-1.5 pt-1">
-            <div className="h-4 flex-1 rounded bg-white/15" />
-            <div className="h-4 flex-1 rounded bg-emerald-500/40" />
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function WebGraphic() {
-  return (
-    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#091e2b] via-[#0b2b3d] to-[#04121b] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#00DEFF_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
-      <motion.div
-        animate={{ scale: [1, 1.25, 1], opacity: [0.2, 0.5, 0.2] }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -left-10 -bottom-10 h-36 w-36 rounded-full bg-cyan-500 blur-2xl"
-      />
-
-      {/* Animated Browser Window Mockup */}
-      <div className="relative z-10 w-full max-w-[220px] rounded-xl border border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
-        {/* Browser Top Navigation Bar */}
-        <div className="flex items-center gap-1.5 border-b border-white/10 pb-2">
-          <span className="h-2 w-2 rounded-full bg-rose-500/80" />
-          <span className="h-2 w-2 rounded-full bg-amber-500/80" />
-          <span className="h-2 w-2 rounded-full bg-emerald-500/80" />
-          <div className="ml-2 flex-1 rounded bg-white/10 px-2 py-0.5 text-[8px] text-cyan-300 truncate">
-            trishulhub.com/live
-          </div>
-        </div>
-
-        {/* Web Visual Elements */}
-        <div className="mt-3 space-y-2">
-          <div className="flex gap-2">
-            <motion.div
-              animate={{ scale: [0.98, 1, 0.98] }}
-              transition={{ duration: 2.5, repeat: Infinity }}
-              className="flex-1 rounded-md bg-cyan-950/70 border border-cyan-500/30 p-2 text-center"
-            >
-              <span className="text-[11px] font-bold text-cyan-300">99.9%</span>
-              <p className="text-[8px] text-white/50">Speed Score</p>
-            </motion.div>
-            <div className="flex-1 rounded-md bg-white/5 border border-white/10 p-2 text-center">
-              <span className="text-[11px] font-bold text-white">Edge</span>
-              <p className="text-[8px] text-white/50">CDN Global</p>
-            </div>
-          </div>
-
-          <motion.div
-            animate={{ x: [-2, 2, -2] }}
-            transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
-            className="flex items-center justify-between rounded-md bg-white/10 p-2"
-          >
-            <span className="text-[9px] text-white/80">Next.js & SSR Ready</span>
-            <Globe size={11} className="text-cyan-400" />
-          </motion.div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function SoftwareGraphic() {
-  return (
-    <div className="relative flex aspect-[10/9] w-full items-center justify-center overflow-hidden rounded-lg bg-gradient-to-br from-[#1b1429] via-[#241a37] to-[#100b1a] p-6 text-white shadow-inner sm:aspect-[5/4] lg:aspect-[4/5] lg:min-h-[260px]">
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(#a855f7_1px,transparent_1px)] [background-size:16px_16px] opacity-10" />
-      <motion.div
-        animate={{ scale: [1, 1.3, 1], opacity: [0.25, 0.55, 0.25] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none absolute -right-6 -bottom-6 h-36 w-36 rounded-full bg-purple-600 blur-2xl"
-      />
-
-      {/* Animated Dashboard / Analytics Mockup */}
-      <div className="relative z-10 w-full max-w-[220px] rounded-xl border border-white/20 bg-black/40 p-3 backdrop-blur-md shadow-2xl">
-        <div className="flex items-center justify-between border-b border-white/10 pb-2">
-          <div className="flex items-center gap-1.5">
-            <LayoutDashboard size={12} className="text-purple-400" />
-            <span className="text-[10px] font-semibold text-purple-300">Custom Admin</span>
-          </div>
-          <span className="text-[8px] rounded bg-purple-500/20 px-1 py-0.5 text-purple-200">Live DB</span>
-        </div>
-
-        <div className="mt-3 space-y-2">
-          {/* Mini Data Bar Chart Animation */}
-          <div className="flex items-end gap-1.5 rounded-lg bg-white/5 p-2 border border-white/10 h-14">
-            <motion.div
-              animate={{ height: ['40%', '80%', '40%'] }}
-              transition={{ duration: 2.2, repeat: Infinity }}
-              className="w-1/4 rounded-t bg-purple-400/60"
-            />
-            <motion.div
-              animate={{ height: ['60%', '95%', '60%'] }}
-              transition={{ duration: 2.8, repeat: Infinity, delay: 0.2 }}
-              className="w-1/4 rounded-t bg-purple-500"
-            />
-            <motion.div
-              animate={{ height: ['30%', '70%', '30%'] }}
-              transition={{ duration: 2.5, repeat: Infinity, delay: 0.4 }}
-              className="w-1/4 rounded-t bg-purple-400/80"
-            />
-            <motion.div
-              animate={{ height: ['50%', '90%', '50%'] }}
-              transition={{ duration: 2.3, repeat: Infinity, delay: 0.1 }}
-              className="w-1/4 rounded-t bg-emerald-400"
-            />
-          </div>
-
-          <div className="flex items-center justify-between text-[9px] text-white/60">
-            <span>Real-time Sync</span>
-            <span className="text-emerald-400 font-semibold">Online</span>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-function ServiceMedia({ id }: { id: string }) {
-  if (id === 'mobile') return <MobileAppGraphic />
-  if (id === 'website') return <WebGraphic />
-  if (id === 'software') return <SoftwareGraphic />
-  return <WebGraphic />
-}
-
+// Service visuals (animated device / browser / dashboard mockups) live in ./service-visuals
 export function ServicesPage() {
   const { links } = useSiteContact()
 
@@ -424,49 +238,52 @@ export function ServicesPage() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{
-                    duration: 0.5,
-                    delay: i * 0.04,
+                    duration: 0.55,
+                    delay: i * 0.08,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] lg:max-w-none"
+                  className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:border-[#0d3c1f]/30 hover:shadow-[0_26px_60px_rgba(6,43,22,0.13)] lg:max-w-none"
                 >
-                  {/* Video on top (centered) → text → button */}
-                  <div className="p-3 pb-0 sm:p-5 sm:pb-0 lg:p-4 lg:pb-0">
-                    <ServiceMedia
-                      id={s.id}
-                    />
+                  {/* Numbered header */}
+                  <div className="flex items-center justify-between border-b border-[#0d3c1f]/8 px-5 py-4 sm:px-6">
+                    <div className="flex items-center gap-3">
+                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition-colors duration-300 group-hover:bg-[#0D3C1F] group-hover:text-white">
+                        <Icon size={18} strokeWidth={1.6} />
+                      </span>
+                      <div>
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0D3C1F]">
+                          Service {s.num}
+                        </p>
+                        <p className="text-xs text-[#6b7280]">{s.tagline}</p>
+                      </div>
+                    </div>
                   </div>
 
-                  <div className="flex flex-1 flex-col p-5 sm:p-6 lg:p-5 lg:pt-5">
-                    <div className="mb-3 flex items-center gap-2">
-                      <span className="text-[10px] font-semibold tracking-[0.16em] text-[#0D3C1F]">
-                        {s.num}
-                      </span>
-                      <span className="text-xs font-medium text-[#6b7280]">
-                        {s.tagline}
-                      </span>
-                    </div>
-                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-[1.35rem] lg:leading-snug">
+                  {/* Animated visual */}
+                  <div className="px-4 pt-4 sm:px-5 sm:pt-5">
+                    <ServiceVisual id={s.id} />
+                  </div>
+
+                  <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-[1.4rem] lg:leading-snug">
                       {s.title}
                     </h3>
 
-                    <ul className="mt-4 flex-1 space-y-2.5">
+                    <ul className="mt-4 flex-1 space-y-3">
                       {s.outcomes.map((o) => (
                         <li
                           key={o}
-                          className="flex items-start gap-2.5 text-sm text-[#111111] sm:text-[15px] lg:text-sm"
+                          className="flex items-start gap-2.5 text-sm leading-relaxed text-[#374151] sm:text-[15px] lg:text-sm"
                         >
-                          <CheckCircle2
-                            size={16}
-                            strokeWidth={1.5}
-                            className="mt-0.5 shrink-0 text-[#0D3C1F]"
-                          />
+                          <span className="mt-0.5 flex h-[18px] w-[18px] shrink-0 items-center justify-center rounded-full bg-[#e8f5ef] text-[#0D3C1F]">
+                            <CheckCircle2 size={12} strokeWidth={2.2} />
+                          </span>
                           {o}
                         </li>
                       ))}
                     </ul>
 
-                    <div className="mt-6">
+                    <div className="mt-6 border-t border-[#0d3c1f]/8 pt-5">
                       <NexusButton href={links.whatsapp} fullWidth showArrow>
                         Talk about this
                       </NexusButton>

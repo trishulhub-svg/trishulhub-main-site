@@ -45,17 +45,17 @@ const paths = pillars.map((item) => {
 
 export function HomeIntelligences() {
   return (
-    <section className="relative overflow-hidden lt-section bg-[#fafafa]">
-      <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-50" />
+    <section className="relative overflow-hidden lt-section">
+      <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-40" />
 
       <div className="relative mx-auto lt-container">
         <div className="mx-auto max-w-3xl text-center">
-          <span className="inline-flex items-center gap-1.5 text-sm font-medium text-[#6b7280]">
+          <span className="th-eyebrow">
             <HeartHandshake className="h-3.5 w-3.5 text-[#0d9488]" />
             The TrishulHub promise
           </span>
 
-          <h2 className="mt-5 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl">
+          <h2 className="text-balance mt-6 text-4xl font-bold uppercase tracking-[-0.02em] text-[#0a0a0a] sm:text-5xl">
             What you can{' '}
             <HeroAccentWord words="expect from us" animate={false} />
           </h2>

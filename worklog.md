@@ -40,7 +40,7 @@ studio positioning to the UK market; remove broken third-party dependencies.
 - Contact: company + budget fields, honeypot spam trap, response-time promise.
 - Founder pages: removed the "My Works" button, renamed the grid heading to
   "Selected projects", added a WhatsApp CTA, lazy images.
-- UK positioning: `hello@trishulhub.com`, "London, United Kingdom · Remote &
+- UK positioning: `info@trishulhub.in`, "London, United Kingdom · Remote &
   Global Delivery", UK GDPR copy. Phone number intentionally left unchanged.
 
 ### SEO / new routes

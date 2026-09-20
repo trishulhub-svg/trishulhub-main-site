@@ -109,7 +109,7 @@ const organizationSchema = {
   description: SITE_DESCRIPTION,
   logo: `${SITE_URL}/images/trishulhub-logo.png`,
   image: `${SITE_URL}/images/trishulhub-logo.png`,
-  email: "hello@trishulhub.com",
+  email: "info@trishulhub.in",
   areaServed: ["United Kingdom", "European Union", "Worldwide"],
   address: {
     "@type": "PostalAddress",
