@@ -83,7 +83,7 @@ function VisualShell({
 }) {
   return (
     <div
-      className={`relative flex aspect-[4/3] w-full items-center justify-center overflow-hidden rounded-2xl p-5 shadow-[inset_0_1px_0_rgba(255,255,255,0.08)] sm:aspect-[16/11] lg:aspect-[4/3.4] lg:min-h-[268px] ${className}`}
+      className={`relative flex aspect-[6/5] w-full items-center justify-center overflow-hidden px-5 py-6 sm:aspect-[16/11] lg:aspect-[4/3.4] lg:min-h-[268px] ${className}`}
       style={{ background: tint }}
     >
       <div
@@ -119,12 +119,12 @@ function MobileAppVisual() {
       <Glow className="-right-10 -top-12 h-40 w-40" color="rgba(16,185,129,0.75)" />
       <Glow className="-bottom-14 -left-12 h-40 w-40" color="rgba(94,234,212,0.45)" />
 
-      <div className="relative mt-1 w-full max-w-[196px]">
+      <div className="relative mt-1 w-[64%] max-w-[240px]">
         {/* Floating push notification */}
         <motion.div
           animate={{ y: [0, -6, 0], opacity: [0.85, 1, 0.85] }}
           transition={{ ...LOOP, duration: 3.6 }}
-          className="th-keep-light absolute -top-5 right-[-26px] z-20 hidden w-[148px] rounded-xl border border-white/20 bg-white/95 p-2.5 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:block"
+          className="th-keep-light absolute -top-6 right-[-16%] z-20 hidden w-[54%] min-w-[132px] max-w-[168px] rounded-xl border border-white/20 bg-white/95 p-2.5 shadow-[0_14px_30px_rgba(0,0,0,0.35)] backdrop-blur-sm sm:block"
         >
           <div className="flex items-center gap-2">
             <span className="flex h-6 w-6 items-center justify-center rounded-lg bg-emerald-500/15 text-emerald-600">
@@ -142,7 +142,7 @@ function MobileAppVisual() {
         </motion.div>
 
         {/* Phone body */}
-        <div className="relative mx-auto w-[176px] rounded-[1.9rem] border border-white/25 bg-[#05100a] p-1.5 shadow-[0_26px_60px_rgba(0,0,0,0.5)]">
+        <div className="relative mx-auto w-[86%] max-w-[210px] rounded-[1.9rem] border border-white/25 bg-[#05100a] p-1.5 shadow-[0_26px_60px_rgba(0,0,0,0.5)]">
           <span className="absolute -left-[3px] top-16 h-8 w-[3px] rounded-l bg-white/20" />
           <span className="absolute -right-[3px] top-24 h-12 w-[3px] rounded-r bg-white/20" />
 
@@ -235,7 +235,7 @@ function WebsiteVisual() {
       <Glow className="-left-12 -bottom-12 h-40 w-40" color="rgba(56,189,248,0.6)" />
       <Glow className="-right-10 -top-10 h-36 w-36" color="rgba(94,234,212,0.45)" />
 
-      <div className="relative w-full max-w-[262px] rounded-xl border border-white/20 bg-[#061620]/90 shadow-[0_24px_54px_rgba(0,0,0,0.45)] backdrop-blur-sm">
+      <div className="relative w-[92%] max-w-[300px] rounded-xl border border-white/20 bg-[#061620]/90 shadow-[0_24px_54px_rgba(0,0,0,0.45)] backdrop-blur-sm">
         {/* Browser chrome */}
         <div className="flex items-center gap-1.5 border-b border-white/10 px-2.5 py-2">
           <span className="h-2 w-2 rounded-full bg-rose-400/80" />
@@ -332,7 +332,7 @@ function SoftwareVisual() {
       <Glow className="-right-12 -bottom-14 h-40 w-40" color="rgba(168,85,247,0.55)" />
       <Glow className="-left-10 -top-10 h-36 w-36" color="rgba(94,234,212,0.35)" />
 
-      <div className="relative w-full max-w-[268px] overflow-hidden rounded-xl border border-white/20 bg-[#0c0817]/90 shadow-[0_24px_54px_rgba(0,0,0,0.5)] backdrop-blur-sm">
+      <div className="relative w-[94%] max-w-[320px] overflow-hidden rounded-xl border border-white/20 bg-[#0c0817]/90 shadow-[0_24px_54px_rgba(0,0,0,0.5)] backdrop-blur-sm">
         {/* Top bar */}
         <div className="flex items-center justify-between border-b border-white/10 px-2.5 py-2">
           <div className="flex items-center gap-1.5">

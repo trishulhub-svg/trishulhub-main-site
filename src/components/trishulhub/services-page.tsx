@@ -256,27 +256,26 @@ export function ServicesPage() {
                   }}
                   className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:border-[#0d3c1f]/30 hover:shadow-[0_26px_60px_rgba(6,43,22,0.13)] lg:max-w-none"
                 >
-                  {/* Numbered header */}
-                  <div className="flex items-center justify-between border-b border-[#0d3c1f]/8 px-5 py-4 sm:px-6">
-                    <div className="flex items-center gap-3">
-                      <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition-colors duration-300 group-hover:bg-[#0D3C1F] group-hover:text-white">
-                        <Icon size={18} strokeWidth={1.6} />
-                      </span>
-                      <div>
-                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0D3C1F]">
-                          Service {s.num}
-                        </p>
-                        <p className="text-xs text-[#6b7280]">{s.tagline}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Animated visual */}
-                  <div className="px-4 pt-4 sm:px-5 sm:pt-5">
+                  {/* Animated visual — full bleed, no surrounding frame */}
+                  <div className="relative">
                     <ServiceVisual id={s.id} />
                   </div>
 
                   <div className="flex flex-1 flex-col p-5 sm:p-6">
+                    <div className="mb-4 flex items-center gap-3">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F] transition-colors duration-300 group-hover:bg-[#0D3C1F] group-hover:text-white">
+                        <Icon size={18} strokeWidth={1.6} />
+                      </span>
+                      <div className="min-w-0">
+                        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#0D3C1F]">
+                          Service {s.num}
+                        </p>
+                        <p className="truncate text-xs text-[#6b7280]">
+                          {s.tagline}
+                        </p>
+                      </div>
+                    </div>
+
                     <h3 className="text-xl font-bold tracking-tight text-[#111111] sm:text-2xl lg:text-[1.4rem] lg:leading-snug">
                       {s.title}
                     </h3>
