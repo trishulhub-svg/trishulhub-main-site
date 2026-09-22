@@ -27,6 +27,9 @@ const CAROUSEL_WORDS = [
   'measurable.',
 ] as const
 
+/** Widest option — used to reserve the headline's second line. */
+const LONGEST_WORD = CAROUSEL_WORDS.reduce((a, b) => (b.length > a.length ? b : a))
+
 const TECH = [
   { file: 'nextdotjs.svg', name: 'Next.js' },
   { file: 'react.svg', name: 'React' },
@@ -117,16 +120,27 @@ export function Hero() {
               transition={{ duration: 0.65, delay: 0.05, ease: EASE_OUT_EXPO }}
               className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
-              <span className="font-sans">We build digital products that are </span>
-              <span className="relative inline-flex align-baseline">
-                <AnimatePresence mode="wait" initial={false}>
+              <span className="block font-sans">
+                We build digital products that are
+              </span>
+              {/*
+                The rotating word gets its own line and a fixed, pre-reserved
+                width (the longest option). Otherwise each swap changed how
+                many lines the headline needed, which pushed the whole page up
+                and down every couple of seconds.
+              */}
+              <span className="relative mt-0.5 block h-[1.18em]">
+                <span aria-hidden className="invisible">
+                  {LONGEST_WORD}
+                </span>
+                <AnimatePresence initial={false}>
                   <motion.span
                     key={word}
-                    initial={{ opacity: 0, y: 16, filter: 'blur(7px)' }}
+                    initial={{ opacity: 0, y: 14, filter: 'blur(7px)' }}
                     animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -14, filter: 'blur(7px)' }}
-                    transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-                    className="inline-block font-playfair italic text-[#0D3C1F]"
+                    exit={{ opacity: 0, y: -12, filter: 'blur(7px)' }}
+                    transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
+                    className="absolute inset-0 font-playfair italic text-[#0D3C1F]"
                   >
                     {word}
                   </motion.span>

@@ -38,6 +38,17 @@ export function HeroAccentWord({
 
   const full = list[index] ?? ''
   const shown = full.slice(0, charCount)
+  /**
+   * Reserve the width of the longest phrase so the typing loop can never
+   * reflow the surrounding heading. Without this, every typed/deleted
+   * character changed the heading's height and pushed the rest of the page up
+   * and down while the visitor was reading it.
+   */
+  const spacer = list.reduce(
+    (longest, candidate) =>
+      candidate.length > longest.length ? candidate : longest,
+    '',
+  )
 
   useEffect(() => {
     if (!animate || !full) return
@@ -81,11 +92,19 @@ export function HeroAccentWord({
 
   return (
     <span
-      className={`inline-block min-w-[0.55em] border-r-4 border-[#0D3C1F] pr-1 font-playfair italic normal-case text-[#0D3C1F] animate-blink ${className}`}
-      aria-live="polite"
-      aria-label={full}
+      className={`relative inline-block font-playfair italic normal-case text-[#0D3C1F] ${className}`}
     >
-      {shown || '\u00A0'}
+      {/* Invisible spacer — holds the box at its widest so nothing below moves. */}
+      <span aria-hidden className="invisible">
+        {spacer}
+      </span>
+      <span
+        className="absolute inset-0 border-r-4 border-[#0D3C1F] pr-1 animate-blink"
+        aria-live="polite"
+        aria-label={full}
+      >
+        {shown || '\u00A0'}
+      </span>
     </span>
   )
 }

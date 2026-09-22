@@ -189,7 +189,9 @@ export function HomeIntelligences() {
             </div>
 
             {/* Commitment detail */}
-            <div className="mt-6 flex min-h-[64px] items-center justify-center rounded-2xl border border-[#0d3c1f]/10 bg-[#f7fbf9] px-6 py-4">
+            {/* min-h covers the longest commitment (two lines at this width) so
+                swapping the text cannot move the sections below it. */}
+            <div className="mt-6 flex min-h-[5.5rem] items-center justify-center rounded-2xl border border-[#0d3c1f]/10 bg-[#f7fbf9] px-6 py-4">
               <AnimatePresence mode="wait" initial={false}>
                 <motion.p
                   key={PILLARS[active].name}
