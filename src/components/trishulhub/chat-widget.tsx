@@ -315,7 +315,7 @@ export function ChatWidget() {
       <button
         aria-expanded={open}
         aria-label={open ? 'Close chat' : 'Open chat'}
-        className="fixed bottom-5 right-5 z-[2147483000] flex h-14 w-14 items-center justify-center rounded-full bg-[#0D3C1F] text-white shadow-[0_14px_34px_rgba(6,43,22,0.32)] transition hover:scale-[1.04] hover:bg-[#164a28] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488]"
+        className="th-chat-trigger fixed bottom-5 right-5 z-[2147483000] flex h-14 w-14 items-center justify-center rounded-full bg-[#0D3C1F] text-white shadow-[0_14px_34px_rgba(6,43,22,0.32)] transition hover:scale-[1.04] hover:bg-[#164a28] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0d9488]"
         onClick={() => setOpen((value) => !value)}
         type="button"
       >

@@ -1779,3 +1779,28 @@ textarea.field-input {
   background: #1b2626;
   color: #eef3f1;
 }
+
+/* ---------- Owner tooling ----------
+   Agentation's toolbar lives bottom-right; lift the chat button above it so the
+   two never sit on top of each other. Only applied once the toolbar is active
+   (html.agent-on), which requires an explicit opt-in. */
+.agent-on .th-chat-trigger {
+  bottom: 5.5rem;
+}
+
+/* Agentation is used from a phone too. Its own settings panel is laid out wider
+   than a small viewport, so keep it inside the screen. Selectors match the
+   vendor's module class *names* (the hash suffix changes between versions). */
+html.agent-on [class*='settingsPanel'],
+html.agent-on [class*='settingsPanelContainer'],
+html.agent-on [class*='settingsPage'] {
+  max-width: calc(100vw - 16px);
+}
+@media (max-width: 640px) {
+  html.agent-on [class*='settingsPanel'],
+  html.agent-on [class*='settingsPanelContainer'] {
+    left: 8px;
+    right: 8px;
+    transform: none;
+  }
+}
