@@ -102,6 +102,18 @@ export const viewport: Viewport = {
   ],
   width: "device-width",
   initialScale: 1,
+  /**
+   * Zoom lock, requested by the owner: pinch/double-tap zoom made the chat
+   * panel and the planner awkward to use on a phone.
+   *
+   * Honest caveat: iOS Safari has ignored `user-scalable=no` since iOS 10 (it
+   * is an accessibility affordance they removed). So the real fixes are in
+   * globals.css — 16px fields so iOS never zoom-on-focus, and
+   * `touch-action: manipulation` so double-tap cannot zoom. Android/Chrome
+   * honours this block. To re-allow zoom, delete these two lines.
+   */
+  maximumScale: 1,
+  userScalable: false,
   colorScheme: "light dark",
 };
 

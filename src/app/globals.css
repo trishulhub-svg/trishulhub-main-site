@@ -126,13 +126,23 @@
   /* Comfortable touch behaviour. */
   @media (pointer: coarse) {
     button,
-    a {
-      -webkit-tap-highlight-color: transparent;
-    }
+    a,
     input,
     select,
-    textarea {
-      font-size: 16px; /* stops iOS zoom-on-focus */
+    textarea,
+    [role='button'],
+    summary {
+      /* Kills accidental double-tap zoom (pinch still works where allowed). */
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+    }
+    /* 16px minimum: iOS zooms the whole page when a smaller field is focused.
+       `html` prefix raises specificity above Tailwind's own text-sm utilities
+       used inside the chat widget, which is where this bug showed up. */
+    html input:not([type='range']),
+    html select,
+    html textarea {
+      font-size: 16px;
     }
   }
   h1,

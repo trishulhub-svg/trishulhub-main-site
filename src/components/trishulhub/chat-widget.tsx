@@ -189,6 +189,18 @@ export function ChatWidget() {
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
 
+  /* Keep the page behind the panel still while it is open — on a phone the
+     background used to scroll (and zoom) while the visitor tried to scroll
+     the conversation, which is what made the chat feel broken. */
+  useEffect(() => {
+    if (!open) return
+    const previous = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    return () => {
+      document.body.style.overflow = previous
+    }
+  }, [open])
+
   useEffect(() => {
     if (!open) return
     logRef.current?.scrollTo({
@@ -338,7 +350,7 @@ export function ChatWidget() {
         <section
           aria-label="Chat with TrishulHub"
           role="dialog"
-          className="fixed bottom-24 right-5 z-[2147483000] flex max-h-[min(76vh,600px)] w-[min(92vw,384px)] flex-col overflow-hidden rounded-2xl border border-[#0d3c1f]/15 th-chat-panel bg-[#f7fbf9] shadow-[0_28px_70px_rgba(6,43,22,0.28)]"
+          className="fixed bottom-24 right-5 z-[2147483000] flex max-h-[min(80svh,620px)] w-[min(92vw,384px)] flex-col overflow-hidden rounded-2xl border border-[#0d3c1f]/15 th-chat-panel bg-[#f7fbf9] shadow-[0_28px_70px_rgba(6,43,22,0.28)]"
         >
           {/* Header */}
           <header className="relative bg-[#0D3C1F] px-4 py-3 text-white">
@@ -379,7 +391,7 @@ export function ChatWidget() {
           <div
             ref={logRef}
             aria-live="polite"
-            className="flex-1 space-y-3 overflow-y-auto px-4 py-4"
+            className="flex-1 space-y-3 overflow-y-auto overscroll-contain px-4 py-4"
           >
             <p className={bubble}>
               Hi — I am the TrishulHub assistant. Four quick questions and the
@@ -468,7 +480,7 @@ export function ChatWidget() {
                 <div className="flex gap-2 pt-1">
                   <input
                     autoComplete="off"
-                    className="w-full rounded-xl border border-[#0d3c1f]/15 px-3 py-2.5 text-sm outline-none focus:border-[#0d9488]"
+                    className="w-full rounded-xl border border-[#0d3c1f]/15 px-3 py-2.5 text-base outline-none focus:border-[#0d9488] sm:text-sm"
                     onChange={(event) => setText(event.target.value)}
                     onKeyDown={(event) => {
                       if (event.key !== 'Enter' || !text.trim()) return
@@ -553,7 +565,7 @@ export function ChatWidget() {
                           ? 'Your email'
                           : 'Your phone number'
                     }
-                    className="w-full rounded-xl border border-[#0d3c1f]/15 px-3 py-2.5 text-sm outline-none focus:border-[#0d9488]"
+                    className="w-full rounded-xl border border-[#0d3c1f]/15 px-3 py-2.5 text-base outline-none focus:border-[#0d9488] sm:text-sm"
                     onChange={(event) => setText(event.target.value)}
                     onKeyDown={(event) => {
                       if (event.key !== 'Enter') return
