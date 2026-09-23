@@ -4,6 +4,9 @@ import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
 import { ChatWidget } from "@/components/trishulhub/chat-widget";
+import { JsonLd } from "@/components/seo/json-ld";
+import { organizationSchema } from "@/lib/structured-data";
+import { readSiteContactFile } from "@/lib/site-contact-io";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -123,48 +126,15 @@ export const viewport: Viewport = {
  */
 const themeScript = `(function(){try{var s=localStorage.getItem('trishulhub-theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;var d=s?s==='dark':m;var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';}catch(e){}})();`;
 
-const organizationSchema = {
-  "@context": "https://schema.org",
-  "@type": "ProfessionalService",
-  name: "TrishulHub",
-  url: SITE_URL,
-  description: SITE_DESCRIPTION,
-  logo: `${SITE_URL}/images/trishulhub-logo.png`,
-  image: `${SITE_URL}/images/trishulhub-logo.png`,
-  email: "info@trishulhub.in",
-  areaServed: ["United Kingdom", "European Union", "Worldwide"],
-  address: {
-    "@type": "PostalAddress",
-    addressCountry: "GB",
-    addressLocality: "London",
-  },
-  knowsAbout: [
-    "Website development",
-    "Custom software development",
-    "Mobile app development",
-    "Cloud engineering",
-  ],
-  makesOffer: [
-    {
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: "Website Development" },
-    },
-    {
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: "Custom Software" },
-    },
-    {
-      "@type": "Offer",
-      itemOffered: { "@type": "Service", name: "Mobile App Development" },
-    },
-  ],
-};
-
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Organisation markup reads the live contact config so the phone number and
+  // email in the schema always match what the admin has entered.
+  const contact = await readSiteContactFile()
+
   return (
     <html lang="en-GB" suppressHydrationWarning>
       <head>
@@ -181,11 +151,7 @@ export default function RootLayout({
         <AgentationLive />
         <ChatWidget />
 
-        <script
-          type="application/ld+json"
-          // eslint-disable-next-line react/no-danger
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationSchema) }}
-        />
+        <JsonLd data={organizationSchema(contact)} />
       </body>
     </html>
   );

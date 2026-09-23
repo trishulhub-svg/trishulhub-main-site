@@ -23,9 +23,8 @@ export async function GET() {
         instagram: true,
       },
     })
-    const founders = all.filter((f) => f.slug !== 'akshat')
     return NextResponse.json(
-      { ok: true, founders },
+      { ok: true, founders: all },
       {
         headers: {
           'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',

@@ -2,6 +2,8 @@ import { notFound } from 'next/navigation'
 import { db } from '@/lib/db'
 import { FounderDetailClient } from '@/components/trishulhub/founder-detail'
 import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
+import { JsonLd } from '@/components/seo/json-ld'
+import { personSchema } from '@/lib/structured-data'
 
 export async function generateStaticParams() {
   try {
@@ -27,8 +29,19 @@ export async function generateMetadata({
   const founder = await db.founder.findUnique({ where: { slug } })
   if (!founder) return { title: 'Founder Not Found | TrishulHub' }
   return {
-    title: `${founder.name} — ${founder.role} | TrishulHub`,
-    description: founder.bio.slice(0, 160),
+    // absolute: skips the "| TrishulHub" template so a long job title still
+    // fits in a search result. .trim() drops the stored trailing space.
+    title: {
+      absolute: `${founder.name} — ${founder.role.trim()}`,
+    },
+    description: founder.bio.slice(0, 160).trim(),
+    alternates: { canonical: `/founders/${founder.slug}` },
+    openGraph: {
+      type: 'profile',
+      title: `${founder.name} — ${founder.role.trim()} | TrishulHub`,
+      description: founder.bio.slice(0, 160).trim(),
+      url: `/founders/${founder.slug}`,
+    },
   }
 }
 
@@ -83,6 +96,17 @@ export default async function FounderPage({
 
   return (
     <ServerSiteShell>
+      <JsonLd
+        data={personSchema({
+          name: founder.name,
+          role: founder.role,
+          bio: founder.bio,
+          slug: founder.slug,
+          image: founder.image,
+          email: founder.email,
+          linkedin: founder.linkedin,
+        })}
+      />
       <FounderDetailClient slug={slug} founder={data} />
     </ServerSiteShell>
   )

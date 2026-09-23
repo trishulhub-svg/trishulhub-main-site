@@ -4,6 +4,12 @@ import { LoginClient } from './login/login-client'
 
 export const dynamic = 'force-dynamic'
 
+/** Internal screens must never appear in search results. */
+export const metadata = {
+  title: 'Admin',
+  robots: { index: false, follow: false, nocache: true },
+}
+
 export default async function AdminPage() {
   const founder = await getCurrentFounder()
 

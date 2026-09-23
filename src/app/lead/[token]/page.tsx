@@ -19,9 +19,11 @@ export async function generateMetadata({
     return {
       title: `Lead — ${lead.name} | TrishulHub`,
       description: `Contact lead from ${lead.name} (${lead.email})`,
+      // Private share link: never index, never follow.
+      robots: { index: false, follow: false, nocache: true },
     }
   } catch {
-    return { title: 'Lead | TrishulHub' }
+    return { title: 'Lead | TrishulHub', robots: { index: false, follow: false } }
   }
 }
 

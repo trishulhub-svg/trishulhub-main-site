@@ -29,6 +29,7 @@ import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { ServiceVisual } from '@/components/trishulhub/service-visuals'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { SERVICES_FAQ } from '@/lib/services-content'
 
 type ServiceCard = {
   id: string
@@ -159,28 +160,6 @@ const inclusions = [
   },
 ] as { icon: LucideIcon; title: string; text: string }[]
 
-const faqs = [
-  {
-    q: 'How long does a typical project take?',
-    a: 'A focused marketing website usually ships in 2–4 weeks. A custom dashboard or internal tool runs 4–8 weeks depending on scope, and mobile apps typically 6–12 weeks. You get a milestone plan before any work starts.',
-  },
-  {
-    q: 'How is pricing structured?',
-    a: 'We quote a fixed price per milestone, so you always know the cost before the next phase begins. Smaller sites start around £900; complex platforms are quoted after a short discovery call.',
-  },
-  {
-    q: 'Do you work with existing codebases?',
-    a: 'Yes. We regularly take over Next.js, React, Node and serverless codebases — starting with a short audit so you know exactly what state things are in before committing.',
-  },
-  {
-    q: 'Who owns the code and the data?',
-    a: 'You do, entirely. Repositories are transferred to your organisation and we document the infrastructure so any competent team can pick it up later.',
-  },
-  {
-    q: 'How do we communicate during the project?',
-    a: 'A shared WhatsApp thread or Slack channel plus a short weekly call. You will see progress on a staging link rather than waiting for a big-bang reveal.',
-  },
-]
 
 // Service visuals (animated device / browser / dashboard mockups) live in ./service-visuals
 export function ServicesPage() {
@@ -507,7 +486,7 @@ export function ServicesPage() {
             </div>
 
             <div className="divide-y divide-[#e5e7eb] border-y border-[#e5e7eb]">
-              {faqs.map((f, i) => (
+              {SERVICES_FAQ.map((f, i) => (
                 <details key={f.q} className="group py-5" open={i === 0}>
                   <summary className="flex cursor-pointer list-none items-start justify-between gap-6 text-left">
                     <span className="text-base font-semibold text-[#111111] sm:text-lg">
