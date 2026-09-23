@@ -17,6 +17,7 @@ import {
 } from 'lucide-react'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import {
   externalHref,
   mailtoHref,
@@ -35,7 +36,6 @@ type Founder = {
   address: string | null
   zipCode: string | null
   email: string | null
-  phone: string | null
   github: string | null
   linkedin: string | null
   twitter: string | null
@@ -87,6 +87,8 @@ export function FounderDetailClient({
   founder: Founder
 }) {
   const aboutImage = f.image2 || f.image
+  // Calling details come from the studio contact config, never the founder.
+  const { links, phoneDisplay } = useSiteContact()
 
   return (
     <div className="min-h-screen bg-[#fafafa] text-[#111111]">
@@ -268,9 +270,6 @@ export function FounderDetailClient({
                 {f.email && (
                   <DetailRow icon={<Mail size={16} />} label="Email" value={f.email} />
                 )}
-                {f.phone && (
-                  <DetailRow icon={<Phone size={16} />} label="Phone" value={f.phone} />
-                )}
               </ul>
             </motion.div>
           </div>
@@ -374,15 +373,14 @@ export function FounderDetailClient({
                 {f.email}
               </a>
             )}
-            {f.phone && (
-              <a
-                href={`tel:${f.phone}`}
-                className="inline-flex items-center gap-2 rounded-full border border-[#111111] bg-white px-6 py-3 text-sm font-semibold text-[#111111] transition hover:bg-[#0D3C1F] hover:text-white"
-              >
-                <Phone size={15} />
-                {f.phone}
-              </a>
-            )}
+            {/* Calling goes to the studio line, not a personal number. */}
+            <a
+              href={links.tel}
+              className="inline-flex items-center gap-2 rounded-full border border-[#111111] bg-white px-6 py-3 text-sm font-semibold text-[#111111] transition hover:bg-[#0D3C1F] hover:text-white"
+            >
+              <Phone size={15} />
+              {phoneDisplay}
+            </a>
           </div>
         </div>
       </section>

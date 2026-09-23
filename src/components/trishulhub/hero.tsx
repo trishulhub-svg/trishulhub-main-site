@@ -129,18 +129,30 @@ export function Hero() {
                 many lines the headline needed, which pushed the whole page up
                 and down every couple of seconds.
               */}
-              <span className="relative mt-0.5 block h-[1.18em]">
-                <span aria-hidden className="invisible">
+              <span className="mt-0.5 grid">
+                {/* Spacer and the live word share one grid cell, so the line
+                    box is always the taller of the two — no overlap, no shift. */}
+                <span
+                  aria-hidden
+                  className="invisible whitespace-nowrap"
+                  style={{ gridArea: '1 / 1' }}
+                >
                   {LONGEST_WORD}
                 </span>
-                <AnimatePresence initial={false}>
+                {/* mode="wait": the outgoing word finishes before the next one
+                    appears. Without it both words render for ~380ms and visibly
+                    overlap each other — which is exactly the "text overlap" that
+                    showed up on a phone. The reserved grid cell means the swap
+                    still cannot move the layout. */}
+                <AnimatePresence mode="wait" initial={false}>
                   <motion.span
                     key={word}
                     initial={{ opacity: 0, y: 14, filter: 'blur(7px)' }}
                     animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
                     exit={{ opacity: 0, y: -12, filter: 'blur(7px)' }}
                     transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
-                    className="absolute inset-0 font-playfair italic text-[#0D3C1F]"
+                    className="whitespace-nowrap font-playfair italic text-[#0D3C1F]"
+                    style={{ gridArea: '1 / 1' }}
                   >
                     {word}
                   </motion.span>

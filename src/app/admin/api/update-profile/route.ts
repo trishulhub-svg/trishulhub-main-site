@@ -17,7 +17,6 @@ type UpdateBody = {
   address?: string | null
   zipCode?: string | null
   email?: string | null
-  phone?: string | null
   origin?: string | null
   github?: string | null
   linkedin?: string | null
@@ -56,7 +55,6 @@ export async function GET() {
       address: founder.address,
       zipCode: founder.zipCode,
       email: founder.email,
-      phone: founder.phone,
       origin: founder.origin,
       github: founder.github,
       linkedin: founder.linkedin,
@@ -95,7 +93,6 @@ export async function PUT(req: NextRequest) {
     if (body.address !== undefined) data.address = body.address
     if (body.zipCode !== undefined) data.zipCode = body.zipCode
     if (body.email !== undefined) data.email = body.email
-    if (body.phone !== undefined) data.phone = body.phone
     if (body.origin !== undefined) data.origin = body.origin
     if (body.github !== undefined) data.github = body.github
     if (body.linkedin !== undefined) data.linkedin = body.linkedin

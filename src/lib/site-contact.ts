@@ -39,14 +39,39 @@ export function normalizePhone(value: string): string {
   return `+${digits}`
 }
 
+/**
+ * Human-readable version of a stored number, derived rather than typed.
+ *
+ * The admin used to ask for this as a third number field ("Phone display
+ * text"), which meant the same number could be stored two different ways.
+ * Deriving it means the owner only ever enters WhatsApp + Call.
+ *
+ * +919662106793 → "+91 96621 06793"
+ */
+export function formatPhoneDisplay(value: string): string {
+  const digits = String(value || '').replace(/\D/g, '')
+  if (!digits) return ''
+  // Assume the last 10 digits are the national number and the rest is the
+  // country code — true for India, the UK, and most of our enquiries.
+  const countryCode = digits.length > 10 ? digits.slice(0, digits.length - 10) : ''
+  const national = countryCode ? digits.slice(countryCode.length) : digits
+  if (!countryCode) return `+${national}`
+  const groups = national.match(/.{1,5}/g) ?? [national]
+  return `+${countryCode} ${groups.join(' ')}`
+}
+
 export function mergeSiteContact(
   partial: Partial<SiteContact> | null | undefined,
 ): SiteContact {
   const base = { ...DEFAULT_SITE_CONTACT, ...(partial || {}) }
+  const phone = normalizePhone(base.phone)
   return {
     whatsapp: normalizeWhatsapp(base.whatsapp) || DEFAULT_SITE_CONTACT.whatsapp,
-    phone: normalizePhone(base.phone),
-    phoneDisplay: String(base.phoneDisplay || DEFAULT_SITE_CONTACT.phoneDisplay).trim(),
+    phone,
+    // Prefer an explicit display value (older records) but fall back to the
+    // number itself so the two can never drift apart.
+    phoneDisplay:
+      String(base.phoneDisplay || '').trim() || formatPhoneDisplay(phone),
     email: String(base.email || DEFAULT_SITE_CONTACT.email).trim(),
     instagram: String(base.instagram || DEFAULT_SITE_CONTACT.instagram).trim(),
     location: String(base.location || DEFAULT_SITE_CONTACT.location).trim(),

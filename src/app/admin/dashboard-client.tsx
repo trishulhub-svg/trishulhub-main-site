@@ -40,6 +40,7 @@ import {
   downloadLeadDoc,
   leadPageUrl,
 } from '@/lib/lead-share'
+import { formatPhoneDisplay } from '@/lib/site-contact'
 
 type Skill = { name: string; level: number }
 type Education = { degree: string; school: string; year: string; description: string }
@@ -60,9 +61,8 @@ type Founder = {
   dateOfBirth: string | null
   address: string | null
   zipCode: string | null
-  email: string | null
-  phone: string | null
-  origin: string | null
+    email: string | null
+    origin: string | null
   github: string | null
   linkedin: string | null
   twitter: string | null
@@ -244,9 +244,8 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         dateOfBirth: founder.dateOfBirth,
         address: founder.address,
         zipCode: founder.zipCode,
-        email: founder.email,
-        phone: founder.phone,
-        origin: founder.origin,
+          email: founder.email,
+          origin: founder.origin,
         github: founder.github,
         linkedin: founder.linkedin,
         twitter: founder.twitter,
@@ -741,16 +740,22 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                 <Field label="Phone (for Call button)">
                   <Input
                     value={siteContact.phone}
-                    onChange={(v) => setSiteContact((c) => ({ ...c, phone: v }))}
+                    onChange={(v) =>
+                      setSiteContact((c) => ({
+                        ...c,
+                        phone: v,
+                        // Display text is derived, never typed — see below.
+                        phoneDisplay: formatPhoneDisplay(v),
+                      }))
+                    }
                     placeholder="+919662106793"
                   />
-                </Field>
-                <Field label="Phone display text">
-                  <Input
-                    value={siteContact.phoneDisplay}
-                    onChange={(v) => setSiteContact((c) => ({ ...c, phoneDisplay: v }))}
-                    placeholder="+91 96621 06793"
-                  />
+                  <p className="mt-1.5 text-[11px] text-[#9ca3af]">
+                    Shown on the site as{' '}
+                    <span className="font-mono text-[#0D3C1F]">
+                      {formatPhoneDisplay(siteContact.phone) || '—'}
+                    </span>
+                  </p>
                 </Field>
                 <Field label="Public email">
                   <Input
@@ -831,13 +836,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     onChange={(v) => setFounder((f) => ({ ...f, email: v || null }))}
                     placeholder="you@trishulhub.com"
                     type="email"
-                  />
-                </Field>
-                <Field label="Phone">
-                  <Input
-                    value={founder.phone ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, phone: v || null }))}
-                    placeholder="+91 ..."
                   />
                 </Field>
               </div>

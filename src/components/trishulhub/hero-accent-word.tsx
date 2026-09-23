@@ -91,15 +91,22 @@ export function HeroAccentWord({
   }
 
   return (
+    /*
+     * Both copies sit in the SAME grid cell: the invisible spacer sets the
+     * width (so typing cannot reflow the heading) and the visible copy draws
+     * on top of it. Grid gives the cell the taller of the two line boxes and
+     * sizes the parent, which is why this cannot overlap neighbouring text the
+     * way an absolutely-positioned overlay could.
+     */
     <span
-      className={`relative inline-block font-playfair italic normal-case text-[#0D3C1F] ${className}`}
+      className={`inline-grid font-playfair italic normal-case text-[#0D3C1F] ${className}`}
     >
-      {/* Invisible spacer — holds the box at its widest so nothing below moves. */}
-      <span aria-hidden className="invisible">
+      <span aria-hidden className="invisible whitespace-nowrap" style={{ gridArea: '1 / 1' }}>
         {spacer}
       </span>
       <span
-        className="absolute inset-0 border-r-4 border-[#0D3C1F] pr-1 animate-blink"
+        className="whitespace-nowrap border-r-4 border-[#0D3C1F] pr-1 animate-blink"
+        style={{ gridArea: '1 / 1' }}
         aria-live="polite"
         aria-label={full}
       >

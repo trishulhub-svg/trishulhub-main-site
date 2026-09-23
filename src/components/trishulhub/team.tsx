@@ -93,7 +93,7 @@ export function Team({ founders }: { founders: Founder[] }) {
         >
           {founders.map((m) => {
             const founderImage = m.image || null
-            const wa = whatsappHref(m.whatsapp || m.phone)
+            const wa = whatsappHref(m.whatsapp)
             const li = externalHref(m.linkedin)
             const ig = externalHref(m.instagram)
             const mail = mailtoHref(m.email)
