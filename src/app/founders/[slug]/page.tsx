@@ -67,6 +67,14 @@ export default async function FounderPage({
 
   return (
     <ServerSiteShell>
+      {/*
+       * Start the portrait download while the HTML is still parsing — it is
+       * the largest element on the page (the LCP), and without this it only
+       * begins after the document has arrived. React hoists this into <head>.
+       */}
+      {data.image ? (
+        <link rel="preload" as="image" href={data.image} fetchPriority="high" />
+      ) : null}
       <JsonLd
         data={personSchema({
           name: founder.name,
