@@ -2,6 +2,7 @@
 
 import { Navbar } from '@/components/trishulhub/navbar'
 import { Footer } from '@/components/trishulhub/footer'
+import { CookieConsent } from '@/components/trishulhub/cookie-consent'
 import { SmoothScrollProvider } from '@/components/trishulhub/smooth-scroll-provider'
 import { SiteContactProvider } from '@/components/trishulhub/site-contact-provider'
 import type { SiteContact } from '@/lib/site-contact'
@@ -29,6 +30,8 @@ export function SiteShell({
             {children}
           </main>
           <Footer />
+          {/* Cookie / device-storage notice + preference centre (PECR). */}
+          <CookieConsent />
         </div>
       </SiteContactProvider>
     </SmoothScrollProvider>

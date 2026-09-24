@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
+import { CookieSettingsButton } from '@/components/trishulhub/cookie-consent'
 
 const company = [
   { label: 'Home', href: '/' },
@@ -21,6 +22,7 @@ const services = [
 
 const legal = [
   { label: 'Privacy', href: '/privacy' },
+  { label: 'Cookies', href: '/cookies' },
   { label: 'Terms', href: '/terms' },
 ]
 
@@ -150,6 +152,11 @@ export function Footer() {
                 {l.label}
               </Link>
             ))}
+            {/* Reopens the cookie / storage preference centre (PECR: the user
+                must be able to change or withdraw their choice at any time). */}
+            <CookieSettingsButton className="th-link inline-block py-2 text-xs text-white/40 transition hover:text-white/80">
+              Cookie settings
+            </CookieSettingsButton>
             <a
               href="#home"
               className="inline-flex items-center gap-1.5 py-2 text-xs text-white/40 transition hover:text-white/80"

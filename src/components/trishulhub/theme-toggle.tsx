@@ -2,8 +2,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import { Moon, Sun } from 'lucide-react'
-
-const STORAGE_KEY = 'trishulhub-theme'
+import { mayStoreAppearance, THEME_STORAGE_KEY } from '@/lib/consent'
 
 /**
  * Light / dark switch.
@@ -27,7 +26,15 @@ export function ThemeToggle({ className = '' }: { className?: string }) {
     root.style.colorScheme = next ? 'dark' : 'light'
     setDark(next)
     try {
-      localStorage.setItem(STORAGE_KEY, next ? 'dark' : 'light')
+      /*
+       * The display preference is stored under the PECR "appearance"
+       * exception, which a visitor can object to from Cookie settings. When
+       * they have, we still switch the theme for this page view but keep
+       * nothing on their device.
+       */
+      if (mayStoreAppearance()) {
+        localStorage.setItem(THEME_STORAGE_KEY, next ? 'dark' : 'light')
+      }
     } catch {
       /* private mode / storage blocked */
     }
