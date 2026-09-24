@@ -365,7 +365,7 @@ export function ChatWidget() {
                 <p className="text-sm font-semibold">TrishulHub</p>
                 <p className="flex items-center gap-1.5 text-[11.5px] text-white/70">
                   <span className="h-1.5 w-1.5 rounded-full bg-[#5eead4]" />
-                  Replies within one business day
+                  Replies within 2-3 business days
                 </p>
               </div>
               <button
@@ -684,7 +684,7 @@ export function ChatWidget() {
                   />
                   <span>
                     Thanks {answers.name.split(' ')[0] || 'there'} — your brief
-                    is with the team. We reply within one business day, usually
+                    is with the team. We reply within 2-3 business days, usually
                     with a few questions and a fixed-price plan.
                   </span>
                 </p>

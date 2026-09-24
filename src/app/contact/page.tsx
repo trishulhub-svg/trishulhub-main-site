@@ -6,12 +6,12 @@ import { breadcrumbSchema } from '@/lib/structured-data'
 export const metadata = {
   title: 'Contact us — Start a Project',
   description:
-    'Start a project with TrishulHub. Tell us what you need — a website, bespoke software or a mobile app — and get a clear response within one business day.',
+    'Start a project with TrishulHub. Tell us what you need — a website, bespoke software or a mobile app — and get a clear response within 2-3 business days.',
   alternates: { canonical: '/contact' },
   openGraph: {
     title: 'Contact us | TrishulHub',
     description:
-      'Talk to TrishulHub about your website, software or mobile app project. Replies within one business day.',
+      'Talk to TrishulHub about your website, software or mobile app project. Replies within 2-3 business days.',
     url: '/contact',
   },
 }

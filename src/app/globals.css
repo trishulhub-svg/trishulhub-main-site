@@ -284,21 +284,37 @@
   }
 }
 .animate-marquee {
-  animation: marquee 30s linear infinite;
+  animation: marquee 24s linear infinite;
 }
 .animate-marquee-slow {
   animation: marquee 45s linear infinite;
 }
 
-/* Tech-strip logos: the source SVGs are brand-cyan and some use currentColor,
-   which renders black inside an <img> — both disappear against the dark hero
-   strip. Flatten every mark to a light one in the dark theme. */
+/* Tech-strip logos.
+   The source SVGs are bright brand-cyan and one of them uses currentColor,
+   which resolves to black inside an <img>. Rendered as-is (or merely greyed
+   at 45%) they wash out against both the white and the near-black strip, so
+   every mark is flattened to a single solid tone and given real contrast. */
+.th-tech-logo {
+  filter: brightness(0);
+  opacity: 0.45;
+  transition: opacity 0.2s ease;
+}
+.th-tech-logo:hover {
+  opacity: 0.7;
+}
 .dark .th-tech-logo {
   filter: brightness(0) invert(1);
-  opacity: 0.7;
+  opacity: 0.75;
 }
 .dark .th-tech-logo:hover {
   opacity: 1;
+}
+
+/* Footer links hover to white only — the animated underline used elsewhere in
+   the site is switched off here so the footer reads the same on every page. */
+.th-footer .th-link::after {
+  content: none;
 }
 
 /* Glow pulse */

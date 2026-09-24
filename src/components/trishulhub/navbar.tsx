@@ -219,7 +219,7 @@ export function Navbar() {
                 <ThemeToggle />
               </div>
               <div className="mt-3 border-t border-[#e5e7eb] px-1 pt-3 text-center text-xs text-[#6b7280]">
-                UK-based · Replying within one business day
+                UK-based · Replying within 2-3 business days
               </div>
             </motion.nav>
           ) : null}

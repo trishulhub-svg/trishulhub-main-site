@@ -249,7 +249,7 @@ export function HeroVisual() {
                 New enquiry received
               </p>
               <p className="truncate text-[10px] text-[#6b7280]">
-                Website · replied in 3h
+                Website · replied in 2 days
               </p>
             </div>
           </div>

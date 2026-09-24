@@ -45,7 +45,7 @@ const principles = [
 const stats = [
   { value: '2023', label: 'Building since' },
   { value: '3', label: 'Core services' },
-  { value: '1 day', label: 'Typical reply time' },
+  { value: '2-3 days', label: 'Typical reply time' },
   { value: '100%', label: 'Code you own' },
 ] as const
 

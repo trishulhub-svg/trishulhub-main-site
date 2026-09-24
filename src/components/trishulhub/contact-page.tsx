@@ -32,7 +32,7 @@ const STEPS = [
   {
     n: '02',
     title: 'We reply with questions',
-    text: 'Usually within one business day, plus a short call if it helps.',
+    text: 'Usually within 2-3 business days, plus a short call if it helps.',
   },
   {
     n: '03',
@@ -132,7 +132,7 @@ export function ContactPage() {
             Let&apos;s work <HeroAccentWord words="together" animate={false} />
           </>
         }
-        subtitle="Tell us what you are trying to build or fix. You will get a clear, honest response — usually within one business day."
+        subtitle="Tell us what you are trying to build or fix. You will get a clear, honest response — usually within 2-3 business days."
       >
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-[#4b5563]">
           <span className="inline-flex items-center gap-2">

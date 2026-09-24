@@ -243,7 +243,7 @@ export function Hero() {
                 height={26}
                 loading="lazy"
                 decoding="async"
-                className="th-tech-logo h-6 w-auto shrink-0 opacity-45 grayscale transition hover:opacity-80"
+                className="th-tech-logo h-6 w-auto shrink-0"
               />
             ))}
           </div>

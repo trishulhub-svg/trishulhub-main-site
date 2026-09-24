@@ -45,7 +45,7 @@ export function Footer() {
   const { email, phoneDisplay, location, links } = useSiteContact()
 
   return (
-    <footer className="relative overflow-hidden bg-[#0a0a0a] text-white">
+    <footer className="th-footer relative overflow-hidden bg-[#0a0a0a] text-white">
       <div
         aria-hidden
         className="pointer-events-none absolute -left-24 top-0 h-72 w-72 rounded-full bg-[#0d9488]/12 blur-[100px]"
