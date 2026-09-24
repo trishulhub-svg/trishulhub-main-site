@@ -215,6 +215,17 @@
       will-change: auto;
       transform: none;
     }
+    /*
+     * Owner requirement: the tech-strip logos always scroll right-to-left.
+     * The `*` rule above zeroes animation-duration/-iteration-count with
+     * `!important`, which silently froze the strip for anyone whose device has
+     * "Reduce motion" on. Same layer + a class selector beats the universal
+     * selector, so the strip keeps moving — just at a calmer speed — and it is
+     * decorative (aria-hidden), so no information is lost.
+     */
+    .animate-marquee {
+      animation: marquee 30s linear infinite !important;
+    }
   }
 }
 
@@ -284,11 +295,12 @@
   }
 }
 .animate-marquee {
-  animation: marquee 24s linear infinite;
+  animation: marquee 16s linear infinite;
 }
 .animate-marquee-slow {
   animation: marquee 45s linear infinite;
 }
+
 
 /* Tech-strip logos.
    The source SVGs are bright brand-cyan and one of them uses currentColor,
