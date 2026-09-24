@@ -105,8 +105,10 @@ export function AboutValues() {
                 }}
                 className="th-card rounded-2xl border border-[#111111]/12 bg-white p-8 shadow-[0_4px_24px_rgba(0,0,0,0.03)]"
               >
-                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-gradient-to-br from-[#e0f7fa] to-[#c8e6c9] text-[#0D3C1F]">
-                  <Icon size={22} />
+                {/* Solid brand tile: the old light gradient left the icon
+                    barely visible against the card. */}
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-xl bg-[#0D3C1F] text-white shadow-[0_8px_20px_rgba(13,60,31,0.18)]">
+                  <Icon size={22} strokeWidth={1.7} />
                 </div>
                 <h3 className="text-lg font-bold text-[#0a0a0a]">{v.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
@@ -143,8 +145,8 @@ export function AboutPage() {
         subtitle="We are a UK-based studio building websites, bespoke software and mobile apps — the kind of tools that quietly remove friction from a business every single day."
       >
         <div className="flex flex-wrap items-center gap-3">
-          <NexusButton href={links.whatsapp} showArrow>
-            Talk to the team
+          <NexusButton href="/contact" showArrow>
+            Contact us
           </NexusButton>
           <NexusButton href="/services" variant="secondary">
             See our services
@@ -210,8 +212,8 @@ export function AboutPage() {
                 transition={{ duration: 0.45, delay: i * 0.06, ease: EASE_OUT_EXPO }}
                 className="th-card rounded-2xl border border-[#111111]/12 bg-[#fafafa] p-6"
               >
-                <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-[#e8f5ef] text-[#0D3C1F]">
-                  <Icon size={19} strokeWidth={1.6} />
+                <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-[#0D3C1F]/15 bg-[#0D3C1F] text-white">
+                  <Icon size={19} strokeWidth={1.7} />
                 </span>
                 <h3 className="mt-4 text-base font-bold text-[#0a0a0a]">
                   {p.title}

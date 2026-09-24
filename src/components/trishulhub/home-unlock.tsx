@@ -5,7 +5,6 @@ import { motion } from 'framer-motion'
 import { Globe, LayoutDashboard, Smartphone, Zap } from 'lucide-react'
 import { NexusButton } from './nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
-import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 type PlanId = 'website' | 'software' | 'mobile'
@@ -79,7 +78,6 @@ type LineGeom = {
 }
 
 export function HomeUnlock() {
-  const { links } = useSiteContact()
   const [active, setActive] = useState<PlanId>('software')
   const current = useMemo(
     () => plans.find((p) => p.id === active) ?? plans[0],
@@ -313,7 +311,8 @@ export function HomeUnlock() {
             </ul>
 
             <div className="mt-8 w-full">
-              <NexusButton href={links.whatsapp} fullWidth>
+              {/* Straight into the project planner on the home page. */}
+              <NexusButton href="/#planner" fullWidth showArrow>
                 {current.cta}
               </NexusButton>
             </div>

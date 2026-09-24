@@ -9,6 +9,24 @@
 
 export type ServiceFaq = { q: string; a: string }
 
+/**
+ * One budget ladder shared by the project planner and the contact form, so the
+ * two can never drift apart.
+ */
+export const BUDGET_OPTIONS = [
+  '£1,500',
+  '£2,500',
+  '£5,000',
+  '£10,000',
+  'Custom',
+] as const
+
+/** Same ladder plus the "no idea yet" escape hatch used on the contact form. */
+export const CONTACT_BUDGET_OPTIONS = [
+  ...BUDGET_OPTIONS,
+  'Not decided yet',
+] as const
+
 export const SERVICES_FAQ: readonly ServiceFaq[] = [
   {
     q: 'How long does a typical project take?',

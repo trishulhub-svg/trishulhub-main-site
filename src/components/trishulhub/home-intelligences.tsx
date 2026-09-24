@@ -1,7 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import {
   Clock,
@@ -47,12 +47,12 @@ const PILLARS: Pillar[] = [
 const STEP_MS = 2600
 
 /**
- * HomeIntelligences — "TrishulHub promise" signal rail.
+ * HomeIntelligences — "TrishulHub promise".
  *
- * One travelling hub walks a five-stop rail; the stop it reaches lights up and
- * its commitment fades in underneath. One index + one interval drives the whole
- * thing, so the motion stays cheap. Hover/tap a stop to park the hub on it;
- * reduced motion renders the rail statically with every commitment listed.
+ * Five commitment cards light up in sequence — one index + one interval drives
+ * the whole thing, so the motion stays cheap. Hover/focus a card to park the
+ * cycle on it. Desktop shows the same cards laid out horizontally (phones keep
+ * the vertical stack the owner preferred).
  */
 export function HomeIntelligences() {
   const reduce = useReducedMotionSafe()
@@ -66,8 +66,6 @@ export function HomeIntelligences() {
     }, STEP_MS)
     return () => window.clearInterval(id)
   }, [reduce])
-
-  const travel = (active / (PILLARS.length - 1)) * 100
 
   return (
     <section className="relative overflow-hidden lt-section">
@@ -95,119 +93,63 @@ export function HomeIntelligences() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.05]"
           />
 
-          {/* ---------- Desktop rail ---------- */}
-          <div className="relative hidden md:block">
-            <div className="relative h-[112px]">
-              {/* Rail */}
-              <div className="absolute left-[10%] right-[10%] top-[38px] h-[2px] rounded-full bg-[#0d3c1f]/12">
-                <motion.div
-                  className="h-full rounded-full bg-gradient-to-r from-[#0d9488] to-[#5eead4]"
-                  animate={{ width: `${travel}%` }}
-                  transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-                />
-              </div>
-
-              {/* Travelling hub */}
-              <motion.div
-                aria-hidden
-                animate={{ left: `calc(10% + (80% * ${active / (PILLARS.length - 1)}))` }}
-                transition={{ duration: 0.7, ease: EASE_OUT_EXPO }}
-                className="absolute top-[38px] z-20 -translate-x-1/2 -translate-y-1/2"
-              >
-                <span className="relative flex h-12 w-12 items-center justify-center overflow-hidden rounded-2xl border border-[#0D3C1F]/20 bg-white shadow-[0_12px_30px_rgba(6,43,22,0.18)]">
-                  <motion.span
-                    animate={reduce ? undefined : { scale: [1, 1.4], opacity: [0.5, 0] }}
-                    transition={{ duration: 1.8, repeat: Infinity }}
-                    className="absolute inset-0 rounded-2xl border border-[#0d9488]"
-                  />
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img
-                    src="/images/trishulhub-logo.png"
-                    alt="TrishulHub"
-                    width={48}
-                    height={48}
-                    className="relative z-10 h-[86%] w-[86%] translate-x-[3%] translate-y-[3.5%] object-contain object-center"
-                  />
-                </span>
-              </motion.div>
-
-              {/* Stops */}
-              {PILLARS.map((pillar, i) => {
-                const Icon = pillar.icon
-                const isActive = i === active
-                const isDone = i < active
-                return (
-                  <button
-                    key={pillar.name}
-                    type="button"
-                    onMouseEnter={() => {
-                      paused.current = true
-                      setActive(i)
-                    }}
-                    onMouseLeave={() => {
-                      paused.current = false
-                    }}
-                    onFocus={() => {
-                      paused.current = true
-                      setActive(i)
-                    }}
-                    onBlur={() => {
-                      paused.current = false
-                    }}
-                    className="absolute top-0 flex -translate-x-1/2 flex-col items-center"
-                    style={{ left: `${10 + (80 * i) / (PILLARS.length - 1)}%` }}
-                  >
-                    <motion.span
-                      animate={{
-                        scale: isActive ? 1.08 : 1,
-                        borderColor: isActive
-                          ? 'rgba(13,60,31,0.55)'
-                          : 'rgba(13,60,31,0.12)',
-                        backgroundColor: isActive
-                          ? '#ffffff'
-                          : isDone
-                            ? '#e8f5ef'
-                            : '#ffffff',
-                      }}
-                      transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
-                      className={`relative flex h-[76px] w-[76px] items-center justify-center rounded-2xl border shadow-[0_10px_28px_rgba(6,43,22,0.07)] ${
-                        isActive ? 'text-[#0D3C1F]' : 'text-[#9ca3af]'
-                      }`}
-                    >
-                      <Icon size={28} strokeWidth={1.55} />
-                    </motion.span>
-                    <span
-                      className={`mt-3 text-[12.5px] font-semibold transition-colors ${
-                        isActive ? 'text-[#0D3C1F]' : 'text-[#6b7280]'
-                      }`}
-                    >
-                      {pillar.name}
-                    </span>
-                  </button>
-                )
-              })}
-            </div>
-
-            {/* Commitment detail */}
-            {/* min-h covers the longest commitment (two lines at this width) so
-                swapping the text cannot move the sections below it. */}
-            <div className="mt-6 flex min-h-[5.5rem] items-center justify-center rounded-2xl border border-[#0d3c1f]/10 bg-[#f7fbf9] px-6 py-4">
-              <AnimatePresence mode="wait" initial={false}>
-                <motion.p
-                  key={PILLARS[active].name}
-                  initial={{ opacity: 0, y: 8 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -8 }}
-                  transition={{ duration: 0.32, ease: EASE_OUT_EXPO }}
-                  className="max-w-3xl text-center text-[14.5px] leading-relaxed text-[#374151]"
+          {/* ---------- Desktop: same cards as mobile, laid out horizontally ---------- */}
+          <div className="hidden gap-3 md:grid md:grid-cols-5">
+            {PILLARS.map((pillar, i) => {
+              const Icon = pillar.icon
+              const isActive = i === active
+              return (
+                <motion.button
+                  key={pillar.name}
+                  type="button"
+                  onMouseEnter={() => {
+                    paused.current = true
+                    setActive(i)
+                  }}
+                  onMouseLeave={() => {
+                    paused.current = false
+                  }}
+                  onFocus={() => {
+                    paused.current = true
+                    setActive(i)
+                  }}
+                  onBlur={() => {
+                    paused.current = false
+                  }}
+                  animate={{
+                    y: isActive ? -4 : 0,
+                    borderColor: isActive
+                      ? 'rgba(13,60,31,0.5)'
+                      : 'rgba(13,60,31,0.1)',
+                    boxShadow: isActive
+                      ? '0 16px 36px rgba(6,43,22,0.12)'
+                      : '0 6px 18px rgba(6,43,22,0.04)',
+                  }}
+                  transition={{ duration: 0.4, ease: EASE_OUT_EXPO }}
+                  className="flex h-full flex-col items-start rounded-2xl border bg-white/70 p-4 text-left"
                 >
-                  <span className="font-semibold text-[#0D3C1F]">
-                    {PILLARS[active].name}:
-                  </span>{' '}
-                  {PILLARS[active].detail}
-                </motion.p>
-              </AnimatePresence>
-            </div>
+                  <span
+                    className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-colors ${
+                      isActive
+                        ? 'border-[#0D3C1F] bg-[#0D3C1F] text-white'
+                        : 'border-[#0d3c1f]/12 bg-white text-[#9ca3af]'
+                    }`}
+                  >
+                    <Icon size={20} strokeWidth={1.7} />
+                  </span>
+                  <span
+                    className={`mt-3 block text-[14px] font-bold ${
+                      isActive ? 'text-[#0D3C1F]' : 'text-[#374151]'
+                    }`}
+                  >
+                    {pillar.name}
+                  </span>
+                  <span className="mt-1.5 block text-[12.5px] leading-relaxed text-[#6b7280]">
+                    {pillar.detail}
+                  </span>
+                </motion.button>
+              )
+            })}
           </div>
 
           {/* ---------- Mobile: vertical rail ---------- */}
@@ -266,23 +208,16 @@ export function HomeIntelligences() {
           </div>
         </div>
 
-        {/* Closing chips */}
+        {/* Closing quote — the first chip was removed on request and replaced
+            with a line about technology and quality. */}
         <div className="mx-auto mt-12 max-w-3xl sm:mt-14">
-          <div className="flex flex-nowrap items-center justify-center gap-2 whitespace-nowrap text-[11px] sm:gap-5 sm:text-base">
-            <div className="inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-              <MessageCircle className="h-3.5 w-3.5 shrink-0 text-[#0d9488] sm:h-5 sm:w-5" />
-              <span className="font-display font-medium text-foreground">
-                Plain English updates
-              </span>
-            </div>
-            <div className="h-px w-6 shrink-0 border-t border-dashed border-[#0d9488]/30 sm:w-28" />
-            <div className="inline-flex shrink-0 items-center gap-1.5 sm:gap-2.5">
-              <ShieldCheck className="h-3.5 w-3.5 shrink-0 text-[#0d9488] sm:h-5 sm:w-5" />
-              <span className="font-display font-medium text-foreground">
-                Work you can trust
-              </span>
-            </div>
-          </div>
+          <p className="text-balance text-center font-playfair text-lg italic leading-relaxed text-foreground sm:text-xl">
+            “Quality is never an accident in technology — it is what happens
+            when engineering, AI and craft are held to the same standard.”
+          </p>
+          <p className="mt-3 text-center text-xs uppercase tracking-[0.16em] text-[#6b7280]">
+            TrishulHub — engineering, AI and quality
+          </p>
         </div>
       </div>
     </section>

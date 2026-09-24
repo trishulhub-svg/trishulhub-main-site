@@ -2,9 +2,7 @@
 
 import { motion } from 'framer-motion'
 import { Sparkles } from 'lucide-react'
-import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
-import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HowWeWork } from '@/components/trishulhub/how-we-work'
 
@@ -17,8 +15,6 @@ const FACTS = [
 ] as const
 
 export function HomeAbout() {
-  const { links } = useSiteContact()
-
   return (
     <section id="about-home" className="relative overflow-hidden py-24 sm:py-32">
       <div
@@ -54,9 +50,6 @@ export function HomeAbout() {
               engineer bespoke software and mobile apps — products that remove
               manual work, surface the right numbers, and stay fast as you grow.
             </motion.p>
-            <div className="mt-7">
-              <NexusButton href={links.whatsapp}>Talk on WhatsApp</NexusButton>
-            </div>
           </div>
         </div>
 

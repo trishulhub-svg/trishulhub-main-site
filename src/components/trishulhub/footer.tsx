@@ -1,7 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowUp, Instagram, Linkedin, Mail, MapPin, Phone } from 'lucide-react'
+import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 
@@ -70,41 +70,23 @@ export function Footer() {
                 <WhatsAppIcon size={16} />
               </a>
               <a
-                href={links.instagram}
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Instagram"
-                className={socialBtn}
-              >
-                <Instagram size={16} />
-              </a>
-              <a
                 href={links.mailto}
                 aria-label="Email"
                 className={socialBtn}
               >
                 <Mail size={16} />
               </a>
-              <a
-                href="https://www.linkedin.com/"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="LinkedIn"
-                className={socialBtn}
-              >
-                <Linkedin size={16} />
-              </a>
             </div>
           </div>
 
           <div className="lg:col-span-2">
             <h3 className="text-sm font-semibold text-white">Company</h3>
-            <ul className="mt-4 space-y-0.5">
+            <ul className="mt-5 space-y-1">
               {company.map((c) => (
                 <li key={c.label}>
                   <Link
                     href={c.href}
-                    className="th-link inline-block py-2 text-sm text-white/55 transition hover:text-white"
+                    className="th-link inline-block py-1.5 text-sm text-white/55 transition hover:text-white"
                   >
                     {c.label}
                   </Link>
@@ -115,12 +97,12 @@ export function Footer() {
 
           <div className="lg:col-span-3">
             <h3 className="text-sm font-semibold text-white">Services</h3>
-            <ul className="mt-4 space-y-0.5">
+            <ul className="mt-5 space-y-1">
               {services.map((s) => (
                 <li key={s.label}>
                   <Link
                     href={s.href}
-                    className="th-link inline-block py-2 text-sm text-white/55 transition hover:text-white"
+                    className="th-link inline-block py-1.5 text-sm text-white/55 transition hover:text-white"
                   >
                     {s.label}
                   </Link>
@@ -131,22 +113,24 @@ export function Footer() {
 
           <div className="lg:col-span-3">
             <h3 className="text-sm font-semibold text-white">Get in touch</h3>
-            <ul className="mt-5 space-y-3.5 text-sm text-white/55">
-              <li className="flex items-start gap-2.5">
-                <Mail size={15} className="mt-0.5 shrink-0 text-[#5eead4]" />
-                <a href={links.mailto} className="th-link py-1 hover:text-white">
+            {/* Same rhythm as the Company / Services columns so the three lists
+                line up: mt-5, space-y-1, py-1.5 targets. */}
+            <ul className="mt-5 space-y-1 text-sm text-white/55">
+              <li className="flex items-center gap-2.5">
+                <Mail size={15} className="shrink-0 text-[#5eead4]" />
+                <a href={links.mailto} className="th-link py-1.5 hover:text-white">
                   {email}
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
-                <Phone size={15} className="mt-0.5 shrink-0 text-[#5eead4]" />
-                <a href={links.tel} className="th-link py-1 hover:text-white">
+              <li className="flex items-center gap-2.5">
+                <Phone size={15} className="shrink-0 text-[#5eead4]" />
+                <a href={links.tel} className="th-link py-1.5 hover:text-white">
                   {phoneDisplay}
                 </a>
               </li>
-              <li className="flex items-start gap-2.5">
-                <MapPin size={15} className="mt-0.5 shrink-0 text-[#5eead4]" />
-                <span className="text-white/55">{location}</span>
+              <li className="flex items-center gap-2.5">
+                <MapPin size={15} className="shrink-0 text-[#5eead4]" />
+                <span className="py-1.5 text-white/55">{location}</span>
               </li>
             </ul>
           </div>

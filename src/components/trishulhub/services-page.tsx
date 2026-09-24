@@ -225,15 +225,17 @@ export function ServicesPage() {
                 <motion.article
                   key={s.id}
                   id={s.id}
-                  initial={{ opacity: 0, y: 24 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
                   viewport={{ once: true, amount: 0.15 }}
                   transition={{
                     duration: 0.55,
                     delay: i * 0.08,
                     ease: EASE_OUT_EXPO,
                   }}
-                  className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[transform,box-shadow,border-color] duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] hover:-translate-y-1.5 hover:border-[#0d3c1f]/30 hover:shadow-[0_26px_60px_rgba(6,43,22,0.13)] lg:max-w-none"
+                  /* No vertical movement (owner feedback) — the card stays put
+                     and the border goes bold green instead. */
+                  className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[box-shadow,border-color] duration-300 ease-out hover:border-[#0D3C1F] hover:ring-2 hover:ring-inset hover:ring-[#0D3C1F] hover:shadow-[0_18px_48px_rgba(6,43,22,0.16)] focus-within:border-[#0D3C1F] focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#0D3C1F] lg:max-w-none"
                 >
                   {/* Animated visual — full bleed, no surrounding frame */}
                   <div className="relative">
@@ -308,7 +310,6 @@ export function ServicesPage() {
                   viewport={{ once: true, amount: 0.2 }}
                   onMouseEnter={() => setStep(i)}
                   animate={{
-                    y: isActive ? -6 : 0,
                     borderColor: isActive
                       ? 'rgba(13,60,31,0.35)'
                       : 'rgba(13,60,31,0.1)',

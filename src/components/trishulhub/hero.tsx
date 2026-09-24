@@ -14,7 +14,6 @@ import {
   Sparkles,
   Zap,
 } from 'lucide-react'
-import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { HeroVisual } from '@/components/trishulhub/hero-visual'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -72,7 +71,6 @@ const PROOF = [
 ] as const
 
 export function Hero() {
-  const { links } = useSiteContact()
   const reduce = useReducedMotionSafe()
   const [wordIndex, setWordIndex] = useState(0)
 
@@ -121,7 +119,7 @@ export function Hero() {
               className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               <span className="block font-sans">
-                We build digital products that are
+                We build digital projects for growing businesses
               </span>
               {/*
                 The rotating word gets its own line and a fixed, pre-reserved
@@ -137,7 +135,7 @@ export function Hero() {
                   className="invisible whitespace-nowrap"
                   style={{ gridArea: '1 / 1' }}
                 >
-                  {LONGEST_WORD}
+                  — {LONGEST_WORD}
                 </span>
                 {/* mode="wait": the outgoing word finishes before the next one
                     appears. Without it both words render for ~380ms and visibly
@@ -154,7 +152,7 @@ export function Hero() {
                     className="whitespace-nowrap font-playfair italic text-[#0D3C1F]"
                     style={{ gridArea: '1 / 1' }}
                   >
-                    {word}
+                    — {word}
                   </motion.span>
                 </AnimatePresence>
               </span>
@@ -177,21 +175,13 @@ export function Hero() {
               transition={{ duration: 0.6, delay: 0.22, ease: EASE_OUT_EXPO }}
               className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
             >
-              <a
-                href={links.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="btn-shine inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)]"
-              >
-                Start your project
-                <ArrowRight size={16} />
-              </a>
               <Link
                 href="/services"
-                className="inline-flex h-13 items-center justify-center gap-2 rounded-xl border border-[#d1d5db] bg-white/80 px-7 py-3.5 text-sm font-semibold text-[#111111] backdrop-blur-sm transition hover:border-[#0D3C1F]/40 hover:text-[#0D3C1F]"
+                className="btn-shine inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)]"
               >
                 <Code2 size={16} />
                 Explore services
+                <ArrowRight size={16} />
               </Link>
             </motion.div>
 

@@ -8,7 +8,6 @@ import {
   Clock,
   Mail,
   MapPin,
-  MessageCircle,
   Phone,
   Send,
   ShieldCheck,
@@ -21,13 +20,14 @@ import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
-import { AboutProtocol } from '@/components/trishulhub/about-protocol'
+import { CONTACT_BUDGET_OPTIONS } from '@/lib/services-content'
+import { emailDraftUrl } from '@/lib/site-contact'
 
 const STEPS = [
   {
     n: '01',
     title: 'You send the brief',
-    text: 'Two minutes on the form — or message us directly on WhatsApp.',
+    text: 'Two minutes on the form — or message us directly on email.',
   },
   {
     n: '02',
@@ -52,7 +52,10 @@ export function ContactPage() {
   const [sending, setSending] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const { email, phoneDisplay, location, links } = useSiteContact()
+  /** The pre-filled mailto we just opened, so the modal can offer it again. */
+  const [emailHref, setEmailHref] = useState<string | null>(null)
+  const contact = useSiteContact()
+  const { email, phoneDisplay, location, links } = contact
   const formRef = useRef<HTMLFormElement>(null)
   const [service, setService] = useState('Website')
 
@@ -82,6 +85,34 @@ export function ContactPage() {
         setError(data?.error || 'Submission failed. Please try again.')
         return
       }
+      /**
+       * Owner request: after a successful submit the visitor's own mail app
+       * opens with everything they typed, so the enquiry also lands in our
+       * inbox. The lead is already stored above (visible in /admin), so a
+       * blocked mailto cannot lose the enquiry — the modal repeats the link.
+       */
+      const mailHref = emailDraftUrl(contact, {
+        subject: `Project enquiry — ${payload.service || 'Website'}`,
+        body: [
+          'Hello TrishulHub team,',
+          '',
+          payload.message,
+          '',
+          'DETAILS',
+          `• Service: ${payload.service}`,
+          `• Budget range: ${payload.budget}`,
+          `• Company: ${payload.company || '—'}`,
+          '',
+          'ABOUT ME',
+          `• Name: ${payload.name}`,
+          `• Email: ${payload.email}`,
+          '',
+          'Thanks,',
+          '',
+        ].join('\r\n'),
+      })
+      setEmailHref(mailHref)
+      window.location.href = mailHref
       formRef.current?.reset()
       setService('Website')
       setShowSuccess(true)
@@ -106,7 +137,7 @@ export function ContactPage() {
         <div className="flex flex-wrap items-center gap-x-6 gap-y-3 text-[13px] text-[#4b5563]">
           <span className="inline-flex items-center gap-2">
             <Clock size={14} className="text-[#0d9488]" />
-            Replies within 1 business day
+            Replies within 2–3 business days
           </span>
           <span className="inline-flex items-center gap-2">
             <ShieldCheck size={14} className="text-[#0d9488]" />
@@ -220,13 +251,12 @@ export function ContactPage() {
                 <select
                   name="budget"
                   className="field-input appearance-none pr-10"
-                  defaultValue="£900 – £2,000"
+                  defaultValue="£1,500"
                 >
-                  <option>Under £900</option>
-                  <option>£900 – £2,000</option>
-                  <option>£2,000 – £5,000</option>
-                  <option>£5,000+</option>
-                  <option>Not decided yet</option>
+                  {/* Same ladder as the project planner. */}
+                  {CONTACT_BUDGET_OPTIONS.map((option) => (
+                    <option key={option}>{option}</option>
+                  ))}
                 </select>
                 <ChevronDown
                   size={16}
@@ -352,12 +382,6 @@ export function ContactPage() {
         <HomeGetInTouch />
       </section>
 
-      {/* Project planner — same wizard as the home page, so visitors can send a
-          structured brief instead of typing one out. */}
-      <div className="lt-container mt-4">
-        <AboutProtocol className="mt-14 lg:mt-20" />
-      </div>
-
       <AnimatePresence>
         {showSuccess ? (
           <motion.div
@@ -396,19 +420,22 @@ export function ContactPage() {
                 Message received
               </h3>
               <p className="mt-2 text-sm leading-relaxed text-[#6b7280]">
-                Thanks — your enquiry is with us. Expect a reply within one
-                business day. Need it sooner? Ping us on WhatsApp.
+                Thanks — your enquiry is with us and your email app should have
+                opened with the details ready to send. Expect a reply within 2–3
+                business days.
               </p>
               <div className="mt-6 space-y-2.5">
-                <a
-                  href={links.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white transition hover:bg-[#164a28]"
-                >
-                  <MessageCircle size={15} />
-                  Continue on WhatsApp
-                </a>
+                {/* If the browser blocked the automatic mailto, this opens the
+                    same pre-filled email. */}
+                {emailHref ? (
+                  <a
+                    href={emailHref}
+                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white transition hover:bg-[#164a28]"
+                  >
+                    <Mail size={15} />
+                    Open the email again
+                  </a>
+                ) : null}
                 <button
                   type="button"
                   onClick={() => setShowSuccess(false)}

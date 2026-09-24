@@ -1,13 +1,14 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import { ArrowRight, Clock, Mail, MessageCircle, ShieldCheck } from 'lucide-react'
 import { HeroAccentWord } from './hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const ASSURANCES = [
-  { icon: Clock, label: 'Reply within 1 business day' },
+  { icon: Clock, label: 'Replies within 2–3 business days' },
   { icon: ShieldCheck, label: 'NDA-friendly, GDPR-aware' },
   { icon: MessageCircle, label: 'No obligation first call' },
 ] as const
@@ -53,15 +54,13 @@ export function CTA() {
             </p>
 
             <div className="mt-10 flex flex-col items-center justify-center gap-3 sm:flex-row sm:gap-4">
-              <a
-                href={links.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                href="/contact"
                 className="btn-shine th-keep-light inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-white px-8 py-3.5 text-sm font-semibold text-[#07140c] transition hover:-translate-y-0.5 hover:shadow-[0_16px_40px_rgba(255,255,255,0.18)] sm:w-auto"
               >
-                Start on WhatsApp
+                Contact us
                 <ArrowRight size={16} />
-              </a>
+              </Link>
               <a
                 href={links.mailto}
                 className="inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl border border-white/25 px-8 py-3.5 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/5 sm:w-auto"

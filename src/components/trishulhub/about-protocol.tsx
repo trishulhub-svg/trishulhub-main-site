@@ -4,6 +4,7 @@ import { useCallback, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Check } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { BUDGET_OPTIONS } from '@/lib/services-content'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
@@ -14,7 +15,7 @@ import {
 } from '@/lib/site-contact'
 
 /** Projects start at £1,500; the last stop is an open "Custom" budget. */
-const BUDGETS_GBP = ['£1,500', '£2,500', '£5,000', '£10,000', 'Custom'] as const
+const BUDGETS_GBP = BUDGET_OPTIONS
 
 const STEPS = [
   {
@@ -138,7 +139,7 @@ export function AboutProtocol({
             </h3>
             <p className="mt-3 text-[#6b7280]">
               Tell us a few details and we will reply with a simple plan within
-              48 hours.
+              2–3 business days.
             </p>
 
             <div className="mt-8 flex items-center justify-center gap-3 sm:gap-4">
