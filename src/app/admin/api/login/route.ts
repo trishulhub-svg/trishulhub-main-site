@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { signSession, setSessionCookie } from '@/lib/auth'
+import { hashPassword, needsRehash, verifyPassword } from '@/lib/password'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -20,11 +21,23 @@ export async function POST(req: NextRequest) {
 
     const founder = await db.founder.findUnique({ where: { username } })
 
-    if (!founder || founder.password !== password) {
+    if (!founder || !verifyPassword(password, founder.password)) {
       return NextResponse.json(
         { ok: false, error: 'Invalid username or password.' },
         { status: 401 },
       )
+    }
+
+    // Anyone still on a legacy plain-text row gets hashed on their next login.
+    if (needsRehash(founder.password)) {
+      await db.founder
+        .update({
+          where: { id: founder.id },
+          data: { password: hashPassword(password) },
+        })
+        .catch((error) => {
+          console.warn('[admin/login] password rehash failed', error)
+        })
     }
 
     const token = await signSession({

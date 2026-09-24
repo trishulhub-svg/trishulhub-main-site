@@ -15,6 +15,36 @@ export function LoginClient() {
   const [showPass, setShowPass] = useState(false)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [forgotOpen, setForgotOpen] = useState(false)
+  const [forgotId, setForgotId] = useState('')
+  const [forgotSending, setForgotSending] = useState(false)
+  const [forgotMessage, setForgotMessage] = useState<string | null>(null)
+  const [forgotOk, setForgotOk] = useState(false)
+
+  async function handleForgot(e: React.FormEvent) {
+    e.preventDefault()
+    setForgotSending(true)
+    setForgotMessage(null)
+    try {
+      const res = await fetch('/admin/api/forgot-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ identifier: forgotId }),
+      })
+      const data = await res.json()
+      setForgotOk(Boolean(data?.ok))
+      setForgotMessage(
+        data?.ok
+          ? 'If that account exists, a reset link is on its way. It expires in 60 minutes.'
+          : (data?.error ?? 'Could not send the reset email.'),
+      )
+    } catch {
+      setForgotOk(false)
+      setForgotMessage('Network error. Please try again.')
+    } finally {
+      setForgotSending(false)
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -153,8 +183,63 @@ export function LoginClient() {
               </button>
             </form>
 
+            {/* Forgot password — emails a one-time reset link via SMTP. */}
+            <div className="mt-5 text-center">
+              {forgotOpen ? (
+                <form onSubmit={handleForgot} className="space-y-3 text-left">
+                  <p className="text-xs uppercase tracking-wider text-[#9ca3af]">
+                    Reset your password
+                  </p>
+                  <input
+                    value={forgotId}
+                    onChange={(e) => setForgotId(e.target.value)}
+                    placeholder="Username or email address"
+                    autoComplete="username"
+                    required
+                    className="w-full rounded-xl border border-[#111111]/15 bg-[#fafafa] px-3 py-2.5 text-sm text-[#111111] placeholder-[#9ca3af] transition focus:border-[#0D3C1F] focus:outline-none focus:ring-1 focus:ring-[#0D3C1F]/30"
+                  />
+                  {forgotMessage ? (
+                    <p
+                      className={`text-xs leading-relaxed ${
+                        forgotOk ? 'text-[#0D3C1F]' : 'text-red-600'
+                      }`}
+                    >
+                      {forgotMessage}
+                    </p>
+                  ) : null}
+                  <div className="flex items-center gap-2">
+                    <button
+                      type="submit"
+                      disabled={forgotSending}
+                      className="inline-flex h-10 flex-1 items-center justify-center rounded-xl border border-[#0D3C1F]/40 bg-[#0D3C1F]/10 text-sm font-semibold text-[#0D3C1F] transition hover:bg-[#0D3C1F]/20 disabled:opacity-50"
+                    >
+                      {forgotSending ? 'Sending…' : 'Email me a reset link'}
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setForgotOpen(false)
+                        setForgotMessage(null)
+                      }}
+                      className="h-10 rounded-xl px-3 text-sm font-medium text-[#6b7280] transition hover:text-[#111111]"
+                    >
+                      Cancel
+                    </button>
+                  </div>
+                </form>
+              ) : (
+                <button
+                  type="button"
+                  onClick={() => setForgotOpen(true)}
+                  className="th-link text-sm font-medium text-[#6b7280] transition hover:text-[#0D3C1F]"
+                >
+                  Forgot password?
+                </button>
+              )}
+            </div>
+
             <p className="mt-6 text-center text-xs text-[#9ca3af]">
-              Credentials are private — founders set their own passwords.
+              Credentials are private — founders manage their own passwords.
             </p>
           </div>
         </motion.div>

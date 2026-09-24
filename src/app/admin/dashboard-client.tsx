@@ -41,6 +41,7 @@ import {
   leadPageUrl,
 } from '@/lib/lead-share'
 import { formatPhoneDisplay } from '@/lib/site-contact'
+import { SmtpSettingsCard } from './smtp-settings-card'
 
 type Skill = { name: string; level: number }
 type Education = { degree: string; school: string; year: string; description: string }
@@ -89,6 +90,8 @@ type ContactLeadRow = {
 }
 
 export function AdminDashboardClient({ founder: initialFounder }: { founder: Founder }) {
+  /** SMTP credentials are Taroon's to manage. */
+  const isOwner = initialFounder.slug === 'taroon'
   const router = useRouter()
   const [founder, setFounder] = useState<Founder>(initialFounder)
   const [tab, setTab] = useState<Tab>('profile')
@@ -571,6 +574,9 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
 
         {/* Tab content */}
         <div className="space-y-6">
+          {/* SMTP credentials — Taroon only */}
+          {tab === 'profile' && isOwner ? <SmtpSettingsCard /> : null}
+
           {tab === 'profile' && (
             <Card title="Profile Photo" icon={<UserIcon size={16} />}>
               <div className="flex flex-col items-center gap-6 text-center sm:flex-row sm:items-center sm:text-left">

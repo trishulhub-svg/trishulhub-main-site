@@ -81,6 +81,26 @@ model ContactLead {
   updatedAt  DateTime @updatedAt
 }
 
+/// Key/value store for owner-editable runtime settings (SMTP credentials etc).
+model Setting {
+  key       String   @id
+  value     String
+  updatedBy String?
+  updatedAt DateTime @updatedAt
+}
+
+/// Single-use tokens for the "forgot password" flow.
+model PasswordReset {
+  id        String    @id @default(cuid())
+  founderId String
+  tokenHash String    @unique
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([founderId])
+}
+
 // =========================================================
 // E-COMMERCE SCHEMA — products, categories, cart, orders
 // =========================================================

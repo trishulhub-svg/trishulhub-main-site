@@ -1,6 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { db } from '@/lib/db'
 import { getCurrentFounder } from '@/lib/auth'
+import {
+  MIN_PASSWORD_LENGTH,
+  hashPassword,
+  verifyPassword,
+} from '@/lib/password'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -133,9 +138,12 @@ export async function PUT(req: NextRequest) {
     }
     if (typeof body.password === 'string' && body.password.trim().length > 0) {
       const next = body.password.trim()
-      if (next.length < 4) {
+      if (next.length < MIN_PASSWORD_LENGTH) {
         return NextResponse.json(
-          { ok: false, error: 'New password must be at least 4 characters.' },
+          {
+            ok: false,
+            error: `New password must be at least ${MIN_PASSWORD_LENGTH} characters.`,
+          },
           { status: 400 },
         )
       }
@@ -147,13 +155,13 @@ export async function PUT(req: NextRequest) {
           { status: 400 },
         )
       }
-      if (current !== founder.password) {
+      if (!verifyPassword(current, founder.password)) {
         return NextResponse.json(
           { ok: false, error: 'Current password is incorrect.' },
           { status: 400 },
         )
       }
-      data.password = next
+      data.password = hashPassword(next)
     }
 
     const updated = await db.founder.update({
