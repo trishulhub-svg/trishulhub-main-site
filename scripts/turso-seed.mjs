@@ -193,51 +193,33 @@ const founderCount = await client.execute(`SELECT COUNT(*) as n FROM "Founder"`)
 if (Number(founderCount.rows[0].n) > 0) {
   console.log(`\n👥 Founder table already has ${founderCount.rows[0].n} rows — skipping seed.`)
 } else {
-  console.log('\n👥 Seeding founders (3)…')
+  console.log('\n👥 Seeding founders…')
   const founders = [
     {
       slug: 'taroon', name: 'Taroon', initial: 'T',
-      role: 'CEO & Chief Product Architect', projects: '40+',
+      role: 'CEO & Chief Product Architect',
       bio: 'Owns company vision, strategy & product roadmap. Architects the TrishulHub dashboard system and holds final authority on tools, tech stack and platform choices. Manages major client relationships & partnerships and holds the override vote on all operational matters.',
-      username: 'taroon', password: 'taroon123',
-      skills: JSON.stringify([{name:'Product Strategy',level:95},{name:'System Architecture',level:90},{name:'Client Relations',level:92}]),
-      education: JSON.stringify([{degree:'B.Tech Computer Science',school:'IIT',year:'2020',description:'Specialized in distributed systems.'}]),
-      experience: JSON.stringify([{role:'CEO & Architect',company:'TrishulHub',period:'2020 - Present',description:'Leading product vision and architecture.'}]),
-      projectsList: JSON.stringify([{name:'TrishulHub Dashboard',description:'Internal operations dashboard.',link:'#',year:'2024'}]),
-    },
-    {
-      slug: 'akshat', name: 'Akshat', initial: 'A',
-      role: 'Head of IT & Development', projects: '45+',
-      bio: 'Leads execution of all development work across TrishulHub and client projects. Manages a team of three trainee developers, owns code quality, deployment and technical delivery, and translates architecture into working, shipped features.',
-      username: 'akshat', password: 'akshat123',
-      skills: JSON.stringify([{name:'React / Next.js',level:95},{name:'Node.js',level:90},{name:'DevOps',level:85}]),
-      education: JSON.stringify([{degree:'B.Tech Information Technology',school:'NIT',year:'2021',description:'Full-stack focus.'}]),
-      experience: JSON.stringify([{role:'Head of Development',company:'TrishulHub',period:'2021 - Present',description:'Manages dev team and delivery.'}]),
-      projectsList: JSON.stringify([{name:'Client SaaS Platform',description:'Full SaaS build with Next.js + Prisma.',link:'#',year:'2024'}]),
+      username: 'taroon',
     },
     {
       slug: 'pruthvi', name: 'Pruthviraj', initial: 'P',
-      role: 'COO & Head of Finance/Admin', projects: '35+',
+      role: 'COO & Head of Finance/Admin',
       bio: 'Oversees finance (invoicing, expenses, profit, tax), HR (onboarding, attendance, payroll), operations (process docs, vendor management) and admin (legal, compliance, contracts). Keeps the company running smoothly behind every project.',
-      username: 'pruthvi', password: 'pruthvi123',
-      skills: JSON.stringify([{name:'Operations',level:92},{name:'Finance',level:88},{name:'HR & Compliance',level:85}]),
-      education: JSON.stringify([{degree:'MBA Finance',school:'IIM',year:'2019',description:'Operations and finance specialization.'}]),
-      experience: JSON.stringify([{role:'COO',company:'TrishulHub',period:'2020 - Present',description:'Owns finance, HR, ops, and admin.'}]),
-      projectsList: JSON.stringify([{name:'Ops Process Overhaul',description:'Redesigned company operations playbook.',link:'#',year:'2023'}]),
+      username: 'pruthvi',
     },
   ]
 
   for (const f of founders) {
     const id = cuid('fdr_')
+    // Unguessable placeholder — nobody can sign in until the founder sets a
+    // password via "Forgot password" (SMTP). Never seed a real password.
+    const lockedPassword = `!${cuid()}${Math.random().toString(36).slice(2)}`
     const ok = await insertIgnore(
       `INSERT INTO "Founder" (
-        id, slug, name, initial, role, bio, projects,
-        skills, education, experience, "projectsList",
+        id, slug, name, initial, role, bio,
         username, password, "updatedAt"
-      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
-      [id, f.slug, f.name, f.initial, f.role, f.bio, f.projects,
-       f.skills, f.education, f.experience, f.projectsList,
-       f.username, f.password],
+      ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP)`,
+      [id, f.slug, f.name, f.initial, f.role, f.bio, f.username, lockedPassword],
     )
     console.log(`  ${ok ? '✓' : '↻'} ${f.name} (${f.role})`)
   }

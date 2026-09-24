@@ -14,13 +14,8 @@ export async function GET() {
         initial: true,
         name: true,
         role: true,
-        projects: true,
         bio: true,
         image: true,
-        email: true,
-        linkedin: true,
-        whatsapp: true,
-        instagram: true,
       },
     })
     return NextResponse.json(

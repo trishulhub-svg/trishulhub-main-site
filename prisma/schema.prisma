@@ -34,39 +34,24 @@ model Post {
 }
 
 model Founder {
-  id           String   @id @default(cuid())
-  slug         String   @unique // taroon, akshat, pruthvi (3 founders)
-  name         String
-  initial      String
-  role         String
-  bio          String
-  projects     String   // "50+"
-  // Profile details
-  image        String?  // Main portfolio / hero photo (URL or data URL)
-  image2       String?  // About Me section photo (URL or data URL)
-  videoUrl     String?  // legacy — unused in UI (kept for DB compat)
-  dateOfBirth  String?
-  address      String?
-  zipCode      String?
-  email        String?
-  phone        String?
-  origin       String?  // hometown / origin
-  github       String?  // legacy — unused in Meet Our Founders UI
-  linkedin     String?
-  twitter      String?  // legacy — unused in Meet Our Founders UI
-  website      String?
-  whatsapp     String?  // digits / phone → https://wa.me/{digits}
-  instagram    String?  // profile URL
-  // JSON-stringified arrays of objects
-  skills       String   // [{name, level}]
-  education    String   // [{degree, school, year, description}]
-  experience   String   // [{role, company, period, description}]
-  projectsList String   // [{name, description, link, year}]
+  id        String  @id @default(cuid())
+  slug      String  @unique // taroon, pruthvi
+  name      String
+  initial   String
+  role      String
+  bio       String
+  // Profile photos (URL or data URL)
+  image     String? // Main portfolio / hero photo
+  image2    String? // About Me section photo
+  email     String?
+  linkedin  String?
+  whatsapp  String? // digits / phone → https://wa.me/{digits}
+  instagram String? // profile URL
   // Auth
-  username     String   @unique
-  password     String   // plain for now (4 internal users only)
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  username  String   @unique
+  password  String   // scrypt hash (see src/lib/password.ts)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 model ContactLead {

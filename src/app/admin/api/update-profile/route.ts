@@ -14,25 +14,12 @@ type UpdateBody = {
   name?: string
   role?: string
   bio?: string
-  projects?: string
   image?: string | null
   image2?: string | null
-  videoUrl?: string | null
-  dateOfBirth?: string | null
-  address?: string | null
-  zipCode?: string | null
   email?: string | null
-  origin?: string | null
-  github?: string | null
   linkedin?: string | null
-  twitter?: string | null
-  website?: string | null
   whatsapp?: string | null
   instagram?: string | null
-  skills?: { name: string; level: number }[]
-  education?: { degree: string; school: string; year: string; description: string }[]
-  experience?: { role: string; company: string; period: string; description: string }[]
-  projectsList?: { name: string; description: string; link: string; year: string }[]
   currentPassword?: string
   password?: string // optional — only update if non-empty + currentPassword matches
 }
@@ -52,25 +39,12 @@ export async function GET() {
       initial: founder.initial,
       role: founder.role,
       bio: founder.bio,
-      projects: founder.projects,
       image: founder.image,
       image2: founder.image2,
-      videoUrl: founder.videoUrl,
-      dateOfBirth: founder.dateOfBirth,
-      address: founder.address,
-      zipCode: founder.zipCode,
       email: founder.email,
-      origin: founder.origin,
-      github: founder.github,
       linkedin: founder.linkedin,
-      twitter: founder.twitter,
-      website: founder.website,
       whatsapp: founder.whatsapp,
       instagram: founder.instagram,
-      skills: JSON.parse(founder.skills),
-      education: JSON.parse(founder.education),
-      experience: JSON.parse(founder.experience),
-      projectsList: JSON.parse(founder.projectsList),
       username: founder.username,
     },
   })
@@ -90,19 +64,10 @@ export async function PUT(req: NextRequest) {
     if (typeof body.name === 'string' && body.name.trim()) data.name = body.name.trim()
     if (typeof body.role === 'string') data.role = body.role
     if (typeof body.bio === 'string') data.bio = body.bio
-    if (typeof body.projects === 'string') data.projects = body.projects
     if (body.image !== undefined) data.image = body.image
     if (body.image2 !== undefined) data.image2 = body.image2
-    if (body.videoUrl !== undefined) data.videoUrl = body.videoUrl
-    if (body.dateOfBirth !== undefined) data.dateOfBirth = body.dateOfBirth
-    if (body.address !== undefined) data.address = body.address
-    if (body.zipCode !== undefined) data.zipCode = body.zipCode
     if (body.email !== undefined) data.email = body.email
-    if (body.origin !== undefined) data.origin = body.origin
-    if (body.github !== undefined) data.github = body.github
     if (body.linkedin !== undefined) data.linkedin = body.linkedin
-    if (body.twitter !== undefined) data.twitter = body.twitter
-    if (body.website !== undefined) data.website = body.website
     if (body.whatsapp !== undefined) {
       data.whatsapp =
         typeof body.whatsapp === 'string'
@@ -111,31 +76,6 @@ export async function PUT(req: NextRequest) {
     }
     if (body.instagram !== undefined) data.instagram = body.instagram
 
-    if (Array.isArray(body.skills)) {
-      data.skills = JSON.stringify(
-        body.skills
-          .filter((s) => s && typeof s.name === 'string' && s.name.trim())
-          .map((s) => ({
-            name: String(s.name).trim(),
-            level: Math.max(0, Math.min(100, Number(s.level) || 0)),
-          })),
-      )
-    }
-    if (Array.isArray(body.education)) {
-      data.education = JSON.stringify(
-        body.education.filter((e) => e && e.degree && e.degree.trim()),
-      )
-    }
-    if (Array.isArray(body.experience)) {
-      data.experience = JSON.stringify(
-        body.experience.filter((e) => e && e.role && e.role.trim()),
-      )
-    }
-    if (Array.isArray(body.projectsList)) {
-      data.projectsList = JSON.stringify(
-        body.projectsList.filter((p) => p && p.name && p.name.trim()),
-      )
-    }
     if (typeof body.password === 'string' && body.password.trim().length > 0) {
       const next = body.password.trim()
       if (next.length < MIN_PASSWORD_LENGTH) {

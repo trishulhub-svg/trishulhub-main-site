@@ -60,38 +60,7 @@ export default async function FounderPage({
     initial: founder.initial,
     role: founder.role,
     bio: founder.bio,
-    projects: founder.projects,
     image: founder.image,
-    image2: founder.image2,
-    dateOfBirth: founder.dateOfBirth,
-    address: founder.address,
-    zipCode: founder.zipCode,
-      email: founder.email,
-      github: founder.github,
-    linkedin: founder.linkedin,
-    twitter: founder.twitter,
-    website: founder.website,
-    whatsapp: founder.whatsapp,
-    instagram: founder.instagram,
-    skills: JSON.parse(founder.skills) as { name: string; level: number }[],
-    education: JSON.parse(founder.education) as {
-      degree: string
-      school: string
-      year: string
-      description: string
-    }[],
-    experience: JSON.parse(founder.experience) as {
-      role: string
-      company: string
-      period: string
-      description: string
-    }[],
-    projectsList: JSON.parse(founder.projectsList) as {
-      name: string
-      description: string
-      link: string
-      year: string
-    }[],
   }
 
   return (

@@ -9,45 +9,13 @@ type Founder = {
   initial: string
   role: string
   bio: string
-  projects: string
   image: string | null
-  image2: string | null
-  dateOfBirth: string | null
-  address: string | null
-  zipCode: string | null
-  email: string | null
-  github: string | null
-  linkedin: string | null
-  twitter: string | null
-  website: string | null
-  whatsapp: string | null
-  instagram: string | null
-  skills: { name: string; level: number }[]
-  education: {
-    degree: string
-    school: string
-    year: string
-    description: string
-  }[]
-  experience: {
-    role: string
-    company: string
-    period: string
-    description: string
-  }[]
-  projectsList: {
-    name: string
-    description: string
-    link: string
-    year: string
-  }[]
 }
 
 /**
  * Owner request: the founder page shows only the photo, name, position and
  * description. Skills / education / experience / projects and the personal
- * contact blocks were removed — the admin editor still keeps those fields, so
- * nothing was deleted from the database.
+ * contact fields were removed from both the page and the admin editor.
  */
 export function FounderDetailClient({
   founder: f,

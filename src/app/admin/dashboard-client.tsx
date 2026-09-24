@@ -5,10 +5,6 @@ import { useRouter } from 'next/navigation'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   User as UserIcon,
-  Briefcase,
-  GraduationCap,
-  Code,
-  FolderGit2,
   Mail,
   Phone,
   MapPin,
@@ -21,32 +17,17 @@ import {
   Loader2,
   CheckCircle2,
   AlertCircle,
-  Plus,
-  Trash2,
   Upload,
-  ExternalLink,
   Image as ImageIcon,
+  ExternalLink,
   Menu,
   X,
-  Inbox,
-  Link2,
-  Check,
-  FileDown,
 } from 'lucide-react'
 import { BrandLogo } from '@/components/trishulhub/brand-logo'
 import Link from 'next/link'
-import {
-  buildUniversalLeadLink,
-  downloadLeadDoc,
-  leadPageUrl,
-} from '@/lib/lead-share'
 import { formatPhoneDisplay } from '@/lib/site-contact'
 import { SmtpSettingsCard } from './smtp-settings-card'
 
-type Skill = { name: string; level: number }
-type Education = { degree: string; school: string; year: string; description: string }
-type Experience = { role: string; company: string; period: string; description: string }
-type Project = { name: string; description: string; link: string; year: string }
 
 type Founder = {
   id: string
@@ -55,39 +36,17 @@ type Founder = {
   initial: string
   role: string
   bio: string
-  projects: string
   image: string | null
   image2: string | null
-  videoUrl: string | null
-  dateOfBirth: string | null
-  address: string | null
-  zipCode: string | null
-    email: string | null
-    origin: string | null
-  github: string | null
+  email: string | null
   linkedin: string | null
-  twitter: string | null
-  website: string | null
   whatsapp: string | null
   instagram: string | null
-  skills: Skill[]
-  education: Education[]
-  experience: Experience[]
-  projectsList: Project[]
   username: string
 }
 
-type Tab = 'profile' | 'about' | 'skills' | 'education' | 'experience' | 'projects' | 'leads' | 'security'
+type Tab = 'profile' | 'about' | 'security'
 
-type ContactLeadRow = {
-  id: string
-  name: string
-  email: string
-  service: string
-  message: string
-  shareToken: string
-  createdAt: string
-}
 
 export function AdminDashboardClient({ founder: initialFounder }: { founder: Founder }) {
   /** SMTP credentials are Taroon's to manage. */
@@ -117,10 +76,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     whatsappPrefill: 'Hi TrishulHub — I want to talk about a project.',
   })
   const [savingSite, setSavingSite] = useState(false)
-  const [leads, setLeads] = useState<ContactLeadRow[]>([])
-  const [leadsLoading, setLeadsLoading] = useState(false)
-  const [leadsError, setLeadsError] = useState<string | null>(null)
-  const [copiedToken, setCopiedToken] = useState<string | null>(null)
 
   // Auto-clear save notice
   useEffect(() => {
@@ -129,79 +84,10 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
     return () => clearTimeout(t)
   }, [savedAt])
 
-  useEffect(() => {
-    if (tab !== 'leads') return
-    let cancelled = false
-    ;(async () => {
-      setLeadsLoading(true)
-      setLeadsError(null)
-      try {
-        const res = await fetch('/admin/api/leads')
-        const data = await res.json()
-        if (cancelled) return
-        if (!res.ok || !data.ok) {
-          setLeadsError(data?.error || 'Could not load leads')
-          setLeads([])
-          return
-        }
-        setLeads(
-          (data.leads || []).map((l: ContactLeadRow) => ({
-            ...l,
-            createdAt: l.createdAt,
-          })),
-        )
-      } catch {
-        if (!cancelled) {
-          setLeadsError('Network error loading leads')
-          setLeads([])
-        }
-      } finally {
-        if (!cancelled) setLeadsLoading(false)
-      }
-    })()
-    return () => {
-      cancelled = true
-    }
-  }, [tab])
 
-  function openLeadPreview(lead: ContactLeadRow) {
-    window.open(leadPageUrl(lead), '_blank', 'noopener,noreferrer')
-  }
 
-  async function copyLeadLink(lead: ContactLeadRow) {
-    const payload = buildUniversalLeadLink(lead)
-    try {
-      await navigator.clipboard.writeText(payload)
-      setCopiedToken(lead.id)
-      window.setTimeout(() => setCopiedToken(null), 2000)
-    } catch {
-      window.prompt('Copy this lead payload:', payload)
-    }
-  }
 
-  function downloadLead(lead: ContactLeadRow) {
-    downloadLeadDoc(lead)
-  }
 
-  async function deleteLead(lead: ContactLeadRow) {
-    const ok = window.confirm(`Delete lead from ${lead.name} (${lead.email})?`)
-    if (!ok) return
-    try {
-      const res = await fetch('/admin/api/leads', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ id: lead.id }),
-      })
-      const data = await res.json()
-      if (!res.ok || !data.ok) {
-        setLeadsError(data?.error || 'Could not delete lead')
-        return
-      }
-      setLeads((prev) => prev.filter((l) => l.id !== lead.id))
-    } catch {
-      setLeadsError('Network error while deleting')
-    }
-  }
 
   useEffect(() => {
     fetch('/admin/api/site-contact')
@@ -240,25 +126,12 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         name: founder.name,
         role: founder.role,
         bio: founder.bio,
-        projects: founder.projects,
         image: founder.image,
         image2: founder.image2,
-        videoUrl: founder.videoUrl,
-        dateOfBirth: founder.dateOfBirth,
-        address: founder.address,
-        zipCode: founder.zipCode,
-          email: founder.email,
-          origin: founder.origin,
-        github: founder.github,
+        email: founder.email,
         linkedin: founder.linkedin,
-        twitter: founder.twitter,
-        website: founder.website,
         whatsapp: founder.whatsapp,
         instagram: founder.instagram,
-        skills: founder.skills,
-        education: founder.education,
-        experience: founder.experience,
-        projectsList: founder.projectsList,
       }
       if (
         currentPassword.trim() ||
@@ -356,79 +229,13 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
   }
 
   /* ----- helpers for editing arrays ----- */
-  function updateSkill(i: number, key: keyof Skill, value: string | number) {
-    setFounder((f) => {
-      const skills = [...f.skills]
-      skills[i] = { ...skills[i], [key]: value }
-      return { ...f, skills }
-    })
-  }
-  function addSkill() {
-    setFounder((f) => ({ ...f, skills: [...f.skills, { name: '', level: 50 }] }))
-  }
-  function removeSkill(i: number) {
-    setFounder((f) => ({ ...f, skills: f.skills.filter((_, idx) => idx !== i) }))
-  }
 
-  function updateEducation(i: number, key: keyof Education, value: string) {
-    setFounder((f) => {
-      const education = [...f.education]
-      education[i] = { ...education[i], [key]: value }
-      return { ...f, education }
-    })
-  }
-  function addEducation() {
-    setFounder((f) => ({
-      ...f,
-      education: [...f.education, { degree: '', school: '', year: '', description: '' }],
-    }))
-  }
-  function removeEducation(i: number) {
-    setFounder((f) => ({ ...f, education: f.education.filter((_, idx) => idx !== i) }))
-  }
 
-  function updateExperience(i: number, key: keyof Experience, value: string) {
-    setFounder((f) => {
-      const experience = [...f.experience]
-      experience[i] = { ...experience[i], [key]: value }
-      return { ...f, experience }
-    })
-  }
-  function addExperience() {
-    setFounder((f) => ({
-      ...f,
-      experience: [...f.experience, { role: '', company: '', period: '', description: '' }],
-    }))
-  }
-  function removeExperience(i: number) {
-    setFounder((f) => ({ ...f, experience: f.experience.filter((_, idx) => idx !== i) }))
-  }
 
-  function updateProject(i: number, key: keyof Project, value: string) {
-    setFounder((f) => {
-      const projectsList = [...f.projectsList]
-      projectsList[i] = { ...projectsList[i], [key]: value }
-      return { ...f, projectsList }
-    })
-  }
-  function addProject() {
-    setFounder((f) => ({
-      ...f,
-      projectsList: [...f.projectsList, { name: '', description: '', link: '', year: '' }],
-    }))
-  }
-  function removeProject(i: number) {
-    setFounder((f) => ({ ...f, projectsList: f.projectsList.filter((_, idx) => idx !== i) }))
-  }
 
   const tabs: { id: Tab; label: string; icon: React.ReactNode }[] = [
     { id: 'profile', label: 'Profile', icon: <UserIcon size={15} /> },
     { id: 'about', label: 'About & Contact', icon: <Mail size={15} /> },
-    { id: 'skills', label: 'Skills', icon: <Code size={15} /> },
-    { id: 'education', label: 'Education', icon: <GraduationCap size={15} /> },
-    { id: 'experience', label: 'Experience', icon: <Briefcase size={15} /> },
-    { id: 'projects', label: 'Projects', icon: <FolderGit2 size={15} /> },
-    { id: 'leads', label: 'Form leads', icon: <Inbox size={15} /> },
     { id: 'security', label: 'Security', icon: <Lock size={15} /> },
   ]
 
@@ -707,13 +514,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
                     placeholder="e.g. Fullstack Developer"
                   />
                 </Field>
-                <Field label="Projects Count (short text)">
-                  <Input
-                    value={founder.projects}
-                    onChange={(v) => setFounder((f) => ({ ...f, projects: v }))}
-                    placeholder="e.g. 50+"
-                  />
-                </Field>
                 <Field label="Bio">
                   <Textarea
                     value={founder.bio}
@@ -810,45 +610,6 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
           )}
 
           {tab === 'about' && (
-            <Card title="Your Portfolio Contact" icon={<Mail size={16} />}>
-              <p className="mb-4 text-sm text-[#9ca3af]">
-                Shown on your personal founder portfolio page only.
-              </p>
-              <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-                <Field label="Date of Birth">
-                  <Input
-                    value={founder.dateOfBirth ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, dateOfBirth: v || null }))}
-                    placeholder="e.g. January 15, 1998"
-                  />
-                </Field>
-                <Field label="Address">
-                  <Input
-                    value={founder.address ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, address: v || null }))}
-                    placeholder="City, State, Country"
-                  />
-                </Field>
-                <Field label="Zip Code">
-                  <Input
-                    value={founder.zipCode ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, zipCode: v || null }))}
-                    placeholder="e.g. 360001"
-                  />
-                </Field>
-                <Field label="Email">
-                  <Input
-                    value={founder.email ?? ''}
-                    onChange={(v) => setFounder((f) => ({ ...f, email: v || null }))}
-                    placeholder="you@trishulhub.com"
-                    type="email"
-                  />
-                </Field>
-              </div>
-            </Card>
-          )}
-
-          {tab === 'about' && (
             <Card title="Social Links" icon={<Globe size={16} />}>
               <p className="mb-4 text-sm text-[#9ca3af]">
                 Shown on Meet Our Founders (About us). Links are built automatically:
@@ -902,361 +663,10 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
             </Card>
           )}
 
-          {tab === 'skills' && (
-            <Card
-              title="Skills"
-              icon={<Code size={16} />}
-              action={
-                <button
-                  onClick={addSkill}
-                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
-                >
-                  <Plus size={13} />
-                  Add Skill
-                </button>
-              }
-            >
-              {founder.skills.length === 0 ? (
-                <EmptyState text="No skills yet. Click 'Add Skill' to begin." />
-              ) : (
-                <div className="space-y-3">
-                  {founder.skills.map((s, i) => (
-                    <div
-                      key={i}
-                      className="flex flex-col gap-3 rounded-xl border border-[#111111] bg-white p-3 sm:flex-row sm:items-center"
-                    >
-                      <Input
-                        value={s.name}
-                        onChange={(v) => updateSkill(i, 'name', v)}
-                        placeholder="Skill name (e.g. React / Next.js)"
-                        className="flex-1"
-                      />
-                      <div className="flex items-center gap-3">
-                        <input
-                          type="range"
-                          min={0}
-                          max={100}
-                          value={s.level}
-                          onChange={(e) => updateSkill(i, 'level', Number(e.target.value))}
-                          className="h-2 flex-1 cursor-pointer appearance-none rounded-full bg-[#e5e7eb] accent-[#0D3C1F] sm:w-40"
-                        />
-                        <span className="w-12 text-right text-sm font-semibold text-[#0D3C1F]">
-                          {s.level}%
-                        </span>
-                        <button
-                          onClick={() => removeSkill(i)}
-                          aria-label="Remove skill"
-                          className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          )}
 
-          {tab === 'education' && (
-            <Card
-              title="Education"
-              icon={<GraduationCap size={16} />}
-              action={
-                <button
-                  onClick={addEducation}
-                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
-                >
-                  <Plus size={13} />
-                  Add Education
-                </button>
-              }
-            >
-              {founder.education.length === 0 ? (
-                <EmptyState text="No education entries yet." />
-              ) : (
-                <div className="space-y-4">
-                  {founder.education.map((e, i) => (
-                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
-                          Entry {i + 1}
-                        </span>
-                        <button
-                          onClick={() => removeEducation(i)}
-                          aria-label="Remove education"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <Field label="Degree">
-                          <Input
-                            value={e.degree}
-                            onChange={(v) => updateEducation(i, 'degree', v)}
-                            placeholder="B.E. Computer Engineering"
-                          />
-                        </Field>
-                        <Field label="School / Institution">
-                          <Input
-                            value={e.school}
-                            onChange={(v) => updateEducation(i, 'school', v)}
-                            placeholder="Atmiya University"
-                          />
-                        </Field>
-                        <Field label="Year / Period">
-                          <Input
-                            value={e.year}
-                            onChange={(v) => updateEducation(i, 'year', v)}
-                            placeholder="2016 - 2020"
-                          />
-                        </Field>
-                        <div className="sm:col-span-2">
-                          <Field label="Description">
-                            <Textarea
-                              value={e.description}
-                              onChange={(v) => updateEducation(i, 'description', v)}
-                              placeholder="What you specialised in, achievements, etc."
-                              rows={3}
-                            />
-                          </Field>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          )}
 
-          {tab === 'experience' && (
-            <Card
-              title="Experience"
-              icon={<Briefcase size={16} />}
-              action={
-                <button
-                  onClick={addExperience}
-                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
-                >
-                  <Plus size={13} />
-                  Add Experience
-                </button>
-              }
-            >
-              {founder.experience.length === 0 ? (
-                <EmptyState text="No experience entries yet." />
-              ) : (
-                <div className="space-y-4">
-                  {founder.experience.map((e, i) => (
-                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
-                          Entry {i + 1}
-                        </span>
-                        <button
-                          onClick={() => removeExperience(i)}
-                          aria-label="Remove experience"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <Field label="Role">
-                          <Input
-                            value={e.role}
-                            onChange={(v) => updateExperience(i, 'role', v)}
-                            placeholder="Fullstack Developer"
-                          />
-                        </Field>
-                        <Field label="Company">
-                          <Input
-                            value={e.company}
-                            onChange={(v) => updateExperience(i, 'company', v)}
-                            placeholder="TrishulHub"
-                          />
-                        </Field>
-                        <Field label="Period">
-                          <Input
-                            value={e.period}
-                            onChange={(v) => updateExperience(i, 'period', v)}
-                            placeholder="2022 - Present"
-                          />
-                        </Field>
-                        <div className="sm:col-span-2">
-                          <Field label="Description">
-                            <Textarea
-                              value={e.description}
-                              onChange={(v) => updateExperience(i, 'description', v)}
-                              placeholder="What you did, achievements, etc."
-                              rows={3}
-                            />
-                          </Field>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          )}
 
-          {tab === 'projects' && (
-            <Card
-              title="Projects"
-              icon={<FolderGit2 size={16} />}
-              action={
-                <button
-                  onClick={addProject}
-                  className="flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-1.5 text-xs font-medium text-[#0D3C1F] transition-all hover:bg-[#0D3C1F] hover:text-white"
-                >
-                  <Plus size={13} />
-                  Add Project
-                </button>
-              }
-            >
-              {founder.projectsList.length === 0 ? (
-                <EmptyState text="No projects yet." />
-              ) : (
-                <div className="space-y-4">
-                  {founder.projectsList.map((p, i) => (
-                    <div key={i} className="rounded-xl border border-[#111111] bg-white p-4">
-                      <div className="mb-3 flex items-center justify-between">
-                        <span className="text-xs font-medium uppercase tracking-wider text-[#0D3C1F]">
-                          Project {i + 1}
-                        </span>
-                        <button
-                          onClick={() => removeProject(i)}
-                          aria-label="Remove project"
-                          className="flex h-8 w-8 items-center justify-center rounded-full border border-[#111111]/15 text-[#9ca3af] transition-all hover:border-red-500/40 hover:bg-red-500/10 hover:text-red-300"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-                        <Field label="Project Name">
-                          <Input
-                            value={p.name}
-                            onChange={(v) => updateProject(i, 'name', v)}
-                            placeholder="TrishulHub App"
-                          />
-                        </Field>
-                        <Field label="Year">
-                          <Input
-                            value={p.year}
-                            onChange={(v) => updateProject(i, 'year', v)}
-                            placeholder="2024"
-                          />
-                        </Field>
-                        <Field label="Link (use # for none)">
-                          <Input
-                            value={p.link}
-                            onChange={(v) => updateProject(i, 'link', v)}
-                            placeholder="https://..."
-                          />
-                        </Field>
-                        <div className="sm:col-span-2">
-                          <Field label="Description">
-                            <Textarea
-                              value={p.description}
-                              onChange={(v) => updateProject(i, 'description', v)}
-                              placeholder="What the project does, your role, impact..."
-                              rows={2}
-                            />
-                          </Field>
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          )}
 
-          {tab === 'leads' && (
-            <Card title="Form leads" icon={<Inbox size={16} />}>
-              {leadsLoading ? (
-                <p className="text-sm text-[#9ca3af]">Loading leads…</p>
-              ) : leadsError ? (
-                <p className="text-sm text-red-600">{leadsError}</p>
-              ) : leads.length === 0 ? (
-                <p className="rounded-xl border border-dashed border-[#111111]/20 px-4 py-8 text-center text-sm text-[#9ca3af]">
-                  No form submissions yet.
-                </p>
-              ) : (
-                <div className="space-y-3">
-                  {leads.map((lead) => {
-                    const when = new Date(lead.createdAt).toLocaleString('en-IN', {
-                      dateStyle: 'medium',
-                      timeStyle: 'short',
-                    })
-                    const copied = copiedToken === lead.id
-                    return (
-                      <div
-                        key={lead.id}
-                        className="rounded-xl border border-[#111111]/15 bg-[#fafafa] p-4"
-                      >
-                        <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-                          <div className="min-w-0">
-                            <p className="truncate text-base font-semibold text-[#111111]">
-                              {lead.name}
-                            </p>
-                            <a
-                              href={`mailto:${lead.email}`}
-                              className="truncate text-sm text-[#0D3C1F] hover:underline"
-                            >
-                              {lead.email}
-                            </a>
-                            <p className="mt-1 text-xs text-[#9ca3af]">
-                              {lead.service} · {when}
-                            </p>
-                            <p className="mt-2 line-clamp-2 text-sm text-[#6b7280]">
-                              {lead.message}
-                            </p>
-                          </div>
-                          <div className="flex shrink-0 flex-wrap gap-2">
-                            <button
-                              type="button"
-                              onClick={() => deleteLead(lead)}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 transition hover:bg-red-600 hover:text-white"
-                            >
-                              <Trash2 size={13} />
-                              Delete
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => openLeadPreview(lead)}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
-                            >
-                              <ExternalLink size={13} />
-                              Open
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => copyLeadLink(lead)}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-[#0D3C1F]/40 px-3 py-2 text-xs font-semibold text-[#0D3C1F] transition hover:bg-[#0D3C1F] hover:text-white"
-                            >
-                              {copied ? <Check size={13} /> : <Link2 size={13} />}
-                              {copied ? 'Copied' : 'Generate link'}
-                            </button>
-                            <button
-                              type="button"
-                              onClick={() => downloadLead(lead)}
-                              className="inline-flex items-center gap-1.5 rounded-full border border-[#111111]/20 px-3 py-2 text-xs font-semibold text-[#111111] transition hover:border-[#0D3C1F] hover:text-[#0D3C1F]"
-                            >
-                              <FileDown size={13} />
-                              Download
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-                    )
-                  })}
-                </div>
-              )}
-            </Card>
-          )}
 
           {tab === 'security' && (
             <Card title="Change Password" icon={<Lock size={16} />}>
