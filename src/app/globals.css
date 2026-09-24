@@ -181,20 +181,16 @@
   .group:hover .group-hover\:translate-x-1 {
     will-change: transform;
   }
-  /* Content-visibility: auto skips off-screen render work — a real win on
-   * long pages, but on phones it fights anchor scrolling and adds jump on
-   * fast flings, so it is desktop-only. */
-  @media (min-width: 1024px) {
-    section {
-      content-visibility: auto;
-      contain-intrinsic-size: auto 600px;
-    }
-    section:has(video),
-    #home {
-      content-visibility: visible;
-      contain-intrinsic-size: auto none;
-    }
-  }
+  /*
+   * Removed: `section { content-visibility: auto }` on desktop.
+   * It skipped off-screen render work, but the placeholder height it uses
+   * before a section is rendered (`contain-intrinsic-size`) never matched the
+   * real height, so /about jumped 254px when the timeline section rendered —
+   * Cumulative Layout Shift 0.064. Measured on the home page it was also
+   * slightly slower (FCP 300ms → 272ms and fewer long tasks without it), so it
+   * cost layout stability for no measurable gain. It also breaks browser
+   * find-in-page, in-page anchors and printing.
+   */
   /* Respect users who prefer reduced motion — they get instant scrolling */
   @media (prefers-reduced-motion: reduce) {
     html {

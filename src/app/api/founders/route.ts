@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server'
 import { db } from '@/lib/db'
+import { founderPhotoUrl } from '@/lib/founder-photo'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -16,10 +17,19 @@ export async function GET() {
         role: true,
         bio: true,
         image: true,
+        updatedAt: true,
       },
     })
+    /*
+     * Portraits come back as cacheable URLs rather than inline base64 — this
+     * payload used to be ~190KB for two founders, all of it string data.
+     */
+    const founders = all.map(({ updatedAt, ...f }) => ({
+      ...f,
+      image: founderPhotoUrl({ ...f, updatedAt }),
+    }))
     return NextResponse.json(
-      { ok: true, founders: all },
+      { ok: true, founders },
       {
         headers: {
           'Cache-Control': 'public, s-maxage=60, stale-while-revalidate=300',

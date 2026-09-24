@@ -3,7 +3,7 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { AgentationLive } from "@/components/agentation";
-import { ChatWidget } from "@/components/trishulhub/chat-widget";
+import { ChatWidgetLazy } from "@/components/trishulhub/chat-widget-lazy";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationSchema } from "@/lib/structured-data";
 import { readSiteContactFile } from "@/lib/site-contact-io";
@@ -106,17 +106,17 @@ export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
   /**
-   * Zoom lock, requested by the owner: pinch/double-tap zoom made the chat
-   * panel and the planner awkward to use on a phone.
+   * Zoom is deliberately NOT locked. `user-scalable=no` / `maximum-scale=1`
+   * fails WCAG 2.2 SC 1.4.4 (Resize text) — a real barrier for anyone with low
+   * vision, and the kind of thing an accessibility complaint or a client audit
+   * will pick up. axe-core flags it as critical.
    *
-   * Honest caveat: iOS Safari has ignored `user-scalable=no` since iOS 10 (it
-   * is an accessibility affordance they removed). So the real fixes are in
-   * globals.css — 16px fields so iOS never zoom-on-focus, and
-   * `touch-action: manipulation` so double-tap cannot zoom. Android/Chrome
-   * honours this block. To re-allow zoom, delete these two lines.
+   * The original annoyance (accidental zoom while using the chat or planner)
+   * is handled properly instead, in globals.css:
+   *   - `touch-action: manipulation` on interactive elements, which kills
+   *     double-tap-to-zoom while leaving pinch-zoom available;
+   *   - 16px form fields, so iOS never zooms when a field takes focus.
    */
-  maximumScale: 1,
-  userScalable: false,
   colorScheme: "light dark",
 };
 
@@ -149,7 +149,7 @@ export default async function RootLayout({
         {children}
         <Toaster />
         <AgentationLive />
-        <ChatWidget />
+        <ChatWidgetLazy />
 
         <JsonLd data={organizationSchema(contact)} />
       </body>

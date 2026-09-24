@@ -82,7 +82,7 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-2">
-            <h3 className="text-sm font-semibold text-white">Company</h3>
+            <h2 className="text-sm font-semibold text-white">Company</h2>
             <ul className="mt-5 space-y-1">
               {company.map((c) => (
                 <li key={c.label}>
@@ -98,7 +98,7 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold text-white">Services</h3>
+            <h2 className="text-sm font-semibold text-white">Services</h2>
             <ul className="mt-5 space-y-1">
               {services.map((s) => (
                 <li key={s.label}>
@@ -114,7 +114,7 @@ export function Footer() {
           </div>
 
           <div className="lg:col-span-3">
-            <h3 className="text-sm font-semibold text-white">Get in touch</h3>
+            <h2 className="text-sm font-semibold text-white">Get in touch</h2>
             {/* Same rhythm as the Company / Services columns so the three lists
                 line up: mt-5, space-y-1, py-1.5 targets. */}
             <ul className="mt-5 space-y-1 text-sm text-white/55">
@@ -139,7 +139,7 @@ export function Footer() {
         </div>
 
         <div className="mt-14 flex flex-col items-center justify-between gap-5 border-t border-white/10 pt-7 sm:flex-row">
-          <p className="text-xs text-white/40">
+          <p className="text-xs text-white/65">
             © {new Date().getFullYear()} TrishulHub. All rights reserved.
           </p>
           <div className="flex items-center gap-6">
@@ -147,19 +147,19 @@ export function Footer() {
               <Link
                 key={l.label}
                 href={l.href}
-                className="th-link inline-block py-2 text-xs text-white/40 transition hover:text-white/80"
+                className="th-link inline-block py-2 text-xs text-white/65 transition hover:text-white/80"
               >
                 {l.label}
               </Link>
             ))}
             {/* Reopens the cookie / storage preference centre (PECR: the user
                 must be able to change or withdraw their choice at any time). */}
-            <CookieSettingsButton className="th-link inline-block py-2 text-xs text-white/40 transition hover:text-white/80">
+            <CookieSettingsButton className="th-link inline-block py-2 text-xs text-white/65 transition hover:text-white/80">
               Cookie settings
             </CookieSettingsButton>
             <a
               href="#home"
-              className="inline-flex items-center gap-1.5 py-2 text-xs text-white/40 transition hover:text-white/80"
+              className="inline-flex items-center gap-1.5 py-2 text-xs text-white/65 transition hover:text-white/80"
             >
               Back to top
               <ArrowUp size={13} />

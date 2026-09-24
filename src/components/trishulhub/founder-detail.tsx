@@ -62,7 +62,10 @@ export function FounderDetailClient({
                 <img
                   src={f.image}
                   alt={f.name}
-                  loading="lazy"
+                  /* This portrait is the largest thing on the page, so it is
+                     the LCP element — eager + high priority beats lazy here. */
+                  loading="eager"
+                  fetchPriority="high"
                   decoding="async"
                   className="absolute inset-0 h-full w-full object-cover"
                   style={{ objectPosition: 'center top' }}

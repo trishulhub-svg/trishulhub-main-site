@@ -4,6 +4,7 @@ import { FounderDetailClient } from '@/components/trishulhub/founder-detail'
 import { ServerSiteShell } from '@/components/trishulhub/server-site-shell'
 import { JsonLd } from '@/components/seo/json-ld'
 import { personSchema } from '@/lib/structured-data'
+import { founderPhotoUrl } from '@/lib/founder-photo'
 
 export async function generateStaticParams() {
   try {
@@ -60,7 +61,8 @@ export default async function FounderPage({
     initial: founder.initial,
     role: founder.role,
     bio: founder.bio,
-    image: founder.image,
+    /* Cacheable image URL instead of a ~140KB base64 string in the HTML. */
+    image: founderPhotoUrl(founder),
   }
 
   return (

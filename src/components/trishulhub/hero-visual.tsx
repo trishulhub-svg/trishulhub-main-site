@@ -278,7 +278,9 @@ export function HeroVisual() {
             <p className="text-[11px] font-bold leading-tight">
               <Counter to={99} />/100
             </p>
-            <p className="text-[9.5px] leading-tight text-white/65">
+            {/* white/65 measured 4.26:1 against the badge green — just under
+                the 4.5:1 WCAG AA minimum at this 9.5px size. */}
+            <p className="text-[9.5px] leading-tight text-white/85">
               performance
             </p>
           </div>

@@ -101,22 +101,18 @@ export function Hero() {
         <div className="grid items-center gap-14 pb-16 pt-6 lg:grid-cols-[1.05fr_1fr] lg:gap-10 lg:pb-20 lg:pt-10">
           {/* ---------------- Copy ---------------- */}
           <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, y: -8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5, ease: EASE_OUT_EXPO }}
-              className="th-eyebrow mb-6"
-            >
+            {/*
+              The hero copy is rendered visible, with no fade-in. Framer's
+              `initial={{ opacity: 0 }}` ships as `style="opacity:0"` in the
+              HTML, so the browser paints nothing until React hydrates — that
+              alone pushed Largest Contentful Paint from ~0.9s to ~2.1s.
+            */}
+            <div className="th-eyebrow mb-6">
               <Sparkles className="h-3.5 w-3.5 text-[#0d9488]" />
               <span>UK digital engineering studio</span>
-            </motion.div>
+            </div>
 
-            <motion.h1
-              initial={{ opacity: 0, y: 18 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.65, delay: 0.05, ease: EASE_OUT_EXPO }}
-              className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
-            >
+            <h1 className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]">
               <span className="block font-sans">
                 We build digital projects for growing businesses
               </span>
@@ -155,25 +151,15 @@ export function Hero() {
                   </motion.span>
                 </AnimatePresence>
               </span>
-            </motion.h1>
+            </h1>
 
-            <motion.p
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.14, ease: EASE_OUT_EXPO }}
-              className="text-pretty mt-6 max-w-xl text-base leading-relaxed text-[#4b5563] sm:text-lg"
-            >
+            <p className="text-pretty mt-6 max-w-xl text-base leading-relaxed text-[#4b5563] sm:text-lg">
               From high-speed marketing sites to bespoke internal software and
               mobile apps — TrishulHub designs, engineers and ships products your
               team can rely on from day one.
-            </motion.p>
+            </p>
 
-            <motion.div
-              initial={{ opacity: 0, y: 16 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.22, ease: EASE_OUT_EXPO }}
-              className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4"
-            >
+            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center sm:gap-4">
               <Link
                 href="/services"
                 className="btn-shine inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)]"
@@ -181,42 +167,41 @@ export function Hero() {
                 Explore services
                 <ArrowRight size={16} />
               </Link>
-            </motion.div>
+            </div>
 
-            {/* Proof grid */}
-            <motion.dl
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.7, delay: 0.34 }}
-              className="mt-12 grid gap-x-6 gap-y-5 border-t border-[#0d3c1f]/10 pt-8 sm:grid-cols-2"
-            >
+            {/*
+              Proof grid. Plain divs, not <dl>/<dt>/<dd>: the definition-list
+              pattern wraps each pair in a <div>, which axe reports as
+              `dlitem`/`definition-list` violations, and the list semantics add
+              nothing here.
+            */}
+            <div className="mt-12 grid gap-x-6 gap-y-5 border-t border-[#0d3c1f]/10 pt-8 sm:grid-cols-2">
               {PROOF.map(({ icon: Icon, title, text }) => (
                 <div key={title} className="flex items-start gap-3">
                   <span className="mt-0.5 flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-white text-[#0D3C1F] shadow-[0_6px_18px_rgba(6,43,22,0.08)] ring-1 ring-[#0d3c1f]/10">
                     <Icon size={16} strokeWidth={1.7} />
                   </span>
                   <div>
-                    <dt className="text-[13.5px] font-semibold text-[#111111]">
+                    <p className="text-[13.5px] font-semibold text-[#111111]">
                       {title}
-                    </dt>
-                    <dd className="mt-0.5 text-[12.5px] leading-snug text-[#6b7280]">
+                    </p>
+                    <p className="mt-0.5 text-[12.5px] leading-snug text-[#6b7280]">
                       {text}
-                    </dd>
+                    </p>
                   </div>
                 </div>
               ))}
-            </motion.dl>
+            </div>
           </div>
 
           {/* ---------------- Animated visual ---------------- */}
-          <motion.div
-            initial={{ opacity: 0, y: 24, scale: 0.97 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ duration: 0.8, delay: 0.2, ease: EASE_OUT_EXPO }}
-            className="relative lg:pl-4"
-          >
+          {/* No opacity fade on the wrapper: it must paint at first contentful
+              paint, otherwise it becomes the largest-contentful-paint element
+              and is reported at hydration time. Its inner motion (chart, cards)
+              still runs. */}
+          <div className="relative lg:pl-4">
             <HeroVisual />
-          </motion.div>
+          </div>
         </div>
       </div>
 

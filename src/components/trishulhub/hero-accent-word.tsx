@@ -97,18 +97,21 @@ export function HeroAccentWord({
      * on top of it. Grid gives the cell the taller of the two line boxes and
      * sizes the parent, which is why this cannot overlap neighbouring text the
      * way an absolutely-positioned overlay could.
+     *
+     * Accessibility: the animated characters are hidden from assistive tech and
+     * the finished phrase is exposed once, as plain text. Announcing every
+     * keystroke (or putting aria-label on a bare <span>, which ARIA forbids)
+     * would be noisier and technically invalid.
      */
-    <span
-      className={`inline-grid font-playfair italic normal-case text-[#0D3C1F] ${className}`}
-    >
+    <span className={`inline-grid font-playfair italic normal-case text-[#0D3C1F] ${className}`}>
+      <span className="sr-only">{full}</span>
       <span aria-hidden className="invisible whitespace-nowrap" style={{ gridArea: '1 / 1' }}>
         {spacer}
       </span>
       <span
+        aria-hidden
         className="whitespace-nowrap border-r-4 border-[#0D3C1F] pr-1 animate-blink"
         style={{ gridArea: '1 / 1' }}
-        aria-live="polite"
-        aria-label={full}
       >
         {shown || '\u00A0'}
       </span>
