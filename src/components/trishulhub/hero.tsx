@@ -1,12 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { AnimatePresence, motion } from 'framer-motion'
-import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
+import { motion } from 'framer-motion'
 import {
   ArrowRight,
-  Code2,
   Gauge,
   Globe,
   MessagesSquare,
@@ -17,17 +14,6 @@ import {
 import { HeroVisual } from '@/components/trishulhub/hero-visual'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
-const CAROUSEL_WORDS = [
-  'high-performing.',
-  'future-proof.',
-  'reliable.',
-  'scalable.',
-  'secure.',
-  'measurable.',
-] as const
-
-/** Widest option — used to reserve the headline's second line. */
-const LONGEST_WORD = CAROUSEL_WORDS.reduce((a, b) => (b.length > a.length ? b : a))
 
 const TECH = [
   { file: 'nextdotjs.svg', name: 'Next.js' },
@@ -71,20 +57,6 @@ const PROOF = [
 ] as const
 
 export function Hero() {
-  const reduce = useReducedMotionSafe()
-  const [wordIndex, setWordIndex] = useState(0)
-
-  useEffect(() => {
-    if (reduce) return
-    const id = window.setInterval(
-      () => setWordIndex((i) => (i + 1) % CAROUSEL_WORDS.length),
-      2400,
-    )
-    return () => window.clearInterval(id)
-  }, [reduce])
-
-  const word = CAROUSEL_WORDS[wordIndex]
-
   return (
     <section
       id="home"
@@ -119,42 +91,11 @@ export function Hero() {
               className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               <span className="block font-sans">
-                We build digital projects for growing businesses
-              </span>
-              {/*
-                The rotating word gets its own line and a fixed, pre-reserved
-                width (the longest option). Otherwise each swap changed how
-                many lines the headline needed, which pushed the whole page up
-                and down every couple of seconds.
-              */}
-              <span className="mt-0.5 grid">
-                {/* Spacer and the live word share one grid cell, so the line
-                    box is always the taller of the two — no overlap, no shift. */}
-                <span
-                  aria-hidden
-                  className="invisible whitespace-nowrap"
-                  style={{ gridArea: '1 / 1' }}
-                >
-                  — {LONGEST_WORD}
+                We build digital projects for{' '}
+                {/* Accent phrase — gently sweeping highlight (CSS only). */}
+                <span className="th-accent-word font-playfair italic">
+                  growing businesses
                 </span>
-                {/* mode="wait": the outgoing word finishes before the next one
-                    appears. Without it both words render for ~380ms and visibly
-                    overlap each other — which is exactly the "text overlap" that
-                    showed up on a phone. The reserved grid cell means the swap
-                    still cannot move the layout. */}
-                <AnimatePresence mode="wait" initial={false}>
-                  <motion.span
-                    key={word}
-                    initial={{ opacity: 0, y: 14, filter: 'blur(7px)' }}
-                    animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
-                    exit={{ opacity: 0, y: -12, filter: 'blur(7px)' }}
-                    transition={{ duration: 0.38, ease: EASE_OUT_EXPO }}
-                    className="whitespace-nowrap font-playfair italic text-[#0D3C1F]"
-                    style={{ gridArea: '1 / 1' }}
-                  >
-                    — {word}
-                  </motion.span>
-                </AnimatePresence>
               </span>
             </motion.h1>
 
@@ -179,7 +120,6 @@ export function Hero() {
                 href="/services"
                 className="btn-shine inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)]"
               >
-                <Code2 size={16} />
                 Explore services
                 <ArrowRight size={16} />
               </Link>

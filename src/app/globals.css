@@ -244,6 +244,53 @@
   -webkit-text-fill-color: #0d9488;
   animation: none;
 }
+
+/* ---------- Hero accent phrase ----------
+   "growing businesses" in the home headline. A soft brand-green highlighter
+   that slowly thickens and thins behind the words — pure CSS, inline-safe (it
+   still wraps on phones), and it costs nothing at runtime. */
+.th-accent-word {
+  color: #0D3C1F;
+  background-image: linear-gradient(
+    90deg,
+    rgba(13, 148, 136, 0.22),
+    rgba(94, 234, 212, 0.5),
+    rgba(13, 148, 136, 0.22)
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 40%;
+  background-position: 0 80%;
+  animation: thAccentSweep 4.2s ease-in-out infinite;
+}
+@keyframes thAccentSweep {
+  0%,
+  100% {
+    background-position: 0 80%;
+    background-size: 100% 40%;
+  }
+  50% {
+    background-position: 0 58%;
+    background-size: 100% 64%;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .th-accent-word {
+    animation: none;
+  }
+}
+
+/* Dark theme: brand green is unreadable on a near-black hero, so the phrase
+   lifts to the mint accent (same token the rest of the dark palette uses). */
+.dark .th-accent-word {
+  color: var(--th-accent);
+  background-image: linear-gradient(
+    90deg,
+    rgba(45, 212, 191, 0.16),
+    rgba(94, 234, 212, 0.4),
+    rgba(45, 212, 191, 0.16)
+  );
+}
+
 @keyframes gradientShift {
   0%, 100% { background-position: 0% 50%; }
   50% { background-position: 100% 50%; }

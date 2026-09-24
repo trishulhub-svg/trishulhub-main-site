@@ -22,7 +22,13 @@ export function HomeAbout() {
         className="pointer-events-none absolute -right-32 top-10 h-[26rem] w-[26rem] rounded-full bg-[#0d9488]/8 blur-[130px]"
       />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="grid gap-10 lg:grid-cols-12 lg:items-end lg:gap-12">
+        {/*
+          items-center (not items-end): with the huge uppercase heading the
+          right-hand paragraph used to bottom-align and leave a large empty
+          block above it on desktop. Vertical rhythm below is 12/16 so the
+          header, the pipeline and the fact rail read as one column.
+        */}
+        <div className="grid gap-8 lg:grid-cols-12 lg:items-center lg:gap-x-14 lg:gap-y-8">
           <div className="lg:col-span-7">
             <motion.span
               initial={{ opacity: 0, y: 12 }}
@@ -56,7 +62,7 @@ export function HomeAbout() {
         <HowWeWork />
 
         {/* Fact rail — the same numbers we stand behind, restyled */}
-        <div className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+        <div className="mt-12 grid grid-cols-2 gap-3 sm:mt-14 sm:grid-cols-4 sm:gap-4">
           {FACTS.map((f, i) => (
             <motion.div
               key={f.label}

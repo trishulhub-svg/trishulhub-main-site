@@ -1,9 +1,6 @@
 'use client'
 
-import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
-import { ArrowUpRight } from 'lucide-react'
 import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -17,8 +14,6 @@ type Founder = {
 }
 
 export function Team({ founders }: { founders: Founder[] }) {
-  const reduce = useReducedMotionSafe()
-
   return (
     <section
       id="founders"
@@ -47,8 +42,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             transition={{ duration: 0.55, delay: 0.08, ease: EASE_OUT_EXPO }}
             className="mx-auto mt-4 max-w-2xl text-base leading-relaxed text-[#6b7280] sm:text-lg"
           >
-            Meet Taroon and Pruthviraj — the people behind TrishulHub. Click
-            anyone to see their full portfolio.
+            Meet Taroon and Pruthviraj — the people behind TrishulHub.
           </motion.p>
         </div>
 
@@ -77,14 +71,10 @@ export function Team({ founders }: { founders: Founder[] }) {
                     transition: { duration: 0.55, ease: EASE_OUT_EXPO },
                   },
                 }}
-                whileHover={reduce ? undefined : { y: -6 }}
                 transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-                className="group relative flex flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)]"
+                className="group relative flex flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
               >
-                <Link
-                  href={`/founders/${m.slug}`}
-                  className="relative aspect-square overflow-hidden"
-                >
+                <div className="relative aspect-square overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]" />
 
                   {founderImage ? (
@@ -104,14 +94,10 @@ export function Team({ founders }: { founders: Founder[] }) {
                       </span>
                     </div>
                   )}
-
-                  <div className="absolute right-4 top-4 flex h-9 w-9 items-center justify-center rounded-full border border-[#111111]/15 bg-white/90 text-[#6b7280] backdrop-blur-sm transition group-hover:border-[#0D3C1F] group-hover:bg-[#0D3C1F] group-hover:text-white">
-                    <ArrowUpRight size={16} />
-                  </div>
-                </Link>
+                </div>
 
                 <div className="flex flex-1 flex-col gap-2 p-5">
-                  <Link href={`/founders/${m.slug}`} className="block">
+                  <div>
                     <h3 className="text-xl font-bold text-[#111111]">{m.name}</h3>
                     <span className="text-sm font-medium text-[#0D3C1F]">
                       {m.role}
@@ -119,7 +105,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                     <p className="mt-1 text-sm leading-relaxed text-[#6b7280]">
                       {m.bio}
                     </p>
-                  </Link>
+                  </div>
                 </div>
               </motion.div>
             )

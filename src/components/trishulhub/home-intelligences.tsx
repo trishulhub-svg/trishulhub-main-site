@@ -129,13 +129,24 @@ export function HomeIntelligences() {
                   className="flex h-full flex-col items-start rounded-2xl border bg-white/70 p-4 text-left"
                 >
                   <span
-                    className={`flex h-11 w-11 items-center justify-center rounded-xl border transition-colors ${
+                    className={`relative flex h-11 w-11 items-center justify-center rounded-xl border transition-colors ${
                       isActive
                         ? 'border-[#0D3C1F] bg-[#0D3C1F] text-white'
                         : 'border-[#0d3c1f]/12 bg-white text-[#9ca3af]'
                     }`}
                   >
                     <Icon size={20} strokeWidth={1.7} />
+                    {/* Same "live pulse" the mobile rail uses, so the desktop
+                        cards animate on their own instead of only changing
+                        colour when the index moves. */}
+                    {isActive && !reduce ? (
+                      <motion.span
+                        aria-hidden
+                        animate={{ scale: [1, 1.5], opacity: [0.5, 0] }}
+                        transition={{ duration: 1.8, repeat: Infinity }}
+                        className="absolute inset-0 rounded-xl border border-[#0d9488]"
+                      />
+                    ) : null}
                   </span>
                   <span
                     className={`mt-3 block text-[14px] font-bold ${
@@ -146,6 +157,20 @@ export function HomeIntelligences() {
                   </span>
                   <span className="mt-1.5 block text-[12.5px] leading-relaxed text-[#6b7280]">
                     {pillar.detail}
+                  </span>
+                  {/* Auto-advancing progress bar — the desktop counterpart of
+                      the mobile vertical rail. */}
+                  <span className="mt-auto block w-full pt-4">
+                    <span className="block h-[3px] w-full overflow-hidden rounded-full bg-[#0d3c1f]/10">
+                      <motion.span
+                        className="block h-full rounded-full bg-gradient-to-r from-[#0d9488] to-[#5eead4]"
+                        animate={{ width: isActive ? '100%' : '0%' }}
+                        transition={{
+                          duration: isActive ? STEP_MS / 1000 : 0.3,
+                          ease: isActive ? 'linear' : 'easeOut',
+                        }}
+                      />
+                    </span>
                   </span>
                 </motion.button>
               )

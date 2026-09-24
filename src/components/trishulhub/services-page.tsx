@@ -234,8 +234,9 @@ export function ServicesPage() {
                     ease: EASE_OUT_EXPO,
                   }}
                   /* No vertical movement (owner feedback) — the card stays put
-                     and the border goes bold green instead. */
-                  className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[box-shadow,border-color] duration-300 ease-out hover:border-[#0D3C1F] hover:ring-2 hover:ring-inset hover:ring-[#0D3C1F] hover:shadow-[0_18px_48px_rgba(6,43,22,0.16)] focus-within:border-[#0D3C1F] focus-within:ring-2 focus-within:ring-inset focus-within:ring-[#0D3C1F] lg:max-w-none"
+                     and the shadow deepens softly. The green border/ring on
+                     hover was removed on request. */
+                  className="group scroll-mt-28 mx-auto flex h-full w-full max-w-3xl flex-col overflow-hidden rounded-[1.75rem] border border-[#0d3c1f]/12 bg-white shadow-[0_10px_40px_rgba(6,43,22,0.06)] transition-[box-shadow] duration-300 ease-out hover:shadow-[0_20px_52px_rgba(6,43,22,0.13)] lg:max-w-none"
                 >
                   {/* Animated visual — full bleed, no surrounding frame */}
                   <div className="relative">
@@ -276,7 +277,7 @@ export function ServicesPage() {
                     </ul>
 
                     <div className="mt-6 border-t border-[#0d3c1f]/8 pt-5">
-                      <NexusButton href={links.whatsapp} fullWidth showArrow>
+                      <NexusButton href="/contact" fullWidth showArrow>
                         Talk about this
                       </NexusButton>
                     </div>
