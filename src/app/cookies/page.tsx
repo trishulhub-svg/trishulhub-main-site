@@ -57,22 +57,6 @@ const ROWS: StorageRow[] = [
     basis: 'Strictly necessary — the service you asked for',
     duration: 'Deleted when you close the tab',
   },
-  {
-    name: 'trishulhub_admin_session',
-    kind: 'Cookie (HttpOnly, Secure, SameSite=Lax)',
-    purpose:
-      'Keeps TrishulHub staff signed in to the private admin area. Never set for ordinary visitors.',
-    basis: 'Strictly necessary — security and authentication',
-    duration: '7 days, or until you sign out',
-  },
-  {
-    name: 'trishulhub:agentation',
-    kind: 'localStorage',
-    purpose:
-      'Internal design-review toolbar used by our own team. It is only ever stored in a browser that deliberately opts in and is never set for visitors.',
-    basis: 'Not used for visitors',
-    duration: 'Until cleared',
-  },
 ]
 
 export default function CookiesPage() {

@@ -178,14 +178,6 @@ export default function PrivacyPage() {
                 </P>
                 <P>
                   <strong className="font-semibold text-[#111111]">
-                    Staff accounts.
-                  </strong>{' '}
-                  If a team member signs in to our internal admin area, we
-                  process the account credentials and a session cookie to keep
-                  that area secure. This is not used for visitors.
-                </P>
-                <P>
-                  <strong className="font-semibold text-[#111111]">
                     Clients and suppliers.
                   </strong>{' '}
                   Once an enquiry becomes a project, we process contact details,
@@ -315,12 +307,13 @@ export default function PrivacyPage() {
               <div>
                 <H>How we protect it</H>
                 <P>
-                  Everything is served over HTTPS. Admin credentials are stored
-                  as salted hashes rather than plain text, sessions are
-                  HTTP-only and same-site cookies, access to enquiry records is
-                  limited to the directors who need it, and we do not put
-                  secrets in the browser bundle. If a breach ever put your rights
-                  at risk, we would notify you and the ICO without undue delay.
+                  Everything is served over HTTPS. Sign-in credentials for our
+                  own team are stored as salted hashes rather than plain text,
+                  sessions use HTTP-only same-site cookies, access to enquiry
+                  records is limited to the directors who need it, and we do not
+                  put secrets in the browser bundle. If a breach ever put your
+                  rights at risk, we would notify you and the ICO without undue
+                  delay.
                 </P>
               </div>
 

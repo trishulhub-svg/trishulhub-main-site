@@ -1838,6 +1838,21 @@ textarea.field-input {
   bottom: 5.5rem;
 }
 
+/* While the cookie / storage notice is on screen, keep the chat button and the
+   chat panel clear of it. `--consent-stack-h` is published by
+   components/trishulhub/cookie-consent.tsx as the measured height of the
+   notice from the bottom of the viewport (it is taller on phones than on
+   desktop, where the notice is a docked bar). */
+.consent-pending .th-chat-trigger {
+  bottom: calc(var(--consent-stack-h, 8rem) + 1rem);
+  transition: bottom 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.consent-pending .th-chat-panel {
+  bottom: calc(var(--consent-stack-h, 8rem) + 1.25rem);
+  /* Keep the panel inside short viewports once it has been lifted. */
+  max-height: min(62svh, 520px);
+}
+
 /* Agentation is used from a phone too. Its own settings panel is laid out wider
    than a small viewport, so keep it inside the screen. Selectors match the
    vendor's module class *names* (the hash suffix changes between versions). */

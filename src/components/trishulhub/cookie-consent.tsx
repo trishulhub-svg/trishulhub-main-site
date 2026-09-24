@@ -1,6 +1,6 @@
 'use client'
 
-import { useCallback, useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { Cookie, ShieldCheck, X } from 'lucide-react'
@@ -51,6 +51,7 @@ type Choice = { appearance: boolean; analytics: boolean }
 
 export function CookieConsent() {
   const pathname = usePathname()
+  const bannerRef = useRef<HTMLDivElement | null>(null)
   const [record, setRecord] = useState<ConsentRecord | null>(null)
   const [ready, setReady] = useState(false)
   const [panelOpen, setPanelOpen] = useState(false)
@@ -85,6 +86,44 @@ export function CookieConsent() {
     return () => window.removeEventListener('keydown', onKey)
   }, [panelOpen])
 
+  /*
+   * Flag the document while the notice is on screen so the chat button and
+   * chat panel step above it (see globals.css). The notice never covers them.
+   */
+  useEffect(() => {
+    if (!ready) return
+    const showing = !record
+    document.documentElement.classList.toggle('consent-pending', showing)
+    return () => document.documentElement.classList.remove('consent-pending')
+  }, [ready, record])
+
+  /*
+   * Publish how much vertical space the notice occupies (measured, because the
+   * bar is taller on phones than on desktop). globals.css uses it to raise the
+   * chat button and panel clear of the notice.
+   */
+  useEffect(() => {
+    if (!ready || record) {
+      document.documentElement.style.removeProperty('--consent-stack-h')
+      return
+    }
+    const measure = () => {
+      const el = bannerRef.current
+      if (!el) return
+      const box = el.getBoundingClientRect()
+      const fromBottom = Math.round(window.innerHeight - box.top)
+      document.documentElement.style.setProperty('--consent-stack-h', `${fromBottom}px`)
+    }
+    measure()
+    const t = window.setTimeout(measure, 450) // after the entry animation
+    window.addEventListener('resize', measure)
+    return () => {
+      window.clearTimeout(t)
+      window.removeEventListener('resize', measure)
+      document.documentElement.style.removeProperty('--consent-stack-h')
+    }
+  }, [ready, record])
+
   const save = useCallback((choice: Choice, source: string) => {
     setRecord(writeConsent(choice, source))
     setDraft(choice)
@@ -102,76 +141,82 @@ export function CookieConsent() {
         {showBanner ? (
           <motion.div
             key="banner"
-            initial={{ opacity: 0, y: 24 }}
+            ref={bannerRef}
+            initial={{ opacity: 0, y: 32 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 24 }}
-            transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
-            /* bottom-24 on phones so it clears the chat button (bottom-5, 56px
-               tall). From sm up the notice is left-aligned, well clear of the
-               bottom-right chat button, so it can sit lower. The chat trigger
-               keeps a higher z-index, so the notice never blocks it. */
-            className="fixed inset-x-3 bottom-24 z-[60] sm:bottom-6 sm:left-6 sm:right-auto sm:max-w-[27rem]"
+            exit={{ opacity: 0, y: 32 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            /*
+             * Phones: a full-width card sitting above the chat button.
+             * sm and up: a full-width bar docked to the bottom edge — the most
+             * recognisable, hardest-to-miss placement. `consent-pending` lifts
+             * the chat UI above it so nothing is covered either way.
+             */
+            className="fixed inset-x-3 bottom-24 z-[2147482500] sm:inset-x-0 sm:bottom-0"
             role="region"
             aria-label="Cookies and storage"
           >
-            <div className="rounded-2xl border border-[#111111]/12 bg-white p-5 shadow-[0_18px_50px_rgba(6,43,22,0.16)]">
-              <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-[#0D3C1F] text-white">
-                  <Cookie size={16} />
+            <div className="rounded-2xl border border-[#111111]/12 bg-white p-5 shadow-[0_18px_50px_rgba(6,43,22,0.16)] sm:rounded-none sm:rounded-t-2xl sm:border-x-0 sm:border-b-0 sm:border-t-2 sm:border-t-[#0D3C1F] sm:px-6 sm:py-5 sm:shadow-[0_-18px_50px_rgba(6,43,22,0.16)]">
+              <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0D3C1F] text-white">
+                  <Cookie size={18} />
                 </span>
-                <div className="min-w-0">
-                  <p className="text-sm font-bold text-[#111111]">
+
+                <div className="min-w-0 flex-1">
+                  <p className="text-[15px] font-bold text-[#111111]">
                     Cookies &amp; device storage
                   </p>
-                  <p className="mt-1.5 text-[12.5px] leading-relaxed text-[#6b7280]">
-                    We keep this simple. No advertising or tracking cookies, and
-                    no analytics. We only store what the site needs — your
-                    light/dark choice, your chat draft while you use it, and a
-                    security cookie if you sign in to the admin area.
+                  <p className="mt-1 text-[13px] leading-relaxed text-[#6b7280]">
+                    No advertising or tracking cookies, and no analytics. We
+                    store only what the site needs — your light/dark choice and
+                    your chat draft. Pick what you are happy with; you can change
+                    it any time.
+                  </p>
+                  <p className="mt-1.5 text-[11.5px] text-[#9ca3af]">
+                    <Link
+                      href="/cookies"
+                      className="font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-2"
+                    >
+                      Cookie &amp; storage policy
+                    </Link>
+                    {' · '}
+                    <Link
+                      href="/privacy"
+                      className="font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-2"
+                    >
+                      Privacy notice
+                    </Link>
                   </p>
                 </div>
-              </div>
 
-              <div className="mt-4 flex flex-wrap items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => save({ appearance: true, analytics: false }, 'banner-accept-all')}
-                  className="inline-flex h-10 items-center justify-center rounded-lg bg-[#0D3C1F] px-4 text-[13px] font-semibold text-white transition hover:bg-[#164a28]"
-                >
-                  Accept
-                </button>
-                <button
-                  type="button"
-                  onClick={() => save({ appearance: false, analytics: false }, 'banner-essential-only')}
-                  className="inline-flex h-10 items-center justify-center rounded-lg border border-[#0D3C1F] bg-white px-4 text-[13px] font-medium text-[#0D3C1F] transition hover:bg-[#f4faf7]"
-                >
-                  Essential only
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setPanelOpen(true)}
-                  className="inline-flex h-10 items-center px-2 text-[13px] font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-4 transition hover:decoration-[#0D3C1F]"
-                >
-                  Choose
-                </button>
+                <div className="flex flex-wrap items-center gap-2 sm:shrink-0">
+                  <button
+                    type="button"
+                    onClick={() =>
+                      save({ appearance: true, analytics: false }, 'banner-accept-all')
+                    }
+                    className="inline-flex h-11 flex-1 items-center justify-center rounded-lg bg-[#0D3C1F] px-5 text-[13.5px] font-semibold text-white transition hover:bg-[#164a28] sm:flex-none"
+                  >
+                    Accept
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() =>
+                      save({ appearance: false, analytics: false }, 'banner-essential-only')
+                    }
+                    className="inline-flex h-11 flex-1 items-center justify-center rounded-lg border border-[#0D3C1F] bg-white px-5 text-[13.5px] font-medium text-[#0D3C1F] transition hover:bg-[#f4faf7] sm:flex-none"
+                  >
+                    Essential only
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setPanelOpen(true)}
+                    className="inline-flex h-11 items-center px-2 text-[13px] font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-4 transition hover:decoration-[#0D3C1F]"
+                  >
+                    Choose
+                  </button>
+                </div>
               </div>
-
-              <p className="mt-3 text-[11.5px] text-[#9ca3af]">
-                Read the{' '}
-                <Link
-                  href="/cookies"
-                  className="font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-2"
-                >
-                  cookie &amp; storage policy
-                </Link>{' '}
-                ·{' '}
-                <Link
-                  href="/privacy"
-                  className="font-medium text-[#0D3C1F] underline decoration-[#0D3C1F]/30 underline-offset-2"
-                >
-                  privacy notice
-                </Link>
-              </p>
             </div>
           </motion.div>
         ) : null}
@@ -304,10 +349,10 @@ function ConsentPanel({
 
         <div className="mt-5 space-y-3">
           <Row title="Strictly necessary" status="No choice needed">
-            Required for the site to work: keeping you signed in to the admin
-            area, protecting forms from abuse, and holding your enquiry draft
-            while the chat is open. These are exempt from consent under PECR
-            because the service cannot be provided without them.
+            Required for the site to work: protecting our forms from abuse and
+            holding your enquiry draft while the chat is open. These are exempt
+            from consent under PECR because the service cannot be provided
+            without them.
           </Row>
 
           <Row
