@@ -69,6 +69,23 @@ export default function Home() {
         <HomeIntelligences />
       </div>
 
+      {/* Quote break — sits between the promise and the closing CTA */}
+      <section className="relative z-20 border-y border-[#0d3c1f]/8 bg-[#f4faf7] py-16 sm:py-20">
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.05]"
+        />
+        <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
+          <p className="text-balance font-playfair text-lg italic leading-relaxed text-[#111111] sm:text-xl">
+            “Quality is never an accident in technology — it is what happens when
+            engineering, AI and craft are held to the same standard.”
+          </p>
+          <p className="mt-4 text-xs uppercase tracking-[0.16em] text-[#6b7280]">
+            TrishulHub — engineering, AI and quality
+          </p>
+        </div>
+      </section>
+
       {/* CTA */}
       <div className="relative z-20 bg-white">
         <CTA />

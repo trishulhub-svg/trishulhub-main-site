@@ -15,6 +15,9 @@ type NexusButtonProps = {
   type?: 'button' | 'submit'
   variant?: 'primary' | 'secondary'
   disabled?: boolean
+  /** Strip the hover scale + arrow slide — used on cards where the owner
+   *  wants the button completely still. */
+  disableMotion?: boolean
 }
 
 /** Lawtrades primary/secondary buttons — 48px, 8px radius */
@@ -29,6 +32,7 @@ export function NexusButton({
   type = 'button',
   variant = 'primary',
   disabled = false,
+  disableMotion = false,
 }: NexusButtonProps) {
   const shellStyle: CSSProperties = fullWidth
     ? { display: 'block', width: '100%' }
@@ -42,12 +46,21 @@ export function NexusButton({
         href.startsWith('tel:') ||
         href.startsWith('https://wa.me')))
 
-  const base =
-    'group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none transition-all duration-200 active:scale-[0.98] disabled:pointer-events-none disabled:opacity-60'
+  const base = `group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none ${
+    disableMotion
+      ? 'transition-colors duration-200'
+      : 'transition-all duration-200 active:scale-[0.98]'
+  } disabled:pointer-events-none disabled:opacity-60`
   const primary =
-    'bg-[#0D3C1F] text-white hover:scale-[1.02] hover:bg-[#164a28] hover:shadow-[0_8px_24px_rgba(13,60,31,0.2)]'
+    `bg-[#0D3C1F] text-white hover:bg-[#164a28] ${
+      disableMotion
+        ? ''
+        : 'hover:scale-[1.02] hover:shadow-[0_8px_24px_rgba(13,60,31,0.2)]'
+    }`
   const secondary =
-    'border border-[#0D3C1F] bg-white text-[#0D3C1F] hover:scale-[1.02] hover:shadow-[0_2px_8px_rgba(13,60,31,0.08)]'
+    `border border-[#0D3C1F] bg-white text-[#0D3C1F] ${
+      disableMotion ? '' : 'hover:scale-[1.02] hover:shadow-[0_2px_8px_rgba(13,60,31,0.08)]'
+    }`
 
   const classNames = `${base} ${variant === 'secondary' ? secondary : primary} ${
     fullWidth ? 'w-full' : ''
@@ -59,7 +72,7 @@ export function NexusButton({
       {showArrow ? (
         <ArrowRight
           size={16}
-          className="transition-transform group-hover:translate-x-0.5"
+          className={disableMotion ? '' : 'transition-transform group-hover:translate-x-0.5'}
         />
       ) : null}
     </>

@@ -72,7 +72,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                   },
                 }}
                 transition={{ duration: 0.35, ease: EASE_OUT_EXPO }}
-                className="group relative flex flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
+                className="relative flex flex-col overflow-hidden rounded-xl border border-[#111111] bg-white shadow-[0_4px_24px_rgba(0,0,0,0.04)] transition-shadow duration-300 hover:shadow-[0_16px_40px_rgba(0,0,0,0.08)]"
               >
                 <div className="relative aspect-square overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-[#e8f5ef] to-[#fafafa]" />
@@ -84,7 +84,7 @@ export function Team({ founders }: { founders: Founder[] }) {
                       alt={m.name}
                       loading="lazy"
                       decoding="async"
-                      className="absolute inset-0 h-full w-full object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                      className="absolute inset-0 h-full w-full object-cover"
                       style={{ objectPosition: 'center top' }}
                     />
                   ) : (

@@ -277,7 +277,7 @@ export function ServicesPage() {
                     </ul>
 
                     <div className="mt-6 border-t border-[#0d3c1f]/8 pt-5">
-                      <NexusButton href="/contact" fullWidth showArrow>
+                      <NexusButton href="/contact" fullWidth showArrow disableMotion>
                         Talk about this
                       </NexusButton>
                     </div>

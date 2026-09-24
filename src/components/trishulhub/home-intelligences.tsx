@@ -93,8 +93,41 @@ export function HomeIntelligences() {
             className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.05]"
           />
 
-          {/* ---------- Desktop: same cards as mobile, laid out horizontally ---------- */}
-          <div className="hidden gap-3 md:grid md:grid-cols-5">
+          {/* ---------- Desktop: pipeline rail + cards ----------
+              Same treatment as the "How we work" section: a rail that fills
+              across the five stops with a travelling marker, then the cards. */}
+          <div className="hidden md:block">
+            <div aria-hidden className="relative mb-8 h-3">
+              <div className="absolute inset-x-[10%] top-1/2 h-[2px] -translate-y-1/2 rounded-full bg-[#0d3c1f]/12">
+                <motion.div
+                  className="h-full rounded-full bg-gradient-to-r from-[#0d9488] to-[#5eead4]"
+                  animate={{ width: `${(active / (PILLARS.length - 1)) * 100}%` }}
+                  transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+                />
+                {!reduce ? (
+                  <motion.span
+                    className="absolute -top-[3px] h-2 w-2 rounded-full bg-[#0d9488] shadow-[0_0_0_4px_rgba(13,148,136,0.18)]"
+                    animate={{
+                      left: `calc(${(active / (PILLARS.length - 1)) * 100}% - 4px)`,
+                    }}
+                    transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
+                  />
+                ) : null}
+              </div>
+              <div className="relative grid grid-cols-5">
+                {PILLARS.map((pillar, i) => (
+                  <span key={pillar.name} className="flex justify-center">
+                    <span
+                      className={`h-3 w-3 rounded-full border-2 border-white shadow-sm transition-colors duration-300 ${
+                        i <= active ? 'bg-[#0d9488]' : 'bg-[#d1d5db]'
+                      }`}
+                    />
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div className="grid gap-3 md:grid-cols-5">
             {PILLARS.map((pillar, i) => {
               const Icon = pillar.icon
               const isActive = i === active
@@ -175,6 +208,7 @@ export function HomeIntelligences() {
                 </motion.button>
               )
             })}
+            </div>
           </div>
 
           {/* ---------- Mobile: vertical rail ---------- */}
@@ -233,17 +267,9 @@ export function HomeIntelligences() {
           </div>
         </div>
 
-        {/* Closing quote — the first chip was removed on request and replaced
-            with a line about technology and quality. */}
-        <div className="mx-auto mt-12 max-w-3xl sm:mt-14">
-          <p className="text-balance text-center font-playfair text-lg italic leading-relaxed text-foreground sm:text-xl">
-            “Quality is never an accident in technology — it is what happens
-            when engineering, AI and craft are held to the same standard.”
-          </p>
-          <p className="mt-3 text-center text-xs uppercase tracking-[0.16em] text-[#6b7280]">
-            TrishulHub — engineering, AI and quality
-          </p>
-        </div>
+        {/* Closing quote moved out of this section — it is now its own band
+            between "What you can expect from us" and "Let's build something"
+            (see src/app/page.tsx). */}
       </div>
     </section>
   )

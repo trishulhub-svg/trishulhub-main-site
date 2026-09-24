@@ -91,11 +91,7 @@ export function Hero() {
               className="text-balance text-[1.9rem] font-bold leading-[1.14] tracking-[-0.03em] text-[#111111] sm:text-[2.6rem] md:text-5xl lg:text-[3.6rem] lg:leading-[1.05]"
             >
               <span className="block font-sans">
-                We build digital projects for{' '}
-                {/* Accent phrase — gently sweeping highlight (CSS only). */}
-                <span className="th-accent-word font-playfair italic">
-                  growing businesses
-                </span>
+                We build digital projects for growing businesses
               </span>
             </motion.h1>
 
