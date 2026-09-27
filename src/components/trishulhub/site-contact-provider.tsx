@@ -40,7 +40,12 @@ export function SiteContactProvider({
     let cancelled = false
     const load = async () => {
       try {
-        const res = await fetch('/site-contact.json', { cache: 'no-store' })
+        /*
+         * Live values from the database, not the bundled JSON file — the file
+         * is baked into the deployment at build time, so an admin edit used to
+         * need a redeploy before anyone saw it.
+         */
+        const res = await fetch('/api/site-contact', { cache: 'no-store' })
         if (!res.ok) throw new Error('Failed to load site contact')
         const data = (await res.json()) as Partial<SiteContact>
         if (!cancelled) {

@@ -1,5 +1,5 @@
 import { SiteShell } from '@/components/trishulhub/site-shell'
-import { readSiteContactFile } from '@/lib/site-contact-io'
+import { getSiteContact } from '@/lib/site-contact-io'
 
 export async function ServerSiteShell({
   children,
@@ -8,7 +8,8 @@ export async function ServerSiteShell({
   children: React.ReactNode
   showLoader?: boolean
 }) {
-  const initialContact = await readSiteContactFile()
+  /* Database-backed, so the values are current rather than a build artefact. */
+  const initialContact = await getSiteContact()
   return (
     <SiteShell showLoader={showLoader} initialContact={initialContact}>
       {children}

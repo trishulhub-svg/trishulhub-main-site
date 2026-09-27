@@ -110,6 +110,13 @@ export function AdminDashboardClient({ founder: initialFounder }: { founder: Fou
         body: JSON.stringify(siteContact),
       })
       if (!res.ok) throw new Error('Could not save site contact')
+      /*
+       * Adopt the values the server actually stored — it derives the
+       * human-readable phone display, so this keeps the form in step with what
+       * visitors now see.
+       */
+      const data = await res.json().catch(() => null)
+      if (data?.contact) setSiteContact((prev) => ({ ...prev, ...data.contact }))
       setSavedAt(Date.now())
     } catch (e) {
       setError(e instanceof Error ? e.message : 'Save failed')

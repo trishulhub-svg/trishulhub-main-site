@@ -6,7 +6,7 @@ import { AgentationLive } from "@/components/agentation";
 import { ChatWidgetLazy } from "@/components/trishulhub/chat-widget-lazy";
 import { JsonLd } from "@/components/seo/json-ld";
 import { organizationSchema } from "@/lib/structured-data";
-import { readSiteContactFile } from "@/lib/site-contact-io";
+import { getSiteContact } from "@/lib/site-contact-io";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -121,6 +121,16 @@ export const viewport: Viewport = {
 };
 
 /**
+ * Safety net for the admin-editable contact details.
+ *
+ * Saving them from the admin purges the cache immediately (`revalidatePath`),
+ * but this window means the pre-rendered pages can also pick up a change on
+ * their own — so a missed invalidation can never leave stale contact details on
+ * the site for long.
+ */
+export const revalidate = 300;
+
+/**
  * Runs before first paint so a dark-mode visitor never sees a white flash.
  * Kept inline (not a module) on purpose — it must execute before React.
  */
@@ -133,7 +143,7 @@ export default async function RootLayout({
 }>) {
   // Organisation markup reads the live contact config so the phone number and
   // email in the schema always match what the admin has entered.
-  const contact = await readSiteContactFile()
+  const contact = await getSiteContact()
 
   return (
     <html lang="en-GB" suppressHydrationWarning>
