@@ -1449,23 +1449,12 @@ textarea.field-input {
   }
 }
 
-/* ---------- Floating badge (hero trust chips) ---------- */
-.th-float {
-  animation: th-float 6s ease-in-out infinite;
-}
-.th-float-slow {
-  animation: th-float 8.5s ease-in-out infinite;
-  animation-delay: -2s;
-}
-@keyframes th-float {
-  0%,
-  100% {
-    transform: translate3d(0, 0, 0);
-  }
-  50% {
-    transform: translate3d(0, -10px, 0);
-  }
-}
+/*
+ * Removed: the `.th-float` / `.th-float-slow` badge animation and its
+ * keyframes. Its only remaining use was the dot in the closing CTA's
+ * "Available for new projects" badge, and the constant drifting read as a
+ * distraction on small screens (owner request), so the dot is now static.
+ */
 
 /* ---------- Text helpers ---------- */
 .text-balance {
@@ -1487,8 +1476,6 @@ textarea.field-input {
   .th-hero-bg::after,
   .th-aurora-glow,
   .th-conic-border::before,
-  .th-float,
-  .th-float-slow,
   .th-shimmer {
     animation: none !important;
   }

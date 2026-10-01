@@ -35,7 +35,9 @@ export function CTA() {
 
           <div className="relative mx-auto max-w-3xl">
             <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-[11px] font-semibold uppercase tracking-[0.18em] text-[#9ff0dd] backdrop-blur-sm">
-              <span className="th-float h-1.5 w-1.5 rounded-full bg-[#5eead4]" />
+              {/* Static dot — the floating animation was distracting on small
+                  screens (owner request). */}
+              <span className="h-1.5 w-1.5 rounded-full bg-[#5eead4]" />
               Available for new projects
             </span>
 
