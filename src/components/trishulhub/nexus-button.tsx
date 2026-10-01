@@ -46,7 +46,12 @@ export function NexusButton({
         href.startsWith('tel:') ||
         href.startsWith('https://wa.me')))
 
-  const base = `group relative inline-flex h-12 items-center justify-center gap-2 rounded-lg px-7 text-[15px] font-medium outline-none ${
+  /*
+   * Canonical primary shape (owner reference, "ref1"): 52px tall, 12px radius,
+   * 32px side padding, 14px semibold — the same geometry as the hero's
+   * "Explore services" button, so every primary CTA on the site matches.
+   */
+  const base = `group relative inline-flex h-13 items-center justify-center gap-2 rounded-xl px-8 text-sm font-semibold outline-none ${
     disableMotion
       ? 'transition-colors duration-200'
       : 'transition-all duration-200 active:scale-[0.98]'

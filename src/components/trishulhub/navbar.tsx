@@ -130,7 +130,8 @@ export function Navbar() {
             <a
               /* Owner request: the header CTA goes to the project planner. */
               href="/#planner"
-              className="btn-shine group hidden h-10 items-center gap-1.5 rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_8px_22px_rgba(13,60,31,0.22)] sm:inline-flex"
+              /* Same shape as the hero's "Explore services" button (ref1). */
+              className="btn-shine group hidden h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-8 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)] sm:inline-flex"
             >
               Get Started
               <ArrowRight
@@ -207,10 +208,10 @@ export function Navbar() {
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.18, duration: 0.3, ease: EASE_OUT_EXPO }}
-                className="mt-2 flex h-12 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
+                className="mt-2 flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] text-sm font-semibold text-white"
               >
                 Get Started
-                <ArrowRight size={15} className="ml-1.5" />
+                <ArrowRight size={16} />
               </motion.a>
               <div className="mt-3 flex items-center justify-between rounded-xl border border-[#0d3c1f]/10 px-4 py-2.5 sm:hidden">
                 <span className="text-sm font-semibold text-[#111111]">

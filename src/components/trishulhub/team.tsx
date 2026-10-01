@@ -120,10 +120,11 @@ export function Team({ founders }: { founders: Founder[] }) {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.1 }}
             transition={{ duration: 0.45, ease: EASE_OUT_EXPO }}
-            className="inline-flex items-center gap-2 rounded-full bg-[#0D3C1F] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#164a28]"
+            /* Same shape as the hero's "Explore services" button (ref1). */
+            className="btn-shine inline-flex h-13 items-center justify-center gap-2 rounded-xl bg-[#0D3C1F] px-8 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_14px_34px_rgba(13,60,31,0.26)]"
           >
             Contact us
-          <ArrowRight size={15} />
+          <ArrowRight size={16} />
           </motion.a>
         </div>
       </div>
