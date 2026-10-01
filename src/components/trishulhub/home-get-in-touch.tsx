@@ -5,9 +5,9 @@ import { motion } from 'framer-motion'
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Mail, MessageCircle, Phone } from 'lucide-react'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
-import { useEmailOptions } from '@/components/trishulhub/email-options'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { enquiryWhatsAppDraft } from '@/lib/site-contact'
+import { openChatWidget } from '@/lib/chat'
 
 type Channel = {
   id: string
@@ -34,7 +34,6 @@ const STEP_MS = 1800
 export function HomeGetInTouch() {
   const contact = useSiteContact()
   const { email, phoneDisplay, whatsappWithMessage } = contact
-  const openEmail = useEmailOptions()
   const reduce = useReducedMotionSafe()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
@@ -44,17 +43,18 @@ export function HomeGetInTouch() {
       id: 'whatsapp',
       label: 'WhatsApp',
       value: 'Chat now',
-      hint: 'Opens with a ready-made brief',
-      href: whatsappWithMessage(enquiryWhatsAppDraft()),
-      external: true,
+      /* Owner request: the card opens our chat assistant, which collects the
+         brief in one place instead of handing the visitor to another app. */
+      hint: 'Opens our chat assistant',
+      onClick: openChatWidget,
       icon: <MessageCircle size={20} strokeWidth={1.7} />,
     },
     {
       id: 'email',
       label: 'Email',
       value: email,
-      hint: 'Gmail, Outlook or your mail app',
-      onClick: () => openEmail(),
+      hint: 'Ask us in the chat',
+      onClick: openChatWidget,
       icon: <Mail size={20} strokeWidth={1.7} />,
     },
     {
@@ -62,7 +62,9 @@ export function HomeGetInTouch() {
       label: 'Phone',
       value: phoneDisplay,
       hint: 'Mon–Sat, 9am–7pm',
-      /* Owner request: this card is informational — no tap-to-call. */
+      /* Owner request: tap the card to call this number. */
+      href: `tel:${phoneDisplay.replace(/[^\d+]/g, '')}`,
+      external: true,
       icon: <Phone size={20} strokeWidth={1.7} />,
     },
   ]

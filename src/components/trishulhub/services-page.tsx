@@ -23,8 +23,7 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
-import { useEmailOptions } from '@/components/trishulhub/email-options'
-import { CHAT_OPEN_EVENT } from '@/components/trishulhub/chat-widget'
+import { openChatWidget } from '@/lib/chat'
 import { CTA } from '@/components/trishulhub/cta'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { ServiceVisual } from '@/components/trishulhub/service-visuals'
@@ -163,7 +162,6 @@ const inclusions = [
 
 // Service visuals (animated device / browser / dashboard mockups) live in ./service-visuals
 export function ServicesPage() {
-  const openEmail = useEmailOptions()
   const [step, setStep] = useState(0)
 
   // Sequential highlight for the "How we work" steps (same single-index
@@ -375,16 +373,8 @@ export function ServicesPage() {
                 trade-offs, ships in stages, and stays reachable after launch.
               </p>
               <div className="mt-8">
-                {/*
-                  Owner request: same visual treatment as "Ask a question", but
-                  this one opens the email chooser (Gmail / Outlook / mail app)
-                  rather than the chat.
-                */}
-                <NexusButton
-                  variant="secondary"
-                  showArrow
-                  onClick={() => openEmail()}
-                >
+                {/* Owner request: both ask-buttons open the chat assistant. */}
+                <NexusButton variant="secondary" showArrow onClick={openChatWidget}>
                   Ask us anything
                 </NexusButton>
               </div>
@@ -486,11 +476,7 @@ export function ServicesPage() {
               </p>
               <div className="mt-6">
                 {/* Owner request: this opens the chat widget, not WhatsApp. */}
-                <NexusButton
-                  variant="secondary"
-                  showArrow
-                  onClick={() => window.dispatchEvent(new Event(CHAT_OPEN_EVENT))}
-                >
+                <NexusButton variant="secondary" showArrow onClick={openChatWidget}>
                   Ask a question
                 </NexusButton>
               </div>

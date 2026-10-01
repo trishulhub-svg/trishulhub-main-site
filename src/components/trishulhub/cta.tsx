@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion'
 import Link from 'next/link'
-import { ArrowRight, Clock, Mail, MessageCircle, ShieldCheck } from 'lucide-react'
+import { ArrowRight, Clock, MessageCircle, ShieldCheck } from 'lucide-react'
 import { HeroAccentWord } from './hero-accent-word'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { openChatWidget } from '@/lib/chat'
 
 const ASSURANCES = [
   { icon: Clock, label: 'Replies within 2–3 business days' },
@@ -14,7 +15,7 @@ const ASSURANCES = [
 ] as const
 
 export function CTA() {
-  const { email, links } = useSiteContact()
+  const { email } = useSiteContact()
 
   return (
     <section className="relative overflow-hidden bg-[#fafafa] py-20 sm:py-28">
@@ -61,13 +62,20 @@ export function CTA() {
                 Contact us
                 <ArrowRight size={16} />
               </Link>
-              <a
-                href={links.mailto}
+              {/*
+                Owner request: this opens the chat assistant rather than a
+                mailto (which does nothing when no mail client is configured).
+                The contact address still appears in the footer on every page.
+              */}
+              <button
+                type="button"
+                onClick={openChatWidget}
                 className="inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl border border-white/25 px-8 py-3.5 text-sm font-semibold text-white transition hover:border-white/60 hover:bg-white/5 sm:w-auto"
               >
-                <Mail size={16} />
-                {email}
-              </a>
+                <MessageCircle size={16} />
+                Chat with us
+                <span className="sr-only"> ({email})</span>
+              </button>
             </div>
 
             <ul className="mt-10 flex flex-wrap items-center justify-center gap-x-7 gap-y-3 text-[12.5px] text-white/55">

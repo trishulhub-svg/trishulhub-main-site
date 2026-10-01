@@ -17,6 +17,7 @@ import {
   enquiryWhatsAppDraft,
 } from '@/lib/site-contact'
 import { EASE_OUT_EXPO } from '@/lib/animations'
+import { CHAT_OPEN_EVENT } from '@/lib/chat'
 
 /**
  * Site chat assistant.
@@ -83,9 +84,6 @@ const EMPTY: Answers = {
 }
 
 const STORAGE_KEY = 'trishulhub-chat-v1'
-
-/** Fired by any button that should open the chat (see the effect below). */
-export const CHAT_OPEN_EVENT = 'trishulhub:open-chat'
 const HIDDEN_PREFIXES = ['/admin', '/lead']
 
 const QUESTIONS: Record<Stage, string> = {
@@ -194,8 +192,8 @@ export function ChatWidget() {
 
   /*
    * Any button on the site can open the chat with
-   * `window.dispatchEvent(new Event('trishulhub:open-chat'))` — used by the
-   * "Ask a question" button on /services, which used to send people to WhatsApp.
+   * `openChatWidget()` from @/lib/chat — used by the "ask" buttons and the
+   * contact cards, which otherwise send people somewhere less useful.
    */
   useEffect(() => {
     const openChat = () => setOpen(true)

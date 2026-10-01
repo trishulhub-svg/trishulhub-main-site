@@ -2,7 +2,7 @@
 
 import { useCallback, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Check } from 'lucide-react'
+import { Check, Lock } from 'lucide-react'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { BUDGET_OPTIONS } from '@/lib/services-content'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
@@ -62,6 +62,12 @@ export function AboutProtocol({
   const contact = useSiteContact()
   const { whatsappWithMessage } = contact
   const [step, setStep] = useState(1)
+  /*
+   * Owner request: steps 02–04 start locked. Filling in the current step and
+   * pressing "Next step" unlocks the next one, so the planner is a guided
+   * sequence rather than four tabs anyone can jump between.
+   */
+  const [unlocked, setUnlocked] = useState(1)
   const [budgetIndex, setBudgetIndex] = useState(0)
   const [lane, setLane] = useState<string>(LANES[0])
   const [timing, setTiming] = useState<string>(TIMING[1])
@@ -114,7 +120,10 @@ export function AboutProtocol({
   }, [budgetIndex, budgets.length])
 
   const next = () => {
-    if (step < 4) setStep((s) => s + 1)
+    if (step >= 4) return
+    setStep((s) => s + 1)
+    /* Unlock the step we are moving into (and never re-lock an earlier one). */
+    setUnlocked((u) => Math.max(u, step + 1))
   }
 
   return (
@@ -146,21 +155,29 @@ export function AboutProtocol({
               {[1, 2, 3, 4].map((n) => {
                 const active = n === step
                 const done = n < step
+                const locked = n > unlocked
                 return (
                   <button
                     key={n}
                     type="button"
-                    onClick={() => setStep(n)}
+                    onClick={() => {
+                      if (!locked) setStep(n)
+                    }}
+                    disabled={locked}
+                    aria-disabled={locked}
+                    title={locked ? 'Complete the previous step first' : `Step ${n}`}
                     className={`flex size-10 items-center justify-center rounded-full text-sm font-semibold transition-all ${
                       active
                         ? 'bg-[#0D3C1F] text-white'
                         : done
                           ? 'bg-[#e0f7fa] text-[#0d9488]'
-                          : 'border border-[#111111] bg-white text-[#6b7280]'
+                          : locked
+                            ? 'cursor-not-allowed border border-dashed border-[#111111]/25 bg-[#fafafa] text-[#c4c8cb]'
+                            : 'border border-[#111111] bg-white text-[#6b7280]'
                     }`}
                     aria-label={`Step ${n}`}
                   >
-                    {done ? <Check size={16} /> : `0${n}`}
+                    {done ? <Check size={16} /> : locked ? <Lock size={14} /> : `0${n}`}
                   </button>
                 )
               })}
