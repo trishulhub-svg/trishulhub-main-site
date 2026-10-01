@@ -9,7 +9,6 @@ import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Menu, X } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { ThemeToggle } from './theme-toggle'
-import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
 const navLinks = [
@@ -24,7 +23,6 @@ export function Navbar() {
   const [open, setOpen] = useState(false)
   const reduce = useReducedMotionSafe()
   const pathname = usePathname()
-  const { links: contactLinks } = useSiteContact()
 
   // Reading-progress bar (top of the viewport)
   const { scrollYProgress } = useScroll()
@@ -130,9 +128,8 @@ export function Navbar() {
             <ThemeToggle className="hidden sm:inline-flex" />
 
             <a
-              href={contactLinks.whatsapp}
-              target="_blank"
-              rel="noopener noreferrer"
+              /* Owner request: the header CTA goes to the project planner. */
+              href="/#planner"
               className="btn-shine group hidden h-10 items-center gap-1.5 rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_8px_22px_rgba(13,60,31,0.22)] sm:inline-flex"
             >
               Get Started
@@ -201,9 +198,7 @@ export function Navbar() {
                 )
               })}
               <motion.a
-                href={contactLinks.whatsapp}
-                target="_blank"
-                rel="noopener noreferrer"
+                href="/#planner"
                 onClick={() => setOpen(false)}
                 initial={{ opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}

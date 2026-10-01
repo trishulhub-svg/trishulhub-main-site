@@ -126,6 +126,46 @@ export function emailDraftUrl(
   return `mailto:${contact.email}?${params.toString().replace(/\+/g, '%20')}`
 }
 
+/**
+ * Webmail compose links.
+ *
+ * Most people in the UK read their mail in a browser (Gmail or Outlook), where
+ * a `mailto:` link does nothing unless a desktop client is configured — it
+ * opens an empty "choose an app" prompt or nothing at all. These deeplinks take
+ * the same pre-written draft straight into the browser composer, addressed to
+ * whatever address the owner has set in Site Contact.
+ *
+ * Note: `outlook.live.com` covers personal Outlook/Hotmail accounts. Work or
+ * school Microsoft 365 accounts are redirected to `outlook.office.com` by
+ * Microsoft themselves, so one link still works for both.
+ */
+export function gmailComposeUrl(
+  contact: SiteContact,
+  draft: { subject: string; body: string },
+): string {
+  const params = new URLSearchParams({
+    view: 'cm',
+    fs: '1',
+    to: contact.email,
+    su: draft.subject,
+    body: draft.body,
+  })
+  // Spaces as %20, not "+": some webmail deeplinks render a literal plus.
+  return `https://mail.google.com/mail/?${params.toString().replace(/\+/g, '%20')}`
+}
+
+export function outlookComposeUrl(
+  contact: SiteContact,
+  draft: { subject: string; body: string },
+): string {
+  const params = new URLSearchParams({
+    to: contact.email,
+    subject: draft.subject,
+    body: draft.body,
+  })
+  return `https://outlook.live.com/mail/0/deeplink/compose?${params.toString().replace(/\+/g, '%20')}`
+}
+
 /** Professional, ready-to-send email brief. */
 export function enquiryEmailDraft(extra?: EnquiryDetails): {
   subject: string

@@ -7,7 +7,6 @@ import {
   LayoutDashboard,
   Smartphone,
   CheckCircle2,
-  ArrowRight,
   MessageSquare,
   Pencil,
   Code2,
@@ -24,10 +23,11 @@ import {
   type LucideIcon,
 } from 'lucide-react'
 import { NexusButton } from '@/components/trishulhub/nexus-button'
+import { useEmailOptions } from '@/components/trishulhub/email-options'
+import { CHAT_OPEN_EVENT } from '@/components/trishulhub/chat-widget'
 import { CTA } from '@/components/trishulhub/cta'
 import { HeroAccentWord } from '@/components/trishulhub/hero-accent-word'
 import { ServiceVisual } from '@/components/trishulhub/service-visuals'
-import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { SERVICES_FAQ } from '@/lib/services-content'
 
@@ -163,7 +163,7 @@ const inclusions = [
 
 // Service visuals (animated device / browser / dashboard mockups) live in ./service-visuals
 export function ServicesPage() {
-  const { links } = useSiteContact()
+  const openEmail = useEmailOptions()
   const [step, setStep] = useState(0)
 
   // Sequential highlight for the "How we work" steps (same single-index
@@ -277,7 +277,8 @@ export function ServicesPage() {
                     </ul>
 
                     <div className="mt-6 border-t border-[#0d3c1f]/8 pt-5">
-                      <NexusButton href="/contact" fullWidth showArrow disableMotion>
+                      {/* Owner request: open the project planner. */}
+                      <NexusButton href="/#planner" fullWidth showArrow disableMotion>
                         Talk about this
                       </NexusButton>
                     </div>
@@ -374,15 +375,18 @@ export function ServicesPage() {
                 trade-offs, ships in stages, and stays reachable after launch.
               </p>
               <div className="mt-8">
-                <a
-                  href={links.whatsapp}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 py-2 text-[15px] font-semibold text-[#111111] transition hover:text-[#0D3C1F]"
+                {/*
+                  Owner request: same visual treatment as "Ask a question", but
+                  this one opens the email chooser (Gmail / Outlook / mail app)
+                  rather than the chat.
+                */}
+                <NexusButton
+                  variant="secondary"
+                  showArrow
+                  onClick={() => openEmail()}
                 >
                   Ask us anything
-                  <ArrowRight size={16} strokeWidth={1.5} />
-                </a>
+                </NexusButton>
               </div>
             </div>
             <div className="grid gap-5 sm:grid-cols-3 lg:col-span-7 lg:grid-cols-1">
@@ -481,7 +485,12 @@ export function ServicesPage() {
                 get a straight answer, not a sales pitch.
               </p>
               <div className="mt-6">
-                <NexusButton href={links.whatsapp} variant="secondary" showArrow>
+                {/* Owner request: this opens the chat widget, not WhatsApp. */}
+                <NexusButton
+                  variant="secondary"
+                  showArrow
+                  onClick={() => window.dispatchEvent(new Event(CHAT_OPEN_EVENT))}
+                >
                   Ask a question
                 </NexusButton>
               </div>

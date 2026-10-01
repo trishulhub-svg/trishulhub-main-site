@@ -83,6 +83,9 @@ const EMPTY: Answers = {
 }
 
 const STORAGE_KEY = 'trishulhub-chat-v1'
+
+/** Fired by any button that should open the chat (see the effect below). */
+export const CHAT_OPEN_EVENT = 'trishulhub:open-chat'
 const HIDDEN_PREFIXES = ['/admin', '/lead']
 
 const QUESTIONS: Record<Stage, string> = {
@@ -188,6 +191,17 @@ export function ChatWidget() {
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
   }, [open])
+
+  /*
+   * Any button on the site can open the chat with
+   * `window.dispatchEvent(new Event('trishulhub:open-chat'))` — used by the
+   * "Ask a question" button on /services, which used to send people to WhatsApp.
+   */
+  useEffect(() => {
+    const openChat = () => setOpen(true)
+    window.addEventListener(CHAT_OPEN_EVENT, openChat)
+    return () => window.removeEventListener(CHAT_OPEN_EVENT, openChat)
+  }, [])
 
   /* Keep the page behind the panel still while it is open — on a phone the
      background used to scroll (and zoom) while the visitor tried to scroll

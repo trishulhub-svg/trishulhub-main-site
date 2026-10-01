@@ -4,22 +4,20 @@ import { useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
 import { Mail, MessageCircle, Phone } from 'lucide-react'
-import { NexusButton } from '@/components/trishulhub/nexus-button'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
+import { useEmailOptions } from '@/components/trishulhub/email-options'
 import { EASE_OUT_EXPO } from '@/lib/animations'
-import {
-  emailDraftUrl,
-  enquiryEmailDraft,
-  enquiryWhatsAppDraft,
-} from '@/lib/site-contact'
+import { enquiryWhatsAppDraft } from '@/lib/site-contact'
 
 type Channel = {
   id: string
   label: string
   value: string
   hint: string
-  href: string
+  /** Undefined = the card is informational and not clickable. */
+  href?: string
   external?: boolean
+  onClick?: () => void
   icon: React.ReactNode
 }
 
@@ -36,6 +34,7 @@ const STEP_MS = 1800
 export function HomeGetInTouch() {
   const contact = useSiteContact()
   const { email, phoneDisplay, whatsappWithMessage } = contact
+  const openEmail = useEmailOptions()
   const reduce = useReducedMotionSafe()
   const [active, setActive] = useState(0)
   const paused = useRef(false)
@@ -54,8 +53,8 @@ export function HomeGetInTouch() {
       id: 'email',
       label: 'Email',
       value: email,
-      hint: 'Opens a ready-to-send draft',
-      href: emailDraftUrl(contact, enquiryEmailDraft()),
+      hint: 'Gmail, Outlook or your mail app',
+      onClick: () => openEmail(),
       icon: <Mail size={20} strokeWidth={1.7} />,
     },
     {
@@ -63,8 +62,7 @@ export function HomeGetInTouch() {
       label: 'Phone',
       value: phoneDisplay,
       hint: 'Mon–Sat, 9am–7pm',
-      href: `tel:${phoneDisplay.replace(/[^\d+]/g, '')}`,
-      external: true,
+      /* Owner request: this card is informational — no tap-to-call. */
       icon: <Phone size={20} strokeWidth={1.7} />,
     },
   ]
@@ -114,50 +112,48 @@ export function HomeGetInTouch() {
           </p>
         </div>
 
-        {/* Channel cards */}
+        {/* Channel cards.
+            WhatsApp opens WhatsApp, Email opens the provider chooser, and Phone
+            is informational only (owner request) — so the element type differs
+            per card while the visuals stay identical. */}
         <div className="relative mx-auto mt-11 grid max-w-4xl gap-4 sm:grid-cols-3">
           {channels.map((c, i) => {
             const isActive = i === active
-            return (
-              <motion.a
-                key={c.id}
-                href={c.href}
-                {...(c.external
-                  ? { target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-                onMouseEnter={() => {
-                  paused.current = true
-                  setActive(i)
-                }}
-                onMouseLeave={() => {
-                  paused.current = false
-                }}
-                onFocus={() => {
-                  paused.current = true
-                  setActive(i)
-                }}
-                onBlur={() => {
-                  paused.current = false
-                }}
-                initial={{ opacity: 0, y: 18 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.2 }}
-                transition={{
-                  duration: 0.5,
-                  delay: i * 0.08,
-                  ease: EASE_OUT_EXPO,
-                }}
-                animate={{
-                  y: isActive ? -6 : 0,
-                  borderColor: isActive
-                    ? 'rgba(13,60,31,0.35)'
-                    : 'rgba(13,60,31,0.1)',
-                  boxShadow: isActive
-                    ? '0 20px 46px rgba(6,43,22,0.13)'
-                    : '0 8px 24px rgba(6,43,22,0.05)',
-                }}
-                className="relative flex flex-col items-center overflow-hidden rounded-2xl border bg-white px-5 py-6 text-center"
-              >
+            const interactive = Boolean(c.href || c.onClick)
+            const cardProps = {
+              onMouseEnter: () => {
+                paused.current = true
+                setActive(i)
+              },
+              onMouseLeave: () => {
+                paused.current = false
+              },
+              onFocus: () => {
+                paused.current = true
+                setActive(i)
+              },
+              onBlur: () => {
+                paused.current = false
+              },
+              initial: { opacity: 0, y: 18 },
+              whileInView: { opacity: 1, y: 0 },
+              viewport: { once: true, amount: 0.2 },
+              transition: { duration: 0.5, delay: i * 0.08, ease: EASE_OUT_EXPO },
+              animate: {
+                y: isActive ? -6 : 0,
+                borderColor: isActive
+                  ? 'rgba(13,60,31,0.35)'
+                  : 'rgba(13,60,31,0.1)',
+                boxShadow: isActive
+                  ? '0 20px 46px rgba(6,43,22,0.13)'
+                  : '0 8px 24px rgba(6,43,22,0.05)',
+              },
+              className: `relative flex flex-col items-center overflow-hidden rounded-2xl border bg-white px-5 py-6 text-center ${
+                interactive ? 'cursor-pointer' : ''
+              }`,
+            }
+            const body = (
+              <>
                 {/* Signal ring on the active card */}
                 {isActive && !reduce ? (
                   <motion.span
@@ -208,60 +204,42 @@ export function HomeGetInTouch() {
                   )}
                   {isActive ? 'Ready now' : 'Available'}
                 </span>
-              </motion.a>
+              </>
+            )
+            if (c.href) {
+              return (
+                <motion.a
+                  key={c.id}
+                  href={c.href}
+                  {...(c.external
+                    ? { target: '_blank', rel: 'noopener noreferrer' }
+                    : {})}
+                  {...cardProps}
+                >
+                  {body}
+                </motion.a>
+              )
+            }
+            if (c.onClick) {
+              return (
+                <motion.button
+                  key={c.id}
+                  type="button"
+                  onClick={c.onClick}
+                  {...cardProps}
+                >
+                  {body}
+                </motion.button>
+              )
+            }
+            return (
+              <motion.div key={c.id} {...cardProps}>
+                {body}
+              </motion.div>
             )
           })}
         </div>
 
-        {/* Relay beams → centre CTA */}
-        <div className="relative mx-auto mt-2 hidden h-24 max-w-4xl md:block" aria-hidden>
-          <svg viewBox="0 0 800 96" preserveAspectRatio="none" className="h-full w-full">
-            <defs>
-              <linearGradient id="relay-beam" x1="0%" y1="0%" x2="0%" y2="100%">
-                <stop offset="0%" stopColor="#0d9488" stopOpacity="0.05" />
-                <stop offset="100%" stopColor="#0d9488" stopOpacity="0.75" />
-              </linearGradient>
-            </defs>
-            {[133, 400, 667].map((x, i) => {
-              const isActive = i === active
-              return (
-                <g key={x}>
-                  <path
-                    d={`M${x} 0 C ${x} 40, 400 44, 400 96`}
-                    stroke="#0d3c1f"
-                    strokeOpacity="0.1"
-                    strokeWidth="1.5"
-                    fill="none"
-                  />
-                  <motion.path
-                    d={`M${x} 0 C ${x} 40, 400 44, 400 96`}
-                    stroke="url(#relay-beam)"
-                    strokeWidth={isActive ? 2.4 : 1.5}
-                    fill="none"
-                    initial={false}
-                    animate={{ pathLength: isActive ? 1 : 0.12, opacity: isActive ? 1 : 0.35 }}
-                    transition={{ duration: 0.6, ease: EASE_OUT_EXPO }}
-                  />
-                  {!reduce && isActive ? (
-                    <circle r="3.5" fill="#5eead4">
-                      <animateMotion
-                        dur="1.4s"
-                        repeatCount="indefinite"
-                        path={`M${x} 0 C ${x} 40, 400 44, 400 96`}
-                      />
-                    </circle>
-                  ) : null}
-                </g>
-              )
-            })}
-          </svg>
-        </div>
-
-        <div className="relative mt-4 flex justify-center md:-mt-6">
-          <NexusButton href="#contact-form" showArrow>
-            Send us a message
-          </NexusButton>
-        </div>
       </div>
     </section>
   )

@@ -3,6 +3,7 @@
 import { Navbar } from '@/components/trishulhub/navbar'
 import { Footer } from '@/components/trishulhub/footer'
 import { CookieConsent } from '@/components/trishulhub/cookie-consent'
+import { EmailOptionsProvider } from '@/components/trishulhub/email-options'
 import { SmoothScrollProvider } from '@/components/trishulhub/smooth-scroll-provider'
 import { SiteContactProvider } from '@/components/trishulhub/site-contact-provider'
 import type { SiteContact } from '@/lib/site-contact'
@@ -24,15 +25,18 @@ export function SiteShell({
   return (
     <SmoothScrollProvider>
       <SiteContactProvider initial={initialContact}>
-        <div className="relative flex min-h-screen flex-col bg-[#fafafa]">
-          <Navbar />
-          <main className="relative z-10 flex min-h-screen flex-1 flex-col">
-            {children}
-          </main>
-          <Footer />
-          {/* Cookie / device-storage notice + preference centre (PECR). */}
-          <CookieConsent />
-        </div>
+        {/* Email actions anywhere in the site open the Gmail / Outlook chooser. */}
+        <EmailOptionsProvider>
+          <div className="relative flex min-h-screen flex-col bg-[#fafafa]">
+            <Navbar />
+            <main className="relative z-10 flex min-h-screen flex-1 flex-col">
+              {children}
+            </main>
+            <Footer />
+            {/* Cookie / device-storage notice + preference centre (PECR). */}
+            <CookieConsent />
+          </div>
+        </EmailOptionsProvider>
       </SiteContactProvider>
     </SmoothScrollProvider>
   )

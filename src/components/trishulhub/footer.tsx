@@ -5,6 +5,7 @@ import { ArrowUp, Mail, MapPin, Phone } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { CookieSettingsButton } from '@/components/trishulhub/cookie-consent'
+import { useEmailOptions } from '@/components/trishulhub/email-options'
 
 const company = [
   { label: 'Home', href: '/' },
@@ -45,6 +46,7 @@ const socialBtn =
 
 export function Footer() {
   const { email, phoneDisplay, location, links } = useSiteContact()
+  const openEmail = useEmailOptions()
 
   return (
     <footer className="th-footer relative overflow-hidden bg-[#0a0a0a] text-white">
@@ -71,13 +73,17 @@ export function Footer() {
               >
                 <WhatsAppIcon size={16} />
               </a>
-              <a
-                href={links.mailto}
-                aria-label="Email"
+              {/* Owner request: offer Gmail / Outlook instead of a bare
+                  mailto, which does nothing when no mail client is set up.
+                  Same behaviour in the footer on every page. */}
+              <button
+                type="button"
+                onClick={() => openEmail()}
+                aria-label={`Email us at ${email}`}
                 className={socialBtn}
               >
                 <Mail size={16} />
-              </a>
+              </button>
             </div>
           </div>
 

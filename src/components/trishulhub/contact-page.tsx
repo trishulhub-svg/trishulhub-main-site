@@ -21,7 +21,7 @@ import { useSiteContact } from '@/components/trishulhub/site-contact-provider'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 import { HomeGetInTouch } from '@/components/trishulhub/home-get-in-touch'
 import { CONTACT_BUDGET_OPTIONS } from '@/lib/services-content'
-import { emailDraftUrl } from '@/lib/site-contact'
+import { useEmailOptions } from '@/components/trishulhub/email-options'
 
 const STEPS = [
   {
@@ -52,10 +52,11 @@ export function ContactPage() {
   const [sending, setSending] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  /** The pre-filled mailto we just opened, so the modal can offer it again. */
-  const [emailHref, setEmailHref] = useState<string | null>(null)
+  /** The draft we just built, so the confirmation can offer it again. */
+  const [emailDraft, setEmailDraft] = useState<{ subject: string; body: string } | null>(null)
   const contact = useSiteContact()
   const { email, phoneDisplay, location, links } = contact
+  const openEmail = useEmailOptions()
   const formRef = useRef<HTMLFormElement>(null)
   const [service, setService] = useState('Website')
 
@@ -86,12 +87,13 @@ export function ContactPage() {
         return
       }
       /**
-       * Owner request: after a successful submit the visitor's own mail app
-       * opens with everything they typed, so the enquiry also lands in our
-       * inbox. The lead is already stored above (visible in /admin), so a
-       * blocked mailto cannot lose the enquiry — the modal repeats the link.
+       * Owner request: after a successful submit the visitor is offered Gmail,
+       * Outlook or their own mail app, with everything they typed already
+       * written and addressed to the live contact email. The lead is stored
+       * above regardless (visible in /admin), so a blocked or abandoned mail
+       * client can never lose the enquiry.
        */
-      const mailHref = emailDraftUrl(contact, {
+      const draft = {
         subject: `Project enquiry — ${payload.service || 'Website'}`,
         body: [
           'Hello TrishulHub team,',
@@ -110,9 +112,9 @@ export function ContactPage() {
           'Thanks,',
           '',
         ].join('\r\n'),
-      })
-      setEmailHref(mailHref)
-      window.location.href = mailHref
+      }
+      setEmailDraft(draft)
+      openEmail(draft)
       formRef.current?.reset()
       setService('Website')
       setShowSuccess(true)
@@ -425,17 +427,16 @@ export function ContactPage() {
                 business days.
               </p>
               <div className="mt-6 space-y-2.5">
-                {/* If the browser blocked the automatic mailto, this opens the
-                    same pre-filled email. */}
-                {emailHref ? (
-                  <a
-                    href={emailHref}
-                    className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white transition hover:bg-[#164a28]"
-                  >
-                    <Mail size={15} />
-                    Open the email again
-                  </a>
-                ) : null}
+                {/* Reopens the Gmail / Outlook / mail-app chooser with the same
+                    pre-written message. */}
+                <button
+                  type="button"
+                  onClick={() => openEmail(emailDraft ?? undefined)}
+                  className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-full bg-[#0D3C1F] text-sm font-semibold text-white transition hover:bg-[#164a28]"
+                >
+                  <Mail size={15} />
+                  Send it by email
+                </button>
                 <button
                   type="button"
                   onClick={() => setShowSuccess(false)}
