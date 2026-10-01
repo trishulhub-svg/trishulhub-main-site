@@ -6,7 +6,7 @@ import { usePathname } from 'next/navigation'
 import {
   AnimatePresence, motion, useScroll, useSpring } from 'framer-motion'
 import { useReducedMotionSafe } from '@/lib/use-reduced-motion-safe'
-import { Menu, X } from 'lucide-react'
+import { ArrowRight, Menu, X } from 'lucide-react'
 import { BrandLogo } from './brand-logo'
 import { ThemeToggle } from './theme-toggle'
 import { EASE_OUT_EXPO } from '@/lib/animations'
@@ -133,6 +133,10 @@ export function Navbar() {
               className="btn-shine group hidden h-10 items-center gap-1.5 rounded-full bg-[#0D3C1F] px-5 text-sm font-semibold text-white transition hover:bg-[#164a28] hover:shadow-[0_8px_22px_rgba(13,60,31,0.22)] sm:inline-flex"
             >
               Get Started
+              <ArrowRight
+                size={15}
+                className="transition-transform group-hover:translate-x-0.5"
+              />
             </a>
 
             <button
@@ -206,6 +210,7 @@ export function Navbar() {
                 className="mt-2 flex h-12 items-center justify-center rounded-full bg-[#0D3C1F] text-sm font-semibold text-white"
               >
                 Get Started
+                <ArrowRight size={15} className="ml-1.5" />
               </motion.a>
               <div className="mt-3 flex items-center justify-between rounded-xl border border-[#0d3c1f]/10 px-4 py-2.5 sm:hidden">
                 <span className="text-sm font-semibold text-[#111111]">

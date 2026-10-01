@@ -3,6 +3,7 @@
 import { useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
+  ArrowRight,
   CheckCircle2,
   ChevronDown,
   Clock,
@@ -436,6 +437,7 @@ export function ContactPage() {
                 >
                   <Mail size={15} />
                   Send it by email
+                  <ArrowRight size={15} />
                 </button>
                 <button
                   type="button"

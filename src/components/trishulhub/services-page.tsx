@@ -175,7 +175,9 @@ export function ServicesPage() {
   }, [])
 
   return (
-    <div className="pb-8">
+    /* No page-level bottom padding: the closing CTA band (and therefore the
+       gap before the footer) is then identical to the home page. */
+    <div>
       <section className="relative overflow-hidden border-b border-[#e5e7eb] pt-28 pb-14 sm:pt-32 sm:pb-16">
         {/* Zero-request local hero background (CSS grid + animated aurora) */}
         <div aria-hidden className="th-hero-bg" />

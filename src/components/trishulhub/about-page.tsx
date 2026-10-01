@@ -148,7 +148,7 @@ export function AboutPage() {
           <NexusButton href="/contact" showArrow>
             Contact us
           </NexusButton>
-          <NexusButton href="/services" variant="secondary">
+          <NexusButton href="/services" variant="secondary" showArrow>
             See our services
           </NexusButton>
         </div>

@@ -365,7 +365,10 @@ export function AboutProtocol({
 
             <div className="mt-8 flex justify-center">
               {step < 4 ? (
-                <NexusButton onClick={next}>Next step</NexusButton>
+                /* Owner request: same primary style as the site's other CTAs. */
+                <NexusButton onClick={next} showArrow>
+                  Next step
+                </NexusButton>
               ) : (
                 <div className="flex w-full flex-col items-center gap-3 sm:w-auto sm:flex-row">
                   <NexusButton
@@ -378,6 +381,7 @@ export function AboutProtocol({
                   </NexusButton>
                   <NexusButton
                     variant="secondary"
+                    showArrow
                     href={emailDraftUrl(
                       contact,
                       enquiryEmailDraft({

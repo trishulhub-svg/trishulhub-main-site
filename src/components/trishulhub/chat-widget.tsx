@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import {
   ArrowLeft,
+  ArrowRight,
   Check,
   Mail,
   MessageCircle,
@@ -513,6 +514,7 @@ export function ChatWidget() {
                     type="button"
                   >
                     Next
+                    <ArrowRight aria-hidden size={14} className="ml-1" />
                   </button>
                 </div>
               ) : (
@@ -626,6 +628,7 @@ export function ChatWidget() {
                     type="button"
                   >
                     Next
+                    <ArrowRight aria-hidden size={14} className="ml-1" />
                   </button>
                 </div>
                 {stage === 'phone' ? (
@@ -665,6 +668,7 @@ export function ChatWidget() {
                     <>
                       <Send aria-hidden size={15} />
                       Send to TrishulHub
+                      <ArrowRight aria-hidden size={15} />
                     </>
                   )}
                 </button>
@@ -703,6 +707,7 @@ export function ChatWidget() {
                 {shareToken ? (
                   <a className={primaryClass} href={`/lead/${shareToken}`}>
                     View your brief
+                    <ArrowRight aria-hidden size={15} />
                   </a>
                 ) : null}
                 <button

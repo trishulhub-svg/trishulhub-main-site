@@ -1,6 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import { ArrowRight } from 'lucide-react'
 import { HeroAccentWord } from './hero-accent-word'
 import { EASE_OUT_EXPO } from '@/lib/animations'
 
@@ -122,6 +123,7 @@ export function Team({ founders }: { founders: Founder[] }) {
             className="inline-flex items-center gap-2 rounded-full bg-[#0D3C1F] px-7 py-3 text-sm font-semibold text-white transition hover:bg-[#164a28]"
           >
             Contact us
+          <ArrowRight size={15} />
           </motion.a>
         </div>
       </div>
