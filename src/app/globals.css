@@ -1334,19 +1334,18 @@ textarea.field-input {
   backdrop-filter: blur(6px);
 }
 
-/* ---------- Brand pattern ----------
-   The repeating background used behind the main bands. It is a tiny "trishul"
-   (three-prong) mark rather than a generic dot grid, so the texture is
-   specific to this brand. Stroke alpha is 1 and the *element* controls how
-   visible it is (the callers already set opacity), so it works on light and
-   dark bands without a second asset. */
+/* ---------- Dot pattern ----------
+   The repeating background used behind the main bands: a one-pixel dot grid on
+   a 24px tile. The dot colour is the only light/dark difference and the
+   *element* controls how visible it is (the callers already set opacity), so
+   no second asset is needed. */
 .th-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%230d3c1f' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M34 24v20M50 24v20M42 16v28M34 44h16'/%3E%3Cpath d='M12 70h60' stroke-width='1' stroke-opacity='0.45'/%3E%3C/g%3E%3C/svg%3E");
-  background-size: 84px 84px;
+  background-image: radial-gradient(#0d3c1f 1px, transparent 1px);
+  background-size: 24px 24px;
   background-position: center;
 }
 .dark .th-pattern {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%235eead4' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M34 24v20M50 24v20M42 16v28M34 44h16'/%3E%3Cpath d='M12 70h60' stroke-width='1' stroke-opacity='0.45'/%3E%3C/g%3E%3C/svg%3E");
+  background-image: radial-gradient(#5eead4 1px, transparent 1px);
 }
 
 /* ---------- Aurora page-hero background (pure CSS, no images) ---------- */
@@ -1842,8 +1841,8 @@ textarea.field-input {
 
 /*
  * Removed: the dark-theme override for the inline dot grids. Every band now
- * uses `.th-pattern`, which carries its own dark variant (mint strokes), so
- * this selector matched nothing.
+ * uses `.th-pattern`, which carries its own dark variant (mint dots), so this
+ * selector matched nothing.
  */
 
 /* ---------- Gradients between light surfaces ---------- */

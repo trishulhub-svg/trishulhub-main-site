@@ -133,8 +133,13 @@ export const revalidate = 300;
 /**
  * Runs before first paint so a dark-mode visitor never sees a white flash.
  * Kept inline (not a module) on purpose — it must execute before React.
+ *
+ * The theme follows the device (`prefers-color-scheme`) until the visitor makes
+ * an explicit choice with the header switch; that choice is stored and wins
+ * from then on. The listener keeps the page in step if the device flips theme
+ * while a tab is open, but only while no stored choice exists.
  */
-const themeScript = `(function(){try{var s=localStorage.getItem('trishulhub-theme');var m=window.matchMedia('(prefers-color-scheme: dark)').matches;var d=s?s==='dark':m;var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light';}catch(e){}})();`;
+const themeScript = `(function(){try{var K='trishulhub-theme';var stored=function(){try{return localStorage.getItem(K)}catch(e){return null}};var paint=function(d){var r=document.documentElement;r.classList.toggle('dark',d);r.style.colorScheme=d?'dark':'light'};var mq=window.matchMedia('(prefers-color-scheme: dark)');paint(stored()?stored()==='dark':mq.matches);var on=function(e){if(!stored())paint(e.matches)};if(mq.addEventListener)mq.addEventListener('change',on);else if(mq.addListener)mq.addListener(on);}catch(e){}})();`;
 
 export default async function RootLayout({
   children,
