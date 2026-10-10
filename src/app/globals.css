@@ -730,6 +730,46 @@ textarea.field-input {
   }
 }
 
+/*
+ * One container scale for the whole site.
+ *
+ * Every page is built on `.lt-container` or Tailwind's `max-w-7xl`, both of
+ * which stopped at ~1200px. Measured before this: the content column was
+ * 1152px wide on a 1280px laptop, a 1920px monitor AND a 2560px display — so a
+ * large screen showed ~700px of empty space on each side, and the two classes
+ * disagreed with each other by 40px, which shifted section edges as you
+ * scrolled.
+ *
+ * They now share one width per breakpoint and grow in steps. Growth is capped
+ * (1760px) because text lines and 2-3 column grids get worse, not better, past
+ * roughly 100 characters per line — the outer margin becoming visible again on
+ * an ultra-wide is correct.
+ */
+@media (min-width: 1024px) {
+  .lt-container,
+  .max-w-7xl {
+    max-width: 1280px;
+  }
+}
+@media (min-width: 1536px) {
+  .lt-container,
+  .max-w-7xl {
+    max-width: 1440px;
+  }
+}
+@media (min-width: 1920px) {
+  .lt-container,
+  .max-w-7xl {
+    max-width: 1600px;
+  }
+}
+@media (min-width: 2560px) {
+  .lt-container,
+  .max-w-7xl {
+    max-width: 1760px;
+  }
+}
+
 .lt-section {
   padding-top: 80px;
   padding-bottom: 80px;

@@ -22,7 +22,9 @@ export function Team({ founders }: { founders: Founder[] }) {
     >
       <div className="lt-glow pointer-events-none absolute left-1/2 top-1/3 h-[28rem] w-[28rem] -translate-x-1/2 opacity-50" />
 
-      <div className="relative z-10 mx-auto max-w-4xl">
+      {/* Two portrait cards: a 896px cap left big voids on a wide display, and
+          the cards themselves get too large past ~1150px. */}
+      <div className="relative z-10 mx-auto max-w-4xl xl:max-w-5xl 2xl:max-w-6xl">
         <div className="mb-14 text-center">
           <motion.p
             initial={{ opacity: 0, y: 10 }}

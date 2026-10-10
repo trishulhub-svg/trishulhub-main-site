@@ -47,7 +47,8 @@ export function TeamSection() {
         className="relative overflow-hidden bg-[#fafafa] px-4 py-24 sm:px-6 sm:py-32 lg:px-8"
         aria-busy="true"
       >
-        <div className="relative z-10 mx-auto max-w-4xl">
+        {/* Must match team.tsx exactly, or the swap re-introduces layout shift. */}
+        <div className="relative z-10 mx-auto max-w-4xl xl:max-w-5xl 2xl:max-w-6xl">
           {/*
             This mirrors <Team /> exactly — same container width, same heading
             block, same grid, same card structure — so when the live data

@@ -157,7 +157,13 @@ export function CookieConsent() {
             aria-label="Cookies and storage"
           >
             <div className="rounded-2xl border border-[#111111]/12 bg-white p-5 shadow-[0_18px_50px_rgba(6,43,22,0.16)] sm:rounded-none sm:rounded-t-2xl sm:border-x-0 sm:border-b-0 sm:border-t-2 sm:border-t-[#0D3C1F] sm:px-6 sm:py-5 sm:shadow-[0_-18px_50px_rgba(6,43,22,0.16)]">
-              <div className="mx-auto flex max-w-7xl flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
+              {/*
+               * Capped independently of the page container: the bar spans the
+               * full width (that is what makes it noticeable) but the sentence
+               * inside would otherwise run to ~1375px on a 2560px display,
+               * which is far past a readable line length.
+               */}
+              <div className="mx-auto flex max-w-[1180px] flex-col gap-4 sm:flex-row sm:items-center sm:gap-6">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#0D3C1F] text-white">
                   <Cookie size={18} />
                 </span>

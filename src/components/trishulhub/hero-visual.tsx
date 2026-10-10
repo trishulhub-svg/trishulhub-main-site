@@ -92,7 +92,11 @@ export function HeroVisual() {
       ref={ref}
       onPointerMove={onMove}
       onPointerLeave={onLeave}
-      className="relative mx-auto w-full max-w-[520px] [perspective:1400px]"
+      /*
+       * Grows on large displays. The container widens to 1440–1760px up there,
+       * so a fixed 520px panel left a visible void inside its own column.
+       */
+      className="relative mx-auto w-full max-w-[520px] lg:max-w-[560px] 2xl:max-w-[660px] [perspective:1400px]"
     >
       {/* Rotating conic ring behind the panel */}
       <motion.div
