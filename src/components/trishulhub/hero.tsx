@@ -44,7 +44,27 @@ const TECH = [
   { file: 'python.svg', name: 'Python' },
   { file: 'figma.svg', name: 'Figma' },
   { file: 'greensock.svg', name: 'GSAP' },
+  { file: 'git.svg', name: 'Git' },
+  { file: 'github.svg', name: 'GitHub' },
+  { file: 'linux.svg', name: 'Linux' },
+  { file: 'framer.svg', name: 'Framer Motion' },
 ] as const
+
+/**
+ * How many times the logo set repeats inside each half of the loop.
+ *
+ * The strip scrolls by exactly 50% of its own width, so each half has to be at
+ * least as wide as the widest screen — otherwise the loop runs out of logos and
+ * shows an empty gap. Before this, the whole track was 2160px (15 logos × 2),
+ * i.e. a 1080px half: on any screen wider than ~1080px the strip visibly "ran
+ * out" mid-cycle.
+ *
+ * One set is ~1368px (19 logos at 24px + 48px gaps), so 3 sets ≈ 4100px of
+ * coverage per half — seamless on everything up to a 4K/ultra-wide display.
+ * The CSS animation duration is scaled to match (see globals.css) so the
+ * scrolling *speed* stays the same rather than racing on long tracks.
+ */
+const TECH_REPEATS_PER_HALF = 3
 
 const PROOF = [
   {
@@ -91,7 +111,9 @@ export function Hero() {
     >
       {/* Background: soft aurora + brand glow (no images, no video) */}
       <div aria-hidden className="pointer-events-none absolute inset-0 -z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(#e2e8e5_1px,transparent_1px)] [background-size:28px_28px] opacity-60" />
+        {/* Brand pattern rather than a generic dot grid — same tile as the rest
+            of the site, kept faint behind the headline. */}
+        <div className="th-pattern absolute inset-0 opacity-[0.06]" />
         <div className="th-aurora-glow absolute -top-[40%] right-[-15%] h-[60rem] w-[60rem] opacity-[0.16]" />
         <div className="absolute -left-40 top-24 h-[26rem] w-[26rem] rounded-full bg-[#0d9488]/10 blur-[120px]" />
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#fafafa] to-transparent" />
@@ -217,19 +239,30 @@ export function Hero() {
           aria-hidden
           className="flex overflow-hidden [mask-image:linear-gradient(90deg,transparent,#000_10%,#000_90%,transparent)]"
         >
-          <div className="animate-marquee flex min-w-max items-center gap-12 pr-12">
-            {[...TECH, ...TECH].map((t, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={`${t.name}-${i}`}
-                src={`/images/logos/${t.file}`}
-                alt=""
-                width={26}
-                height={26}
-                loading="lazy"
-                decoding="async"
-                className="th-tech-logo h-6 w-auto shrink-0"
-              />
+          <div className="animate-marquee flex min-w-max">
+            {[0, 1].map((half) => (
+              <div
+                key={half}
+                /* Each half is identical and ends with the same 48px gap it
+                   uses internally, so the seam is invisible. */
+                className="flex shrink-0 items-center gap-12 pr-12"
+              >
+                {Array.from({ length: TECH_REPEATS_PER_HALF }).flatMap((_, r) =>
+                  TECH.map((t, i) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={`${r}-${t.name}-${i}`}
+                      src={`/images/logos/${t.file}`}
+                      alt=""
+                      width={26}
+                      height={26}
+                      loading="lazy"
+                      decoding="async"
+                      className="th-tech-logo h-6 w-auto shrink-0"
+                    />
+                  )),
+                )}
+              </div>
             ))}
           </div>
         </div>

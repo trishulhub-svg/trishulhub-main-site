@@ -83,7 +83,7 @@ export function HomeGetInTouch() {
       <div className="relative overflow-hidden rounded-[2rem] border border-[#0d3c1f]/12 bg-white px-5 py-10 sm:px-10 sm:py-12">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.05]"
+          className="pointer-events-none absolute inset-0 th-pattern opacity-[0.05]"
         />
         <div
           aria-hidden

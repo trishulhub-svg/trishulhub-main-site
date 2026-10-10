@@ -276,7 +276,7 @@ export function HomeUnlock() {
             <div className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-[#0d9488]/18 blur-3xl" />
             <div
               aria-hidden
-              className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:20px_20px] opacity-[0.06]"
+              className="pointer-events-none absolute inset-0 th-pattern opacity-[0.06]"
             />
             <div className="flex flex-wrap items-start justify-between gap-4">
               <h3 className="max-w-[16rem] font-display text-2xl font-medium text-foreground sm:max-w-none sm:text-3xl lg:text-4xl">

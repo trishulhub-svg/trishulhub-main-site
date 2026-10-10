@@ -220,7 +220,8 @@
      * decorative (aria-hidden), so no information is lost.
      */
     .animate-marquee {
-      animation: marquee 30s linear infinite !important;
+      /* Same track, calmer ~37px/s (was 30s on the old 1080px track). */
+      animation: marquee 110s linear infinite !important;
     }
   }
 }
@@ -291,7 +292,13 @@
   }
 }
 .animate-marquee {
-  animation: marquee 16s linear infinite;
+  /*
+   * Duration is tied to the track length: the strip scrolls by 50% of its own
+   * width, and the logo set now repeats 3× per half (~4100px per half) so the
+   * loop cannot run out on a wide screen. 60s keeps the same ~68px/s as the
+   * old 16s/1080px track — change one, change the other.
+   */
+  animation: marquee 60s linear infinite;
 }
 .animate-marquee-slow {
   animation: marquee 45s linear infinite;
@@ -1308,7 +1315,16 @@ textarea.field-input {
   gap: 0.5rem;
   border-radius: 9999px;
   border: 1px solid rgba(13, 60, 31, 0.14);
-  background: rgba(255, 255, 255, 0.78);
+  /* Glass pill: a hairline of light on top makes the chip read as a surface
+     rather than a flat outline. */
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.94),
+    rgba(241, 249, 246, 0.78)
+  );
+  box-shadow:
+    0 1px 2px rgba(6, 43, 22, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
   padding: 0.35rem 0.85rem;
   font-size: 11px;
   font-weight: 600;
@@ -1316,6 +1332,21 @@ textarea.field-input {
   text-transform: uppercase;
   color: var(--brand-800);
   backdrop-filter: blur(6px);
+}
+
+/* ---------- Brand pattern ----------
+   The repeating background used behind the main bands. It is a tiny "trishul"
+   (three-prong) mark rather than a generic dot grid, so the texture is
+   specific to this brand. Stroke alpha is 1 and the *element* controls how
+   visible it is (the callers already set opacity), so it works on light and
+   dark bands without a second asset. */
+.th-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%230d3c1f' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M34 24v20M50 24v20M42 16v28M34 44h16'/%3E%3Cpath d='M12 70h60' stroke-width='1' stroke-opacity='0.45'/%3E%3C/g%3E%3C/svg%3E");
+  background-size: 84px 84px;
+  background-position: center;
+}
+.dark .th-pattern {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='84' height='84' viewBox='0 0 84 84'%3E%3Cg fill='none' stroke='%235eead4' stroke-width='1.2' stroke-linecap='round'%3E%3Cpath d='M34 24v20M50 24v20M42 16v28M34 44h16'/%3E%3Cpath d='M12 70h60' stroke-width='1' stroke-opacity='0.45'/%3E%3C/g%3E%3C/svg%3E");
 }
 
 /* ---------- Aurora page-hero background (pure CSS, no images) ---------- */
@@ -1465,7 +1496,11 @@ textarea.field-input {
 }
 .th-card:hover {
   transform: translateY(-6px);
-  box-shadow: 0 18px 48px rgba(6, 43, 22, 0.1);
+  /* Two-layer shadow: a tight contact shadow plus a wide soft one reads as
+     real depth instead of a grey blur. */
+  box-shadow:
+    0 2px 6px rgba(6, 43, 22, 0.05),
+    0 26px 60px -20px rgba(6, 43, 22, 0.22);
   border-color: rgba(13, 60, 31, 0.35);
 }
 
@@ -1805,15 +1840,11 @@ textarea.field-input {
   opacity: 0.28;
 }
 
-/* ---------- Dot grids authored inline (light dots on light paper) ---------- */
-.dark [class*='radial-gradient(#e2e8e5'],
-.dark [class*='radial-gradient(#0d3c1f_1px'],
-.dark [class*='radial-gradient(#0d3c1f_1'] {
-  background-image: radial-gradient(
-    rgba(94, 234, 212, 0.22) 1px,
-    transparent 1px
-  );
-}
+/*
+ * Removed: the dark-theme override for the inline dot grids. Every band now
+ * uses `.th-pattern`, which carries its own dark variant (mint strokes), so
+ * this selector matched nothing.
+ */
 
 /* ---------- Gradients between light surfaces ---------- */
 .dark [class*='from-[#f4faf7]'],

@@ -112,7 +112,7 @@ export function HeroVisual() {
       {/* Soft grid plate */}
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-6 rounded-[2rem] bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:18px_18px] opacity-[0.07]"
+        className="pointer-events-none absolute inset-6 rounded-[2rem] th-pattern opacity-[0.07]"
       />
 
       <motion.div

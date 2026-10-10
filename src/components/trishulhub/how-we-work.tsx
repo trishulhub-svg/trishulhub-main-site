@@ -66,7 +66,7 @@ export function HowWeWork() {
     <div className="surface-card relative mt-14 overflow-hidden rounded-[2rem] border border-[#0d3c1f]/12 bg-white p-5 sm:p-8 lg:p-10">
       <div
         aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.05]"
+        className="pointer-events-none absolute inset-0 th-pattern opacity-[0.05]"
       />
 
       <div className="relative mb-10 flex flex-wrap items-end justify-between gap-4">

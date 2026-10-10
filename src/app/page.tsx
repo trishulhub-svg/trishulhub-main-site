@@ -50,7 +50,7 @@ export default function Home() {
       <div className="relative z-20 overflow-hidden border-y border-[#0d3c1f]/8 bg-[#f4faf7]">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:22px_22px] opacity-[0.05]"
+          className="pointer-events-none absolute inset-0 th-pattern opacity-[0.05]"
         />
         <HomeUnlock />
       </div>
@@ -73,7 +73,7 @@ export default function Home() {
       <section className="relative z-20 border-y border-[#0d3c1f]/8 bg-[#f4faf7] py-16 sm:py-20">
         <div
           aria-hidden
-          className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:24px_24px] opacity-[0.05]"
+          className="pointer-events-none absolute inset-0 th-pattern opacity-[0.05]"
         />
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <p className="text-balance font-playfair text-lg italic leading-relaxed text-[#111111] sm:text-xl">

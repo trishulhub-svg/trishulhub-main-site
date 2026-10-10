@@ -90,7 +90,7 @@ export function HomeIntelligences() {
         <div className="relative mt-16 overflow-hidden rounded-[2rem] border border-[#0d3c1f]/12 bg-white p-6 shadow-[0_18px_50px_rgba(6,43,22,0.07)] sm:p-9">
           <div
             aria-hidden
-            className="pointer-events-none absolute inset-0 bg-[radial-gradient(#0d3c1f_1px,transparent_1px)] [background-size:26px_26px] opacity-[0.05]"
+            className="pointer-events-none absolute inset-0 th-pattern opacity-[0.05]"
           />
 
           {/* ---------- Desktop: pipeline rail + cards ----------
